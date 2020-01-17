@@ -4,7 +4,7 @@ python:
   - "3.7"
 
 install:
-  - echo "Nothing to install yet :("
+  - make virtualenv
 
 script:
-  - echo "Nothing to test yet :("
+  - make test
