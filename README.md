@@ -1,6 +1,16 @@
-# Datalabs_utils
+# WellcomeML utils
 
-Common functions for manipulating data.
+This package contains common utility functions for usual tasks at Wellcome Data Labs. In particular:
+
+
+| modules | description| 
+|---|---|
+| **io** | manipulating data, in and out S3, and processing |
+| **ml** | wrappers for processing texts, vectorisers and classifiers |
+| **spacy** | common utils for converting data form and to spacy/prodigy format |
+| **mis/viz** | any other utils, including Wellcome colour palletes | 
+
+
 
 ## 1. Getting started
 
