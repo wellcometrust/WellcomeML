@@ -50,7 +50,7 @@ $(VIRTUALENV)/.en_trf_bertbaseuncased_lg:
 
 .PHONY: test
 test: $(VIRTUALENV)/.en_core_web_sm $(VIRTUALENV)/.en_trf_bertbaseuncased_lg
-	$(VIRTUALENV)/bin/pytest -m "not integration" --disable-warnings --tb=line ./tests
+	$(VIRTUALENV)/bin/pytest -m "not integration" --disable-warnings --tb=line --cov=/wellcomeml ./tests
 
 .PHONY: test-integrations
 test-integrations:
