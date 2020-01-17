@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/wellcometrust/WellcomeML.svg?token=cssCZpnz8YDs4Hb4K5pS&branch=master)](https://travis-ci.com/wellcometrust/WellcomeML)
+
 # WellcomeML utils
 
 This package contains common utility functions for usual tasks at Wellcome Data Labs. In particular:
