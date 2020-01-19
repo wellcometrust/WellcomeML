@@ -10,3 +10,7 @@ script:
   - make test
 
 cache: pip
+
+branches:
+  only:
+  - master
