@@ -1,7 +1,7 @@
 # Created by 'make update-requirements-txt'. DO NOT EDIT!
 blis==0.4.1
-boto3==1.11.4
-botocore==1.14.4
+boto3==1.11.5
+botocore==1.14.5
 catalogue==1.0.0
 certifi==2019.11.28
 chardet==3.0.4
@@ -32,7 +32,7 @@ scipy==1.4.1
 sentencepiece==0.1.85
 six==1.14.0
 spacy==2.2.3
--e git+git@github.com:nsorros/spacy-transformers.git@e1d1e1c73a25b1d18d540fca13f0c8bdb58a69cd#egg=spacy_transformers
+-e git+https://github.com/nsorros/spacy-transformers@e1d1e1c73a25b1d18d540fca13f0c8bdb58a69cd#egg=spacy_transformers
 srsly==1.0.1
 thinc==7.3.1
 torch==1.4.0
