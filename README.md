@@ -30,7 +30,7 @@ After making changes, in order to buil a new wheel, run:
 make dist
 ```
 
-### 1.3 (Optional) Installing from other locations within the datalabs monorepo
+### 1.3 (Optional) Installing from other locations
 
 ```
 pip3 install <relative path to this folder>
