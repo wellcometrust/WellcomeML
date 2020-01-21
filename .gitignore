@@ -15,3 +15,4 @@ dist
 
 **/.mypy_cache/
 **/.envrc
+*.coverage
