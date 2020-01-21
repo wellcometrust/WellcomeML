@@ -1,0 +1,18 @@
+dist
+**/build/*
+*.egg-info/*
+**/*.egg-info/*
+
+*.DS_Store
+*.pyc
+*~
+**/.ipynb_checkpoints*
+
+# Credentials
+
+# IDE dirs
+*.idea/
+
+**/.mypy_cache/
+**/.envrc
+*.coverage
