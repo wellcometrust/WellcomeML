@@ -43,7 +43,7 @@ setuptools.setup(
     install_requires=[
         'numpy',
         'pandas',
-	'boto3',
+        'boto3',
         'scikit-learn',
         'spacy==2.2.1',
         'nervaluate',
