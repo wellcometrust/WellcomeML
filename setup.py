@@ -43,16 +43,22 @@ setuptools.setup(
     install_requires=[
         'numpy',
         'pandas',
+	'boto3',
         'scikit-learn',
-        'torch',
         'spacy==2.2.1',
-        'transformers<=2.0.0',
-        'spacy-transformers @ https://github.com/nsorros/spacy-transformers/tarball/master#egg=spacy-transformers',
         'nervaluate',
-        'en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz#egg=en_core_web_sm',
-        'en_trf_bertbaseuncased_lg @ https://github.com/explosion/spacy-models/releases/download/en_trf_bertbaseuncased_lg-2.2.0/en_trf_bertbaseuncased_lg-2.2.0.tar.gz#egg=en_trf_bertbaseuncased_lg'
+        'en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz#egg=en_core_web_sm'
     ],
+    extras_require={
+        'deep-learning': [
+            'torch',
+            'transformers<=2.0.0',
+            'spacy-transformers @ https://github.com/nsorros/spacy-transformers/tarball/master#egg=spacy-transformers',
+            'en_trf_bertbaseuncased_lg @ https://github.com/explosion/spacy-models/releases/download/en_trf_bertbaseuncased_lg-2.2.0/en_trf_bertbaseuncased_lg-2.2.0.tar.gz#egg=en_trf_bertbaseuncased_lg'
+        ]
+    },
     tests_require=[
-        'pytest'
+        'pytest',
+        'pytest-cov'
     ]
 )
