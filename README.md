@@ -13,16 +13,32 @@ This package contains common utility functions for usual tasks at Wellcome Data 
 | **mis/viz** | any other utils, including Wellcome colour palletes | 
 
 
+## 1. Quickstart
 
-## 1. Getting started
+Installing from git (from the master branch):
 
-### 1.1 Build local virtualenv
+```bash
+pip install git+git://github.com:wellcometrust/WellcomeML#egg=WellcomeML
+```
+
+This will install the "vanilla" package. In order to install the deep-learning functionality 
+(torch/transformers/spacy transformers):
+
+
+```bash
+pip install git+git://github.com:wellcometrust/WellcomeML#egg=WellcomeML[deep-learning]
+```
+
+
+## 2. Development
+
+### 2.1 Build local virtualenv
 
 ```
 make
 ```
 
-### 1.2 Build the wheel (and upload to aws s3)
+### 2.2 Build the wheel (and upload to aws s3)
 
 After making changes, in order to buil a new wheel, run:
 
@@ -30,13 +46,13 @@ After making changes, in order to buil a new wheel, run:
 make dist
 ```
 
-### 1.3 (Optional) Installing from other locations
+### 3.3 (Optional) Installing from other locations
 
 ```
 pip3 install <relative path to this folder>
 ```
 
-## 2. Example usage of some modules
+## 3. Example usage of some modules
 
 Examples can be found in the subfolder `examples`.
 
