@@ -1,7 +1,8 @@
+from wellcomeml.logger import logger
+
 from .entity_linking import EntityLinker
 from .knowledge_base import PeopleKB
-
-from wellcomeml.logger import logger
+from .frequency_vectorizer import FrequencyVectorizer
 
 try:
     from .bert_classifier import BertClassifier
