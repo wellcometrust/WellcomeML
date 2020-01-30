@@ -109,7 +109,7 @@ members of the project's leadership.
 
 ### Attribution
 
-This file was adapted from  and
+This file was adapted from
 [CONTRIBUTING.md](https://github.com/wellcometrust/reach/blob/master/CONTRIBUTING.md), 
 which, in turn is adapted from the
  [Contributor Covenant][homepage], version 1.4,
