@@ -12,6 +12,7 @@ This package contains common utility functions for usual tasks at Wellcome Data 
 | **spacy** | common utils for converting data form and to spacy/prodigy format |
 | **mis/viz** | any other utils, including Wellcome colour palletes | 
 
+For more in depth information see the `/examples` folder and [release notes](https://github.com/wellcometrust/WellcomeML/releases).
 
 ## 1. Quickstart
 Installing from a release wheel: Download the wheel [from aws](https://s3.amazonaws.com/datalabs-public/wellcomeml/wellcomeml-2020.1.0-py3-none-any.whl)
