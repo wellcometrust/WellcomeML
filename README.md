@@ -12,21 +12,21 @@ This package contains common utility functions for usual tasks at Wellcome Data 
 | **spacy** | common utils for converting data form and to spacy/prodigy format |
 | **mis/viz** | any other utils, including Wellcome colour palletes | 
 
+For more in depth information see the `/examples` folder and [release notes](https://github.com/wellcometrust/WellcomeML/releases).
 
 ## 1. Quickstart
-
-Installing from git (from the master branch):
+Installing from a release wheel: Download the wheel [from aws](https://s3.amazonaws.com/datalabs-public/wellcomeml/wellcomeml-2020.1.0-py3-none-any.whl)
+and pip install it:
 
 ```bash
-pip install git+git://github.com:wellcometrust/WellcomeML#egg=WellcomeML
+pip install wellcomeml-2020.1.0-py3-none-any.whl
 ```
 
-This will install the "vanilla" package. In order to install the deep-learning functionality 
+This will install the "vanilla" package. In order to install the deep-learning functionality
 (torch/transformers/spacy transformers):
 
-
 ```bash
-pip install git+git://github.com:wellcometrust/WellcomeML#egg=WellcomeML[deep-learning]
+pip install wellcomeml-2020.1.0-py3-none-any.whl[deep-learning]
 ```
 
 
