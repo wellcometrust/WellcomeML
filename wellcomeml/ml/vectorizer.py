@@ -12,6 +12,11 @@ from wellcomeml.ml.bert_vectorizer import BertVectorizer
 
 
 class Vectorizer(BaseEstimator, TransformerMixin):
+    """
+    Abstract class, sklearn-compatible, that can vectorize texts using
+    various models.
+
+    """
     def __init__(self, embedding='tf-idf', **kwargs):
         """
         Args:
