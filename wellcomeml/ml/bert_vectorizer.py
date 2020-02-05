@@ -49,7 +49,7 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
             embedded_x = last_layer.sum(dim=1)
         else:
             # 'last_cls'
-            embedded_x = last_layer[0,:]
+            embedded_x = last_layer[0, :]
 
         return embedded_x.cpu().numpy().flatten()
 
