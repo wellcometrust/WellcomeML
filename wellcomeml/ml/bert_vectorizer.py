@@ -15,17 +15,9 @@ from sklearn.base import BaseEstimator, TransformerMixin
 import numpy as np
 import torch
 
+from wellcomeml.ml.constants import MODELS_DIR, MODEL_DISPATCH
 from wellcomeml.logger import logger
 
-
-MODELS_DIR = os.path.expanduser("~/.cache/wellcomeml/models")
-MODEL_DISPATCH = {
-    'scibert_scivocab_uncased': {
-        "bucket": "ai2-s2-research",
-        "path": "scibert/huggingface_pytorch/scibert_scivocab_uncased.tar",
-        "file_name": "scibert_scivocab_uncased.tar"
-        }
-}
 
 class BertVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, pretrained='bert', sentence_embedding='mean_second_to_last'):

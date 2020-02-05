@@ -5,13 +5,14 @@
 A generic "frequency" vectorizer that wraps all usual transformations.
 """
 import re
+import pickle
 
 import spacy
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+from wellcomeml.ml.constants import MODELS_DIR
 from wellcomeml.logger import logger
-
 nlp = spacy.load('en_core_web_sm', disable=['ner', 'tagger', 'parser',
                                             'textcat'])
 

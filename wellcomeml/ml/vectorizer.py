@@ -29,7 +29,7 @@ class Vectorizer(BaseEstimator, TransformerMixin):
 
         self.vectorizer = vectorizer_dispatcher.get(embedding)(**kwargs)
 
-    def fit(self, X, *_):
+    def fit(self, X=None, *_):
         return self.vectorizer.fit(X)
 
     def transform(self, X, *_):
