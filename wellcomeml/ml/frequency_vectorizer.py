@@ -8,16 +8,14 @@ import re
 import pickle
 
 import spacy
-from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from wellcomeml.ml.constants import MODELS_DIR
 from wellcomeml.logger import logger
 nlp = spacy.load('en_core_web_sm', disable=['ner', 'tagger', 'parser',
                                             'textcat'])
 
 
-class FrequencyVectorizer(BaseEstimator, TransformerMixin):
+class FrequencyVectorizer(TfidfVectorizer):
     """
     Class to wrap some basic transformation and text
     vectorisation/embedding
@@ -32,9 +30,13 @@ class FrequencyVectorizer(BaseEstimator, TransformerMixin):
         self.embedding = 'tf-idf'
 
         logger.info("Initialising frequency vectorizer.")
-        self.vectorizer = TfidfVectorizer(stop_words='english', **kwargs)
 
-    def regex_transform(self, X, *_, remove_numbers='years'):
+        kwargs['stop_words'] = kwargs.get('stop_words', 'english')
+
+        super().__init__(**kwargs)
+
+
+    def regex_transform(self, X, remove_numbers='years', *_):
         """
         Extra regular expression transformations to clean text
         Args:
@@ -49,9 +51,9 @@ class FrequencyVectorizer(BaseEstimator, TransformerMixin):
 
         """
         if remove_numbers == 'years':
-            return [re.sub('[1-2]\d{3}', '', text) for text in X]
+            return [re.sub(r'[1-2]\d{3}', '', text) for text in X]
         elif remove_numbers == 'digits':
-            return [re.sub('\d', '', text) for text in X]
+            return [re.sub(r'\d', '', text) for text in X]
         else:
             return X
 
@@ -83,7 +85,7 @@ class FrequencyVectorizer(BaseEstimator, TransformerMixin):
         X = self.spacy_lemmatizer(X)
         X = [' '.join(text) for text in X]
 
-        return self.vectorizer.transform(X)
+        return super().transform(X)
 
     def fit(self, X, *_):
         logger.info("Using spacy pre-trained lemmatiser.")
@@ -93,6 +95,6 @@ class FrequencyVectorizer(BaseEstimator, TransformerMixin):
         logger.info("Fitting vectorizer.")
 
         X = [' '.join(text) for text in X]
-        self.vectorizer.fit(X)
+        super().fit(X)
 
         return self
