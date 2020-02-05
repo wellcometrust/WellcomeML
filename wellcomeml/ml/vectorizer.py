@@ -7,7 +7,7 @@ or embed using bert, doc2vec etc
 """
 
 from sklearn.base import BaseEstimator, TransformerMixin
-from wellcomeml.ml.frequency_vectorizer import FrequencyVectorizer
+from wellcomeml.ml.frequency_vectorizer import WellcomeTfidf
 from wellcomeml.ml.bert_vectorizer import BertVectorizer
 
 
@@ -25,7 +25,7 @@ class Vectorizer(BaseEstimator, TransformerMixin):
         self.embedding = embedding
 
         vectorizer_dispatcher = {
-            'tf-idf': FrequencyVectorizer,
+            'tf-idf': WellcomeTfidf,
             'bert': BertVectorizer
         }
 

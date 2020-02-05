@@ -2,7 +2,7 @@ from wellcomeml.logger import logger
 
 from .entity_linking import EntityLinker
 from .knowledge_base import PeopleKB
-from .frequency_vectorizer import FrequencyVectorizer
+from .frequency_vectorizer import WellcomeTfidf
 
 try:
     from .bert_classifier import BertClassifier

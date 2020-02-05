@@ -15,7 +15,7 @@ nlp = spacy.load('en_core_web_sm', disable=['ner', 'tagger', 'parser',
                                             'textcat'])
 
 
-class FrequencyVectorizer(TfidfVectorizer):
+class WellcomeTfidf(TfidfVectorizer):
     """
     Class to wrap some basic transformation and text
     vectorisation/embedding
