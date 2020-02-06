@@ -35,7 +35,6 @@ class WellcomeTfidf(TfidfVectorizer):
 
         super().__init__(**kwargs)
 
-
     def regex_transform(self, X, remove_numbers='years', *_):
         """
         Extra regular expression transformations to clean text
@@ -68,6 +67,7 @@ class WellcomeTfidf(TfidfVectorizer):
         Returns:
 
         """
+        logger.info("Using spacy pre-trained lemmatiser.")
         if remove_stopwords_and_punct:
             return [
                 [token.lemma_.lower() for token in doc
@@ -76,21 +76,24 @@ class WellcomeTfidf(TfidfVectorizer):
                 for doc in nlp.tokenizer.pipe(X)
             ]
         else:
-
             return [[token.lemma_.lower() for token in
                      doc] for doc in nlp.tokenizer.pipe(X)]
 
-    def transform(self, X, *_):
-        X = self.regex_transform(X)
-        X = self.spacy_lemmatizer(X)
+    def transform(self, X, regex=True, spacy_lemmatizer=True, *_):
+        if regex:
+            X = self.regex_transform(X)
+        if spacy_lemmatizer:
+            X = self.spacy_lemmatizer(X)
+
         X = [' '.join(text) for text in X]
 
         return super().transform(X)
 
-    def fit(self, X, *_):
-        logger.info("Using spacy pre-trained lemmatiser.")
-        X = self.regex_transform(X)
-        X = self.spacy_lemmatizer(X)
+    def fit(self, X, regex=True, spacy_lemmatizer=True, *_):
+        if regex:
+            X = self.regex_transform(X)
+        if spacy_lemmatizer:
+            X = self.spacy_lemmatizer(X)
 
         logger.info("Fitting vectorizer.")
 
