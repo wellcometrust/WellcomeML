@@ -4,7 +4,7 @@
 import en_core_web_sm
 import pytest
 import spacy
-from wellcomeml.spacy.spacy_doc_to_prodigy import SpacyDocToProdigy
+from wellcomeml.prodigy.spacy_doc_to_prodigy import SpacyDocToProdigy
 
 @pytest.fixture(scope="module")
 def nlp():
