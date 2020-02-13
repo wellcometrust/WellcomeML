@@ -22,7 +22,7 @@ if __name__ == "__main__":
         "annotate_numbered_refs": annotate_numbered_references,
         "prodigy_to_tsv": prodigy_to_tsv,
         "reach_to_prodigy": reach_to_prodigy,
-        "refs_to_tokens": reference_to_token_annotations,
+        "refs_to_token_annotations": reference_to_token_annotations,
     }
 
     if len(sys.argv) == 1:
