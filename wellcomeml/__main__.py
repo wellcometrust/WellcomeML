@@ -13,12 +13,14 @@ if __name__ == "__main__":
     import plac
     import sys
     from wasabi import msg
-    from .prodigy.reference_to_token_annotations import reference_to_token_annotations
     from .prodigy.prodigy_to_tsv import prodigy_to_tsv
+    from .prodigy.reach_to_prodigy import reach_to_prodigy
+    from .prodigy.reference_to_token_annotations import reference_to_token_annotations
 
     commands = {
-        "refs_to_tokens": reference_to_token_annotations,
         "prodigy_to_tsv": prodigy_to_tsv,
+        "refs_to_tokens": reference_to_token_annotations,
+        "reach_to_prodigy": reach_to_prodigy,
     }
 
     if len(sys.argv) == 1:
