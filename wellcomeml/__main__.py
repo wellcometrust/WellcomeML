@@ -14,9 +14,11 @@ if __name__ == "__main__":
     import sys
     from wasabi import msg
     from .prodigy.reference_to_token_annotations import reference_to_token_annotations
+    from .prodigy.prodigy_to_tsv import prodigy_to_tsv
 
     commands = {
         "refs_to_tokens": reference_to_token_annotations,
+        "prodigy_to_tsv": prodigy_to_tsv,
     }
 
     if len(sys.argv) == 1:
