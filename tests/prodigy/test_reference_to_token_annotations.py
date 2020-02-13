@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import pytest
-from wellcomeml.prodigy.token_tagger import TokenTagger
+from wellcomeml.prodigy.reference_to_token_annotations import TokenTagger
 
 
 @pytest.fixture(scope="function")
