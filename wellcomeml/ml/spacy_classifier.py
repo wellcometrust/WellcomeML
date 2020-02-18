@@ -132,7 +132,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                 )
         return self
 
-    def partial_fit(self, X, Y):
+    def partial_fit(self, X, Y, classes=None):
         """
         Args:
             X: 1d list of documents
@@ -142,6 +142,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         Y = np.array(Y)
 
         if not hasattr(self, 'unique_labels'):
+            # We could also use classes here
             nb_labels = Y.shape[1]
             self.unique_labels = [str(i) for i in range(nb_labels)]
             self._init_nlp()
