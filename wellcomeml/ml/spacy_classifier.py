@@ -132,6 +132,42 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                 )
         return self
 
+    def partial_fit(self, X, Y, classes=None):
+        """
+        Args:
+            X: 1d list of documents
+            Y: 2d numpy array (nb_examples, nb_labels)
+        TODO: Generalise to y being 1d
+        """
+        Y = np.array(Y)
+
+        if not hasattr(self, 'unique_labels'):
+            # We could also use classes here
+            nb_labels = Y.shape[1]
+            self.unique_labels = [str(i) for i in range(nb_labels)]
+            self._init_nlp()
+
+        texts = X
+
+        train_tags = self._label_binarizer_inverse_transform(Y)
+        train_cats = [
+            {
+                label: label in tags
+                for label in self.unique_labels
+            } for tags in train_tags
+        ]
+        annotations = [{"cats": cats} for cats in train_cats]
+
+        other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
+        with self.nlp.disable_pipes(*other_pipes):  # only train textcat
+            if not hasattr(self, 'optimizer'):
+                self.optimizer = self.nlp.begin_training()
+                self.optimizer.alpha = self.learning_rate
+
+            self.nlp.update(texts, annotations, sgd=self.optimizer, drop=self.dropout)
+
+        return self
+    
     def predict(self, X):
         def binarize_output(x):
             cats = self.nlp(x).cats
