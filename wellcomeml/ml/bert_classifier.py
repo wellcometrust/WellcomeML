@@ -136,6 +136,32 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
                 )
         return self
 
+    def partial_fit(self, X, Y, classes=None):
+        if not hasattr(self, 'unique_labels'):
+            self.unique_labels = [str(i) for i in range(Y_train.shape[1])]
+            self._init_nlp()
+
+        texts = X
+
+        train_tags = self._label_binarizer_inverse_transform(Y)
+        train_cats = [
+            {
+                label: label in tags
+                for label in self.unique_labels
+            } for tags in train_tags
+        ]
+        annotations = [{"cats": cats} for cats in train_cats]
+
+        other_pipes = [pipe for pipe in self.nlp.pipe_names if 'trf' not in pipe]
+        with self.nlp.disable_pipes(*other_pipes):  # only train textcat
+            if not hasattr(self, 'optimizer'):
+                self.optimizer = self.nlp.resume_training()
+                self.optimizer.alpha = self.learning_rate
+
+            self.nlp.update(texts, annotations, sgd=self.optimizer, drop=self.dropout)
+
+        return self
+
     def predict(self, X):
         def binarize_output(x):
             cats = self.nlp(x).cats
