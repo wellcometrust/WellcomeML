@@ -138,7 +138,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
 
     def partial_fit(self, X, Y, classes=None):
         if not hasattr(self, 'unique_labels'):
-            self.unique_labels = [str(i) for i in range(Y_train.shape[1])]
+            self.unique_labels = [str(i) for i in range(Y.shape[1])]
             self._init_nlp()
 
         texts = X
