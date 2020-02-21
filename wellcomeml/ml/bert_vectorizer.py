@@ -47,9 +47,12 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
             embedded_x = last_layer.mean(dim=1)
         elif self.sentence_embedding == 'sum_last':
             embedded_x = last_layer.sum(dim=1)
+        elif self.sentence_embedding == "mean_last_four":
+            embedded_x = torch.stack(output[2][-4:]).mean(dim=0).mean(dim=1)
         else:
-            # 'last_cls'
-            embedded_x = last_layer[0, :]
+            # Else gives the embbedding for the pooler layer. This can be, for
+            # example, fed into a softmax classifier
+            embedded_x = output[1]
 
         return embedded_x.cpu().numpy().flatten()
 
