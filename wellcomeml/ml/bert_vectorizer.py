@@ -29,7 +29,8 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
             sentence_embedding: How to embedd a sentence using bert's layers.
             Current options:
             'mean_second_to_last', 'mean_last', 'sum_last' or 'mean_last_four'
-            If unset, returns the pooler layer (embedding for the token [CLS])
+            Default: `mean_second_to_last`. If a valid option is not set,
+            returns the pooler layer (embedding for the token [CLS])
         """
         self.pretrained = pretrained
         self.sentence_embedding = sentence_embedding
