@@ -21,6 +21,17 @@ from wellcomeml.logger import logger
 
 class BertVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, pretrained='bert', sentence_embedding='mean_second_to_last'):
+        """
+        Bert vectorizer parameters
+
+        Args:
+            pretrained: A pre-trained model name. Currently 'bert' or 'scibert'
+            sentence_embedding: How to embedd a sentence using bert's layers.
+            Current options:
+            'mean_second_to_last', 'mean_last', 'sum_last' or 'mean_last_four'
+            Default: `mean_second_to_last`. If a valid option is not set,
+            returns the pooler layer (embedding for the token [CLS])
+        """
         self.pretrained = pretrained
         self.sentence_embedding = sentence_embedding
 
@@ -47,9 +58,12 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
             embedded_x = last_layer.mean(dim=1)
         elif self.sentence_embedding == 'sum_last':
             embedded_x = last_layer.sum(dim=1)
+        elif self.sentence_embedding == "mean_last_four":
+            embedded_x = torch.stack(output[2][-4:]).mean(dim=0).mean(dim=1)
         else:
-            # 'last_cls'
-            embedded_x = last_layer[0, :]
+            # Else gives the embbedding for the pooler layer. This can be, for
+            # example, fed into a softmax classifier
+            embedded_x = output[1]
 
         return embedded_x.cpu().numpy().flatten()
 
