@@ -169,15 +169,15 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         return self
     
     def predict(self, X):
-        def binarize_output(x):
-            cats = self.nlp(x).cats
+        def binarize_output(doc):
+            cats = doc.cats
             out = [
                 1 if cats[label] > self.threshold else 0
                 for label in self.unique_labels
             ]
             return out
-
-        return np.array([binarize_output(x) for x in X])
+        docs = self.nlp.pipe(X)
+        return np.array([binarize_output(doc) for doc in docs])
 
     def predict_proba(self, X):
         def get_proba(x):
