@@ -92,13 +92,12 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         
         def yield_train_data(X_train, Y_train):
             for x, y in zip(X_train, Y_train):
-                tags = self._label_binarizer_inverse_transform(y)
+                tags = self._label_binarizer_inverse_transform([y])[0]
                 cats = {
                     label: label in tags
                     for label in self.unique_labels
                 }
-                yield (x, cats)
-        train_data = yield_train_data(X_train, Y_train)
+                yield (x, {"cats": cats})
 
         # start of problem        
         #train_texts = X_train
@@ -125,7 +124,8 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
             for i in range(n_iter):
                 losses = {}
                 # batch up the examples using spaCy's minibatch
-                random.shuffle(train_data)
+                train_data = yield_train_data(X_train, Y_train)
+                #random.shuffle(train_data)
                 batches = minibatch(train_data, size=batch_sizes)
                 for batch in batches:
                     texts, annotations = zip(*batch)
