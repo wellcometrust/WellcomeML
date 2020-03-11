@@ -25,12 +25,14 @@ if is_using_gpu:
 
 class SpacyClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, threshold=0.5, n_iterations=5,
-                 batch_size=8, learning_rate=0.001, dropout=0.1):
+                 batch_size=8, learning_rate=0.001,
+                 dropout=0.1, shuffle=True):
         self.threshold = threshold
         self.batch_size = batch_size
         self.dropout = dropout
         self.learning_rate = learning_rate
         self.n_iterations=n_iterations
+        self.shuffle=shuffle
 
     def _init_nlp(self):
         self.nlp = spacy.blank('en')
@@ -98,19 +100,6 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                     for label in self.unique_labels
                 }
                 yield (x, {"cats": cats})
-
-        # start of problem        
-        #train_texts = X_train
-        #train_tags = self._label_binarizer_inverse_transform(Y_train)
-    
-        #train_cats = [
-        #    {
-        #        label: label in tags
-        #        for label in self.unique_labels
-        #    } for tags in train_tags
-        #]
-        #train_data = list(zip(train_texts, [{"cats": cats} for cats in train_cats]))
-        # end of problem
         
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
         with self.nlp.disable_pipes(*other_pipes):  # only train textcat
@@ -123,9 +112,19 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
             #dropout = decaying(0.6, 0.2, 1e-4)
             for i in range(n_iter):
                 losses = {}
-                # batch up the examples using spaCy's minibatch
+
+                def shuffle(X_train, Y_train):
+                    # this is not memory friendly but there should be
+                    # memory from deleting X, Y
+                    d = list(zip(X_train, Y_train))
+                    random.shuffle(d)
+                    X_train, Y_train = zip(*d)
+                    return X_train, Y_train
+
+                if self.shuffle:
+                    X_train, Y_train = shuffle(X_train, Y_train)
+
                 train_data = yield_train_data(X_train, Y_train)
-                #random.shuffle(train_data)
                 batches = minibatch(train_data, size=batch_sizes)
                 for batch in batches:
                     texts, annotations = zip(*batch)
