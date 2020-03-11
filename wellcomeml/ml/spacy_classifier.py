@@ -81,23 +81,38 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         X_train, X_test, Y_train, Y_test = train_test_split(
             X, Y, random_state=42
         )
+        # Free memory
+        del X
+        del Y
 
         nb_labels = Y_train.shape[1]
         self.unique_labels = [str(i) for i in range(nb_labels)]
         self._init_nlp()
         n_iter = self.n_iterations
-        train_texts = X_train
-        train_tags = self._label_binarizer_inverse_transform(Y_train)
+        
+        def yield_train_data(X_train, Y_train):
+            for x, y in zip(X_train, Y_train):
+                tags = self._label_binarizer_inverse_transform(y)
+                cats = {
+                    label: label in tags
+                    for label in self.unique_labels
+                }
+                yield (x, cats)
+        train_data = yield_train_data(X_train, Y_train)
+
+        # start of problem        
+        #train_texts = X_train
+        #train_tags = self._label_binarizer_inverse_transform(Y_train)
     
-        train_cats = [
-            {
-                label: label in tags
-                for label in self.unique_labels
-            } for tags in train_tags
-        ]
-
-        train_data = list(zip(train_texts, [{"cats": cats} for cats in train_cats]))
-
+        #train_cats = [
+        #    {
+        #        label: label in tags
+        #        for label in self.unique_labels
+        #    } for tags in train_tags
+        #]
+        #train_data = list(zip(train_texts, [{"cats": cats} for cats in train_cats]))
+        # end of problem
+        
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
         with self.nlp.disable_pipes(*other_pipes):  # only train textcat
             optimizer = self.nlp.begin_training()
