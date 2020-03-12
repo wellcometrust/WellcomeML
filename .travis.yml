@@ -6,6 +6,7 @@ python:
 
 install:
   - make virtualenv
+  - pip install -r requirements_test.txt
 
 script:
   - make test
@@ -20,4 +21,4 @@ branches:
   - master
 
 after_success:
-  - build/virtualenv/bin/python/codecov
+  - codecov
