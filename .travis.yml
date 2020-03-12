@@ -22,4 +22,4 @@ branches:
   - master
 
 after_success:
-  - codecov
+  - build/virtualenv/bin/python/codecov
