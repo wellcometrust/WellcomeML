@@ -10,6 +10,7 @@ from sklearn.metrics import f1_score, precision_score, recall_score
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_recall_fscore_support
+from scipy.sparse import csr_matrix
 import numpy as np
 import spacy
 import torch
@@ -66,6 +67,9 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         "Transforms Y matrix to labels which are the non zero indices"
         data = []
         for row in Y_train:
+            if type(row) is csr_matrix:
+                row = row.todense()
+                row = np.squeeze(np.asarray(row))
             row_data = [str(i) for i, item in enumerate(row) if item]
             data.append(row_data)
         # Do we need to convert to numpy?
@@ -78,7 +82,8 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
             Y: 2d numpy array (nb_examples, nb_labels)
         TODO: Generalise to y being 1d
         """
-        Y = np.array(Y)
+        if type(Y) == list:
+            Y = np.array(Y)
 
         X_train, X_test, Y_train, Y_test = train_test_split(
             X, Y, random_state=42
