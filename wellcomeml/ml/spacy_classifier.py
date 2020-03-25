@@ -86,7 +86,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
             Y: 2d numpy array (nb_examples, nb_labels)
         TODO: Generalise to y being 1d
         """
-        if type(Y) == list:
+        if type(Y) in [list, tuple]:
             Y = np.array(Y)
 
         X_train, X_test, Y_train, Y_test = train_test_split(
@@ -96,7 +96,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         del X
         del Y
 
-        if len(Y_train) > 1:
+        if not self.exclusive_classes:
             nb_labels = Y_train.shape[1]
             self.unique_labels = [str(i) for i in range(nb_labels)]
         else:
@@ -106,7 +106,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         
         def yield_train_data(X_train, Y_train):
             for x, y in zip(X_train, Y_train):
-                if len(Y_train) > 1:
+                if not self.exclusive_classes:
                     tags = self._label_binarizer_inverse_transform([y])[0]
                     cats = {
                         label: label in tags
