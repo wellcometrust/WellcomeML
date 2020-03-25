@@ -209,10 +209,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         def transform_output(doc):
             cats = doc.cats
             if self.exclusive_classes:
-                out = [
-                    label if cats[label] > self.threshold else 0
-                    for label in self.unique_labels
-                ]
+                out = max(cats.items(), key=lambda x: x[1])[0]
             else:
                 out = [
                     1 if cats[label] > self.threshold else 0
