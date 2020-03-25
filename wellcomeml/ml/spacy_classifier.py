@@ -114,8 +114,8 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
             #optimizer.L2 = 1e-4
 
             if self.pre_trained_vectors:
-                with open(pre_trained_vectors, "rb") as f:
-                    self.textcat.model.tok2vec.from_bytes(file_.read())
+                with open(self.pre_trained_vectors, "rb") as f:
+                    self.textcat.model.tok2vec.from_bytes(f.read())
             
             logger.info("Training the model...")
             logger.info("{:^5}\t{:^5}\t{:^5}\t{:^5}\t{:^5}".format("ITER", "LOSS", "P", "R", "F"))
