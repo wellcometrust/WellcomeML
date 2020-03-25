@@ -28,7 +28,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, threshold=0.5, n_iterations=5,
                  batch_size=8, learning_rate=0.001,
                  dropout=0.1, shuffle=True, architecture="simple_cnn",
-                 pre_trained_vectors_path=None):
+                 exclusive_classes=False, pre_trained_vectors_path=None):
         self.threshold = threshold
         self.batch_size = batch_size
         self.dropout = dropout
@@ -37,6 +37,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         self.shuffle=shuffle
         self.architecture=architecture
         self.pre_trained_vectors_path=pre_trained_vectors_path
+        self.exclusive_classes=exclusive_classes
 
     def _init_nlp(self):
         self.nlp = spacy.blank('en')
@@ -45,8 +46,8 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         self.textcat = self.nlp.create_pipe(
             "textcat",
             config={
-                "exclusive_classes": False,
-                "architecture": self.architecture
+                "architecture": self.architecture,
+                "exclusive_classes": self.exclusive_classes
             }
         )
         self.nlp.add_pipe(self.textcat, last=True)
@@ -95,18 +96,27 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         del X
         del Y
 
-        nb_labels = Y_train.shape[1]
-        self.unique_labels = [str(i) for i in range(nb_labels)]
+        if len(Y_train) > 1:
+            nb_labels = Y_train.shape[1]
+            self.unique_labels = [str(i) for i in range(nb_labels)]
+        else:
+            self.unique_labels = np.unique(Y_train)
         self._init_nlp()
         n_iter = self.n_iterations
         
         def yield_train_data(X_train, Y_train):
             for x, y in zip(X_train, Y_train):
-                tags = self._label_binarizer_inverse_transform([y])[0]
-                cats = {
-                    label: label in tags
-                    for label in self.unique_labels
-                }
+                if len(Y_train) > 1:
+                    tags = self._label_binarizer_inverse_transform([y])[0]
+                    cats = {
+                        label: label in tags
+                        for label in self.unique_labels
+                    }
+                else:
+                    cats = {
+                        label: label == y
+                        for label in self.unique_labels
+                    }
                 yield (x, {"cats": cats})
         
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
@@ -196,15 +206,21 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         return self
     
     def predict(self, X):
-        def binarize_output(doc):
+        def transform_output(doc):
             cats = doc.cats
-            out = [
-                1 if cats[label] > self.threshold else 0
-                for label in self.unique_labels
-            ]
+            if self.exclusive_classes:
+                out = [
+                    label if cats[label] > self.threshold else 0
+                    for label in self.unique_labels
+                ]
+            else:
+                out = [
+                    1 if cats[label] > self.threshold else 0
+                    for label in self.unique_labels
+                ]
             return out
         docs = self.nlp.pipe(X)
-        return np.array([binarize_output(doc) for doc in docs])
+        return np.array([transform_output(doc) for doc in docs])
 
     def predict_proba(self, X):
         def get_proba(x):
