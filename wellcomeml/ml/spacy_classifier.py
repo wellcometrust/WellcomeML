@@ -27,13 +27,14 @@ if is_using_gpu:
 class SpacyClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, threshold=0.5, n_iterations=5,
                  batch_size=8, learning_rate=0.001,
-                 dropout=0.1, shuffle=True):
+                 dropout=0.1, shuffle=True, architecture="simple_cnn"):
         self.threshold = threshold
         self.batch_size = batch_size
         self.dropout = dropout
         self.learning_rate = learning_rate
         self.n_iterations=n_iterations
         self.shuffle=shuffle
+        self.architecture=architecture
 
     def _init_nlp(self):
         self.nlp = spacy.blank('en')
@@ -43,7 +44,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
             "textcat",
             config={
                 "exclusive_classes": False,
-                "architecture": "simple_cnn",
+                "architecture": self.architecture
             }
         )
         self.nlp.add_pipe(self.textcat, last=True)
