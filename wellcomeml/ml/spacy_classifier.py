@@ -186,13 +186,22 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
 
         texts = X
 
-        train_tags = self._label_binarizer_inverse_transform(Y)
-        train_cats = [
-            {
-                label: label in tags
-                for label in self.unique_labels
-            } for tags in train_tags
-        ]
+        if self.exclusive_classes:
+            train_cats = []
+            for y in Y:
+                cats = {
+                    label: label == y
+                    for label in self.unique_labels
+                }
+                train_cats.append(cats)
+        else:
+            train_tags = self._label_binarizer_inverse_transform(Y)
+            train_cats = [
+                {
+                    label: label in tags
+                    for label in self.unique_labels
+                } for tags in train_tags
+            ]
         annotations = [{"cats": cats} for cats in train_cats]
 
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
