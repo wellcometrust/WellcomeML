@@ -1,5 +1,5 @@
 # encoding: utf-8
-
+from sklearn.metrics import f1_score
 import numpy as np
 
 from wellcomeml.ml import BertClassifier
@@ -22,8 +22,10 @@ def test_multilabel():
 
     model = BertClassifier()
     model.fit(X, Y)
-    assert model.score(X, Y) > 0.4
-    assert model.predict(X).shape == (5,4)
+    assert model.predict(X).sum() != 0
+    assert model.predict(X).sum() != Y.size
+    assert model.predict(X).shape == Y.shape
+    assert model.losses[0] > model.losses[-1]
 
 def test_partial_fit():
     X = [
@@ -42,7 +44,10 @@ def test_partial_fit():
     ]
 
     model = BertClassifier()
-    for x, y in zip(X, Y):
-        model.partial_fit([x], np.array([y]))
-    assert model.score(X, Y) > 0.3
-    assert model.predict(X).shape == (5,4)
+    for epoch in range(5):
+        for x, y in zip(X, Y):
+            model.partial_fit([x], np.array([y]))       
+    assert model.predict(X).sum() != 0
+    assert model.predict(X).sum() != np.array(Y).size
+    assert model.predict(X).shape == np.array(Y).shape
+    assert model.losses[0] > model.losses[-1]

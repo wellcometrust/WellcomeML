@@ -112,6 +112,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
             logger.info("{:^5}\t{:^5}\t{:^5}\t{:^5}\t{:^5}\t{:^5}".format("ITER", "LOSS", "P", "R", "F", "TF"))
             batch_sizes = compounding(4.0, self.batch_size, 1.001)
             #dropout = decaying(0.6, 0.2, 1e-4)
+            self.losses = []
             for i in range(n_iter):
                 losses = {}
                 # batch up the examples using spaCy's minibatch
@@ -125,6 +126,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
                     Y_test_pred = self.predict(X_test)
                     p, r, f1, _ = precision_recall_fscore_support(Y_test, Y_test_pred, average='micro')
                 loss = losses['trf_textcat']
+                self.losses.append(loss)
                 logger.info(
                     "{0:2d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}".format(
                         i,
@@ -140,6 +142,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
         if not hasattr(self, 'unique_labels'):
             self.unique_labels = [str(i) for i in range(Y.shape[1])]
             self._init_nlp()
+            self.losses = []
 
         texts = X
 
@@ -158,8 +161,9 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
                 self.optimizer = self.nlp.resume_training()
                 self.optimizer.alpha = self.learning_rate
 
-            self.nlp.update(texts, annotations, sgd=self.optimizer, drop=self.dropout)
-
+            losses = {}
+            self.nlp.update(texts, annotations, sgd=self.optimizer, drop=self.dropout, losses=losses)
+            self.losses.append(losses['trf_textcat'])
         return self
 
     def predict(self, X):
