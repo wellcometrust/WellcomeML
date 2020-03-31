@@ -27,7 +27,8 @@ if is_using_gpu:
 class SpacyClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, threshold=0.5, n_iterations=5,
                  batch_size=8, learning_rate=0.001,
-                 dropout=0.1, shuffle=True, architecture="simple_cnn"):
+                 dropout=0.1, shuffle=True, architecture="simple_cnn",
+                 pre_trained_vectors_path=None):
         self.threshold = threshold
         self.batch_size = batch_size
         self.dropout = dropout
@@ -35,6 +36,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         self.n_iterations=n_iterations
         self.shuffle=shuffle
         self.architecture=architecture
+        self.pre_trained_vectors_path=pre_trained_vectors_path
 
     def _init_nlp(self):
         self.nlp = spacy.blank('en')
@@ -112,6 +114,11 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
             optimizer = self.nlp.begin_training()
             optimizer.alpha = self.learning_rate
             #optimizer.L2 = 1e-4
+
+            if self.pre_trained_vectors_path:
+                with open(self.pre_trained_vectors_path, "rb") as f:
+                    self.textcat.model.tok2vec.from_bytes(f.read())
+            
             logger.info("Training the model...")
             logger.info("{:^5}\t{:^5}\t{:^5}\t{:^5}\t{:^5}".format("ITER", "LOSS", "P", "R", "F"))
             batch_sizes = compounding(4.0, self.batch_size, 1.001)
