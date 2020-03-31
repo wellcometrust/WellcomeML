@@ -159,7 +159,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                     p, r, f, _ = precision_recall_fscore_support(Y_test, Y_test_pred, average='micro')
                 loss = losses["textcat"]
                 logger.info(
-                    "{0:2d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}".format(
+                    "{0:5d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}".format(
                         i,
                         loss,
                         p,
