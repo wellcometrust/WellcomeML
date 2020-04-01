@@ -16,6 +16,7 @@ import spacy
 import torch
 
 import random
+import time
 
 from wellcomeml.logger import logger
 
@@ -147,10 +148,12 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                     self.textcat.model.tok2vec.from_bytes(f.read())
             
             logger.info("Training the model...")
-            logger.info("{:^5}\t{:^5}\t{:^5}\t{:^5}\t{:^5}".format("ITER", "LOSS", "P", "R", "F"))
+            logger.info("{:^5}\t{:^5}\t{:^5}\t{:^5}\t{:^5}\t{:^5}".format("ITER", "LOSS", "P", "R", "F", "SPEED"))
             batch_sizes = compounding(4.0, self.batch_size, 1.001)
             #dropout = decaying(0.6, 0.2, 1e-4)
             for i in range(n_iter):
+                start_time = time.time()
+                nb_examples = 0
                 losses = {}
 
                 def shuffle(X_train, Y_train):
@@ -170,18 +173,22 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                     texts, annotations = zip(*batch)
                     next_dropout = self.dropout # next(dropout)
                     self.nlp.update(texts, annotations, sgd=optimizer, drop=next_dropout, losses=losses)
+                    nb_examples += len(texts)
+                end_time = time.time() - start_time
+                examples_per_second = round(nb_examples / end_time, 2)
                 with self.textcat.model.use_params(optimizer.averages):
                     Y_train_pred = self.predict(X_train)
                     Y_test_pred = self.predict(X_test)
                     p, r, f, _ = precision_recall_fscore_support(Y_test, Y_test_pred, average='micro')
                 loss = losses["textcat"]
                 logger.info(
-                    "{0:5d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}".format(
+                    "{0:2d}\t\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}\t{5:.2f} ex/s".format(
                         i,
                         loss,
                         p,
                         r,
-                        f
+                        f,
+                        examples_per_second
                     )
                 )
         return self
