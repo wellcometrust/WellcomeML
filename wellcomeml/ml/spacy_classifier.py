@@ -29,6 +29,25 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                  batch_size=8, learning_rate=0.001,
                  dropout=0.1, shuffle=True, architecture="simple_cnn",
                  exclusive_classes=False, pre_trained_vectors_path=None):
+        """
+        Args:
+            threshold: the threshold above of which a label should be assigned.
+                Should take values from 0 to 1. default is 0.5.
+            batch_size: the number of examples that will be given to the optimizer
+                in each update of the parameters. default is 8.
+            dropout: the dropout added to the layers. default is 0.1.
+            learning_rate: the learning rate of the optimizer. default is 0.001.
+            n_iterations: number of iterations on the entire dataset (epochs)
+                default is 5
+            shuffle: whether the example are shuffled before an iterations.
+                default is True
+            architecture: architecture that Spacy uses. can be one of "bow", "simple_cnn"
+                and "ensemble". default is "simple_cnn"
+            exclusive_classes: whether the problem is multilabel and hence has no exclusive_classes
+                or not. default is False thus multilabel.
+            pre_trained_vectors_path: path to pretrained vectors produced by spacy pretrain.
+                default is None
+        """
         self.threshold = threshold
         self.batch_size = batch_size
         self.dropout = dropout
