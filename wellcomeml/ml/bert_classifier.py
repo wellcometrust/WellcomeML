@@ -128,7 +128,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
                 loss = losses['trf_textcat']
                 self.losses.append(loss)
                 logger.info(
-                    "{0:2d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}".format(
+                    "{0:5d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}".format(
                         i,
                         loss,
                         p,

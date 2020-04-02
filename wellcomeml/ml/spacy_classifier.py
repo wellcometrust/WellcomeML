@@ -28,7 +28,25 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, threshold=0.5, n_iterations=5,
                  batch_size=8, learning_rate=0.001,
                  dropout=0.1, shuffle=True, architecture="simple_cnn",
-                 pre_trained_vectors_path=None):
+                 multilabel=True, pre_trained_vectors_path=None):
+        """
+        Args:
+            threshold: the threshold above of which a label should be assigned.
+                Should take values from 0 to 1. default is 0.5.
+            batch_size: the number of examples that will be given to the optimizer
+                in each update of the parameters. default is 8.
+            dropout: the dropout added to the layers. default is 0.1.
+            learning_rate: the learning rate of the optimizer. default is 0.001.
+            n_iterations: number of iterations on the entire dataset (epochs)
+                default is 5
+            shuffle: whether the example are shuffled before an iterations.
+                default is True
+            architecture: architecture that Spacy uses. can be one of "bow", "simple_cnn"
+                and "ensemble". default is "simple_cnn"
+            multilabel: whether the problem is multilabel and thus Y is a matrix. default is True
+            pre_trained_vectors_path: path to pretrained vectors produced by spacy pretrain.
+                default is None
+        """
         self.threshold = threshold
         self.batch_size = batch_size
         self.dropout = dropout
@@ -37,16 +55,16 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         self.shuffle=shuffle
         self.architecture=architecture
         self.pre_trained_vectors_path=pre_trained_vectors_path
+        self.multilabel=multilabel
 
     def _init_nlp(self):
         self.nlp = spacy.blank('en')
 
-        # Add a param for exclusive classes to cover non multilabel
         self.textcat = self.nlp.create_pipe(
             "textcat",
             config={
-                "exclusive_classes": False,
-                "architecture": self.architecture
+                "architecture": self.architecture,
+                "exclusive_classes": not self.multilabel
             }
         )
         self.nlp.add_pipe(self.textcat, last=True)
@@ -85,7 +103,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
             Y: 2d numpy array (nb_examples, nb_labels)
         TODO: Generalise to y being 1d
         """
-        if type(Y) == list:
+        if type(Y) in [list, tuple]:
             Y = np.array(Y)
 
         X_train, X_test, Y_train, Y_test = train_test_split(
@@ -95,18 +113,27 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         del X
         del Y
 
-        nb_labels = Y_train.shape[1]
-        self.unique_labels = [str(i) for i in range(nb_labels)]
+        if self.multilabel:
+            nb_labels = Y_train.shape[1]
+            self.unique_labels = [str(i) for i in range(nb_labels)]
+        else:
+            self.unique_labels = np.unique(Y_train)
         self._init_nlp()
         n_iter = self.n_iterations
         
         def yield_train_data(X_train, Y_train):
             for x, y in zip(X_train, Y_train):
-                tags = self._label_binarizer_inverse_transform([y])[0]
-                cats = {
-                    label: label in tags
-                    for label in self.unique_labels
-                }
+                if self.multilabel:
+                    tags = self._label_binarizer_inverse_transform([y])[0]
+                    cats = {
+                        label: label in tags
+                        for label in self.unique_labels
+                    }
+                else:
+                    cats = {
+                        label: label == y
+                        for label in self.unique_labels
+                    }
                 yield (x, {"cats": cats})
         
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
@@ -149,7 +176,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                     p, r, f, _ = precision_recall_fscore_support(Y_test, Y_test_pred, average='micro')
                 loss = losses["textcat"]
                 logger.info(
-                    "{0:2d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}".format(
+                    "{0:5d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}".format(
                         i,
                         loss,
                         p,
@@ -176,13 +203,22 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
 
         texts = X
 
-        train_tags = self._label_binarizer_inverse_transform(Y)
-        train_cats = [
-            {
-                label: label in tags
-                for label in self.unique_labels
-            } for tags in train_tags
-        ]
+        if self.multilabel:
+            train_tags = self._label_binarizer_inverse_transform(Y)
+            train_cats = [
+                {
+                    label: label in tags
+                    for label in self.unique_labels
+                } for tags in train_tags
+            ]
+        else:
+            train_cats = []
+            for y in Y:
+                cats = {
+                    label: label == y
+                    for label in self.unique_labels
+                }
+                train_cats.append(cats)
         annotations = [{"cats": cats} for cats in train_cats]
 
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
@@ -196,15 +232,18 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         return self
     
     def predict(self, X):
-        def binarize_output(doc):
+        def transform_output(doc):
             cats = doc.cats
-            out = [
-                1 if cats[label] > self.threshold else 0
-                for label in self.unique_labels
-            ]
+            if self.multilabel:
+                out = [
+                    1 if cats[label] > self.threshold else 0
+                    for label in self.unique_labels
+                ]
+            else:
+                out = max(cats.items(), key=lambda x: x[1])[0]
             return out
         docs = self.nlp.pipe(X)
-        return np.array([binarize_output(doc) for doc in docs])
+        return np.array([transform_output(doc) for doc in docs])
 
     def predict_proba(self, X):
         def get_proba(x):
