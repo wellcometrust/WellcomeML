@@ -16,6 +16,7 @@ import spacy
 import torch
 
 import random
+import time
 
 from wellcomeml.logger import logger
 
@@ -114,6 +115,8 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
             #dropout = decaying(0.6, 0.2, 1e-4)
             self.losses = []
             for i in range(n_iter):
+                start_epoch = time.time()
+                nb_examples = 0
                 losses = {}
                 # batch up the examples using spaCy's minibatch
                 random.shuffle(train_data)
@@ -122,18 +125,23 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
                     texts, annotations = zip(*batch)
                     next_dropout = self.dropout # next(dropout)
                     self.nlp.update(texts, annotations, sgd=optimizer, drop=next_dropout, losses=losses)
+                    nb_examples += len(texts)
                 with self.textcat.model.use_params(optimizer.averages):
                     Y_test_pred = self.predict(X_test)
                     p, r, f1, _ = precision_recall_fscore_support(Y_test, Y_test_pred, average='micro')
                 loss = losses['trf_textcat']
                 self.losses.append(loss)
+
+                epoch_seconds = time.time() - start_epoch
+                speed = nb_examples / epoch_seconds
                 logger.info(
                     "{0:5d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}".format(
                         i,
                         loss,
                         p,
                         r,
-                        f1
+                        f1,
+                        speed
                     )
                 )
         return self
