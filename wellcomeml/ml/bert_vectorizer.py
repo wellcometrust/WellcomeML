@@ -35,6 +35,16 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
         self.pretrained = pretrained
         self.sentence_embedding = sentence_embedding
 
+    @classmethod
+    def save_transformed(cls, path, X_transformed):
+        """Saves transformed embedded vectors"""
+        np.save(path, X_transformed)
+
+    @classmethod
+    def load_transformed(cls, path):
+        """Loads transformed embedded vectors"""
+        np.load(path)
+
     def bert_embedding(self, x):
         # Max sequence length is 512 for BERT
         if len(x) > 512:
@@ -85,7 +95,6 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
         self.tokenizer = BertTokenizer.from_pretrained(model_name)
         self.model.eval()
         return self
-
 
 def _check_cache_and_download(model_name):
     """ Checks if model_name is cached and return complete path"""
