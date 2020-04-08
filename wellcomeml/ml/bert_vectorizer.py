@@ -43,7 +43,7 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
     @classmethod
     def load_transformed(cls, path):
         """Loads transformed embedded vectors"""
-        np.load(path)
+        return np.load(path)
 
     def bert_embedding(self, x):
         # Max sequence length is 512 for BERT
