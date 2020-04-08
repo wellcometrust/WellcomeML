@@ -26,3 +26,21 @@ def test_wrong_model_dispatch_error():
     with pytest.raises(ValueError):
         Vectorizer(embedding='embedding_that_doesnt_exist')
 
+
+
+def test_vectorizer_that_does_not_have_save(monkeypatch):
+    X = ['This is a sentence']
+
+    vec = Vectorizer()
+
+    X_embed = vec.fit_transform(X)
+
+    monkeypatch.delattr(vec.vectorizer.__class__, 'save_transformed', raising=True)
+    monkeypatch.delattr(vec.vectorizer.__class__, 'load_transformed', raising=True)
+
+    with pytest.raises(NotImplementedError):
+        vec.save_transformed(path='fake_path.npy', X_transformed=X_embed)
+
+    with pytest.raises(NotImplementedError):
+        vec.load_transformed(path='fake_path.npy')
+
