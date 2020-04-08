@@ -38,4 +38,20 @@ class Vectorizer(BaseEstimator, TransformerMixin):
         return self.vectorizer.fit(X)
 
     def transform(self, X, *_):
-        return self.transform(X)
+        return self.vectorizer.transform(X)
+
+    def save(self, X_transformed, path):
+        save_method = getattr(self.vectorizer.__class__, 'save', None)
+        if not save_method:
+            raise NotImplementedError(f'Method save not implemented for class '
+                                      f'{self.vectorizer.__class__.__name__}')
+
+        return save_method(X_transformed=X_transformed, path=path)
+
+    def load(self, path):
+        load_method = getattr(self.vectorizer.__class__, 'load', None)
+        if not load_method:
+            raise NotImplementedError(f'Method load not implemented for class '
+                                      f'{self.vectorizer.__class__.__name__}')
+
+        return load_method(path=path)
