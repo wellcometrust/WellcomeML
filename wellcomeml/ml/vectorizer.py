@@ -40,18 +40,40 @@ class Vectorizer(BaseEstimator, TransformerMixin):
     def transform(self, X, *_):
         return self.vectorizer.transform(X)
 
-    def save(self, X_transformed, path):
-        save_method = getattr(self.vectorizer.__class__, 'save', None)
+    def save_transformed(self, path, X_transformed):
+        """
+        Saves transformed vector X_transformed vector, using the corresponding
+        save_transformed method for the specific vectorizer.
+
+        Args:
+            path: A path to the embedding file
+            X_transformed: A transformed vector (as output by using the
+            .transform method)
+
+        """
+        save_method = getattr(self.vectorizer.__class__, 'save_transformed',
+                              None)
         if not save_method:
-            raise NotImplementedError(f'Method save not implemented for class '
+            raise NotImplementedError(f'Method save_transformed not implemented'
+                                      f' for class '
                                       f'{self.vectorizer.__class__.__name__}')
 
-        return save_method(X_transformed=X_transformed, path=path)
+        return save_method(path=path, X_transformed=X_transformed)
 
-    def load(self, path):
-        load_method = getattr(self.vectorizer.__class__, 'load', None)
+    def load_transformed(self, path):
+        """
+        Loads transformed vector X_transformed vector, using the corresponding
+        load method for the specific vectorizer.
+
+        Args:
+            path: A path to the file containing embedded vectors
+
+        """
+        load_method = getattr(self.vectorizer.__class__, 'load_transformed',
+                              None)
         if not load_method:
-            raise NotImplementedError(f'Method load not implemented for class '
+            raise NotImplementedError(f'Method load_transformed not implemented'
+                                      f' for class '
                                       f'{self.vectorizer.__class__.__name__}')
 
         return load_method(path=path)
