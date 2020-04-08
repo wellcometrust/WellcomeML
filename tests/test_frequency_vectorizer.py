@@ -16,7 +16,6 @@ def test_save_and_load(tmpdir):
 
     X = ["This is a sentence"*100]
 
-
     vec = WellcomeTfidf()
 
     X_embed = vec.fit_transform(X)
