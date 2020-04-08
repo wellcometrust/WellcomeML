@@ -68,6 +68,9 @@ class Vectorizer(BaseEstimator, TransformerMixin):
         Args:
             path: A path to the file containing embedded vectors
 
+        Returns:
+            X_transformed (array), like the one returned by the the
+            fit_transform function.
         """
         load_method = getattr(self.vectorizer.__class__, 'load_transformed',
                               None)
