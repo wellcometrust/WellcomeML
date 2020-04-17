@@ -15,7 +15,7 @@ from sklearn.metrics import f1_score
 import tensorflow as tf
 
 
-class CNN(BaseEstimator, ClassifierMixin):
+class CNNClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, context_window = 3, learning_rate=0.001, batch_size=32, nb_epochs=5, dropout=0.2, multilabel=False):
         self.context_window = context_window
         self.learning_rate = learning_rate
@@ -28,7 +28,7 @@ class CNN(BaseEstimator, ClassifierMixin):
         sequence_length = X.shape[1]
         vocab_size = X.max() + 1
         emb_dim = embedding_matrix.shape[1] if embedding_matrix else 100
-        nb_outputs = max(Y)
+        nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
 
         def residual_conv_block(x1):
             filters = x1.shape[2]
@@ -57,7 +57,7 @@ class CNN(BaseEstimator, ClassifierMixin):
 
         self.model = tf.keras.Model(inp, out)
         self.model.compile(optimizer=tf.keras.optimizers.Adam(lr=self.learning_rate), loss='binary_crossentropy', metrics=['accuracy'])
-        self.model.fit(X, y, epochs=self.nb_epochs, batch_size=self.batch_size, validation_split=0.1)
+        self.model.fit(X, Y, epochs=self.nb_epochs, batch_size=self.batch_size, validation_split=0.1)
         return self
 
     def predict(self, X):

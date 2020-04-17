@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 class KerasVectorizer(BaseEstimator, TransformerMixin):
-    def __init__(self, vocab_size, sequence_length, oov_token='<OOV>'):
+    def __init__(self, vocab_size=1000, sequence_length=100, oov_token='<OOV>'):
         self.vocab_size = vocab_size
         self.oov_token = oov_token
         self.sequence_length = sequence_length
@@ -15,12 +15,12 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
             num_words=self.vocab_size,
             oov_token=self.oov_token
         )
-        self.tokenizer.fit_on_texts(texts)
+        self.tokenizer.fit_on_texts(X)
         return self
 
     def transform(self, X, *_):
-        sequences = self.tokenizer.texts_to_sequences(texts)
-        return pad_sequences(sequences, maxlen=sequence_length)
+        sequences = self.tokenizer.texts_to_sequences(X)
+        return pad_sequences(sequences, maxlen=self.sequence_length)
 
     def build_embedding_matrix(embeddings_path):
         embeddings_index = {}
