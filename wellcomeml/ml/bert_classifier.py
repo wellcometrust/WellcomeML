@@ -6,7 +6,12 @@ of grants
 Adapted from https://github.com/explosion/spaCy/blob/master/examples/training/train_textcat.py
 """
 from spacy_transformers import TransformersLanguage, TransformersWordPiecer, TransformersTok2Vec
+from spacy_transformers.model_registry import register_model, get_last_hidden, flatten_add_lengths
 from spacy.util import minibatch, compounding, decaying
+from spacy._ml import zero_init, logistic
+from thinc.t2v import Pooling, mean_pool
+from thinc.v2v import Affine
+from thinc.api import chain
 from sklearn.metrics import precision_recall_fscore_support, f1_score
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import train_test_split
@@ -19,6 +24,19 @@ import random
 import time
 
 from wellcomeml.logger import logger
+
+
+@register_model("sigmoid_last_hidden")
+def sigmoid_last_hidden(nr_class, *, exclusive_classes=False, **cfg):
+    width = cfg["token_vector_width"]
+    return chain(
+        get_last_hidden,
+        flatten_add_lengths,
+        Pooling(mean_pool),
+        zero_init(Affine(nr_class, width, drop_factor=0.0)),
+        logistic,
+    )
+
 
 is_using_gpu = spacy.prefer_gpu()
 if is_using_gpu:
