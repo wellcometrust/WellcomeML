@@ -9,7 +9,8 @@ from spacy_transformers import TransformersLanguage, TransformersWordPiecer, Tra
 from spacy_transformers.model_registry import register_model, get_last_hidden, flatten_add_lengths
 from spacy.util import minibatch, compounding, decaying
 from spacy._ml import zero_init, logistic
-from thinc.t2v import Affine, Pooling, mean_pool
+from thinc.t2v import Pooling, mean_pool
+from thinc.v2v import Affine
 from thinc.api import chain
 from sklearn.metrics import precision_recall_fscore_support, f1_score
 from sklearn.base import BaseEstimator, ClassifierMixin
