@@ -4,8 +4,8 @@ pandas
 scikit-learn
 torch
 spacy<2.3.0,>=2.2.1
-#spacy-transformers
--e git+https://github.com/nsorros/spacy-transformers#egg=spacy-transformers
+spacy-transformers
+#-e git+https://github.com/nsorros/spacy-transformers#egg=spacy-transformers
 nervaluate
 transformers<=2.0.0
 python-dateutil<2.8.1,>=2.1

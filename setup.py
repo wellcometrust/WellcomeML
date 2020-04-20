@@ -53,7 +53,7 @@ setuptools.setup(
         'deep-learning': [
             'torch',
             'transformers<=2.0.0',
-            'spacy-transformers @ https://github.com/nsorros/spacy-transformers/tarball/master#egg=spacy-transformers',
+            'spacy-transformers',
             'en_trf_bertbaseuncased_lg @ https://github.com/explosion/spacy-models/releases/download/en_trf_bertbaseuncased_lg-2.2.0/en_trf_bertbaseuncased_lg-2.2.0.tar.gz#egg=en_trf_bertbaseuncased_lg'
         ]
     },
