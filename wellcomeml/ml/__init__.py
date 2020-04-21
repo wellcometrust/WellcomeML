@@ -11,6 +11,7 @@ try:
     from .spacy_ner import SpacyNER
     from .spacy_classifier import SpacyClassifier
     from .cnn import CNNClassifier
+    from .bilstm import BiLSTMClassifier
     from .keras_vectorizer import KerasVectorizer
 except ImportError:
     logger.warning("Using WellcomeML without extras (transformers & torch).")
