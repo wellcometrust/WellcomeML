@@ -17,7 +17,7 @@ def test_vanilla():
         ('clf', CNNClassifier())
     ])
     model.fit(X, Y)
-    assert model.score(X, Y) > 0.4
+    assert model.score(X, Y) > 0.6
 
 def test_multilabel():
     X = [
