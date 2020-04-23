@@ -46,3 +46,22 @@ def test_embed_scibert():
                                              sentence_embedding=embedding)
         X_embed = vec.fit_transform(X)
         assert(X_embed.shape == (1, 768))
+
+
+def test_save_and_load(tmpdir):
+    tmpfile = tmpdir.join('test.npy')
+
+    X = ["This is a sentence"*100]
+    for pretrained in ['bert', 'scibert']:
+        for embedding in EMBEDDING_TYPES:
+            vec = bert_vectorizer.BertVectorizer(
+                pretrained=pretrained,
+                sentence_embedding=embedding
+            )
+            X_embed = vec.fit_transform(X)
+
+            vec.save_transformed(str(tmpfile), X_embed)
+
+            X_loaded = vec.load_transformed(str(tmpfile))
+
+            assert (X_loaded != X_embed).sum() == 0

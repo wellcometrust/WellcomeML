@@ -5,8 +5,8 @@
 A generic "frequency" vectorizer that wraps all usual transformations.
 """
 import re
-import pickle
 
+import numpy as np
 import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -34,6 +34,22 @@ class WellcomeTfidf(TfidfVectorizer):
         kwargs['stop_words'] = kwargs.get('stop_words', 'english')
 
         super().__init__(**kwargs)
+
+    @classmethod
+    def save_transformed(cls, path, X_transformed):
+        """Saves transformed embedded vectors"""
+        # Numpy will save the transformed sparse array
+        # into a 0-dimensional array, preserving sparsity
+        np.save(path, X_transformed)
+
+    @classmethod
+    def load_transformed(cls, path):
+        """Loads transformed embedded vectors"""
+
+        # Loads the 0-dimensional array and returns its content
+        X_transformed = np.load(path, allow_pickle=True)
+
+        return X_transformed[()]
 
     def regex_transform(self, X, remove_numbers='years', *_):
         """
