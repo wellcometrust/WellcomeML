@@ -42,7 +42,7 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate, clipnorm=1.0)
         metrics = Metrics(validation_data=(X_val, Y_val))
         self.model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=[])
-        self.model.fit(X, Y, epochs=self.nb_epochs, batch_size=self.batch_size, validation_data=(X_val, Y_val), callbacks=[metrics])
+        self.model.fit(X_train, Y_train, epochs=self.nb_epochs, batch_size=self.batch_size, validation_data=(X_val, Y_val), callbacks=[metrics])
         return self
 
     def predict(self, X, *_):
