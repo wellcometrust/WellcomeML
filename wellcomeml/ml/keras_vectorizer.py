@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 class KerasVectorizer(BaseEstimator, TransformerMixin):
-    def __init__(self, vocab_size=1000, sequence_length=100, oov_token='<OOV>'):
+    def __init__(self, vocab_size=None, sequence_length=None, oov_token='<OOV>'):
         self.vocab_size = vocab_size
         self.oov_token = oov_token
         self.sequence_length = sequence_length
