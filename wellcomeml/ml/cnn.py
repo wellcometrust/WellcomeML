@@ -11,7 +11,8 @@ Predict: softmax or sigmoid depending on number of outputs
     and whether task is multilabel
 """
 from sklearn.base import BaseEstimator, ClassifierMixin
-from sklearn.metrics import f1_score
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score, precision_score, recall_score
 import tensorflow as tf
 
 
@@ -30,9 +31,30 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         emb_dim = embedding_matrix.shape[1] if embedding_matrix else 100
         nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
 
+        class Metrics(tf.keras.callbacks.Callback):
+            def __init__(self, validation_data):
+                self.validation_data = validation_data
+
+            def on_epoch_end(self, epoch, logs):
+                X_val = self.validation_data[0]
+                Y_val = self.validation_data[1]
+
+                Y_pred = self.model.predict(X_val) > 0.5
+                f1 = round(f1_score(Y_val, Y_pred, average='micro'), 4)
+                p = round(precision_score(Y_val, Y_pred, average='micro'), 4)
+                r = round(recall_score(Y_val, Y_pred, average='micro'), 4)
+                print(f"- val metrics: P {p} R {r} F {f1}")
+                return
+
         def residual_conv_block(x1):
             filters = x1.shape[2]
-            x2 = tf.keras.layers.Conv1D(filters, self.context_window, padding='same', activation='relu')(x1)
+            x2 = tf.keras.layers.Conv1D(
+                filters,
+                self.context_window,
+                padding='same',
+                activation='relu',
+                kernel_regularizer=tf.keras.regularizers.l2(1e-6)
+            )(x1)
             x2 = tf.keras.layers.Dropout(self.dropout)(x2)
             x2 = tf.keras.layers.LayerNormalization()(x2)
             return tf.keras.layers.add([x1, x2])
@@ -48,16 +70,20 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         x = residual_conv_block(x)
         x = residual_conv_block(x)
         x = tf.keras.layers.GlobalMaxPooling1D()(x)
-        x = tf.keras.layers.Dense(32, activation='relu')(x)
+        x = tf.keras.layers.Dense(32, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(1e-6))(x)
         x = tf.keras.layers.Dropout(self.dropout)(x)
         x = tf.keras.layers.LayerNormalization()(x)
 
         output_activation = 'sigmoid' if nb_outputs==1 or self.multilabel else 'softmax'
-        out = tf.keras.layers.Dense(nb_outputs, activation=output_activation)(x)
-
+        out = tf.keras.layers.Dense(nb_outputs, activation=output_activation, kernel_regularizer=tf.keras.regularizers.l2(1e-6))(x)
         self.model = tf.keras.Model(inp, out)
-        self.model.compile(optimizer=tf.keras.optimizers.Adam(lr=self.learning_rate), loss='binary_crossentropy', metrics=['accuracy'])
-        self.model.fit(X, Y, epochs=self.nb_epochs, batch_size=self.batch_size, validation_split=0.1)
+
+        optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate, clipnorm=1.0)
+        self.model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=[])
+
+        X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=0.1, shuffle= True)
+        metrics = Metrics(validation_data=(X_val, Y_val))
+        self.model.fit(X_train, Y_train, epochs=self.nb_epochs, batch_size=self.batch_size, validation_data=(X_val, Y_val), callbacks=[metrics])
         return self
 
     def predict(self, X):
