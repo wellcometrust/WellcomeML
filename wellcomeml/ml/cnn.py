@@ -47,7 +47,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 f1 = round(f1_score(Y_val, Y_pred, average='micro'), 4)
                 p = round(precision_score(Y_val, Y_pred, average='micro'), 4)
                 r = round(recall_score(Y_val, Y_pred, average='micro'), 4)
-                print(f"- val metrics: P {p} R {r} F {f1}")
+                print(f" - val metrics: P {p:.4f} R {r:.4f} F {f1:.4f}")
                 return
 
         def residual_conv_block(x1):
