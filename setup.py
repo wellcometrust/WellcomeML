@@ -51,6 +51,7 @@ setuptools.setup(
     ],
     extras_require={
         'deep-learning': [
+            'tensorflow',
             'torch',
             'transformers<=2.0.0',
             'spacy-transformers',
