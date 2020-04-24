@@ -90,6 +90,18 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         return dataset
 
     def fit(self, X, y, random_state=None, epochs=3):
+        """
+        Fits a sentence similarity model
+
+        Args:
+            X: List of 2-uples: [('Sentence 1', 'Sentence 2'), ....]
+            y: list of 0 (not similar) and 1s (similar)
+            random_state: a random state for the train_test_split
+            epochs: number_of epochs
+
+        Returns:
+
+        """
         # Initialises/downloads model
         self._initialise_models()
 
@@ -123,7 +135,13 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         self.fit_epoch(epochs=epochs)
 
+        return self
+
     def fit_epoch(self, epochs=3):
+        """Fits a certain number of epochs"""
+        if not self.train_dataset:
+            raise RuntimeError("You have to first fit a model using .fit")
+
         self.model.fit(
             self.train_dataset,
             epochs=epochs,
@@ -131,6 +149,24 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             validation_data=self.valid_dataset,
             validation_steps=self.valid_steps,
         )
+
+        return self
+
+    def score(self, X):
+        X_tokenized = self.tokenizer.batch_encode_plus(
+            X, max_length=self.max_length, add_special_tokens=True,
+            return_tensors="tf"
+        )
+        predictions = tf.convert_to_tensor(self.model.predict(X_tokenized))
+
+        return tf.keras.activations.softmax(predictions).numpy()
+
+    def predict(self, X):
+        return self.score(X).argmax(axis=1)
+
+    def save(self, path):
+        os.makedirs(path, exist_ok=True)
+        self.model.save_pretrained(path)
 
 
 def pad(x, pad_len):
