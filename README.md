@@ -54,7 +54,7 @@ pip3 install <relative path to this folder>
 
 ### 2.4 Transformers
 
-Some experimental features (currently the `SemanticSimilarityClassifier`) requires a version of `transformers` that is not compatible with `spacy-transformers`. To develop those features:
+Some experimental features (currently `wellcomeml.ml.SemanticEquivalenceClassifier`) require a version of `transformers` that is not compatible with `spacy-transformers`. To develop those features:
 
 ```bash
 export WELLCOMEML_ENV=development_transformers
