@@ -5,11 +5,11 @@ from wellcomeml.logger import logger
 # disable functions that use spacy.
 
 development_transformers_mode = \
-    os.environ.get("WELLCOMEML_ENV", "") != "development_transformers"
+    os.environ.get("WELLCOMEML_ENV", "") == "development_transformers"
 
 if development_transformers_mode:
     logger.warning("Running in development mode. Only loading modules that"
-                   "use new version of transformers.")
+                   " use new version of transformers.")
 
     from .bert_classifier import BertClassifier
     from .bert_vectorizer import BertVectorizer
