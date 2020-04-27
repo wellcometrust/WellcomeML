@@ -1,13 +1,10 @@
 import os
 
 import tensorflow as tf
-
 from transformers import (
     BertConfig,
     BertTokenizer,
-    TFBertForSequenceClassification,
-    glue_convert_examples_to_features,
-    glue_processors,
+    TFBertForSequenceClassification
 )
 
 from sklearn.base import BaseEstimator, TransformerMixin
