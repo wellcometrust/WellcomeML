@@ -26,5 +26,7 @@ else:
         from .bert_classifier import BertClassifier
         from .bert_vectorizer import BertVectorizer
         from .bert_semantic_equivalence import SemanticEquivalenceClassifier
+        from .cnn import CNNClassifier
+        from .keras_vectorizer import KerasVectorizer
     except ImportError:
         logger.warning("Using WellcomeML without extras (transformers & torch).")
