@@ -7,11 +7,12 @@ from wellcomeml.logger import logger
 development_transformers_mode = \
     os.environ.get("WELLCOMEML_ENV", "") == "development_transformers"
 
+print (development_transformers_mode)
+
 if development_transformers_mode:
     logger.warning("Running in development mode. Only loading modules that"
                    " use new version of transformers.")
-
-    from .bert_classifier import BertClassifier
+    
     from .bert_vectorizer import BertVectorizer
     from .bert_semantic_equivalence import SemanticEquivalenceClassifier
 else:

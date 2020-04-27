@@ -1,5 +1,4 @@
 pytest
 pytest-cov
 codecov
-spacy
 ipython

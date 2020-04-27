@@ -55,7 +55,7 @@ test: $(VIRTUALENV)/.en_core_web_sm $(VIRTUALENV)/.en_trf_bertbaseuncased_lg
 .PHONY: test-transformers
 test-transformers:
 	$(VIRTUALENV)/bin/pip install -r requirements_transformers.txt
-	$(VIRTUALENV)/bin/pytest -m "transformers" --disable-warnings --cov-append --tb=line --cov=wellcomeml ./tests
+	export WELLCOMEML_ENV=development_transformers && $(VIRTUALENV)/bin/pytest -m "transformers" --disable-warnings --cov-append --tb=line --cov=wellcomeml ./tests/transformers
 	
 
 .PHONY: test-integrations
