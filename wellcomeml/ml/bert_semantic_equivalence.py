@@ -13,6 +13,8 @@ from transformers import (
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
 
+from wellcomeml.ml.bert_vectorizer import check_cache_and_download
+
 
 class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
     """
@@ -41,13 +43,16 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.train_steps = None
         self.valid_steps = None
 
+    # Bert models have a tensorflow checkopoint, otherwise,
+    # we need to load the pytorch versions with the parameter `from_pt=True`
+
     def _initialise_models(self):
         if self.pretrained == 'bert':
             model_name = 'bert-base-cased'
             from_pt = False
         elif self.pretrained == 'scibert':
-            # Todo
-            pass
+            model_name = check_cache_and_download('scibert_scivocab_cased')
+            from_pt = True
 
         self.config = BertConfig.from_pretrained(model_name, num_labels=2)
         self.tokenizer = BertTokenizer.from_pretrained(model_name)
