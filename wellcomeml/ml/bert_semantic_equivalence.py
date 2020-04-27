@@ -149,6 +149,16 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         return self
 
     def score(self, X):
+        """
+        Calculates scores for model prediction
+
+        Args:
+            X: List of 2-uples: [('Sentence 1', 'Sentence 2'), ....]
+
+        Returns:
+            An array of shape len(X) x 2 with scores for classes 0 and 1
+
+        """
         X_tokenized = self.tokenizer.batch_encode_plus(
             X, max_length=self.max_length, add_special_tokens=True,
             pad_to_max_length=True,
@@ -159,6 +169,17 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         return tf.keras.activations.softmax(predictions).numpy()
 
     def predict(self, X):
+        """
+        Calculates the predicted class (0 - for negative and 1 for positive)
+        for X.
+
+        Args:
+            X: List of 2-uples: [('Sentence 1', 'Sentence 2'), ....]
+
+        Returns:
+            An array of 0s and 1s
+
+        """
         return self.score(X).argmax(axis=1)
 
     def save(self, path):
