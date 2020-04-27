@@ -54,6 +54,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             model_name = check_cache_and_download('scibert_scivocab_cased')
             from_pt = True
 
+        print(model_name)
         self.config = BertConfig.from_pretrained(model_name, num_labels=2)
         self.tokenizer = BertTokenizer.from_pretrained(model_name)
         self.model = TFBertForSequenceClassification.from_pretrained(
@@ -155,6 +156,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
     def score(self, X):
         X_tokenized = self.tokenizer.batch_encode_plus(
             X, max_length=self.max_length, add_special_tokens=True,
+            pad_to_max_length=True,
             return_tensors="tf"
         )
         predictions = tf.convert_to_tensor(self.model.predict(X_tokenized))
