@@ -6,7 +6,6 @@ from transformers import (
     BertTokenizer,
     TFBertForSequenceClassification
 )
-
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
 
@@ -51,7 +50,6 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             model_name = check_cache_and_download('scibert_scivocab_cased')
             from_pt = True
 
-        print(model_name)
         self.config = BertConfig.from_pretrained(model_name, num_labels=2)
         self.tokenizer = BertTokenizer.from_pretrained(model_name)
         self.model = TFBertForSequenceClassification.from_pretrained(
