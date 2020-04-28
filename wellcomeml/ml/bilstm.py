@@ -24,21 +24,27 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         output_activation = 'sigmoid' if nb_outputs==1 or self.multilabel else 'softmax'
 
         X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=0.1, shuffle=True)
-        
+
+        def residual_bilstm(x1, l2):
+            x2 = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(50, return_sequences=True, kernel_regularizer=l2))(x1)
+            return tf.keras.layers.add([x1, x2])
+
         l2 = tf.keras.regularizers.l2(1e-6)
         embeddings_initializer = tf.keras.initializers.Constant(embedding_matrix) if embedding_matrix else 'uniform'
-        self.model = tf.keras.Sequential([
-            tf.keras.layers.Embedding(
+        inp = tf.keras.layers.Input(shape=(sequence_length,))
+        x = tf.keras.layers.Embedding(
                 vocab_size,
                 embedding_size,
                 input_length=sequence_length,
                 embeddings_initializer=embeddings_initializer
-            ),
-            tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64, return_sequences=True, kernel_regularizer=l2)),
-            tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64, kernel_regularizer=l2)),
-            tf.keras.layers.Dense(20, kernel_regularizer=l2),
-            tf.keras.layers.Dense(nb_outputs, activation=output_activation, kernel_regularizer=l2)
-        ])
+            )(inp)
+        x = residual_bilstm(x, l2)
+        x = residual_bilstm(x, l2)
+        x = tf.keras.layers.GlobalMaxPooling1D()(x)
+        x = tf.keras.layers.Dense(20, kernel_regularizer=l2)(x)
+        out = tf.keras.layers.Dense(nb_outputs, activation=output_activation, kernel_regularizer=l2)(x)
+        self.model = tf.keras.Model(inp, out)
+        print(self.model.summary())
         optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate, clipnorm=1.0)
         metrics = Metrics(validation_data=(X_val, Y_val))
         self.model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=[])
