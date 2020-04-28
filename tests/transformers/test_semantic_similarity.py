@@ -18,10 +18,24 @@ def test_semantic_similarity():
 
     classifier.fit(X, y, epochs=3)
 
-    losses = classifier.model.history.history['loss']
+    loss_initial = classifier.history['loss'][0]
+    loss_epoch_2 = classifier.history['loss'][2]
     scores = classifier.score(X)
 
-    assert losses[2] < losses[0]
+    assert loss_epoch_2 < loss_initial
     assert len(classifier.predict(X)) == 3
     assert (scores > 0).sum() == 6
     assert (scores < 1).sum() == 6
+
+    # Fits two extra epoch
+
+    classifier.fit(X, y, epochs=2)
+
+    # Asserts that the classifier model is adding to the history, and still
+    # decreasing loss, not re-training
+
+    assert len(classifier.history['loss']) == 5
+
+    loss_epoch_4 = classifier.history['loss'][4]
+
+    assert loss_epoch_4 < loss_epoch_2
