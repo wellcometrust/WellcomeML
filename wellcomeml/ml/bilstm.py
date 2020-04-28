@@ -38,8 +38,8 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
                 input_length=sequence_length,
                 embeddings_initializer=embeddings_initializer
             )(inp)
-        x = residual_bilstm(x, l2)
-        x = residual_bilstm(x, l2)
+        for _ in range(self.nb_layers):
+            x = residual_bilstm(x, l2)
         x = tf.keras.layers.GlobalMaxPooling1D()(x)
         x = tf.keras.layers.Dense(20, kernel_regularizer=l2)(x)
         out = tf.keras.layers.Dense(nb_outputs, activation=output_activation, kernel_regularizer=l2)(x)
