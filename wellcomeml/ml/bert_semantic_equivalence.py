@@ -1,3 +1,4 @@
+from collections import defaultdict
 import os
 
 import tensorflow as tf
@@ -38,6 +39,10 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.valid_dataset = None
         self.train_steps = None
         self.valid_steps = None
+        
+        # Flag to determine whether a model was previously trained or not
+        self._trained = False
+        self.history = defaultdict(list)
 
     # Bert models have a tensorflow checkopoint, otherwise,
     # we need to load the pytorch versions with the parameter `from_pt=True`
@@ -98,53 +103,54 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         Returns:
 
         """
-        # Initialises/downloads model
-        self._initialise_models()
+        # Initialises/downloads model if not trained before.
+        # If trained, fits extra epochs without the transformations
+        if not self._trained:
+            self._initialise_models()
+            
+            # Train/val split
+            X_train, X_valid, y_train, y_valid = train_test_split(
+                X, y, test_size=self.test_size, random_state=random_state
+            )
+    
+            # Generates tensorflow dataset
+            self.train_dataset = self._prep_dataset_generator(X_train, y_train)
+            self.valid_dataset = self._prep_dataset_generator(X_valid, y_valid)
+    
+            # Generates mini-batches and stores in a class variable
+            self.train_dataset = self.train_dataset.shuffle(self.max_length).\
+                batch(self.batch_size).repeat(-1)
+            self.valid_dataset = self.valid_dataset.batch(self.eval_batch_size)
+    
+            opt = tf.keras.optimizers.Adam(learning_rate=self.learning_rate,
+                                           epsilon=1e-08)
+    
+            loss = tf.keras.losses.SparseCategoricalCrossentropy(
+                from_logits=True
+            )
+    
+            # Train and evaluate using tf.keras.Model.fit()
+    
+            metric = tf.keras.metrics.SparseCategoricalAccuracy("accuracy")
+    
+            self.model.compile(optimizer=opt, loss=loss, metrics=[metric])
+    
+            self.train_steps = len(X_train) // self.batch_size
+            self.valid_steps = len(X_valid) // self.eval_batch_size
 
-        # Train/val split
-        X_train, X_valid, y_train, y_valid = train_test_split(
-            X, y, test_size=self.test_size, random_state=random_state
-        )
-
-        # Generates tensorflow dataset
-        self.train_dataset = self._prep_dataset_generator(X_train, y_train)
-        self.valid_dataset = self._prep_dataset_generator(X_valid, y_valid)
-
-        # Generates mini-batches and stores in a class variable
-        self.train_dataset = self.train_dataset.shuffle(self.max_length).\
-            batch(self.batch_size).repeat(-1)
-        self.valid_dataset = self.valid_dataset.batch(self.eval_batch_size)
-
-        opt = tf.keras.optimizers.Adam(learning_rate=self.learning_rate,
-                                       epsilon=1e-08)
-
-        loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
-
-        # Train and evaluate using tf.keras.Model.fit()
-
-        metric = tf.keras.metrics.SparseCategoricalAccuracy("accuracy")
-
-        self.model.compile(optimizer=opt, loss=loss, metrics=[metric])
-
-        self.train_steps = len(X_train) // self.batch_size
-        self.valid_steps = len(X_valid) // self.eval_batch_size
-
-        self.fit_epoch(epochs=epochs)
-
-        return self
-
-    def fit_epoch(self, epochs=3):
-        """Fits a certain number of epochs"""
-        if not self.train_dataset:
-            raise RuntimeError("You have to first fit a model using .fit")
-
-        self.model.fit(
+        history = self.model.fit(
             self.train_dataset,
             epochs=epochs,
             steps_per_epoch=self.train_steps,
             validation_data=self.valid_dataset,
-            validation_steps=self.valid_steps,
+            validation_steps=self.valid_steps
         )
+
+        # Accumulates history of metrics from different partial fits
+        for metric, values in history.history.items():
+            self.history[metric] += values
+
+        self._trained = True
 
         return self
 
