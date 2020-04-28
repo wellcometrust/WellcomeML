@@ -52,7 +52,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             model_name = 'bert-base-cased'
             from_pt = False
         elif self.pretrained == 'scibert':
-            model_name = model_name = 'allenai/scibert_scivocab_cased'
+            model_name = 'allenai/scibert_scivocab_cased'
             from_pt = True
 
         self.config = BertConfig.from_pretrained(model_name, num_labels=2)
