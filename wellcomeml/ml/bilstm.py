@@ -26,7 +26,7 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=0.1, shuffle=True)
 
         def residual_bilstm(x1, l2):
-            x2 = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(50, return_sequences=True, kernel_regularizer=l2))(x1)
+            x2 = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(int(x1.shape[-1]/2), return_sequences=True, kernel_regularizer=l2))(x1)
             return tf.keras.layers.add([x1, x2])
 
         l2 = tf.keras.regularizers.l2(1e-6)
