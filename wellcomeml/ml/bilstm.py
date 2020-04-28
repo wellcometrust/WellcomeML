@@ -44,7 +44,7 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         x = tf.keras.layers.Dense(20, kernel_regularizer=l2)(x)
         out = tf.keras.layers.Dense(nb_outputs, activation=output_activation, kernel_regularizer=l2)(x)
         self.model = tf.keras.Model(inp, out)
-        print(self.model.summary())
+
         optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate, clipnorm=1.0)
         metrics = Metrics(validation_data=(X_val, Y_val))
         self.model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=[])
