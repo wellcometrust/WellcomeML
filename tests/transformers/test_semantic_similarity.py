@@ -32,10 +32,6 @@ def test_semantic_similarity():
     classifier.fit(X, y, epochs=2)
 
     # Asserts that the classifier model is adding to the history, and still
-    # decreasing loss, not re-training
+    # not re-training from scratch
 
     assert len(classifier.history['loss']) == 5
-
-    loss_epoch_4 = classifier.history['loss'][4]
-
-    assert loss_epoch_4 < loss_epoch_2
