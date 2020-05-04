@@ -87,7 +87,7 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
         # If model_name doesn't exist checks cache and change name to
         # full path
         if model_name == 'scibert_scivocab_uncased':
-            model_name = _check_cache_and_download(model_name)
+            model_name = check_cache_and_download(model_name)
 
         logger.info("Using {} embedding".format(model_name))
         self.model = BertModel.from_pretrained(model_name,
@@ -96,7 +96,8 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
         self.model.eval()
         return self
 
-def _check_cache_and_download(model_name):
+
+def check_cache_and_download(model_name):
     """ Checks if model_name is cached and return complete path"""
     os.makedirs(MODELS_DIR, exist_ok=True)
 

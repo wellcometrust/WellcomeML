@@ -7,5 +7,10 @@ MODEL_DISPATCH = {
         "bucket": "ai2-s2-research",
         "path": "scibert/huggingface_pytorch/scibert_scivocab_uncased.tar",
         "file_name": "scibert_scivocab_uncased.tar"
+    },
+    'scibert_scivocab_cased': {
+        "bucket": "ai2-s2-research",
+        "path": "scibert/huggingface_pytorch/scibert_scivocab_cased.tar",
+        "file_name": "scibert_scivocab_cased.tar"
     }
 }
