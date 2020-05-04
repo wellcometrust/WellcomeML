@@ -1,157 +1,168 @@
 """
-TODO: Fill this
+A class that for each of a list of sentences will find the most similar document in a corpus
+using the TFIDF vectors or a BERT embedding from the corpus documents.
+
 """
-from pathlib import Path
-import random
-import os
 
-from spacy.vocab import Vocab
-from spacy.kb import KnowledgeBase
-from spacy.symbols import PERSON
-from spacy.tokens import Span
-from spacy.util import minibatch, compounding
-import spacy
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import f1_score
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
-from wellcomeml.ml.knowledge_base import PeopleKB
+from wellcomeml.ml import BertVectorizer
 
 
-class EntityLinker(object):
-    def __init__(self, kb_path, n_iter=50, print_output=True):
-        self.kb_path = kb_path
-        self.n_iter = n_iter
-        self.print_output = print_output
-
-    def _remove_examples_not_in_kb(self, kb, data):
-        # Remove examples with unknown identifiers to the knowlege base
-        kb_ids = kb.get_entity_strings()
-        for text, annotation in data:
-            for offset, kb_id_dict in annotation["links"].items():
-                new_dict = {}
-                for kb_id, value in kb_id_dict.items():
-                    if kb_id in kb_ids:
-                        new_dict[kb_id] = value
-                    else:
-                        print(
-                            "Removed", kb_id,
-                            "from training because it is not in the KB."
-                        )
-                annotation["links"][offset] = new_dict
-        return data
-
-    def train(self, data):
+class EntityLinker():
+    def __init__(self, stopwords, embedding='tf-idf'):
         """
-        Input:
-            data: list of training data in the form
-                [('A sentence about Farrar',
-                {'links': {(17, 22): {'Q1': 1.0, 'Q2': 0.0}}})]
-
-        See https://spacy.io/usage/linguistic-features#entity-linking for where I got this code from
+        Input: 
+            stopwords - list of stopwords
+            embedding - How to embed the documents
+                    in order to find which document in the corpus
+                    is most similar to the sentence.
+                    embedding='tf-idf': Use a TFIDF vectoriser
+                    embedding='bert': Use a BERT vectoriser
         """
-        # TODO: Replace n_iter with self.n_iter
-        n_iter = self.n_iter
 
-        kb = PeopleKB()
-        kb = kb.load(self.kb_path)
-        print("Loaded Knowledge Base from '%s'" % self.kb_path)
+        self.stopwords = stopwords
+        self.embedding = embedding
 
-        nlp = spacy.blank("en", vocab=kb.vocab)
-        nlp.vocab.vectors.name = "spacy_pretrained_vectors"
-    
-        entity_linker = nlp.create_pipe("entity_linker")
-        entity_linker.set_kb(kb)
-        nlp.add_pipe(entity_linker, last=True)        
+    def _clean_text(self, text):
+        """
+        Clean a body of text
+        """
+        text_split = text.replace("\n"," ")
 
-        data = self._remove_examples_not_in_kb(kb, data)
+        return text_split
+
+    def _clean_kb(self, raw_knowledge_base):
+        """
+        Creates a cleaned version of the raw_knowledge_base
+        which is a dictionary of each document's text.
         
-        other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "entity_linker"]
-        with nlp.disable_pipes(*other_pipes):
-            optimizer = nlp.begin_training()
-            for itn in range(n_iter):
-                random.shuffle(data)
-                losses = {}
-                batches = minibatch(data, size=compounding(4.0, 32.0, 1.001))
-                for batch in batches:
-                    texts, annotations = zip(*batch)
-                    nlp.update(
-                        texts,
-                        annotations,
-                        drop=0.2,
-                        losses=losses,
-                        sgd=optimizer,
-                    )
-                if self.print_output:
-                    print(itn, "Losses", losses)
-
-        self.nlp = nlp
-        return self.nlp
-
-    def _get_token_nums(self, doc, char_idx):
+        Don't include any empty text information
         """
-        Convert a character index to a token index
-        i.e. what number token is character number char_idx in ?
-        """
-        for i, token in enumerate(doc):
-            if char_idx > token.idx:
-                continue
-            if char_idx == token.idx:
-                return i
-            if char_idx < token.idx:
-                return i
 
-    def predict(self, data):
-        """
-        See how well the model predicts which entity you are referring to in your data
-        Input:
-            data: list of test data in the form
-                [('A sentence about Farrar',
-                {'links': {(17, 22): {'Q1': 1.0, 'Q2': 0.0}}})]
-        Output:
-           pred_entities_ids: ['Q1', 'Q1', 'Q2']
-    """
-        # TODO: Replace nlp_el with self.nlp 
-        nlp_el = self.nlp
+        knowledge_base = {}
+        for key, text in raw_knowledge_base.items():
+            if len(text.replace(" ","")) != 0:
+                knowledge_base[key] = self._clean_text(text)
 
-        # IMPORTANT
-        #
-        # This code assumes each training example has one entity
-        # e.g. (start, end) = list(values['links'].keys())[0]
-        #
-        # If the code has more than one entities we predict the
-        # first only  e.g. pred_entity_id = doc.ents[0].kb_id_
+        return knowledge_base
+
+    def fit(self, documents):
+        """
+        documents: dictionary of the texts from each of the corpus documents
+        """
+
+        documents = self._clean_kb(documents)
+
+        document_texts = list(documents.values())
+        self.classifications = list(documents.keys())
+
+        if self.embedding == 'tf-idf':
+            self.vectorizer = TfidfVectorizer(stop_words=self.stopwords)
+            self.corpus_matrix = self.vectorizer.fit_transform(document_texts)
+        else:
+            self.vectorizer = BertVectorizer(sentence_embedding='mean_last')
+            self.vectorizer.fit()
+            self.corpus_matrix = self.vectorizer.transform(document_texts)
+
+    def predict_proba(self, data):
+        """
+        Returns probability estimates for each class
+        in the same order as self.classifications
+        """
+
+        sentences = [self._clean_text(sentence) for sentence, _ in data]
+        query = self.vectorizer.transform(sentences)
+
+        class_probabilities = cosine_similarity(query, self.corpus_matrix)
+
+        return class_probabilities
+
+    def optimise_threshold(self, data, id_col='orcid', no_id_col='No ORCID'):
+        """
+        Find the f1 scores when different similarity thresholds are used.
+        Use half the maximum F1 score found as the optimal threshold.
+        This value will be used as the value for the similarity
+        threshold in predict, unless another value is given.
+        """
+
+        y_true = [test_meta[id_col] for _, test_meta in data]
         
-        pred_entities_ids = []
-        for text, values in data:
-            (start, end) = list(values['links'].keys())[0]
-            entity_text = text[start:end]
+        # Find the best prediction and probability for each data point 
+        probabilities = self.predict_proba(data)
+        pred_entities = []
+        pred_similarities = []
+        for entity, similarity in zip(
+                np.argmax(probabilities, axis=1),
+                np.max(probabilities, axis=1)
+                ):
+            pred_entities.append(self.classifications[entity])
+            pred_similarities.append(similarity)
 
-            doc = nlp_el.tokenizer(text)
-            entity_tokens = nlp_el.tokenizer(entity_text)
-
-            # Set entity span to PERSON
-            doc.ents = [
-                Span(
-                    doc,
-                    self._get_token_nums(doc, start),
-                    self._get_token_nums(doc, end),
-                    label=PERSON
+        # Lipton, Z. C., Elkan, C., & Naryanaswamy, B. (2014)
+        # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4442797/
+        f1_scores = []
+        for similarity_threshold in np.linspace(0, 1, 40):
+            pred_entities_temp = [
+                pred_entities[i] if sim <= similarity_threshold else no_id_col for i, sim in enumerate(pred_similarities)
+                ]
+            f1_scores.append(
+                f1_score(y_true, pred_entities_temp, average='weighted', zero_division=0)
                 )
-            ]
+        self.optimal_threshold = max(f1_scores)/2
 
-            doc = nlp_el.get_pipe("entity_linker")(doc)
+    def predict(self, data, similarity_threshold=None, no_id_col='No ORCID'):
+        """
+        Identify the most similar document to a sentence using TFIDF
 
-            pred_entity_id = doc.ents[0].kb_id_
-            pred_entities_ids.append(pred_entity_id)
+        If the most similar document doesnt have a similarity value over
+        a threshold then return they key 'No ORCID'
 
-        return pred_entities_ids
+        similarity_threshold can be specified, otherwise if you've optimised
+        the threshold it will use this value
 
-    def save(self, output_dir):
-        output_dir = Path(output_dir)
-        if not output_dir.exists():
-            output_dir.mkdir()
-        self.nlp.to_disk(output_dir)
-        print("Saved model to", output_dir)
+        Input:
+            data: a list of tuples in the form
+                [('A sentence about Farrar',
+                {metadata}),
+                ('A sentence about Smith',
+                {metadata})]
+                For this predict function the contents of 
+                {metadata} isn't important
+            similarity_threshold: The threshold by which to 
+                classify a match as being true or that there is
+                no match. If this is None then the best threshold 
+                will be found
+        Output:
+            pred_entities: a list of predictions
+                of which document in the corpus each data
+                point is likely to link to
+                ['0000-0002-2700-623X', '0000-0002-6259-1606', 'No ORCID']
+        """
 
-    def load(self, output_dir):
-        print("Loading from", output_dir)
-        self.nlp = spacy.load(output_dir)
-        return self.nlp
+        if similarity_threshold is None:
+            similarity_threshold = self.optimal_threshold
+
+        # Find all the probabilities for the different classes
+        probabilities = self.predict_proba(data)
+
+        pred_entities = []
+        for entity, similarity in zip(
+                np.argmax(probabilities, axis=1),
+                np.max(probabilities, axis=1)
+                ):
+            if similarity > similarity_threshold:
+                pred_entities.append(self.classifications[entity])
+            else:
+                pred_entities.append(no_id_col)
+
+        return pred_entities
+
+    def evaluate(self, y_true, y_pred):
+
+        f1_micro = f1_score(y_true, y_pred, average = 'micro', zero_division = 0)
+
+        return f1_micro
