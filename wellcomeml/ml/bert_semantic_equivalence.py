@@ -9,8 +9,8 @@ from transformers import (
 )
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
-
-from wellcomeml.ml.bert_vectorizer import check_cache_and_download
+from sklearn.utils.validation import check_is_fitted
+from sklearn.exceptions import NotFittedError
 
 
 class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
@@ -39,9 +39,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.valid_dataset = None
         self.train_steps = None
         self.valid_steps = None
-        
-        # Flag to determine whether a model was previously trained or not
-        self._trained = False
+
         self.history = defaultdict(list)
 
     # Bert models have a tensorflow checkopoint, otherwise,
@@ -105,7 +103,9 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         """
         # Initialises/downloads model if not trained before.
         # If trained, fits extra epochs without the transformations
-        if not self._trained:
+        try:
+            check_is_fitted(self)
+        except NotFittedError:
             self._initialise_models()
             
             # Train/val split
@@ -137,20 +137,20 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
     
             self.train_steps = len(X_train) // self.batch_size
             self.valid_steps = len(X_valid) // self.eval_batch_size
+        finally:
+            history = self.model.fit(
+                self.train_dataset,
+                epochs=epochs,
+                steps_per_epoch=self.train_steps,
+                validation_data=self.valid_dataset,
+                validation_steps=self.valid_steps
+            )
 
-        history = self.model.fit(
-            self.train_dataset,
-            epochs=epochs,
-            steps_per_epoch=self.train_steps,
-            validation_data=self.valid_dataset,
-            validation_steps=self.valid_steps
-        )
+            # Accumulates history of metrics from different partial fits
+            for metric, values in history.history.items():
+                self.history[metric] += values
 
-        # Accumulates history of metrics from different partial fits
-        for metric, values in history.history.items():
-            self.history[metric] += values
-
-        self._trained = True
+            self.trained_ = True
 
         return self
 
