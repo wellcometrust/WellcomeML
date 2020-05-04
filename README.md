@@ -61,6 +61,13 @@ export WELLCOMEML_ENV=development_transformers
 pip install -r requirements_transformers.txt --upgrade
 ```
 
+On OSX, ff you get a message complaining about the rust compiler, install and initialise it with:
+
+```
+brew install rustup
+rustup-init
+```
+
 ## 3. Example usage of some modules
 
 Examples can be found in the subfolder `examples`.
