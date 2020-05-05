@@ -26,7 +26,7 @@ class SelfAttention(tf.keras.layers.Layer):
 class FeedForwardAttention(tf.keras.layers.Layer):
     """https://colinraffel.com/publications/iclr2016feed.pdf"""
     def __init__(self):
-        super(SimpleAttention, self).__init__()
+        super(FeedForwardAttention, self).__init__()
 
     def build(self, input_shape):
         self.W = self.add_weight(shape=(input_shape[-1],1), trainable=True, initializer='uniform')
@@ -43,7 +43,7 @@ class FeedForwardAttention(tf.keras.layers.Layer):
 class HierarchicalAttention(tf.keras.layers.Layer):
     """https://www.aclweb.org/anthology/N16-1174/"""
     def __init__(self):
-        super(AttentionMatrix, self).__init__()
+        super(HierarchicalAttention, self).__init__()
     
     def build(self, input_shape):
         self.attention_matrix = self.add_weight(shape=(input_shape[-1], input_shape[-2]), trainable=True, initializer='uniform')
