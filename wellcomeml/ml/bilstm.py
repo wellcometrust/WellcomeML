@@ -3,17 +3,20 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import f1_score
 import tensorflow as tf
 
+from wellcomeml.ml.attention import HierarchicalAttention
 from wellcomeml.ml.keras_utils import Metrics
 
 class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, learning_rate=0.01, batch_size=32, nb_epochs=5,
-                 dropout=0.1, nb_layers=2, multilabel=False):
+                 dropout=0.1, nb_layers=2, multilabel=False,
+                 attention=False):
         self.learning_rate = learning_rate
         self.batch_size = batch_size
         self.nb_epochs = nb_epochs
         self.dropout = dropout
         self.nb_layers = nb_layers
         self.multilabel = multilabel
+        self.attention = attention
 
     def fit(self, X, Y, embedding_matrix=None, *_):
         sequence_length = X.shape[1]
@@ -29,6 +32,12 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
             x2 = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(int(x1.shape[-1]/2), return_sequences=True, kernel_regularizer=l2))(x1)
             return tf.keras.layers.add([x1, x2])
 
+        def residual_attention(x1):
+            x2 = HierarchicalAttention()(x1)
+            x2 = tf.keras.layers.Dropout(self.dropout)(x2)
+            x2 = tf.keras.layers.LayerNormalization()(x2)
+            return tf.keras.layers.add([x1, x2])
+
         l2 = tf.keras.regularizers.l2(1e-6)
         embeddings_initializer = tf.keras.initializers.Constant(embedding_matrix) if embedding_matrix else 'uniform'
         inp = tf.keras.layers.Input(shape=(sequence_length,))
@@ -40,6 +49,8 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
             )(inp)
         for _ in range(self.nb_layers):
             x = residual_bilstm(x, l2)
+        if self.attention:
+            x = residual_attention(x)
         x = tf.keras.layers.GlobalMaxPooling1D()(x)
         x = tf.keras.layers.Dense(20, kernel_regularizer=l2)(x)
         out = tf.keras.layers.Dense(nb_outputs, activation=output_activation, kernel_regularizer=l2)(x)

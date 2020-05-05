@@ -15,12 +15,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, precision_score, recall_score
 import tensorflow as tf
 
+from wellcomeml.ml.attention import HierarchicalAttention
 from wellcomeml.ml.keras_utils import Metrics
 
 class CNNClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, context_window = 3, learning_rate=0.001,
                  batch_size=32, nb_epochs=5, dropout=0.2,
-                 nb_layers=4, hidden_size=100, multilabel=False):
+                 nb_layers=4, hidden_size=100, multilabel=False,
+                 attention=False):
         self.context_window = context_window
         self.learning_rate = learning_rate
         self.batch_size = batch_size
@@ -29,6 +31,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.nb_layers = nb_layers
         self.hidden_size = hidden_size # note that on current implementation CNN use same hidden size as embedding so if embedding matrix is passed, this is not used. in the future we can decouple
         self.multilabel = multilabel
+        self.attention = attention
 
     def fit(self, X, Y, embedding_matrix=None):
         sequence_length = X.shape[1]
@@ -49,6 +52,12 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             x2 = tf.keras.layers.LayerNormalization()(x2)
             return tf.keras.layers.add([x1, x2])
 
+        def residual_attention(x1):
+            x2 = HierarchicalAttention()(x1)
+            x2 = tf.keras.layers.Dropout(self.dropout)(x2)
+            x2 = tf.keras.layers.LayerNormalization()(x2)
+            return tf.keras.layers.add([x1, x2])
+
         embeddings_initializer = tf.keras.initializers.Constant(embedding_matrix) if embedding_matrix else 'uniform'
         inp = tf.keras.layers.Input(shape=(sequence_length,))
         x = tf.keras.layers.Embedding(
@@ -59,6 +68,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         x = tf.keras.layers.LayerNormalization()(x)
         for i in range(self.nb_layers):
             x = residual_conv_block(x)
+        if self.attention:
+            x = residual_attention(x)
         x = tf.keras.layers.GlobalMaxPooling1D()(x)
         x = tf.keras.layers.Dense(32, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(1e-6))(x)
         x = tf.keras.layers.Dropout(self.dropout)(x)
