@@ -7,7 +7,9 @@ try:
     from .bert_vectorizer import BertVectorizer
     from .vectorizer import Vectorizer
     from .spacy_ner import SpacyNER
-    from .entity_linking import EntityLinker
+    from .spacy_knowledge_base import SpacyKnowledgeBase
+    from .spacy_entity_linking import SpacyEntityLinker
+    from .similarity_entity_linking import SimilarityEntityLinker
     from .spacy_classifier import SpacyClassifier
     from .cnn import CNNClassifier
     from .bilstm import BiLSTMClassifier
