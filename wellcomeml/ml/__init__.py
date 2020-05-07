@@ -11,11 +11,8 @@ if development_transformers_mode:
     logger.warning("Running in development mode. Only loading modules that"
                    " use new version of transformers.")
 
-    from .bert_vectorizer import BertVectorizer
     from .bert_semantic_equivalence import SemanticEquivalenceClassifier
 else:
-    from .entity_linking import EntityLinker
-    from .knowledge_base import PeopleKB
     from .frequency_vectorizer import WellcomeTfidf
 
     try:
@@ -24,6 +21,9 @@ else:
         from .spacy_classifier import SpacyClassifier
         from .bert_classifier import BertClassifier
         from .bert_vectorizer import BertVectorizer
+        from .spacy_knowledge_base import SpacyKnowledgeBase
+        from .spacy_entity_linking import SpacyEntityLinker
+        from .similarity_entity_linking import SimilarityEntityLinker
         from .bert_semantic_equivalence import SemanticEquivalenceClassifier
         from .cnn import CNNClassifier
         from .bilstm import BiLSTMClassifier

@@ -13,7 +13,7 @@ from spacy.kb import KnowledgeBase
 from bin.wiki_entity_linking.train_descriptions import EntityEncoder
 import spacy
 
-class PeopleKB(object):
+class SpacyKnowledgeBase(object):
 
     def __init__(self, kb_model="en_core_web_lg", desc_width=64,
                  input_dim=300, num_epochs=5):

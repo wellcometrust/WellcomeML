@@ -12,10 +12,10 @@ from spacy.tokens import Span
 from spacy.util import minibatch, compounding
 import spacy
 
-from wellcomeml.ml.knowledge_base import PeopleKB
+from wellcomeml.ml.spacy_knowledge_base import SpacyKnowledgeBase
 
 
-class EntityLinker(object):
+class SpacyEntityLinker(object):
     def __init__(self, kb_path, n_iter=50, print_output=True):
         self.kb_path = kb_path
         self.n_iter = n_iter
@@ -50,7 +50,7 @@ class EntityLinker(object):
         # TODO: Replace n_iter with self.n_iter
         n_iter = self.n_iter
 
-        kb = PeopleKB()
+        kb = SpacyKnowledgeBase()
         kb = kb.load(self.kb_path)
         print("Loaded Knowledge Base from '%s'" % self.kb_path)
 
