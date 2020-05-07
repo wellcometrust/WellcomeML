@@ -46,10 +46,26 @@ After making changes, in order to buil a new wheel, run:
 make dist
 ```
 
-### 3.3 (Optional) Installing from other locations
+### 2.3 (Optional) Installing from other locations
 
 ```
 pip3 install <relative path to this folder>
+```
+
+### 2.4 Transformers
+
+Some experimental features (currently `wellcomeml.ml.SemanticEquivalenceClassifier`) require a version of `transformers` that is not compatible with `spacy-transformers`. To develop those features:
+
+```bash
+export WELLCOMEML_ENV=development_transformers
+pip install -r requirements_transformers.txt --upgrade
+```
+
+On OSX, ff you get a message complaining about the rust compiler, install and initialise it with:
+
+```
+brew install rustup
+rustup-init
 ```
 
 ## 3. Example usage of some modules
