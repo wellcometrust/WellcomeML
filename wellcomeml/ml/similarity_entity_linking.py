@@ -12,7 +12,7 @@ import numpy as np
 from wellcomeml.ml import BertVectorizer
 
 
-class EntityLinker():
+class SimilarityEntityLinker():
     def __init__(self, stopwords, embedding='tf-idf'):
         """
         Input: 

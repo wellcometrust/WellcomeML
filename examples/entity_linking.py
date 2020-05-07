@@ -1,4 +1,4 @@
-from wellcomeml.ml import EntityLinker
+from wellcomeml.ml import SimilarityEntityLinker
 
 entities_kb = {
         'Michelle Williams (actor)': "American actress. She is the recipient of several accolades, including two Golden Globe Awards and a Primetime Emmy Award, in addition to nominations for four Academy Awards and one Tony Award.",
@@ -14,11 +14,11 @@ train_data = [
         ("Franklin would have ideally been awarded a Nobel Prize in Chemistry", {'id': 'No ID'})
         ]
 
-entity_linker = EntityLinker(stopwords=stopwords, embedding='tf-idf')
+entity_linker = SimilarityEntityLinker(stopwords=stopwords, embedding='tf-idf')
 entity_linker.fit(entities_kb)
 tfidf_predictions = entity_linker.predict(train_data, similarity_threshold=0.1, no_id_col='No ID')
 
-entity_linker = EntityLinker(stopwords=stopwords, embedding='bert')
+entity_linker = SimilarityEntityLinker(stopwords=stopwords, embedding='bert')
 entity_linker.fit(entities_kb)
 bert_predictions = entity_linker.predict(train_data, similarity_threshold=0.1, no_id_col='No ID')
 

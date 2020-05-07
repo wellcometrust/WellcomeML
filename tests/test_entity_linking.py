@@ -1,5 +1,5 @@
 import pytest
-from wellcomeml.ml import EntityLinker
+from wellcomeml.ml import SimilarityEntityLinker
 
 
 @pytest.fixture(scope="module")
@@ -24,13 +24,13 @@ def train_data():
 
 def test_clean_kb(entities_kb, stopwords):
 
-    entity_linker = EntityLinker(stopwords=stopwords)
+    entity_linker = SimilarityEntityLinker(stopwords=stopwords)
     knowledge_base = entity_linker._clean_kb(entities_kb)
 
     assert len(knowledge_base) == 2
 
 def test_optimise_threshold(entities_kb, stopwords, train_data):
-    entity_linker = EntityLinker(stopwords=stopwords)
+    entity_linker = SimilarityEntityLinker(stopwords=stopwords)
     entity_linker.fit(entities_kb)
     entity_linker.optimise_threshold(train_data, id_col='id', no_id_col='No ID')
     optimal_threshold = entity_linker.optimal_threshold
@@ -38,14 +38,14 @@ def test_optimise_threshold(entities_kb, stopwords, train_data):
     assert isinstance(optimal_threshold, float)
 
 def test_predict_lowthreshold(entities_kb, stopwords, train_data):
-    entity_linker = EntityLinker(stopwords=stopwords)
+    entity_linker = SimilarityEntityLinker(stopwords=stopwords)
     entity_linker.fit(entities_kb)
     predictions = entity_linker.predict(train_data, similarity_threshold=0.1, no_id_col='No ID')
 
     assert predictions == ['id_2', 'id_1', 'No ID']
 
 def test_predict_highthreshold(entities_kb, stopwords, train_data):
-    entity_linker = EntityLinker(stopwords=stopwords)
+    entity_linker = SimilarityEntityLinker(stopwords=stopwords)
     entity_linker.fit(entities_kb)
     predictions = entity_linker.predict(train_data, similarity_threshold=1.0, no_id_col='No ID')
 
