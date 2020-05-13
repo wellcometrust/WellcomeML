@@ -37,6 +37,7 @@ dist:
 	$(VIRTUALENV)/bin/python3 setup.py sdist bdist_wheel
 	aws s3 sync dist/ s3://datalabs-packages/wellcomeml
 	aws s3 cp --recursive --acl public-read dist/ s3://datalabs-public/wellcomeml
+	python -m twine upload --repository testpypi --username $TWINE_USERNAME --password $TWINE_PASSWORD dist/*
 
 # Spacy is require for testing spacy_to_prodigy
 
@@ -48,6 +49,12 @@ $(VIRTUALENV)/.en_trf_bertbaseuncased_lg:
 	$(VIRTUALENV)/bin/python -m spacy download en_trf_bertbaseuncased_lg
 	touch $@
 
+.PHONY: download_models
+download_models: $(VIRTUALENV)/.en_core_web_sm
+
+.PHONY: download_deep_learning_models
+download_deep_learning_models: $(VIRTUALENV)/.en_core_web_sm $(VIRTUALENV)/.en_trf_bertbaseuncased_lg
+
 .PHONY: test
 test: $(VIRTUALENV)/.en_core_web_sm $(VIRTUALENV)/.en_trf_bertbaseuncased_lg
 	$(VIRTUALENV)/bin/pytest -m "not (integration or transformers)" --disable-warnings --tb=line --cov=wellcomeml ./tests
@@ -56,7 +63,7 @@ test: $(VIRTUALENV)/.en_core_web_sm $(VIRTUALENV)/.en_trf_bertbaseuncased_lg
 test-transformers:
 	$(VIRTUALENV)/bin/pip install -r requirements_transformers.txt
 	export WELLCOMEML_ENV=development_transformers && $(VIRTUALENV)/bin/pytest -m "transformers" --disable-warnings --cov-append --tb=line --cov=wellcomeml ./tests/transformers
-	
+
 
 .PHONY: test-integrations
 test-integrations:
