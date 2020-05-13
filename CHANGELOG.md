@@ -1,3 +1,17 @@
+# 2020.5.0
+
+## ML
+
+* Add CNNClassifier
+* Add BiLSTMClassifier
+* Add attention layers
+* Add Semantic equivalence classifier
+* Add embedding based entity linker
+
+## Datasets
+
+* Add Hoc dataset
+
 # 2020.4.0
 
 * Add partial_fit to BERTClassifier
