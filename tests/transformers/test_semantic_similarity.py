@@ -37,6 +37,7 @@ def test_semantic_similarity():
     assert len(classifier.history['loss']) == 5
 
 
+@pytest.mark.transformers
 def test_save_and_load(tmp_path):
     classifier_1 = SemanticEquivalenceClassifier(pretrained="scibert",
                                                  batch_size=2,
