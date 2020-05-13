@@ -88,7 +88,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         return dataset
 
-    def fit(self, X, y, random_state=None, epochs=3):
+    def fit(self, X, y, random_state=None, epochs=3, **kwargs):
         """
         Fits a sentence similarity model
 
@@ -143,7 +143,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
                 epochs=epochs,
                 steps_per_epoch=self.train_steps,
                 validation_data=self.valid_dataset,
-                validation_steps=self.valid_steps
+                validation_steps=self.valid_steps,
+                **kwargs
             )
 
             # Accumulates history of metrics from different partial fits
@@ -191,6 +192,11 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
     def save(self, path):
         os.makedirs(path, exist_ok=True)
         self.model.save_pretrained(path)
+
+    def load(self, path):
+        self._initialise_models()
+        self.model = TFBertForSequenceClassification.from_pretrained(path)
+        self.trained_ = True
 
 
 def pad(x, pad_len):
