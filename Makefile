@@ -54,7 +54,7 @@ download_models: $(VIRTUALENV)/.models
 download_deep_learning_models: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models
 
 .PHONY: test
-test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deeplearning-models
+test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models
 	$(VIRTUALENV)/bin/pytest -m "not (integration or transformers)" --disable-warnings --tb=line --cov=wellcomeml ./tests
 
 .PHONY: test-transformers
