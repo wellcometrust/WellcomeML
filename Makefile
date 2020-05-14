@@ -29,8 +29,6 @@ update-requirements-txt:
 	$(VIRTUALENV)/bin/pip3 install -r unpinned_requirements.txt
 	echo "# Created by 'make update-requirements-txt'. DO NOT EDIT!" > requirements.txt
 	$(VIRTUALENV)/bin/pip freeze | grep -v pkg-resources==0.0.0 >> requirements.txt
-	echo "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz#egg=en_core_web_sm" >> requirements.txt
-	echo "https://github.com/explosion/spacy-models/releases/download/en_trf_bertbaseuncased_lg-2.2.0/en_trf_bertbaseuncased_lg-2.2.0.tar.gz#egg=en_trf_bertbaseuncased_lg" >> requirements.txt
 
 .PHONY: dist
 dist:
@@ -41,22 +39,22 @@ dist:
 
 # Spacy is require for testing spacy_to_prodigy
 
-$(VIRTUALENV)/.en_core_web_sm: 
-	$(VIRTUALENV)/bin/python -m spacy download en_core_web_sm
+$(VIRTUALENV)/.models: 
+	$(VIRTUALENV)/bin/python -m wellcomeml download models
 	touch $@
 
-$(VIRTUALENV)/.en_trf_bertbaseuncased_lg:
-	$(VIRTUALENV)/bin/python -m spacy download en_trf_bertbaseuncased_lg
+$(VIRTUALENV)/.deep_learning_models:
+	$(VIRTUALENV)/bin/python -m wellcomeml download deeplearning-models
 	touch $@
 
 .PHONY: download_models
-download_models: $(VIRTUALENV)/.en_core_web_sm
+download_models: $(VIRTUALENV)/.models
 
 .PHONY: download_deep_learning_models
-download_deep_learning_models: $(VIRTUALENV)/.en_core_web_sm $(VIRTUALENV)/.en_trf_bertbaseuncased_lg
+download_deep_learning_models: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models
 
 .PHONY: test
-test: $(VIRTUALENV)/.en_core_web_sm $(VIRTUALENV)/.en_trf_bertbaseuncased_lg
+test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deeplearning-models
 	$(VIRTUALENV)/bin/pytest -m "not (integration or transformers)" --disable-warnings --tb=line --cov=wellcomeml ./tests
 
 .PHONY: test-transformers
