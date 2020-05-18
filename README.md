@@ -15,20 +15,29 @@ This package contains common utility functions for usual tasks at Wellcome Data 
 For more in depth information see the `/examples` folder and [release notes](https://github.com/wellcometrust/WellcomeML/releases).
 
 ## 1. Quickstart
-Installing from a release wheel: Download the wheel [from aws](https://datalabs-public.s3.eu-west-2.amazonaws.com/wellcomeml/wellcomeml-2020.1.0-py3-none-any.whl)
-and pip install it:
+
+Installing from PyPi
 
 ```bash
-pip install wellcomeml-2020.1.0-py3-none-any.whl
+pip install wellcomeml
 ```
 
 This will install the "vanilla" package. In order to install the deep-learning functionality
 (torch/transformers/spacy transformers):
 
 ```bash
-pip install wellcomeml-2020.1.0-py3-none-any.whl[deep-learning]
+pip install wellcomeml[deep-learning]
 ```
 
+Installing from a release wheel
+
+Download the wheel [from aws](https://datalabs-public.s3.eu-west-2.amazonaws.com/wellcomeml/wellcomeml-2020.1.0-py3-none-any.whl)
+and pip install it:
+
+```bash
+pip install wellcomeml-2020.1.0-py3-none-any.whl
+pip install wellcomeml-2020.1.0-py3-none-any.whl[deep-learning]
+```
 
 ## 2. Development
 
