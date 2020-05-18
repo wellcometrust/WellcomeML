@@ -35,20 +35,20 @@ dist:
 	$(VIRTUALENV)/bin/python3 setup.py sdist bdist_wheel
 	aws s3 sync dist/ s3://datalabs-packages/wellcomeml
 	aws s3 cp --recursive --acl public-read dist/ s3://datalabs-public/wellcomeml
-	python -m twine upload --repository testpypi --username $TWINE_USERNAME --password $TWINE_PASSWORD dist/*
+	$(VIRTUALENV)/bin/python -m twine upload --repository pypi --username ${TWINE_USERNAME} --password ${TWINE_PASSWORD} dist/*
 
 # Spacy is require for testing spacy_to_prodigy
 
-$(VIRTUALENV)/.models: 
-	$(VIRTUALENV)/bin/python -m wellcomeml download models
+$(VIRTUALENV)/.models:
+	$(VIRTUALENV)/bin/python -m spacy download en_core_web_sm
 	touch $@
 
 $(VIRTUALENV)/.deep_learning_models:
-	$(VIRTUALENV)/bin/python -m wellcomeml download deeplearning-models
+	$(VIRTUALENV)/bin/python -m spacy download en_trf_bertbaseuncased_lg
 	touch $@
 
 .PHONY: download_models
-download_models: $(VIRTUALENV)/.models
+download_models: $(VIRTUALENV)/.installed $(VIRTUALENV)/.models
 
 .PHONY: download_deep_learning_models
 download_deep_learning_models: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models
