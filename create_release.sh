@@ -21,5 +21,5 @@ curl --request POST --silent --header "Authorization: token $GITHUB_TOKEN" -H "C
 curl --request POST --silent --header "Authorization: token $GITHUB_TOKEN" -H "Content-Type: $(file -b --mime-type wellcomeml-$VERSION.tar.gz)" --data-binary @wellcomeml-$VERSION.tar.gz --url "https://uploads.github.com/repos/wellcometrust/WellcomeML/releases/$RELEASE_ID/assets?name=wellcomeml-$VERSION-py3-none-any.whl"
 
 echo "Draft release created"
-echo "Please change the release description and upload artifacts at https://github.com/wellcometrust/WellcomeML/releases/tag/v$VERSION"
+echo "Please change the release description at https://github.com/wellcometrust/WellcomeML/releases/tag/v$VERSION"
 
