@@ -108,7 +108,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
 
     def fit(self, X, Y):
         X_train, X_test, Y_train, Y_test = train_test_split(
-            X, Y, random_state=42, test_size=validation_split
+            X, Y, random_state=42, test_size=self.validation_split
         )
         self.unique_labels = [str(i) for i in range(Y_train.shape[1])]
         self._init_nlp()
