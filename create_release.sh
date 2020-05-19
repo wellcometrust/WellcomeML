@@ -5,10 +5,10 @@ RELEASE=$(curl --request post --silent  \
   --header 'content-type: application/json' \
   --header "authorization: token $GITHUB_TOKEN" \
   --data '{
-  "tag_name": "v'$version'",
+  "tag_name": "v'$VERSION'",
   "target_commitish": "master",
   "name": "v'$version'",
-  "body": "pre-release '$version'",
+  "body": "pre-release '$VERSION'",
   "draft": false,
   "prerelease": true
 }')
