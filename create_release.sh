@@ -13,7 +13,7 @@ RELEASE=$(curl --request post --silent  \
   "prerelease": true
 }')
 
-RELEASE_ID=$(curl -XGET --silent https://api.github.com/repos/wellcometrust/WellcomeML/releases/tags/v2020.5.0 | jq .id)
+RELEASE_ID=$(curl -XGET --silent "https://api.github.com/repos/wellcometrust/WellcomeML/releases/tags/v$VERSION" | jq .id)
 
 cd dist/
 
