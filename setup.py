@@ -47,15 +47,14 @@ setuptools.setup(
         'scikit-learn',
         'spacy==2.2.1',
         'nervaluate',
-        'en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz#egg=en_core_web_sm'
+        'twine'
     ],
     extras_require={
         'deep-learning': [
             'tensorflow',
             'torch',
             'transformers<=2.0.0',
-            'spacy-transformers',
-            'en_trf_bertbaseuncased_lg @ https://github.com/explosion/spacy-models/releases/download/en_trf_bertbaseuncased_lg-2.2.0/en_trf_bertbaseuncased_lg-2.2.0.tar.gz#egg=en_trf_bertbaseuncased_lg'
+            'spacy-transformers'
         ]
     },
     tests_require=[
