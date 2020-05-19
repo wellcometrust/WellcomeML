@@ -9,7 +9,7 @@ RELEASE=$(curl --request post --silent  \
   "target_commitish": "master",
   "name": "v'$version'",
   "body": "pre-release '$version'",
-  "draft": true,
+  "draft": false,
   "prerelease": true
 }')
 
