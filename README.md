@@ -38,8 +38,12 @@ pip install wellcomeml-2020.1.0-py3-none-any.whl[deep-learning]
 make
 ```
 
-### 2.2 Build the wheel (and upload to aws s3)
+### 2.2 Build the wheel (and upload to aws s3/pypi/github)
 
+Create a [github token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with artifact write access and export it to the env variables:
+```bash
+export GITHUB_TOKEN=...
+```
 After making changes, in order to buil a new wheel, run:
 
 ```
