@@ -15,8 +15,8 @@ fi
 $VIRTUALENV/bin/python3 setup.py sdist bdist_wheel
 aws s3 sync dist/ s3://datalabs-packages/wellcomeml
 aws s3 cp --recursive --acl public-read dist/ s3://datalabs-public/wellcomeml
+$VIRTUALENV/bin/python -m twine upload --repository pypi --username $TWINE_USERNAME --password $TWINE_PASSWORD dist/*
 
-echo $VERSION
 
 curl --request POST \
   --url https://api.github.com/repos/wellcometrust/wellcomeml/releases \
