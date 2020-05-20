@@ -1,3 +1,14 @@
+# 2020.5.1
+
+## ML
+* Add l2 and validation_split to BertClassifier
+
+## Extras
+* Add command line interface to download models
+* Removed models from deployment
+* Moved package to pypi
+
+
 # 2020.5.0
 
 ## ML
