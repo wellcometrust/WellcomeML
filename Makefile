@@ -34,10 +34,7 @@ update-requirements-txt:
 
 .PHONY: dist
 dist:
-	$(VIRTUALENV)/bin/python3 setup.py sdist bdist_wheel
-	aws s3 sync dist/ s3://datalabs-packages/wellcomeml
-	aws s3 cp --recursive --acl public-read dist/ s3://datalabs-public/wellcomeml
-	chmod +x create_release.sh && ./create_release.sh
+	./create_release.sh
 
 # Spacy is require for testing spacy_to_prodigy
 
