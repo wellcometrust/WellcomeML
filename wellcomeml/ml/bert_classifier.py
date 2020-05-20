@@ -45,13 +45,16 @@ if is_using_gpu:
 
 class BertClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, threshold=0.5, n_iterations=5, pretrained='bert',
-                 batch_size=8, learning_rate=0.00001, dropout=0.1):
+                 batch_size=8, learning_rate=1e-5, dropout=0.1,
+                 l2=1e-4, validation_split=0.1):
         self.threshold = threshold
         self.batch_size = batch_size
         self.dropout = dropout
         self.learning_rate = learning_rate
-        self.n_iterations=n_iterations
+        self.n_iterations = n_iterations
         self.pretrained = pretrained
+        self.l2 = l2
+        self.validation_split = validation_split
 
     def _init_nlp(self):
         if self.pretrained == 'bert':
@@ -105,7 +108,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
 
     def fit(self, X, Y):
         X_train, X_test, Y_train, Y_test = train_test_split(
-            X, Y, random_state=42
+            X, Y, random_state=42, test_size=self.validation_split
         )
         self.unique_labels = [str(i) for i in range(Y_train.shape[1])]
         self._init_nlp()
@@ -126,7 +129,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
         with self.nlp.disable_pipes(*other_pipes):  # only train textcat
             optimizer = self.nlp.resume_training()
             optimizer.alpha = self.learning_rate
-            #optimizer.L2 = 1e-4
+            optimizer.L2 = self.l2
             logger.info("Training the model...")
             logger.info("{:^5}\t{:^5}\t{:^5}\t{:^5}\t{:^5}\t{:^5}".format("ITER", "LOSS", "P", "R", "F", "TF"))
             batch_sizes = compounding(4.0, self.batch_size, 1.001)
