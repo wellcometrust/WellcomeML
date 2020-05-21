@@ -2,6 +2,7 @@
 
 ## ML
 * Add l2 and validation_split to BertClassifier
+* Add kwargs and load model to semantic similarity
 
 ## Extras
 * Add command line interface to download models
