@@ -1,3 +1,15 @@
+# 2020.5.1
+
+## ML
+* Add l2 and validation_split to BertClassifier
+* Add kwargs and load model to semantic similarity
+
+## Extras
+* Add command line interface to download models
+* Removed models from deployment
+* Moved package to pypi
+
+
 # 2020.5.0
 
 ## ML
