@@ -6,7 +6,7 @@ from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 import numpy as np
 
 class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
-    def __init__(self, vector_size=100, window_size=2, n_jobs=1):
+    def __init__(self, vector_size=100, window_size=5, n_jobs=1):
         self.vector_size = vector_size
         self.window_size = window_size
         self.n_jobs = n_jobs
