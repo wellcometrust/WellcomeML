@@ -17,17 +17,22 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
 
     def fit(self, X):
         # TODO: Implement streaming option
+        #    model.build_vocab(X)
+        #    model.train(X, total_examples=model.corpus_count, epochs=20)
         tagged_documents = list(self._yield_tagged_documents(X))
-        self.model = Doc2Vec(tagged_documents, vector_size, window, workers=self.n_jobs)
+        self.model = Doc2Vec(
+            tagged_documents, vector_size=self.vector_size,
+            window_size=self.window_size, workers=self.n_jobs
+        )
 
     def transform(self, X):
-        return np.array([self.model.infer_vector(x) for x in X])
+        return np.array([self.model.infer_vector(x.split()) for x in X])
 
-    def save():
-        pass
+    def save(self, model_path):
+        self.model.save(model_path)
 
-    def load():
-        pass
+    def load(self, model_path):
+        self.model = Doc2Vec.load(model_path)
 
 if __name__ == '__main__':
     DATA = "data.jsonl"
@@ -36,20 +41,12 @@ if __name__ == '__main__':
         with open(data) as f:
             for i, line in enumerate(f):
                 item = json.loads(line)
-                yield TaggedDocument(item["text"], [i])
+                yield item["text"]
 
-    texts = yield_texts(DATA)
+    texts = list(yield_texts(DATA))
 
-# Option 1 - Stream
-#model = Doc2Vec(vector_size=5, window=2, min_count=1, workers=2)
-#model.build_vocab(texts)
-#model.train(texts, total_examples=model.corpus_count, epochs=20)
+    doc2vec = Doc2VecVectorizer()
+    doc2vec.fit(texts)
+    print(doc2vec.transform(texts[:5]))
 
-# Option 2 - In memory
-    model = Doc2Vec(list(texts), vector_size=5, window=2, min_count=1, workers=2)
-
-    vectors = [model.infer_vector(doc) for doc in ["This is malaria".split()]*5]
-    print(vectors)
-
-    print(type(vectors[0]))
-    print(np.array(vectors).shape)
+    doc2vec.save("delete_doc2vec_model")
