@@ -32,7 +32,7 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         for i, x in enumerate(X):
             yield TaggedDocument(self._tokenize(x), [i])
 
-    def fit(self, X):
+    def fit(self, X, *_):
         """
         Args:
             X: list of texts (strings)
