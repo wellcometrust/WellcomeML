@@ -10,7 +10,7 @@ import numpy as np
 
 class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, vector_size=100, window_size=5, n_jobs=1,
-                 min_count=2, epochs=20):
+                 min_count=2, negative=5, sample=1e-5, epochs=20):
         """
         Args:
             vector_size: size of vector to represent text
@@ -23,6 +23,8 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         self.window_size = window_size
         self.epochs = epochs
         self.min_count = min_count
+        self.negative = negative
+        self.sample = sample
         self.n_jobs = n_jobs
 
     def _tokenize(self, x):
@@ -56,7 +58,8 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         self.model = Doc2Vec(
             tagged_documents, vector_size=self.vector_size,
             window_size=self.window_size, workers=workers,
-            min_count=self.min_count, epochs=self.epochs
+            min_count=self.min_count, epochs=self.epochs,
+            negative=self.negative, sample=self.sample
         )
         return self
 
