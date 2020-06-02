@@ -13,6 +13,16 @@ DATA_DISPATCH = {
         "bucket": "datalabs-public",
         "path": "datasets/hoc/hoc.tar",
         "file_name": "hoc.tar"
+    },
+    "winer": {
+        "bucket": "datalabs-public",
+        "path": "datasets/ner/winer.tar",
+        "file_name": "winer.tar"
+    },
+    "conll": {
+        "bucket": "datalabs-public",
+        "path": "datasets/ner/conll.tar",
+        "file_name": "conll.tar"
     }
 }
 
