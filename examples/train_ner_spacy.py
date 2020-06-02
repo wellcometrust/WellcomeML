@@ -1,8 +1,5 @@
-import spacy
-
-from wellcomeml.ml import SpacyNER
-from wellcomeml.metrics.ner_classification_report import ner_classification_report
-
+"""
+Takes data in the form:
 X_train = [
         'n Journal of Psychiatry 158: 2071–4\nFreeman MP, Hibbeln JR, Wisner KL et al. (2006)\nOmega-3 fatty ac',
         'rd, (BKKBN)\n \nJakarta, Indonesia\n29. Drs Titut Prihyugiarto\n MSPA\n \nSenior Researcher for Reproducti',
@@ -15,7 +12,6 @@ X_train = [
         '. \n3. \nFischer G and Stöver H. Assessing the current state of opioid-dependence treatment across Eur',
         'ated by\nLlorca et al. (2014) or Pae et al. (2015), or when vortioxetine was assumed to be\nas effecti',
 ]
-
 y_train = [
         [{'start': 36, 'end': 46, 'label': 'PERSON'}, {'start': 48, 'end': 58, 'label': 'PERSON'}, {'start': 61, 'end': 69, 'label': 'PERSON'}],
         [{'start': 41, 'end': 59, 'label': 'PERSON'}],
@@ -28,25 +24,43 @@ y_train = [
         [{'start': 7, 'end': 16, 'label': 'PERSON'}, {'start': 21, 'end': 30, 'label': 'PERSON'}],
         [{'start': 8, 'end': 14, 'label': 'PERSON'}, {'start': 32, 'end': 35, 'label': 'PERSON'}],
 ]
+person_tag_name = 'PERSON'
 
-# A list of the groups each of the data points belong to
-groups = ['Group 1', 'Group 2', 'Group 3', 'Group 2', 'Group 1', 'Group 3', 'Group 3', 'Group 3', 'Group 2', 'Group 1']
+Add trains the SpaCy NER model with it, returning some predictions and an evaluation of the trained model
+"""
+
+import spacy
+
+import random
+
+from wellcomeml.ml import SpacyNER
+from wellcomeml.metrics.ner_classification_report import ner_classification_report
+from wellcomeml.datasets.conll import load_conll
+
+X_train, y_train = load_conll(split='train', shuffle=False, inc_outside=False)
+n = 100 # For the purposes of this example just train on a small amount of the data
+X_train = X_train[0:n]
+y_train = y_train[0:n]
+person_tag_name = 'I-PER'
+
+# # A list of the groups each of the data points belong to
+groups = random.choices(['Group 1', 'Group 2', 'Group 3'], k=len(X_train))
 
 spacy_ner = SpacyNER(n_iter=3, dropout=0.2, output=True)
 spacy_ner.load("en_core_web_sm")
 nlp = spacy_ner.fit(X_train, y_train)
 
-# Predict the entities in a piece of text
+# # Predict the entities in a piece of text
 text = '\nKhumalo, Lungile, National Department of Health \n• \nKistnasamy, Dr Barry, National Department of He'
 predictions = spacy_ner.predict(text)
-print([text[entity['start']: entity['end']] for entity in predictions])
+print([text[entity['start']: entity['end']] for entity in predictions if entity['label']==person_tag_name])
 
 # Evaluate the performance of the model on the training data
 y_pred = [spacy_ner.predict(text) for text in X_train]
-f1 = spacy_ner.score(y_train, y_pred, tags=['PERSON'])
+f1 = spacy_ner.score(y_train, y_pred, tags=[person_tag_name])
 print(f1)
 
 # Evaluate the performance of the model per group
-report = ner_classification_report(y_train, y_pred, groups, tags=['PERSON'])
+report = ner_classification_report(y_train, y_pred, groups, tags=[person_tag_name])
 print(report)
 
