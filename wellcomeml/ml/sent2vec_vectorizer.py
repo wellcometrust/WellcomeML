@@ -5,7 +5,7 @@ paper and codebase. https://github.com/epfml/sent2vec
 from sklearn.base import TransformerMixin, BaseEstimator
 try:
     import sent2vec
-except ImportError
+except ImportError:
     from wellcomeml.__main__ import download
     download("non_pypi_packages")
 
