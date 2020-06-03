@@ -8,6 +8,7 @@ try:
 except ImportError:
     from wellcomeml.__main__ import download
     download("non_pypi_packages")
+    import sent2vec
 
 from wellcomeml.utils import check_cache_and_download
 
