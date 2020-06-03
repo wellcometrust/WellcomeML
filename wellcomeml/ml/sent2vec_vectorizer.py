@@ -3,7 +3,11 @@ Vectorizer that exposes sklearn interface to sent2vec
 paper and codebase. https://github.com/epfml/sent2vec
 """
 from sklearn.base import TransformerMixin, BaseEstimator
-import sent2vec
+try:
+    import sent2vec
+except ImportError
+    from wellcomeml.__main__ import download
+    download("non_pypi_packages")
 
 from wellcomeml.utils import check_cache_and_download
 
