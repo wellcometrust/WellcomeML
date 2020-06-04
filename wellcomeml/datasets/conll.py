@@ -49,8 +49,8 @@ def load_conll(split='train', shuffle=True, inc_outside=True):
 
     if shuffle:
         data = list(zip(X, Y))
-        shuffled_data = random.shuffle(data)
-        X, Y = zip(*shuffled_data)
+        random.shuffle(data)
+        X, Y = zip(*data)
 
     return X, Y
 
