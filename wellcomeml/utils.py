@@ -24,6 +24,11 @@ MODEL_DISPATCH = {
         "bucket": "datalabs-public",
         "path": "models/ncbi-nlp/biosent2vec.bin",
         "file_name": "biosent2vec.bin",
+    },
+    'sent2vec_wiki_unigrams': {
+        "bucket": "datalabs-public",
+        "path": "models/epfml/wiki_unigrams.bin",
+        "file_name": "wiki_unigrams.bin",
     }
 }
 
