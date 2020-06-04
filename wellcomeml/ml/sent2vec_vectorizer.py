@@ -17,7 +17,7 @@ class Sent2VecVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, pretrained=None):
         self.pretrained=pretrained
 
-    def fit(self):
+    def fit(self, *_):
         if self.pretrained:
             model_path = check_cache_and_download(self.pretrained)
             self.model = sent2vec.Sent2vecModel()
