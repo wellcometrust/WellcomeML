@@ -27,4 +27,4 @@ def test_score():
     doc2vec = Doc2VecVectorizer(min_count=1, vector_size=4, negative=5, epochs=100)
     doc2vec.fit(X)
     score = doc2vec.score(X)
-    assert 0 < score < 1
+    assert 0 <= score <= 1
