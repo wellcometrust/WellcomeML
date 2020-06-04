@@ -2,11 +2,15 @@
 from collections import Counter
 import multiprocessing
 import statistics
+import logging
 import json
 
 from sklearn.base import BaseEstimator, TransformerMixin
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 import numpy as np
+
+logging.getLogger("gensim").setLevel(logging.WARNING)
+
 
 class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, vector_size=100, window_size=5, n_jobs=1,
