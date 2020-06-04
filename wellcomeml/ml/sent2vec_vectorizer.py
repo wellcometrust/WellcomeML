@@ -12,6 +12,7 @@ except ImportError:
 
 from wellcomeml.utils import check_cache_and_download
 
+
 class Sent2VecVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, pretrained=None):
         self.pretrained=pretrained
