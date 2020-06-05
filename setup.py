@@ -47,7 +47,8 @@ setuptools.setup(
         'scikit-learn',
         'spacy==2.2.1',
         'nervaluate',
-        'twine'
+        'twine',
+        'gensim'
     ],
     extras_require={
         'deep-learning': [
