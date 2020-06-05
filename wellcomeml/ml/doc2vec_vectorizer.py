@@ -107,21 +107,3 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
 
     def load(self, model_path):
         self.model = Doc2Vec.load(model_path)
-
-if __name__ == '__main__':
-    DATA = "data.jsonl"
-
-    def yield_texts(data):
-        with open(data) as f:
-            for i, line in enumerate(f):
-                item = json.loads(line)
-                yield item["text"]
-
-    texts = list(yield_texts(DATA))
-
-    doc2vec = Doc2VecVectorizer(epochs=40)
-    doc2vec.fit(texts)
-
-    print(doc2vec.score(texts))
-
-#    doc2vec.save("delete_doc2vec_model")
