@@ -1,14 +1,14 @@
 # WiNER: A Wikipedia Annotated Corpus for Named Entity Recognition
 # https://www.aclweb.org/anthology/I17-1042/
 
-from wellcomeml.datasets.download import check_cache_and_download
-
-# def load_winer():
 import tarfile
 import os
 from tqdm import tqdm 
 import json
 import random
+
+from wellcomeml.datasets.download import check_cache_and_download
+from wellcomeml.logger import logger
 
 def create_train_test(
     NE_path, vocab_path, docs_path,
@@ -16,9 +16,13 @@ def create_train_test(
     n_sample, prop_train, rand_seed=42
     ):
     """
-    NE_path: File path to the named entities
-    vocab_path: File path to the vocab dictionary
-    docs_path: File path to the documents texts (words coded according to the vocab)
+    Function to transform the raw WiNER datasets into training
+    and testing datasets suitable for training a NER model
+
+    NE_path: File path to the WiNER raw data named entities
+    vocab_path: File path to the WiNER raw data vocab dictionary
+    docs_path: File path to the WiNER raw data documents texts
+            (words coded according to the vocab)
     train_processed_path: Output file path for the training data
     test_processed_path: Output file path for the testing data
     n_sample: Number of files to get data from, each file contains about 1000 documents
@@ -45,7 +49,7 @@ def create_train_test(
     random.seed(rand_seed)
     n_train = round(prop_train*n_sample)
 
-    print("Creating entities dictionary from {}".format(NE_path))
+    logger.info("Creating entities dictionary from {}".format(NE_path))
     entities = {}
     with tarfile.open(NE_path, "r:bz2") as tar:
         for member in tqdm(tar.getmembers()):
@@ -53,8 +57,7 @@ def create_train_test(
             if f:
                 content = f.read().decode('utf-8', errors='ignore')
                 articles = content.replace('\t', ' ').split('ID ')
-                if articles[0]=='':
-                    articles = articles[1:]
+                articles = articles[1:]
                 for article in articles:
                     article_entities = article.split('\n')
                     article_id = article_entities[0]    
@@ -73,7 +76,7 @@ def create_train_test(
                     entities[article_id] = sentence_entities
 
     # Create id2word from vocab file (line number is id)
-    print("Creating id2word dictionary from {}".format(vocab_path))
+    logger.info("Creating id2word dictionary from {}".format(vocab_path))
     id2word = {}
     with open(vocab_path, "r") as vocab:
         f = vocab.read()
@@ -82,7 +85,7 @@ def create_train_test(
             id2word[i] = line.split(' ')[0]
 
     # Go into a sample of the document files and get the text for these entities
-    print("Creating token and tag from {}".format(docs_path))
+    logger.info("Creating token and tag from {}".format(docs_path))
     with tarfile.open(docs_path, "r:bz2") as tar_docs, \
             open(train_processed_path, 'w') as train_file, \
             open(test_processed_path, 'w') as test_file:
@@ -120,9 +123,9 @@ def create_train_test(
                                 for token, tag in list(zip(tokens, tags)):
                                     output_file.write(' '.join([token, tag]))
                                     output_file.write('\n')
-                        output_file.write('\n')
+                            output_file.write('\n')
 
-def load_data_spacy(data_path, inc_outside=True, merge_entities=True):
+def _load_data_spacy(data_path, inc_outside=True, merge_entities=True):
 
     # Load data in Spacy format:
     # X = list of sentences (plural) / documents ['the cat ...', 'some dog...', ...]
@@ -177,10 +180,10 @@ def load_winer(split='train', shuffle=True, inc_outside=True, merge_entities=Tru
 
     if split == 'train':
         train_data_path = os.path.join(path, "train.txt")
-        X, Y = load_data_spacy(train_data_path, inc_outside=inc_outside, merge_entities=merge_entities)
+        X, Y = _load_data_spacy(train_data_path, inc_outside=inc_outside, merge_entities=merge_entities)
     elif split == 'test':
         test_data_path = os.path.join(path, "test.txt")
-        X, Y = load_data_spacy(test_data_path, inc_outside=inc_outside, merge_entities=merge_entities)
+        X, Y = _load_data_spacy(test_data_path, inc_outside=inc_outside, merge_entities=merge_entities)
     else:
         raise ValueError(f"Split argument {split} is not one of train, test or evaluate")
 
@@ -202,7 +205,7 @@ if __name__ == '__main__':
         # Since this has been done once it shouldnt need to be done again, 
         # including here for completeness or in th case we want to increase 
         # the sample size
-        print("No {} training data file found, generating ...".format(train_processed_path))
+        logger.info("No {} training data file found, generating ...".format(train_processed_path))
 
         NE_path = os.path.join(path, "CoarseNE.tar.bz2")
         docs_path = os.path.join(path, "Documents.tar.bz2")
@@ -218,5 +221,5 @@ if __name__ == '__main__':
             n_sample, prop_train, rand_seed=42
             )
     else:
-        print("Training and test data found")
+        logger.info("Training and test data found")
 
