@@ -54,9 +54,7 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         """
         # If pretrained, just load, no need to fit
         if self.pretrained:
-            # possibly better to leverage the save and load
-            with open(pretrained, "rb") as f:
-                self = pickle.loads(f.read())
+            self.load(self.pretrained)
             return self
 
         if self.n_jobs == -1:
