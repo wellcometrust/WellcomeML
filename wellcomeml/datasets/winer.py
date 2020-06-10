@@ -17,7 +17,11 @@ def create_train_test(
     ):
     """
     Function to transform the raw WiNER datasets into training
-    and testing datasets suitable for training a NER model
+    and testing datasets suitable for training a NER model.
+    This NE_path file gives the entities, but they need to be linked
+    to the sentences they came from, which involves translating
+    them from the vectorised form in the docs_path file
+    using the vocab_path file.
 
     NE_path: File path to the WiNER raw data named entities
     vocab_path: File path to the WiNER raw data vocab dictionary
@@ -33,6 +37,7 @@ def create_train_test(
     in the form:
 
     ID 12345
+
     John Smith PERSON
     rejects O
     German LOC
@@ -42,12 +47,20 @@ def create_train_test(
     sentence 0
 
     ID 444
+
     Next
     document
     """
 
+    # Set the random seed for taking a sample
     random.seed(rand_seed)
     n_train = round(prop_train*n_sample)
+
+    # Make a dictionary for the entities for every article
+    # in the form
+    # entities = {article_id: {sentence_id:[[0, 4, 0], [18, 25, 1]]}}
+    # The sentence id is which number sentence (e.g. 1st, 2nd) the entities
+    # are from in the whole document
 
     logger.info("Creating entities dictionary from {}".format(NE_path))
     entities = {}
@@ -57,10 +70,12 @@ def create_train_test(
             if f:
                 content = f.read().decode('utf-8', errors='ignore')
                 articles = content.replace('\t', ' ').split('ID ')
+                # The first element will be blank from the splitting
                 articles = articles[1:]
                 for article in articles:
                     article_entities = article.split('\n')
                     article_id = article_entities[0]    
+                    # The first and possibly last entity will be blank from the splitting
                     if article_entities[-1]=='':
                         article_entities = article_entities[1:-2]
                     else:
@@ -68,6 +83,10 @@ def create_train_test(
                     entity_info = [l.split(' ') for l in article_entities]
                     sentence_entities = {}
                     for sentence_id, begin, end, ent_type in entity_info:
+                        # The data is stored as strings, but they are all numerical
+                        # and sentence id = 3 refers to the 2nd sentence in this article
+                        # so for querying the list of sentences in an article
+                        # later it is useful to have this as an integer
                         sentence_id, begin, end, ent_type = int(sentence_id), int(begin), int(end), int(ent_type)
                         if sentence_entities.get(sentence_id):
                             sentence_entities[sentence_id].append([begin, end, ent_type])
@@ -75,7 +94,8 @@ def create_train_test(
                             sentence_entities[sentence_id] = [[begin, end, ent_type]]
                     entities[article_id] = sentence_entities
 
-    # Create id2word from vocab file (line number is id)
+    # Create id2word from vocab file
+    # The WiNER documentation states that the line number is the word id
     logger.info("Creating id2word dictionary from {}".format(vocab_path))
     id2word = {}
     with open(vocab_path, "r") as vocab:
@@ -84,39 +104,60 @@ def create_train_test(
         for i, line in enumerate(lines):
             id2word[i] = line.split(' ')[0]
 
-    # Go into a sample of the document files and get the text for these entities
+    # Go into a sample of the vectorised document files, see if there are any entities 
+    # found for it in the 'entities' dictionary, and if so translate
+    # the vectorised document into words using 'id2word'
+    # Saving a certain proportion to the test file and train file.
     logger.info("Creating token and tag from {}".format(docs_path))
     with tarfile.open(docs_path, "r:bz2") as tar_docs, \
             open(train_processed_path, 'w') as train_file, \
             open(test_processed_path, 'w') as test_file:
         for i, member in tqdm(enumerate(random.sample(tar_docs.getmembers(), n_sample))):
+            # Which output file to save the results in
             if i < n_train:
                 output_file = train_file
             else:
                 output_file = test_file
+            # Extract the texts for this file if there is any given
             f = tar_docs.extractfile(member)
             if f:
                 content = f.read().decode('utf-8', errors='ignore')
+                # Each article in the document is separated by the article ID, e.g. 'ID 123'
                 articles = content.replace('\t', ' ').split('ID ')
-                if articles[0]=='':
-                    articles = articles[1:]
+                articles = articles[1:]
                 for article in articles:
-                    lines = article.split('\n')
-                    article_id = lines[0]
+                    sentences = article.split('\n')
+                    article_id = sentences[0]
                     article_entities = entities.get(article_id)
+                    # Only save entity information if we found that
+                    # this document indeed had entities!
                     if article_entities:
                         output_file.write('ID ' + article_id)
-                        output_file.write('\n')
-                        if lines[-1]=='':
-                            lines = lines[1:-1]
+                        output_file.write('\n\n')
+                        # The first and last sentences can be blank due to splitting
+                        if sentences[-1]=='':
+                            sentences = sentences[1:-1]
                         else:
-                            lines = lines[1:]
-                        sent_wordidx = [l.split(' ') for l in lines]
+                            sentences = sentences[1:]
+                        # In the documents each sentence is a string of
+                        # numbers corresponding to words in id2word, convert
+                        # this string into a list of numbers for each sentence
+                        sent_wordidx = [l.split(' ') for l in sentences]
+                        # Go through each of the entites for this article
+                        # and translate the word ids to their words to create
+                        # the tokens and each entity.
                         for sentid, sentence_entities in article_entities.items():
                             if len(sent_wordidx) > int(sentid):
+                                # Translate the list of words ids for this sentence into 
+                                # the words using id2word
                                 tokens = [id2word[int(s)] for s in sent_wordidx[int(sentid)]]
+                                # Every word in the sentence is classed as an outside word 
+                                # until found otherwise from the entity list
                                 tags = ['O']*len(tokens)
                                 for begin, end, ent_type in sentence_entities:
+                                    # For entities that spread over multiple words
+                                    # it should be clear which word is the start of the 
+                                    # entity and which is the end
                                     tags[(begin+1):(end-1)] = [str(ent_type) + '-I']*(end-1-begin-1)
                                     tags[end-1] = str(ent_type) + '-E'
                                     tags[begin] = str(ent_type) + '-B'
