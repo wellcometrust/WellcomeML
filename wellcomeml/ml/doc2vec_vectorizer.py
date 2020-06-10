@@ -15,7 +15,7 @@ logging.getLogger("gensim").setLevel(logging.WARNING)
 class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, vector_size=100, window_size=5, n_jobs=1,
                  min_count=2, negative=5, sample=1e-5, epochs=20,
-                 learning_rate=0.025, model="dm"):
+                 learning_rate=0.025, model="dm", pretrained=None):
         """
         Args:
             vector_size: size of vector to represent text
@@ -27,6 +27,7 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
             model: underlying model architecture, one of dm or dbow. default: dm
             epochs: number of passes over training data. default: 20
             n_jobs: number of cores to use (-1 for all). default: 1
+            pretrained: pretrained doc2vec model
         """
         self.vector_size = vector_size
         self.window_size = window_size
@@ -37,6 +38,7 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         self.n_jobs = n_jobs
         self.learning_rate = learning_rate
         self.model = model
+        self.pretrained = pretrained
 
     def _tokenize(self, x):
         return x.lower().split()
@@ -50,6 +52,13 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         Args:
             X: list of texts (strings)
         """
+        # If pretrained, just load, no need to fit
+        if self.pretrained:
+            # possibly better to leverage the save and load
+            with open(pretrained, "rb") as f:
+                self = pickle.loads(f.read())
+            return self
+
         if self.n_jobs == -1:
             workers = multiprocessing.cpu_count()
         else:
