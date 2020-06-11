@@ -109,7 +109,7 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         
         return statistics.mean(correct)
 
-    def _get_model_path(model_dir):
+    def _get_model_path(self, model_dir):
         return "{}/doc2vec".format(model_dir)
 
     def save(self, model_dir):
