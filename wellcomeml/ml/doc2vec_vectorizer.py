@@ -1,5 +1,6 @@
 """Doc2Vec sklearn wrapper"""
 from collections import Counter
+from pathlib import Path
 import multiprocessing
 import statistics
 import logging
@@ -113,6 +114,7 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         return "{}/doc2vec".format(model_dir)
 
     def save(self, model_dir):
+        Path(model_dir).mkdir(parents=True, exist_ok=True)
         model_path = self._get_model_path(model_dir)
         self.model.save(model_path)
 
