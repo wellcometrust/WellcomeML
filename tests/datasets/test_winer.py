@@ -6,10 +6,11 @@ from wellcomeml.datasets.winer import create_train_test, _load_data_spacy
 @pytest.fixture(scope="module")
 def define_paths():
 
-    NE_path = 'tests/test_data/CoarseNE_sample.tar.bz2'
-    docs_path ='tests/test_data/Documents_sample.tar.bz2'
-    vocab_path = 'tests/test_data/document_sample.vocab'
+    NE_path = 'tests/test_data/mock_winer_CoarseNE.tar.bz2'
+    docs_path ='tests/test_data/mock_winer_Documents.tar.bz2'
+    vocab_path = 'tests/test_data/mock_winer_document.vocab'
 
+    # These will be generated and then deleted in these tests
     train_processed_path = 'tests/test_data/temp_train_sample.txt'
     test_processed_path = 'tests/test_data/temp_test_sample.txt'
 
