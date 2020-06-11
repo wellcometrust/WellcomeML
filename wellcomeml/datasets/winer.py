@@ -181,38 +181,43 @@ def _load_data_spacy(data_path, inc_outside=True, merge_entities=True):
         lines = f.read().split('ID ')
         for line in lines:
             if line != '':
-                article_text = ''
-                char_i = 0
-                article_tags = []
-                entities = line.split('\n')
-                tokens, tags = zip(*[tuple(ee) for ee in [e.split(' ') for e in entities] if len(ee)==2])
-                
-                if merge_entities:
-                    prev_B = 0
-                    group_tags = []
-                    for i, tag in enumerate(tags):
-                        if tag[-2:]=='-E':
-                            group_tags.append((prev_B, i+1))
-                        if tag[-2:]=='-B':
-                            if len(tags)!=(i+1) and (tags[i+1][-2:]=='-I' or tags[i+1][-2:]=='-E'):
-                                prev_B = i
-                            else:
+                sentences = line.split('\n\n')
+                # The first and last sentence is blank due to splitting
+                sentences = sentences[1:-1]
+                for sentence in sentences:
+                    char_i = 0 # A counter to populate the start and end character indexes for each entity
+                    sentence_text = ''
+                    sentence_tags = []
+                    entities = sentence.split('\n') # ['Gibraltar 3-B', 'has O', 'a O', ...]
+                    tokens, tags = zip(*[tuple(ee) for ee in [e.split(' ') for e in entities]])
+                    if merge_entities:
+                        # if entities span over multiple words merge them into one token
+                        # e.g. John 3-B Smith 3-E -> John Smith 3
+                        prev_B = 0 # Counter for index of last entity beginning
+                        group_tags = []
+                        for i, tag in enumerate(tags):
+                            if tag[-2:]=='-E':
+                                group_tags.append((prev_B, i+1))
+                            if tag[-2:]=='-B':
+                                if len(tags)!=(i+1) and (tags[i+1][-2:]=='-I' or tags[i+1][-2:]=='-E'):
+                                    prev_B = i
+                                else:
+                                    group_tags.append((i, i+1))
+                            if tag=='O':
                                 group_tags.append((i, i+1))
-                        if tag=='O':
-                            group_tags.append((i, i+1))
-                    tags_joined = [' '.join(tags[b:e])[0] for b,e in group_tags]
-                    tokens_joined = [' '.join(tokens[b:e]) for b,e in group_tags]
-                else:
-                    tags_joined = [t[0] for t in tags]
-                    tokens_joined = tokens
-                for tag, token in zip(tags_joined, tokens_joined):
-                    article_text += token + ' '
-                    if tag!='O' or inc_outside:
-                        article_tags.append({'start': char_i, 'end': char_i+len(token), 'label': tag})
-                    char_i += len(token) + 1 # plus 1 for the space separating
-                if article_tags!=[]:
-                    X.append(article_text)
-                    Y.append(article_tags)
+                        tags_joined = [' '.join(tags[b:e])[0] for b,e in group_tags]
+                        tokens_joined = [' '.join(tokens[b:e]) for b,e in group_tags]
+                    else:
+                        tags_joined = [t[0] for t in tags]
+                        tokens_joined = tokens
+                    for tag, token in zip(tags_joined, tokens_joined):
+                        sentence_text += token + ' '
+                        if tag!='O' or inc_outside:
+                            sentence_tags.append({'start': char_i, 'end': char_i+len(token), 'label': tag})
+                        char_i += len(token) + 1 # plus 1 for the space separating
+                    if sentence_tags!=[]:
+                        X.append(sentence_text)
+                        Y.append(sentence_tags)
 
     return X, Y
 
