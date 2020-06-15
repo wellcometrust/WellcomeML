@@ -24,7 +24,7 @@ class Sent2VecVectorizer(BaseEstimator, TransformerMixin):
             self.model.load_model(model_path)
         else:
             # Custom training not yet implemented
-            pass
+            raise NotImplementedError("Fit only implemented for loading pretrained models")
         return self
 
     def transform(self, X):
