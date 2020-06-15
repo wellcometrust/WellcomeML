@@ -28,7 +28,7 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
             model: underlying model architecture, one of dm or dbow. default: dm
             epochs: number of passes over training data. default: 20
             n_jobs: number of cores to use (-1 for all). default: 1
-            pretrained: pretrained doc2vec model
+            pretrained: path to directory containing saved pretrained doc2vec artifacts
         """
         self.vector_size = vector_size
         self.window_size = window_size
