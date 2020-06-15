@@ -3,19 +3,12 @@
 BERT Vectorizer that embeds text using a prertained BERT model
 """
 
-import os
-import tarfile
-
-import boto3
-from botocore import UNSIGNED
-from botocore.client import Config
-
 from transformers import BertModel, BertTokenizer
 from sklearn.base import BaseEstimator, TransformerMixin
 import numpy as np
 import torch
 
-from wellcomeml.ml.constants import MODELS_DIR, MODEL_DISPATCH
+from wellcomeml.utils import check_cache_and_download
 from wellcomeml.logger import logger
 
 
@@ -97,26 +90,4 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
         return self
 
 
-def check_cache_and_download(model_name):
-    """ Checks if model_name is cached and return complete path"""
-    os.makedirs(MODELS_DIR, exist_ok=True)
 
-    model_path = os.path.join(MODELS_DIR, model_name)
-    if not os.path.exists(model_path):
-        logger.info(f"Could not find model {model_name}. Downloading from S3")
-
-        # The following allows to download from S3 without AWS credentials
-        s3 = boto3.client('s3', config=Config(signature_version=UNSIGNED))
-        tmp_file = os.path.join(MODELS_DIR,
-                                MODEL_DISPATCH[model_name]['file_name'])
-
-        s3.download_file(MODEL_DISPATCH[model_name]['bucket'],
-                         MODEL_DISPATCH[model_name]['path'], tmp_file)
-
-        tar = tarfile.open(tmp_file)
-        tar.extractall(path=MODELS_DIR)
-        tar.close()
-
-        os.remove(tmp_file)
-
-    return model_path

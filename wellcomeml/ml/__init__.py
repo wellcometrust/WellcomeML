@@ -15,6 +15,7 @@ if development_transformers_mode:
 else:
     from .frequency_vectorizer import WellcomeTfidf
     from .doc2vec_vectorizer import Doc2VecVectorizer
+    from .sent2vec_vectorizer import Sent2VecVectorizer
 
     try:
         from .vectorizer import Vectorizer

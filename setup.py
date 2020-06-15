@@ -48,7 +48,8 @@ setuptools.setup(
         'spacy==2.2.1',
         'nervaluate',
         'twine',
-        'gensim'
+        'gensim',
+        'cython'
     ],
     extras_require={
         'deep-learning': [

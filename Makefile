@@ -10,6 +10,7 @@ $(VIRTUALENV)/.installed:
 	$(VIRTUALENV)/bin/pip3 install -r requirements.txt
 	$(VIRTUALENV)/bin/pip3 install -r requirements_test.txt
 	$(VIRTUALENV)/bin/pip3 install -e .
+	$(VIRTUALENV)/bin/pip3 install git+https://github.com/epfml/sent2vec.git # otherwise it fails cause setup.py relies on cython and numpy being installed
 	touch $@
 
 .PHONY: virtualenv
@@ -44,11 +45,18 @@ $(VIRTUALENV)/.deep_learning_models:
 	$(VIRTUALENV)/bin/python -m spacy download en_trf_bertbaseuncased_lg
 	touch $@
 
+$(VIRTUALENV)/.non_pypi_packages:
+	$(VIRTUALENV)/bin/pip install git+https://github.com/epfml/sent2vec.git
+	touch $@
+
 .PHONY: download_models
 download_models: $(VIRTUALENV)/.installed $(VIRTUALENV)/.models
 
 .PHONY: download_deep_learning_models
 download_deep_learning_models: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models
+
+.PHONY: download_nonpypi_packages
+download_nonpypi_packages: $(VIRTUALENV)/.installed $(VIRTUALENV)/.non_pypi_packages
 
 .PHONY: test
 test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models
