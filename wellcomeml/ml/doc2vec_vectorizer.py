@@ -1,5 +1,6 @@
 """Doc2Vec sklearn wrapper"""
 from collections import Counter
+from pathlib import Path
 import multiprocessing
 import statistics
 import logging
@@ -15,7 +16,7 @@ logging.getLogger("gensim").setLevel(logging.WARNING)
 class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, vector_size=100, window_size=5, n_jobs=1,
                  min_count=2, negative=5, sample=1e-5, epochs=20,
-                 learning_rate=0.025, model="dm"):
+                 learning_rate=0.025, model="dm", pretrained=None):
         """
         Args:
             vector_size: size of vector to represent text
@@ -27,6 +28,7 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
             model: underlying model architecture, one of dm or dbow. default: dm
             epochs: number of passes over training data. default: 20
             n_jobs: number of cores to use (-1 for all). default: 1
+            pretrained: path to directory containing saved pretrained doc2vec artifacts
         """
         self.vector_size = vector_size
         self.window_size = window_size
@@ -37,6 +39,7 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         self.n_jobs = n_jobs
         self.learning_rate = learning_rate
         self.model = model
+        self.pretrained = pretrained
 
     def _tokenize(self, x):
         return x.lower().split()
@@ -50,6 +53,11 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         Args:
             X: list of texts (strings)
         """
+        # If pretrained, just load, no need to fit
+        if self.pretrained:
+            self.load(self.pretrained)
+            return self
+
         if self.n_jobs == -1:
             workers = multiprocessing.cpu_count()
         else:
@@ -102,8 +110,14 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         
         return statistics.mean(correct)
 
-    def save(self, model_path):
+    def _get_model_path(self, model_dir):
+        return "{}/doc2vec".format(model_dir)
+
+    def save(self, model_dir):
+        Path(model_dir).mkdir(parents=True, exist_ok=True)
+        model_path = self._get_model_path(model_dir)
         self.model.save(model_path)
 
-    def load(self, model_path):
+    def load(self, model_dir):
+        model_path = self._get_model_path(model_dir)
         self.model = Doc2Vec.load(model_path)
