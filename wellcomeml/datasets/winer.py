@@ -119,7 +119,7 @@ def create_train_test(
             if 'Documents/Documents/' in name and 'Documents/Documents/._' not in name]
         # Take a sample of the relevant files
         tar_name_sample = random.sample(tar_names, n_sample)
-        for i, tar_name in tqdm(enumerate(tar_names)):
+        for i, tar_name in tqdm(enumerate(tar_name_sample)):
             member = tar_docs.getmember(tar_name)
             # Which output file to save the results in
             if i < n_train:
