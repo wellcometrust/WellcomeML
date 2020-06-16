@@ -10,6 +10,21 @@ import random
 from wellcomeml.datasets.download import check_cache_and_download
 from wellcomeml.logger import logger
 
+def yield_article_entities(f):
+    article_entities = []
+    for i, line in enumerate(f):
+        line = line.decode("utf-8").replace('\n', '') # because line is of type bytes
+        if line.startswith('ID '):
+            article_id = line.split('ID ')[1]
+        else:
+            entities_data = line.replace('\t', ' ')
+            sentence_id, begin, end, ent_type = entities_data.split(' ')
+            # The data is stored as strings, but they are all numerical
+            # and sentence id = 3 refers to the 2nd sentence in this article
+            # so for querying the list of sentences in an article
+            # later it is useful to have this as an integer
+            yield (article_id, int(sentence_id), int(begin), int(end), int(ent_type))
+
 def create_train_test(
     NE_path, vocab_path, docs_path,
     train_processed_path, test_processed_path,
@@ -72,31 +87,15 @@ def create_train_test(
         for tar_name in tqdm(tar_names):
             member = tar.getmember(tar_name)
             f = tar.extractfile(member)
-            content = f.read().decode('utf-8', errors='ignore')
-            articles = content.replace('\t', ' ').split('ID ')
-            # The first element will be blank from the splitting
-            articles = articles[1:]
-            for article in articles:
-                article_entities = article.split('\n')
-                article_id = article_entities[0]
-                # The first and possibly last entity will be blank from the splitting
-                if article_entities[-1]=='':
-                    article_entities = article_entities[1:-1]
-                else:
-                    article_entities = article_entities[1:]
-                entity_info = [l.split(' ') for l in article_entities]
-                sentence_entities = {}
-                for sentence_id, begin, end, ent_type in entity_info:
-                    # The data is stored as strings, but they are all numerical
-                    # and sentence id = 3 refers to the 2nd sentence in this article
-                    # so for querying the list of sentences in an article
-                    # later it is useful to have this as an integer
-                    sentence_id, begin, end, ent_type = int(sentence_id), int(begin), int(end), int(ent_type)
-                    if sentence_entities.get(sentence_id):
-                        sentence_entities[sentence_id].append([begin, end, ent_type])
+            sentence_entities = {}
+            for (article_id, sentence_id, begin, end, ent_type) in yield_article_entities(f):
+                if entities.get(article_id):
+                    if entities[article_id].get(sentence_id):
+                        entities[article_id][sentence_id].append([begin, end, ent_type])
                     else:
-                        sentence_entities[sentence_id] = [[begin, end, ent_type]]
-                entities[article_id] = sentence_entities
+                        entities[article_id][sentence_id] = [[begin, end, ent_type]]
+                else:
+                    entities[article_id] = {sentence_id : [[begin, end, ent_type]]}
 
     # Create id2word from vocab file
     # The WiNER documentation states that the line number is the word id
