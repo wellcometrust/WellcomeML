@@ -65,43 +65,45 @@ def create_train_test(
     logger.info("Creating entities dictionary from {}".format(NE_path))
     entities = {}
     with tarfile.open(NE_path, "r:bz2") as tar:
-        for member in tqdm(tar.getmembers()):
+        tar_names = tar.getnames()
+        # Some nuances of the tarred folders contains 
+        tar_names = [name for name in tar_names \
+            if 'CoarseNE/' in name and 'CoarseNE/._' not in name]
+        for tar_name in tqdm(tar_names):
+            member = tar.getmember(tar_name)
             f = tar.extractfile(member)
-            if f:
-                content = f.read().decode('utf-8', errors='ignore')
-                articles = content.replace('\t', ' ').split('ID ')
-                # The first element will be blank from the splitting
-                articles = articles[1:]
-                for article in articles:
-                    article_entities = article.split('\n')
-                    article_id = article_entities[0]    
-                    # The first and possibly last entity will be blank from the splitting
-                    if article_entities[-1]=='':
-                        article_entities = article_entities[1:-2]
+            content = f.read().decode('utf-8', errors='ignore')
+            articles = content.replace('\t', ' ').split('ID ')
+            # The first element will be blank from the splitting
+            articles = articles[1:]
+            for article in articles:
+                article_entities = article.split('\n')
+                article_id = article_entities[0]
+                # The first and possibly last entity will be blank from the splitting
+                if article_entities[-1]=='':
+                    article_entities = article_entities[1:-1]
+                else:
+                    article_entities = article_entities[1:]
+                entity_info = [l.split(' ') for l in article_entities]
+                sentence_entities = {}
+                for sentence_id, begin, end, ent_type in entity_info:
+                    # The data is stored as strings, but they are all numerical
+                    # and sentence id = 3 refers to the 2nd sentence in this article
+                    # so for querying the list of sentences in an article
+                    # later it is useful to have this as an integer
+                    sentence_id, begin, end, ent_type = int(sentence_id), int(begin), int(end), int(ent_type)
+                    if sentence_entities.get(sentence_id):
+                        sentence_entities[sentence_id].append([begin, end, ent_type])
                     else:
-                        article_entities = article_entities[1:]
-                    entity_info = [l.split(' ') for l in article_entities]
-                    sentence_entities = {}
-                    for sentence_id, begin, end, ent_type in entity_info:
-                        # The data is stored as strings, but they are all numerical
-                        # and sentence id = 3 refers to the 2nd sentence in this article
-                        # so for querying the list of sentences in an article
-                        # later it is useful to have this as an integer
-                        sentence_id, begin, end, ent_type = int(sentence_id), int(begin), int(end), int(ent_type)
-                        if sentence_entities.get(sentence_id):
-                            sentence_entities[sentence_id].append([begin, end, ent_type])
-                        else:
-                            sentence_entities[sentence_id] = [[begin, end, ent_type]]
-                    entities[article_id] = sentence_entities
+                        sentence_entities[sentence_id] = [[begin, end, ent_type]]
+                entities[article_id] = sentence_entities
 
     # Create id2word from vocab file
     # The WiNER documentation states that the line number is the word id
     logger.info("Creating id2word dictionary from {}".format(vocab_path))
     id2word = {}
     with open(vocab_path, "r") as vocab:
-        f = vocab.read()
-        lines = f.split('\n')
-        for i, line in enumerate(lines):
+        for i, line in enumerate(vocab):
             id2word[i] = line.split(' ')[0]
 
     # Go into a sample of the vectorised document files, see if there are any entities 
@@ -112,7 +114,14 @@ def create_train_test(
     with tarfile.open(docs_path, "r:bz2") as tar_docs, \
             open(train_processed_path, 'w') as train_file, \
             open(test_processed_path, 'w') as test_file:
-        for i, member in tqdm(enumerate(random.sample(tar_docs.getmembers(), n_sample))):
+        tar_names = tar_docs.getnames()
+        # Some nuances of the tarred folders contains 
+        tar_names = [name for name in tar_names \
+            if 'Documents/Documents/' in name and 'Documents/Documents/._' not in name]
+        # Take a sample of the relevant files
+        tar_name_sample = random.sample(tar_names, n_sample)
+        for i, tar_name in tqdm(enumerate(tar_names)):
+            member = tar_docs.getmember(tar_name)
             # Which output file to save the results in
             if i < n_train:
                 output_file = train_file
