@@ -19,32 +19,14 @@ def define_paths():
         train_processed_path, test_processed_path
         )
 
-def test_create_train_test(define_paths):
-
-    (NE_path, docs_path, vocab_path,
-        train_processed_path, test_processed_path) = define_paths
-    # Create the train/test data
-    n_sample = 10
-    prop_train = 0.5
-
-    create_train_test(
-        NE_path, vocab_path, docs_path,
-        train_processed_path, test_processed_path,
-        n_sample, prop_train, rand_seed=42
-        )
-    assert os.path.exists(train_processed_path) and os.path.exists(test_processed_path)
-    os.remove(train_processed_path)
-    os.remove(test_processed_path)
-
-
 def test_train_test_documents(define_paths):
 
     (NE_path, docs_path, vocab_path,
         train_processed_path, test_processed_path) = define_paths
     # Create the train/test data
-    n_sample = 10
+    n_sample = 2
     prop_train = 0.5
-    # There are 4 documents with entities in the sample data
+    # There are 4 article IDs with entities in the sample data
     expected_train_size = round(prop_train*4) 
 
     create_train_test(
@@ -53,7 +35,7 @@ def test_train_test_documents(define_paths):
         n_sample, prop_train, rand_seed=42
         )
 
-    docs_IDs = ['ID 1000', 'ID 10002', 'ID 12083', 'ID 12084']
+    docs_IDs = ['ID 1', 'ID 2', 'ID 3', 'ID 4']
 
     with open(train_processed_path, 'r') as file:
         train_text = file.read()
