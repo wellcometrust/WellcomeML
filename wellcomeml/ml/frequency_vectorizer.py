@@ -11,7 +11,13 @@ import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from wellcomeml.logger import logger
-nlp = spacy.load('en_core_web_sm', disable=['ner', 'tagger', 'parser',
+try:
+    nlp = spacy.load('en_core_web_sm', disable=['ner', 'tagger', 'parser',
+                                                'textcat'])
+except IOError:
+    from wellcomeml.__main__ import download
+    download("models")
+    nlp = spacy.load('en_core_web_sm', disable=['ner', 'tagger', 'parser',
                                             'textcat'])
 
 
