@@ -25,6 +25,36 @@ def yield_article_entities(f):
             # later it is useful to have this as an integer
             yield (article_id, int(sentence_id), int(begin), int(end), int(ent_type))
 
+def yield_merged_entities(entities):
+    # Yield successive spans of entities into one
+    # e.g. 
+    # [{'start': 0, 'end': 2, 'label': '3-B'},
+    # {'start': 3, 'end': 5, 'label': '3-E'}]
+    # -> {'start': 0, 'end': 5, 'label': '3'}
+    merged_entity = None
+    for i, tag in enumerate(entities):
+        if tag['label'][-2:] == '-B':
+            # Yield the previous entity if it existed
+            if merged_entity:
+                yield merged_entity
+            # Start creating a new merged entity
+            merged_entity = tag.copy()
+            merged_entity['label'] = tag['label'][0]
+            if i+1 == len(entities):
+                yield merged_entity
+        elif tag['label'][-2:] == '-E':
+            if merged_entity:
+                # merged_entity should always exist if you reach a -E, but
+                # on some occassions there are mislabels in the data, which 
+                # I will ignore. e.g. European 2-B Union 2-E directives 3-E
+                merged_entity.update({'end': tag['end']})
+                yield merged_entity
+                merged_entity = None
+        elif tag['label'][-2:] == 'O':
+            merged_entity = tag.copy()
+            yield merged_entity
+            merged_entity = None
+
 def create_train_test(
     NE_path, vocab_path, docs_path,
     train_processed_path, test_processed_path,
@@ -185,47 +215,29 @@ def _load_data_spacy(data_path, inc_outside=True, merge_entities=True):
 
     X = []
     Y = []
+    sentence_text = None
     with open(data_path) as f:
-        lines = f.read().split('ID ')
-        for line in lines:
-            if line != '':
-                sentences = line.split('\n\n')
-                # The first and last sentence is blank due to splitting
-                sentences = sentences[1:-1]
-                for sentence in sentences:
-                    char_i = 0 # A counter to populate the start and end character indexes for each entity
-                    sentence_text = ''
-                    sentence_tags = []
-                    entities = sentence.split('\n') # ['Gibraltar 3-B', 'has O', 'a O', ...]
-                    tokens, tags = zip(*[tuple(ee) for ee in [e.split(' ') for e in entities]])
+        char_i = 0 # A counter to populate the start and end character indexes for each entity
+        for line in f:
+            line = line.replace('\n', '')
+            if line == '' or line[0:2] == 'ID':
+                # You are at the start of a new sentence
+                # so output previous sentence (if you had one)
+                # and start variables again
+                if sentence_text:
                     if merge_entities:
-                        # if entities span over multiple words merge them into one token
-                        # e.g. John 3-B Smith 3-E -> John Smith 3
-                        prev_B = 0 # Counter for index of last entity beginning
-                        group_tags = []
-                        for i, tag in enumerate(tags):
-                            if tag[-2:]=='-E':
-                                group_tags.append((prev_B, i+1))
-                            if tag[-2:]=='-B':
-                                if len(tags)!=(i+1) and (tags[i+1][-2:]=='-I' or tags[i+1][-2:]=='-E'):
-                                    prev_B = i
-                                else:
-                                    group_tags.append((i, i+1))
-                            if tag=='O':
-                                group_tags.append((i, i+1))
-                        tags_joined = [' '.join(tags[b:e])[0] for b,e in group_tags]
-                        tokens_joined = [' '.join(tokens[b:e]) for b,e in group_tags]
-                    else:
-                        tags_joined = [t[0] for t in tags]
-                        tokens_joined = tokens
-                    for tag, token in zip(tags_joined, tokens_joined):
-                        sentence_text += token + ' '
-                        if tag!='O' or inc_outside:
-                            sentence_tags.append({'start': char_i, 'end': char_i+len(token), 'label': tag})
-                        char_i += len(token) + 1 # plus 1 for the space separating
-                    if sentence_tags!=[]:
-                        X.append(sentence_text)
-                        Y.append(sentence_tags)
+                        sentence_tags = [merged_entity for merged_entity in yield_merged_entities(sentence_tags.copy())]
+                    X.append(sentence_text)
+                    Y.append(sentence_tags)
+                sentence_text = ''
+                sentence_tags = []
+            else:
+                token, tag = line.split(' ')
+                # Add to the sentence
+                sentence_text += token + ' '
+                if tag != 'O' or inc_outside:
+                    sentence_tags.append({'start': char_i, 'end': char_i + len(token), 'label': tag})
+                char_i += len(token) + 1 # plus 1 for the space separating
 
     return X, Y
 
