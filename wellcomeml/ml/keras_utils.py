@@ -21,7 +21,7 @@ class Metrics(tf.keras.callbacks.Callback):
 class CategoricalMetrics(tf.keras.metrics.Metric):
     def __init__(self, metric='precision', from_logits=True,
                  threshold=0.5,
-                 binary='true', pos_label=1, **kwargs):
+                 binary='true', pos=1, **kwargs):
         """
         Categorical metrics
 
@@ -31,7 +31,7 @@ class CategoricalMetrics(tf.keras.metrics.Metric):
                         a softmax activation on input
             threshold: a threshold to calculate predictions
             binary: whether input is binary or not (in which case does average)
-            pos_label: the positive label
+            pos: the positive label (between [0, n_classes])
         """
         self.metric = metric
         name = f"categorical_{metric}"
@@ -39,15 +39,15 @@ class CategoricalMetrics(tf.keras.metrics.Metric):
         self.threshold = threshold
         self.from_logits = from_logits
         self.binary = binary
-        self.pos_label = pos_label
+        self.pos = pos
         self.value = self.add_weight(name='tp', initializer='zeros')
 
     def update_state(self, y_true, y_pred, sample_weight=None):
         if self.from_logits:
             y_pred = tf.keras.activations.softmax(y_pred)
 
-        greater_than_threshold = tf.cast(y_pred[:, 1:] > self.threshold, 'bool')
-        positive = tf.cast(y_true, 'int32') == self.pos_label
+        greater_than_threshold = tf.cast(y_pred[:, self.pos:] > self.threshold, 'bool')
+        positive = tf.cast(y_true, 'int32') == self.pos
 
         # Epsilon added to denominators to avoid division by zero
         eps = tf.keras.backend.epsilon()
