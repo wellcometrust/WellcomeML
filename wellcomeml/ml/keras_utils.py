@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from sklearn.metrics import f1_score, precision_score, recall_score
 import tensorflow as tf
 
@@ -32,10 +34,11 @@ class CategoricalMetrics(tf.keras.metrics.Metric):
             threshold: a threshold to calculate predictions
             binary: whether input is binary or not (in which case does average)
             pos: the positive label (between [0, n_classes])
+            **kwargs:
         """
         self.metric = metric
         name = f"categorical_{metric}"
-        super(CategoricalMetrics, self).__init__(name=name, **kwargs)
+        super().__init__(name=name, **kwargs)
         self.threshold = threshold
         self.from_logits = from_logits
         self.binary = binary
@@ -46,7 +49,8 @@ class CategoricalMetrics(tf.keras.metrics.Metric):
         if self.from_logits:
             y_pred = tf.keras.activations.softmax(y_pred)
 
-        greater_than_threshold = tf.cast(y_pred[:, self.pos:] > self.threshold, 'bool')
+        greater_than_threshold = tf.cast(y_pred[:, self.pos:] > self.threshold,
+                                         'bool')
         positive = tf.cast(y_true, 'int32') == self.pos
 
         # Epsilon added to denominators to avoid division by zero
@@ -92,3 +96,17 @@ class CategoricalMetrics(tf.keras.metrics.Metric):
     def reset_states(self):
         # The state of the metric will be reset at the start of each epoch.
         self.value.assign(0.)
+
+
+class MetricMiniBatchHistory(tf.keras.callbacks.Callback):
+    def on_train_begin(self, logs={}):
+        self.metric_history_mini_batch = defaultdict(list)
+
+    def on_batch_end(self, batch, logs={}):
+        for metric in self.params['metrics']:
+            if logs.get(metric):
+                self.metric_history_mini_batch[metric].append(
+                    logs.get(metric)
+                )
+                self.model.history.history[f"mini_batch_{metric}"] =\
+                    self.metric_history_mini_batch[metric]
