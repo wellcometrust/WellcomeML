@@ -16,7 +16,7 @@ from sklearn.metrics import f1_score, precision_score, recall_score
 import tensorflow as tf
 
 from wellcomeml.ml.attention import HierarchicalAttention
-from wellcomeml.ml.keras_utils import Metrics
+from wellcomeml.ml.keras_utils import Metrics, CategoricalMetrics
 
 class CNNClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, context_window = 3, learning_rate=0.001,
@@ -33,7 +33,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.multilabel = multilabel
         self.attention = attention
 
-    def fit(self, X, Y, embedding_matrix=None):
+    def fit(self, X, Y, metrics=[], embedding_matrix=None):
         sequence_length = X.shape[1]
         vocab_size = X.max() + 1
         emb_dim = embedding_matrix.shape[1] if embedding_matrix else self.hidden_size
