@@ -7,10 +7,14 @@ from transformers import (
     BertTokenizer,
     TFBertForSequenceClassification
 )
+
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
 from sklearn.utils.validation import check_is_fitted
 from sklearn.exceptions import NotFittedError
+
+from wellcomeml.ml.keras_utils import CategoricalMetrics, \
+    MetricMiniBatchHistory
 
 
 class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
@@ -88,7 +92,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         return dataset
 
-    def fit(self, X, y, random_state=None, epochs=3, **kwargs):
+    def fit(self, X, y, random_state=None, epochs=3, metrics=[], **kwargs):
         """
         Fits a sentence similarity model
 
@@ -128,12 +132,15 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             loss = tf.keras.losses.SparseCategoricalCrossentropy(
                 from_logits=True
             )
-    
-            # Train and evaluate using tf.keras.Model.fit()
-    
-            metric = tf.keras.metrics.SparseCategoricalAccuracy("accuracy")
-    
-            self.model.compile(optimizer=opt, loss=loss, metrics=[metric])
+
+            precision = CategoricalMetrics(metric='precision')
+            recall = CategoricalMetrics(metric='recall')
+            f1_score = CategoricalMetrics(metric='f1_score')
+            accuracy = tf.keras.metrics.SparseCategoricalAccuracy("accuracy")
+
+            metrics = [accuracy, precision, recall, f1_score] + metrics
+
+            self.model.compile(optimizer=opt, loss=loss, metrics=metrics)
     
             self.train_steps = len(X_train) // self.batch_size
             self.valid_steps = len(X_valid) // self.eval_batch_size
@@ -144,6 +151,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
                 steps_per_epoch=self.train_steps,
                 validation_data=self.valid_dataset,
                 validation_steps=self.valid_steps,
+                callbacks=[MetricMiniBatchHistory()],
                 **kwargs
             )
 
@@ -153,7 +161,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
             self.trained_ = True
 
-        return self
+        return history
 
     def score(self, X):
         """
