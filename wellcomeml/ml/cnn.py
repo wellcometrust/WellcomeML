@@ -44,12 +44,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.multilabel = multilabel
         self.attention = attention
 
-    def fit(self, X, Y, metrics=[], embedding_matrix=None):
-        sequence_length = X.shape[1]
-        vocab_size = X.max() + 1
-        emb_dim = embedding_matrix.shape[1] if embedding_matrix else self.hidden_size
-        nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
-
+    def _build_model(self, sequence_length, vocab_size, emb_dim, nb_outputs, embedding_matrix=None):
         def residual_conv_block(x1):
             filters = x1.shape[2]
             x2 = tf.keras.layers.Conv1D(
@@ -105,6 +100,15 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
 
         optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate, clipnorm=1.0)
         self.model.compile(optimizer=optimizer, loss="binary_crossentropy", metrics=[])
+        return model
+
+    def fit(self, X, Y, embedding_matrix=None):
+        sequence_length = X.shape[1]
+        vocab_size = X.max() + 1
+        emb_dim = embedding_matrix.shape[1] if embedding_matrix else self.hidden_size
+        nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
+
+        self.model = self._build_model(sequence_length, vocab_size, emb_dim, nb_outputs, embedding_matrix)
 
         X_train, X_val, Y_train, Y_val = train_test_split(
             X, Y, test_size=0.1, shuffle=True
