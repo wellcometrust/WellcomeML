@@ -8,7 +8,11 @@ from wellcomeml.utils import check_cache_and_download
 
 
 class Sent2VecVectorizer(BaseEstimator, TransformerMixin):
+
     def __init__(self, pretrained=None):
+        self.pretrained=pretrained
+
+    def fit(self, *_):
 
         try:
             import sent2vec
@@ -16,10 +20,7 @@ class Sent2VecVectorizer(BaseEstimator, TransformerMixin):
             from wellcomeml.__main__ import download
             download("non_pypi_packages")
             import sent2vec
-    
-        self.pretrained=pretrained
 
-    def fit(self, *_):
         if self.pretrained:
             model_path = check_cache_and_download(self.pretrained)
             self.model = sent2vec.Sent2vecModel()
