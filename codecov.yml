@@ -1,0 +1,12 @@
+coverage:
+  precision: 2
+  round: down
+  status:
+    patch:
+      default:
+        enabled: no
+        if_not_found: success
+    changes:
+      default:
+        enabled: no
+        if_not_found: success
