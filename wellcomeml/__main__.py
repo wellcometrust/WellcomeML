@@ -12,7 +12,7 @@ def download(download_target):
             'python', '-m', 'spacy', 'download', 'en_trf_bertbaseuncased_lg'])
     elif download_target == "non_pypi_packages":
         subprocess.run([
-            'pip', 'install', 'git+https://github.com/epfml/sent2vec.git'])
+            'build/virtualenv/bin/pip', 'install', 'git+https://github.com/epfml/sent2vec.git'])
     else:
         print(f"{download_target} is not one of models,deeplearning-models")
 
