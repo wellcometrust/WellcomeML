@@ -2,6 +2,9 @@ coverage:
   precision: 2
   round: down
   status:
+    project:
+      target: auto
+      threshold: 10%
     patch:
       default:
         enabled: no
