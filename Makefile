@@ -37,7 +37,7 @@ update-requirements-txt:
 	$(VIRTUALENV)/bin/pip freeze | grep -v pkg-resources==0.0.0 >> requirements.txt
 
 .PHONY: dist
-dist:
+dist: update-docs
 	./create_release.sh
 
 # Spacy is require for testing spacy_to_prodigy
