@@ -9,8 +9,14 @@ $(VIRTUALENV)/.installed:
 	virtualenv --python $(PYTHON_VERSION) $(VIRTUALENV)
 	$(VIRTUALENV)/bin/pip3 install -r requirements.txt
 	$(VIRTUALENV)/bin/pip3 install -r requirements_test.txt
+	$(VIRTUALENV)/bin/pip3 install -r docs/requirements.txt # Installs requirements to docs
 	$(VIRTUALENV)/bin/pip3 install -e .
 	touch $@
+
+.PHONY: update-docs
+update-docs:
+	cd docs && ../$(VIRTUALENV)/bin/sphinx-apidoc --no-toc -d 5 -H WellcomeML -o . -f ../wellcomeml
+	cd docs && make html
 
 .PHONY: virtualenv
 virtualenv: $(VIRTUALENV)/.installed
