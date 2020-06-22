@@ -7,10 +7,9 @@ $(VIRTUALENV)/.installed:
 	@if [ -d $(VIRTUALENV) ]; then rm -rf $(VIRTUALENV); fi
 	@mkdir -p $(VIRTUALENV)
 	virtualenv --python $(PYTHON_VERSION) $(VIRTUALENV)
-	$(VIRTUALENV)/bin/pip3 install -r requirements.txt
 	$(VIRTUALENV)/bin/pip3 install -r requirements_test.txt
 	$(VIRTUALENV)/bin/pip3 install -r docs/requirements.txt # Installs requirements to docs
-	$(VIRTUALENV)/bin/pip3 install -e .
+	$(VIRTUALENV)/bin/pip3 install -e .[deep-learning]
 	touch $@
 
 .PHONY: update-docs
@@ -20,21 +19,6 @@ update-docs:
 
 .PHONY: virtualenv
 virtualenv: $(VIRTUALENV)/.installed
-
-#
-# Tooling for updating requirements.txt, b/c $(VIRTUALENV) also has test
-# dependencies in it.
-#
-
-.PHONY: update-requirements-txt
-update-requirements-txt: VIRTUALENV := build/tmp/update-requirements-virtualenv
-update-requirements-txt:
-	@if [ -d $(VIRTUALENV) ]; then rm -rf $(VIRTUALENV); fi
-	@mkdir -p $(VIRTUALENV)
-	virtualenv --python $(PYTHON_VERSION) $(VIRTUALENV)
-	$(VIRTUALENV)/bin/pip3 install -r unpinned_requirements.txt
-	echo "# Created by 'make update-requirements-txt'. DO NOT EDIT!" > requirements.txt
-	$(VIRTUALENV)/bin/pip freeze | grep -v pkg-resources==0.0.0 >> requirements.txt
 
 .PHONY: dist
 dist: update-docs
