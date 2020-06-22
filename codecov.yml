@@ -3,8 +3,9 @@ coverage:
   round: down
   status:
     project:
-      target: auto
-      threshold: 10%
+      default:
+        target: auto
+        threshold: 10%
     patch:
       default:
         enabled: no
