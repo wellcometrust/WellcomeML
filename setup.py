@@ -56,7 +56,7 @@ setuptools.setup(
             'tensorflow',
             'torch',
             'transformers<=2.0.0',
-            'spacy-transformers'
+            'spacy-transformers==0.5.1'
         ]
     },
     tests_require=[
