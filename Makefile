@@ -15,8 +15,8 @@ $(VIRTUALENV)/.installed:
 
 .PHONY: update-docs
 update-docs:
-	cd docs && ../$(VIRTUALENV)/bin/sphinx-apidoc --no-toc -d 5 -H WellcomeML -o . -f ../wellcomeml
-	cd docs && make html
+	$(VIRTUALENV)/bin/sphinx-apidoc --no-toc -d 5 -H WellcomeML -o ./docs -f wellcomeml
+	. $(VIRTUALENV)/bin/activate && cd docs && make html
 
 .PHONY: virtualenv
 virtualenv: $(VIRTUALENV)/.installed
