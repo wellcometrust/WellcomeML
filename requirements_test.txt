@@ -2,4 +2,4 @@ pytest
 pytest-cov
 codecov
 ipython
--e git+https://github.com/epfml/sent2vec.git#egg=sent2vec
+cython
