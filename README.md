@@ -47,25 +47,37 @@ pip install wellcomeml-2020.1.0-py3-none-any.whl[deep-learning]
 make
 ```
 
-### 2.2 Build the wheel (and upload to aws s3/pypi/github)
+### 2.2 Contributing to the docs
+
+Make changes to the .rst files in `/docs` (please **do not change the ones starting by wellcomeml** as those are generated automatically)
+
+Navigate to the root repository and run
+
+```bash
+make update-docs
+```
+
+Verify that `_build/html/index.html` has generated correctly and submit a PR.
+
+### 2.3 Build the wheel (and upload to aws s3/pypi/github)
 
 Create a [github token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with artifact write access and export it to the env variables:
 ```bash
 export GITHUB_TOKEN=...
 ```
-After making changes, in order to buil a new wheel, run:
+After making changes, in order to build a new release, run:
 
 ```
 make dist
 ```
 
-### 2.3 (Optional) Installing from other locations
+### 2.4 (Optional) Installing from other locations
 
 ```
 pip3 install <relative path to this folder>
 ```
 
-### 2.4 Transformers
+### 2.5 Transformers
 
 Some experimental features (currently `wellcomeml.ml.SemanticEquivalenceClassifier`) require a version of `transformers` that is not compatible with `spacy-transformers`. To develop those features:
 

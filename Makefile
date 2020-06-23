@@ -9,9 +9,15 @@ $(VIRTUALENV)/.installed:
 	virtualenv --python $(PYTHON_VERSION) $(VIRTUALENV)
 	$(VIRTUALENV)/bin/pip3 install -r requirements.txt
 	$(VIRTUALENV)/bin/pip3 install -r requirements_test.txt
+	$(VIRTUALENV)/bin/pip3 install -r docs/requirements.txt # Installs requirements to docs
 	$(VIRTUALENV)/bin/pip3 install -e .
 	$(VIRTUALENV)/bin/pip3 install git+https://github.com/epfml/sent2vec.git # otherwise it fails cause setup.py relies on cython and numpy being installed
 	touch $@
+
+.PHONY: update-docs
+update-docs:
+	$(VIRTUALENV)/bin/sphinx-apidoc --no-toc -d 5 -H WellcomeML -o ./docs -f wellcomeml
+	. $(VIRTUALENV)/bin/activate && cd docs && make html
 
 .PHONY: virtualenv
 virtualenv: $(VIRTUALENV)/.installed
@@ -32,7 +38,7 @@ update-requirements-txt:
 	$(VIRTUALENV)/bin/pip freeze | grep -v pkg-resources==0.0.0 >> requirements.txt
 
 .PHONY: dist
-dist:
+dist: update-docs
 	./create_release.sh
 
 # Spacy is require for testing spacy_to_prodigy

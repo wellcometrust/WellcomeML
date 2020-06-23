@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>wellcomeml.datasets package &mdash; WellcomeML v2020.5.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="wellcomeml.io package" href="wellcomeml.io.html" />
+    <link rel="prev" title="wellcomeml package" href="wellcomeml.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> WellcomeML
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">WellcomeML’s documentation!</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="wellcomeml.html">Core library documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="wellcomeml.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">wellcomeml.datasets package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.datasets.conll">wellcomeml.datasets.conll module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.datasets.download">wellcomeml.datasets.download module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.datasets.hoc">wellcomeml.datasets.hoc module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.datasets.winer">wellcomeml.datasets.winer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.datasets">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="wellcomeml.io.html">wellcomeml.io package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wellcomeml.metrics.html">wellcomeml.metrics package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wellcomeml.ml.html">wellcomeml.ml package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wellcomeml.spacy.html">wellcomeml.spacy package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wellcomeml.viz.html">wellcomeml.viz package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wellcomeml.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wellcomeml.html#module-wellcomeml.logger">wellcomeml.logger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wellcomeml.html#module-wellcomeml.utils">wellcomeml.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wellcomeml.html#module-wellcomeml">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">WellcomeML</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="wellcomeml.html">wellcomeml package</a> &raquo;</li>
+        
+      <li>wellcomeml.datasets package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/wellcomeml.datasets.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="wellcomeml-datasets-package">
+<h1>wellcomeml.datasets package<a class="headerlink" href="#wellcomeml-datasets-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-wellcomeml.datasets.conll">
+<span id="wellcomeml-datasets-conll-module"></span><h2>wellcomeml.datasets.conll module<a class="headerlink" href="#module-wellcomeml.datasets.conll" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="wellcomeml.datasets.conll.load_conll">
+<code class="sig-prename descclassname">wellcomeml.datasets.conll.</code><code class="sig-name descname">load_conll</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">split</span><span class="o">=</span><span class="default_value">'train'</span></em>, <em class="sig-param"><span class="n">shuffle</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">inc_outside</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.conll.load_conll" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-wellcomeml.datasets.download">
+<span id="wellcomeml-datasets-download-module"></span><h2>wellcomeml.datasets.download module<a class="headerlink" href="#module-wellcomeml.datasets.download" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="wellcomeml.datasets.download.check_cache_and_download">
+<code class="sig-prename descclassname">wellcomeml.datasets.download.</code><code class="sig-name descname">check_cache_and_download</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataset_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.download.check_cache_and_download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if dataset_name is cached and return complete path</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-wellcomeml.datasets.hoc">
+<span id="wellcomeml-datasets-hoc-module"></span><h2>wellcomeml.datasets.hoc module<a class="headerlink" href="#module-wellcomeml.datasets.hoc" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="wellcomeml.datasets.hoc.load_hoc">
+<code class="sig-prename descclassname">wellcomeml.datasets.hoc.</code><code class="sig-name descname">load_hoc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">split</span><span class="o">=</span><span class="default_value">'train'</span></em>, <em class="sig-param"><span class="n">shuffle</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.hoc.load_hoc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="wellcomeml.datasets.hoc.load_split">
+<code class="sig-prename descclassname">wellcomeml.datasets.hoc.</code><code class="sig-name descname">load_split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.hoc.load_split" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-wellcomeml.datasets.winer">
+<span id="wellcomeml-datasets-winer-module"></span><h2>wellcomeml.datasets.winer module<a class="headerlink" href="#module-wellcomeml.datasets.winer" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="wellcomeml.datasets.winer.create_train_test">
+<code class="sig-prename descclassname">wellcomeml.datasets.winer.</code><code class="sig-name descname">create_train_test</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NE_path</span></em>, <em class="sig-param"><span class="n">vocab_path</span></em>, <em class="sig-param"><span class="n">docs_path</span></em>, <em class="sig-param"><span class="n">train_processed_path</span></em>, <em class="sig-param"><span class="n">test_processed_path</span></em>, <em class="sig-param"><span class="n">n_sample</span></em>, <em class="sig-param"><span class="n">prop_train</span></em>, <em class="sig-param"><span class="n">rand_seed</span><span class="o">=</span><span class="default_value">42</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.create_train_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to transform the raw WiNER datasets into training
+and testing datasets suitable for training a NER model.
+This NE_path file gives the entities, but they need to be linked
+to the sentences they came from, which involves translating
+them from the vectorised form in the docs_path file
+using the vocab_path file.</p>
+<p>NE_path: File path to the WiNER raw data named entities
+vocab_path: File path to the WiNER raw data vocab dictionary
+docs_path: File path to the WiNER raw data documents texts</p>
+<blockquote>
+<div><p>(words coded according to the vocab)</p>
+</div></blockquote>
+<p>train_processed_path: Output file path for the training data
+test_processed_path: Output file path for the testing data
+n_sample: Number of files to get data from, each file contains about 1000 documents
+prop_train: Proportion of the file sample that will be in the training data</p>
+<p>Utilise the three datasources to get the entities from a sample
+of documents and save to a training and testing dataset files
+in the form:</p>
+<p>ID 12345</p>
+<p>John Smith PERSON
+rejects O
+German LOC
+call O</p>
+<p>Next 0
+sentence 0</p>
+<p>ID 444</p>
+<p>Next
+document</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="wellcomeml.datasets.winer.load_winer">
+<code class="sig-prename descclassname">wellcomeml.datasets.winer.</code><code class="sig-name descname">load_winer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">split</span><span class="o">=</span><span class="default_value">'train'</span></em>, <em class="sig-param"><span class="n">shuffle</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">inc_outside</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">merge_entities</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.load_winer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="wellcomeml.datasets.winer.yield_article_entities">
+<code class="sig-prename descclassname">wellcomeml.datasets.winer.</code><code class="sig-name descname">yield_article_entities</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.yield_article_entities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="wellcomeml.datasets.winer.yield_merged_entities">
+<code class="sig-prename descclassname">wellcomeml.datasets.winer.</code><code class="sig-name descname">yield_merged_entities</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entities</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.yield_merged_entities" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-wellcomeml.datasets">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.datasets" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="wellcomeml.io.html" class="btn btn-neutral float-right" title="wellcomeml.io package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="wellcomeml.html" class="btn btn-neutral float-left" title="wellcomeml package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Wellcome Data Labs
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
