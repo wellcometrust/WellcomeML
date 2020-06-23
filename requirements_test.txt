@@ -2,4 +2,3 @@ pytest
 pytest-cov
 codecov
 ipython
-cython
