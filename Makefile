@@ -64,7 +64,7 @@ download_deep_learning_models: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learnin
 download_nonpypi_packages: $(VIRTUALENV)/.installed $(VIRTUALENV)/.non_pypi_packages
 
 .PHONY: test
-test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models $(VIRTUALENV)/.download_nonpypi_packages
+test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models $(VIRTUALENV)/.non_pypi_packages
 	$(VIRTUALENV)/bin/pytest -m "not (integration or transformers)" --disable-warnings --tb=line --cov=wellcomeml ./tests
 
 .PHONY: test-transformers
