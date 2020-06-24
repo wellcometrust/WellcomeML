@@ -327,7 +327,7 @@ class SemanticMetaBert(SemanticEquivalenceClassifier):
 
         return dataset
 
-    def fit(self, X, **kwargs):
+    def fit(self, X, y, **kwargs):
         """
         Fits semantic classifier
 
@@ -343,7 +343,7 @@ class SemanticMetaBert(SemanticEquivalenceClassifier):
              Array of probabilities, of shape len(X) x 2
 
         """
-        return super().fit(X, **kwargs)
+        return super().fit(X, y, **kwargs)
 
     def score(self, X):
         """
@@ -387,13 +387,13 @@ class SemanticMetaBert(SemanticEquivalenceClassifier):
 
     def save(self, path):
         """Saves meta model to path"""
-        os.makedirs(path+'_meta', exist_ok=True)
-        self.meta_model.save(path+'_meta')
+        os.makedirs(path, exist_ok=True)
+        self.meta_model.save(path)
 
     def load(self, path):
         """Loads metamodel from path"""
         self._initialise_models()
-        self.meta_model = tf.keras.models.load_model(path+'_meta')
+        self.meta_model = tf.keras.models.load_model(path)
         self.trained_ = True
 
 
