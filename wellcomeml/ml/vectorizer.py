@@ -10,6 +10,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from wellcomeml.ml.frequency_vectorizer import WellcomeTfidf
 from wellcomeml.ml.bert_vectorizer import BertVectorizer
 from wellcomeml.ml.keras_vectorizer import KerasVectorizer
+from wellcomeml.ml.doc2vec_vectorizer import Doc2VecVectorizer
 
 class Vectorizer(BaseEstimator, TransformerMixin):
     """
@@ -27,7 +28,8 @@ class Vectorizer(BaseEstimator, TransformerMixin):
         vectorizer_dispatcher = {
             'tf-idf': WellcomeTfidf,
             'bert': BertVectorizer,
-            'keras': KerasVectorizer
+            'keras': KerasVectorizer,
+            'doc2vec': Doc2VecVectorizer
         }
 
         if not vectorizer_dispatcher.get(embedding):

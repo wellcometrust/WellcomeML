@@ -11,8 +11,6 @@ import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from wellcomeml.logger import logger
-nlp = spacy.load('en_core_web_sm', disable=['ner', 'tagger', 'parser',
-                                            'textcat'])
 
 
 class WellcomeTfidf(TfidfVectorizer):
@@ -83,6 +81,19 @@ class WellcomeTfidf(TfidfVectorizer):
         Returns:
 
         """
+
+        try:
+            nlp = spacy.load('en_core_web_sm', disable=['ner', 'tagger', 'parser',
+                                                        'textcat'])
+        except IOError:
+            from wellcomeml.__main__ import download
+            download("models")
+            # pkg_resources need to be reloaded to pick up the newly installed models
+            import pkg_resources, imp
+            imp.reload(pkg_resources)
+            nlp = spacy.load('en_core_web_sm', disable=['ner', 'tagger', 'parser',
+                                                    'textcat'])
+
         logger.info("Using spacy pre-trained lemmatiser.")
         if remove_stopwords_and_punct:
             return [

@@ -28,7 +28,7 @@ def load_hoc(split='train', shuffle=True):
 
     if shuffle:
         data = list(zip(X, Y))
-        shuffled_data = random.shuffle(data)
+        random.shuffle(data)
         X, Y = zip(*data)
 
     return X, Y

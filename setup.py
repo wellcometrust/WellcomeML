@@ -47,14 +47,16 @@ setuptools.setup(
         'scikit-learn',
         'spacy==2.2.1',
         'nervaluate',
-        'twine'
+        'twine',
+        'gensim',
+        'cython'
     ],
     extras_require={
         'deep-learning': [
             'tensorflow',
             'torch',
             'transformers<=2.0.0',
-            'spacy-transformers'
+            'spacy-transformers==0.5.1'
         ]
     },
     tests_require=[

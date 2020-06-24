@@ -40,7 +40,15 @@ class SpacyKnowledgeBase(object):
             }]
             probabilities are 'prior probabilities' and must sum to < 1
         """
-        nlp = spacy.load(self.kb_model)
+        try:
+            nlp = spacy.load(self.kb_model)
+        except IOError:
+            subprocess.run(['python', '-m', 'spacy', 'download', self.kb_model])
+            # pkg_resources need to be reloaded to pick up the newly installed models
+            import pkg_resources, imp
+            imp.reload(pkg_resources)
+            nlp = spacy.load(self.kb_model)
+
         print("Loaded model '%s'" % self.kb_model)
         kb = KnowledgeBase(vocab=nlp.vocab, entity_vector_length=self.desc_width)
 

@@ -3,6 +3,20 @@ import sys
 import os
 
 
+def download(download_target):
+    if download_target == "models":
+        subprocess.run([
+            'python', '-m', 'spacy', 'download', 'en_core_web_sm'])
+    elif download_target == "deeplearning-models":
+        subprocess.run([
+            'python', '-m', 'spacy', 'download', 'en_trf_bertbaseuncased_lg'])
+    elif download_target == "non_pypi_packages":
+        subprocess.run([
+            'pip', 'install', 'git+https://github.com/epfml/sent2vec.git'])
+    else:
+        print(f"{download_target} is not one of models,deeplearning-models")
+
+
 if __name__ == '__main__':
     command = sys.argv.pop(1)
     if command != "download":
@@ -10,11 +24,4 @@ if __name__ == '__main__':
         exit()
 
     download_target = sys.argv.pop(1)
-    if download_target == "models":
-        subprocess.run([
-            'python', '-m', 'spacy', 'download', 'en_core_web_sm'])
-    elif download_target == "deeplearning-models":
-        subprocess.run([
-            'python', '-m', 'spacy', 'download', 'en_trf_bertbaseuncased_lg'])
-    else:
-        print(f"{download_target} is not one of models,deeplearning-models")
+    download(download_target)
