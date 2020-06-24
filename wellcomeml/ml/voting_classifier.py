@@ -11,10 +11,9 @@ import numpy as np
 
 
 class WellcomeVotingClassifier(VotingClassifier):
-    def __init__(self, *args, multilabel=False, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(WellcomeVotingClassifier, self).__init__(*args, **kwargs)
         self.pretrained = self._is_pretrained()
-        self.multilabel = multilabel
 
     def _is_pretrained(self):
         try:
@@ -50,10 +49,16 @@ class WellcomeVotingClassifier(VotingClassifier):
                 else:
                     return np.argmax(Y_prob, axis=1)
             else: # hard voting
-                Y_preds = np.array([est.predict(X) for est in estimators])
+                Y_preds = [est.predict(X) for est in estimators]
+                if multilabel:
+                    Y_preds = np.array(Y_preds)
+                    axis = 0
+                else:
+                    Y_preds = np.column_stack(Y_preds)   
+                    axis = 1
                 return np.apply_along_axis(
                     lambda x: np.argmax(np.bincount(x)),
-                    axis=0 if multilabel else 1,
+                    axis=axis,
                     arr=Y_preds)
         else:
             return super(WellcomeVotingClassifier, self).predict(X)

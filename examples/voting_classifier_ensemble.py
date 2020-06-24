@@ -8,12 +8,14 @@ from wellcomeml.ml.voting_classifier import WellcomeVotingClassifier
 X = [
     "One two",
     "One",
-    "Three and two"
+    "Three and two",
+    "Three"
 ]
 Y = [
     [1,1,0],
     [1,0,0],
-    [0,1,1]
+    [0,1,1],
+    [0,0,1]
 ]
 
 vec = CountVectorizer()
@@ -28,7 +30,22 @@ sgd.fit(X_vec, Y)
 nb.fit(X_vec, Y)
 
 voting_classifier = WellcomeVotingClassifier(
-    estimators=[sgd, nb], voting="soft", multilabel=True
+    estimators=[sgd, nb], voting="soft"
+)
+
+Y_pred = voting_classifier.predict(X_vec)
+print(Y_pred)
+
+Y = [1, 0, 1, 0]
+
+sgd = SGDClassifier(loss="log")
+nb = MultinomialNB()
+
+sgd.fit(X_vec, Y)
+nb.fit(X_vec, Y)
+
+voting_classifier = WellcomeVotingClassifier(
+    estimators=[sgd, nb], voting="soft"
 )
 
 Y_pred = voting_classifier.predict(X_vec)
