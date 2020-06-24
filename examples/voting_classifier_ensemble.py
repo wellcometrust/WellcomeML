@@ -28,7 +28,7 @@ sgd.fit(X_vec, Y)
 nb.fit(X_vec, Y)
 
 voting_classifier = WellcomeVotingClassifier(
-    estimators=[sgd, nb], voting="hard", multilabel=True
+    estimators=[sgd, nb], voting="soft", multilabel=True
 )
 
 Y_pred = voting_classifier.predict(X_vec)
