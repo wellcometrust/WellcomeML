@@ -11,7 +11,6 @@ $(VIRTUALENV)/.installed:
 	$(VIRTUALENV)/bin/pip3 install -r requirements_test.txt
 	$(VIRTUALENV)/bin/pip3 install -r docs/requirements.txt # Installs requirements to docs
 	$(VIRTUALENV)/bin/pip3 install -e .
-	$(VIRTUALENV)/bin/pip3 install git+https://github.com/epfml/sent2vec.git # otherwise it fails cause setup.py relies on cython and numpy being installed
 	touch $@
 
 .PHONY: update-docs
@@ -65,7 +64,7 @@ download_deep_learning_models: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learnin
 download_nonpypi_packages: $(VIRTUALENV)/.installed $(VIRTUALENV)/.non_pypi_packages
 
 .PHONY: test
-test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models
+test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models $(VIRTUALENV)/.non_pypi_packages
 	$(VIRTUALENV)/bin/pytest -m "not (integration or transformers)" --disable-warnings --tb=line --cov=wellcomeml ./tests
 
 .PHONY: test-transformers
