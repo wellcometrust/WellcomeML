@@ -1,18 +1,18 @@
 [![Build Status](https://travis-ci.com/wellcometrust/WellcomeML.svg?token=cssCZpnz8YDs4Hb4K5pS&branch=master)](https://travis-ci.com/wellcometrust/WellcomeML) [![codecov](https://codecov.io/gh/wellcometrust/wellcomeml/branch/master/graph/badge.svg)](https://codecov.io/gh/wellcometrust/wellcomeml)
+![GitHub](https://img.shields.io/github/license/wellcometrust/wellcomeml)
+![PyPI](https://img.shields.io/pypi/v/wellcomeml)
+
 
 # WellcomeML utils
 
-This package contains common utility functions for usual tasks at Wellcome Data Labs. In particular:
+This package contains common utility functions for usual tasks at Wellcome Data Labs, in particular functionalities for processing, embedding and classifying text data. This includes
 
+* An intuitive sklearn-like API wrapping text vectorizers, such as Doc2vec, Bert, Scibert
+* Common API for off-the-shelf classifiers to allow quick iteration (e.g. Frequency Vectorizer, Bert, Scibert, basic CNN, BiLSTM)
+* Utils to download and convert academic text datasets for benchmark
 
-| modules | description| 
-|---|---|
-| **io** | manipulating data, in and out S3, and processing |
-| **ml** | wrappers for processing texts, vectorisers and classifiers |
-| **spacy** | common utils for converting data form and to spacy/prodigy format |
-| **mis/viz** | any other utils, including Wellcome colour palletes | 
+For more information read the official [![docs](https://img.shields.io/badge/docs-%20-success)](http://wellcometrust.github.io/WellcomeML)
 
-For more in depth information see the `/examples` folder and [release notes](https://github.com/wellcometrust/WellcomeML/releases).
 
 ## 1. Quickstart
 
@@ -86,7 +86,7 @@ export WELLCOMEML_ENV=development_transformers
 pip install -r requirements_transformers.txt --upgrade
 ```
 
-On OSX, ff you get a message complaining about the rust compiler, install and initialise it with:
+On OSX, if you get a message complaining about the rust compiler, install and initialise it with:
 
 ```
 brew install rustup
