@@ -49,10 +49,7 @@ def test_semantic_meta_fit():
          ['This sentence has context_2', 'This one also has context_2', 0.2, 0.2],
          ['This sentence is about something else', 'God save the queen', -0.5, -0.5]]
 
-    X += [X[0]]*2
-    X += [X[2]]*2
-
-    y = [1, 1, 0, 1, 1, 0, 1]
+    y = [1, 1, 0]
 
     classifier.fit(X, y, epochs=3)
 
@@ -102,19 +99,16 @@ def test_save_and_load_semantic(tmp_path):
 
 @pytest.mark.transformers
 def test_save_and_load_meta(tmp_path):
-    classifier_1 = SemanticMetaBert(n_numerical_features=2,
-                                  pretrained="scibert",
-                                  batch_size=2,
-                                  eval_batch_size=1)
+    classifier_1 = SemanticMetaBert(n_numerical_features=1,
+                                    pretrained="bert",
+                                    batch_size=2,
+                                    eval_batch_size=1)
 
-    X = [('This sentence has context_1', 'This one also has context_1', 0.1, 0.2),
-         ('This sentence has context_2', 'This one also has context_2', 0.2, 0.2),
-         ('This sentence is about something else', 'God save the queen', -0.5, -0.5)]
+    X = [('This sentence has context_1', 'This one also has context_1', 0.1),
+         ('This sentence has context_2', 'This one also has context_2', 0.2),
+         ('This sentence is about something else', 'God save the queen', -0.5)]
 
-    X += [X[0]]*2
-    X += [X[2]]*2
-
-    y = [1, 1, 0, 1, 1, 0, 1]
+    y = [1, 1, 0]
 
     classifier_1.fit(X, y, epochs=1)
     # Save and load for Meta Models only accepts strings (not PosixPath)
@@ -125,8 +119,6 @@ def test_save_and_load_meta(tmp_path):
     classifier_2 = SemanticMetaBert(n_numerical_features=2)
     classifier_2.load(str(tmp_path.absolute()))
     scores_2 = classifier_2.score(X)
-
-
 
     score_diff = sum([abs(diff) for diff in (scores_1-scores_2).flatten()])
 
