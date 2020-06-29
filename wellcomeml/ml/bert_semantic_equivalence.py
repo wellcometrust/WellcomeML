@@ -255,8 +255,8 @@ class SemanticMetaBert(SemanticEquivalenceClassifier):
         self.meta_model = None
 
     def _separate_features(self, X):
-        X_text = [x[:self.n_numerical_features] for x in X]
-        X_numerical = [x[self.n_numerical_features:] for x in X]
+        X_text = [x[:2] for x in X]
+        X_numerical = [x[2:2+self.n_numerical_features] for x in X]
 
         return X_text, X_numerical
 
