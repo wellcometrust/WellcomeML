@@ -49,7 +49,10 @@ def test_semantic_meta_fit():
          ['This sentence has context_2', 'This one also has context_2', 0.2, 0.2],
          ['This sentence is about something else', 'God save the queen', -0.5, -0.5]]
 
-    y = [1, 1, 0]
+    X += [X[0]]*2
+    X += [X[2]]*2
+
+    y = [1, 1, 0, 1, 1, 0, 1]
 
     classifier.fit(X, y, epochs=3)
 
@@ -62,7 +65,7 @@ def test_semantic_meta_fit():
     assert (scores > 0).sum() == 6
     assert (scores < 1).sum() == 6
 
-    # Fits two extra epoch
+    # Fits two extra epochs
 
     classifier.fit(X, y, epochs=2)
 
@@ -108,7 +111,10 @@ def test_save_and_load_meta(tmp_path):
          ('This sentence has context_2', 'This one also has context_2', 0.2, 0.2),
          ('This sentence is about something else', 'God save the queen', -0.5, -0.5)]
 
-    y = [1, 1, 0]
+    X += [X[0]]*2
+    X += [X[2]]*2
+
+    y = [1, 1, 0, 1, 1, 0, 1]
 
     classifier_1.fit(X, y, epochs=1)
     # Save and load for Meta Models only accepts strings (not PosixPath)
@@ -119,6 +125,8 @@ def test_save_and_load_meta(tmp_path):
     classifier_2 = SemanticMetaBert(n_numerical_features=2)
     classifier_2.load(str(tmp_path.absolute()))
     scores_2 = classifier_2.score(X)
+
+
 
     score_diff = sum([abs(diff) for diff in (scores_1-scores_2).flatten()])
 
