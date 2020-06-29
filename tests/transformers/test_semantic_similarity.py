@@ -99,7 +99,7 @@ def test_save_and_load_semantic(tmp_path):
 
 @pytest.mark.transformers
 def test_save_and_load_meta(tmp_path):
-    classifier_1 = SemanticMetaBert(n_numerical_features=1,
+    classifier = SemanticMetaBert(n_numerical_features=1,
                                     pretrained="bert",
                                     batch_size=2,
                                     eval_batch_size=1)
@@ -110,15 +110,15 @@ def test_save_and_load_meta(tmp_path):
 
     y = [1, 1, 0]
 
-    classifier_1.fit(X, y, epochs=1)
+    classifier.fit(X, y, epochs=1)
     # Save and load for Meta Models only accepts strings (not PosixPath)
     
-    classifier_1.save(str(tmp_path.absolute()))
-    scores_1 = classifier_1.score(X)
+    classifier.save(str(tmp_path.absolute()))
+    scores_1 = classifier.score(X)
 
-    classifier_2 = SemanticMetaBert(n_numerical_features=2)
-    classifier_2.load(str(tmp_path.absolute()))
-    scores_2 = classifier_2.score(X)
+    classifier = SemanticMetaBert(n_numerical_features=2)
+    classifier.load(str(tmp_path.absolute()))
+    scores_2 = classifier.score(X)
 
     score_diff = sum([abs(diff) for diff in (scores_1-scores_2).flatten()])
 
