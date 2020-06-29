@@ -116,7 +116,7 @@ def test_save_and_load_meta(tmp_path):
     classifier.save(str(tmp_path.absolute()))
     scores_1 = classifier.score(X)
 
-    classifier = SemanticMetaBert(n_numerical_features=2)
+    classifier = SemanticMetaBert(n_numerical_features=1)
     classifier.load(str(tmp_path.absolute()))
     scores_2 = classifier.score(X)
 
