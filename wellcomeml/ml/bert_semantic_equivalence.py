@@ -123,7 +123,6 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         self.model.compile(optimizer=opt, loss=loss, metrics=metrics)
 
-
     def _tokenize(self, X):
         return self.tokenizer.batch_encode_plus(
             X, max_length=self.max_length, add_special_tokens=True,
@@ -281,15 +280,14 @@ class SemanticMetaBert(SemanticEquivalenceClassifier):
             dtype=tf.float32
         )
         # Calls the CLS layer of Bert
-        x = self.model.layers[0](input_text_tensors)[1]
+        x = self.model.bert(input_text_tensors)[1]
+
+        # Drop out layer to the Bert features
+        x = self.model.dropout(x, training=False)
 
         # Concatenates with numerical features
         x = tf.keras.layers.concatenate([x, input_numerical_data_tensor],
                                         name='concatenate')
-
-        # Drop out layer to the concatenated features
-        x = tf.keras.layers.Dropout(rate=self.dropout_rate,
-                                    name='concatenated_dropout')(x)
 
         # Dense layer that will be used for softmax prediction later
         x = tf.keras.layers.Dense(2, name='dense_layer')(x)
