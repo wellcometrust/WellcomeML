@@ -76,7 +76,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         )
 
     def _prep_dataset_generator(self, X, y):
-        features = {"input_ids", "attention_mask", "token_type_ids"}
+        features = ["input_ids", "attention_mask", "token_type_ids"]
 
         batch_encoding = self.tokenizer.batch_encode_plus(
             X, max_length=self.max_length, add_special_tokens=True,
@@ -265,7 +265,7 @@ class SemanticMetaBert(SemanticEquivalenceClassifier):
         super()._initialise_models()
 
         # Define text input features
-        text_features = {"input_ids", "attention_mask", "token_type_ids"}
+        text_features = ["input_ids", "attention_mask", "token_type_ids"]
         input_text_tensors = [
             tf.keras.layers.Input(
                 name=feature_name,
@@ -299,7 +299,7 @@ class SemanticMetaBert(SemanticEquivalenceClassifier):
 
     def _prep_dataset_generator(self, X, y):
         """Overrides/extends the super class data preparation"""
-        text_features = {"input_ids", "attention_mask", "token_type_ids"}
+        text_features = ["input_ids", "attention_mask", "token_type_ids"]
         X_text, X_numerical = self._separate_features(X)
 
         batch_encoding_text = self.tokenizer.batch_encode_plus(
