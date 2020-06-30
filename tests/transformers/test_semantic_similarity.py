@@ -104,24 +104,15 @@ def test_save_and_load_meta(tmp_path):
                                                    batch_size=2,
                                                    eval_batch_size=1)
 
-    X = [('This sentence has context_1', 'This one also has context_1', 0.1),
-         ('This sentence has context_2', 'This one also has context_2', 0.2),
-         ('This sentence is about something else', 'God save the queen', -0.5)]
-
-    y = [1, 1, 0]
-
-    classifier.fit(X, y, epochs=1)
     # Save and load for Meta Models only accepts strings (not PosixPath)
+    classifier._initialise_models()
     
     classifier.save(str(tmp_path.absolute()) + '.h5')
-    scores_1 = classifier.score(X)
+    config_1 = classifier.config
 
     classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=1)
     classifier.load(str(tmp_path.absolute()) + '.h5')
-    scores_2 = classifier.score(X)
 
-    score_diff = sum([abs(diff) for diff in (scores_1-scores_2).flatten()])
+    config_2 = classifier.config
 
-    assert pytest.approx(score_diff, 0)
-
-
+    assert config_1 == config_2
