@@ -274,11 +274,11 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
             ) for feature_name in text_features
         ]
 
-        input_numerical_data_tensor = tf.keras.layers.Input(
+        input_numerical_data_tensor = [tf.keras.layers.Input(
             name="numerical_metadata",
             shape=tf.TensorShape([self.n_numerical_features]),
             dtype=tf.float32
-        )
+        )]
         # Calls the CLS layer of Bert
         x = self.model.bert(input_text_tensors)[1]
 
@@ -293,7 +293,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         x = tf.keras.layers.Dense(2, name='dense_layer')(x)
 
         self.meta_model = tf.keras.Model(
-            input_text_tensors + [input_numerical_data_tensor],
+            input_text_tensors + input_numerical_data_tensor,
             x
         )
 
