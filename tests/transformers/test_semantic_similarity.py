@@ -97,7 +97,7 @@ def test_save_and_load_semantic(tmp_path):
     assert pytest.approx(score_diff, 0)
 
 
-@pytest.mark.xfail(reason="Test requires too much memory")
+@pytest.mark.skip(reason="Test requires too much memory")
 @pytest.mark.transformers
 def test_save_and_load_meta(tmp_path):
     classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=1,
