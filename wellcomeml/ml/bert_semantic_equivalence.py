@@ -74,6 +74,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.model = TFBertForSequenceClassification.from_pretrained(
             model_name, config=self.config, from_pt=from_pt
         )
+        return self.model
 
     def _prep_dataset_generator(self, X, y):
         features = ["input_ids", "attention_mask", "token_type_ids"]
@@ -253,7 +254,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         super().__init__(**kwargs)
         self.n_numerical_features = n_numerical_features
         self.dropout_rate = dropout_rate
-        self.meta_model = None
+        self.model = None
 
     def _separate_features(self, X):
         X_text = [x[:2] for x in X]
@@ -263,7 +264,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
     def _initialise_models(self):
         """Extends/overrides super class initialisation of model"""
-        super()._initialise_models()
+        super_model = super()._initialise_models()
 
         # Define text input features
         text_features = ["input_ids", "attention_mask", "token_type_ids"]
@@ -281,10 +282,10 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
             dtype=tf.float32
         )]
         # Calls the CLS layer of Bert
-        x = self.model.bert(input_text_tensors)[1]
+        x = super_model.bert(input_text_tensors)[1]
 
         # Drop out layer to the Bert features
-        x = self.model.dropout(x, training=False)
+        x = super_model.dropout(x, training=False)
 
         # Concatenates with numerical features
         x = tf.keras.layers.concatenate([x, input_numerical_data_tensor[0]],
@@ -293,7 +294,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         # Dense layer that will be used for softmax prediction later
         x = tf.keras.layers.Dense(2, name='dense_layer')(x)
 
-        self.meta_model = tf.keras.Model(
+        self.model = tf.keras.Model(
             input_text_tensors + input_numerical_data_tensor,
             x
         )
@@ -312,18 +313,18 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
                 features = {k: pad(batch_encoding_text[k][i],
                                    self.max_length)
                             for k in batch_encoding_text}
-                features['numerical_features'] = X_numerical[i]
+                features['numerical_metadata'] = X_numerical[i]
 
                 yield (features, int(y[i]))
 
         input_element_types = (
             {**{feature: tf.int32 for feature in text_features},
-             **{'numerical_features': tf.float32}},
+             **{'numerical_metadata': tf.float32}},
             tf.int64
         )
         input_element_tensors = (
             {**{feature: tf.TensorShape([None]) for feature in text_features},
-             **{'numerical_features': tf.TensorShape([self.n_numerical_features])}},
+             **{'numerical_metadata': tf.TensorShape([self.n_numerical_features])}},
             tf.TensorShape([])
         )
 
@@ -342,7 +343,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         X_processed['numerical_metadata'] = tf.convert_to_tensor(X_numerical)
 
         predictions = tf.convert_to_tensor(
-            self.meta_model.predict(X_processed)
+            self.model.predict(X_processed)
         )
         return predictions
 
@@ -397,12 +398,12 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
     def save(self, path):
         """Saves meta model to path"""
-        self.meta_model.save(path)
+        self.model.save(path)
 
     def load(self, path):
         """Loads metamodel from path"""
         self._initialise_models()
-        self.meta_model = tf.keras.models.load_model(path)
+        self.model = tf.keras.models.load_model(path)
         self.trained_ = True
 
 
