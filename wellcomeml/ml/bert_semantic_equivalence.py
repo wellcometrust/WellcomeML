@@ -129,6 +129,10 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             pad_to_max_length=True, return_tensors="tf"
             )
 
+    def _prep_data_for_prediction(self, X):
+        X_tokenized = self._tokenize(X)
+        return tf.convert_to_tensor(self.model.predict(X_tokenized))
+
     def fit(self, X, y, random_state=None, epochs=3, metrics=[], **kwargs):
         """
         Fits a sentence similarity model
@@ -198,10 +202,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             An array of shape len(X) x 2 with scores for classes 0 and 1
 
         """
-
-        X_tokenized = self._tokenize(X)
-
-        predictions = tf.convert_to_tensor(self.model.predict(X_tokenized))
+        predictions = self._prep_data_for_prediction(X)
 
         return tf.keras.activations.softmax(predictions).numpy()
 
@@ -286,7 +287,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         x = self.model.dropout(x, training=False)
 
         # Concatenates with numerical features
-        x = tf.keras.layers.concatenate([x, input_numerical_data_tensor],
+        x = tf.keras.layers.concatenate([x, input_numerical_data_tensor[0]],
                                         name='concatenate')
 
         # Dense layer that will be used for softmax prediction later
@@ -334,6 +335,17 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
         return dataset
 
+    def _prep_data_for_prediction(self, X):
+        X_text, X_numerical = self._separate_features(X)
+
+        X_processed = self._tokenize(X_text)
+        X_processed['numerical_metadata'] = tf.convert_to_tensor(X_numerical)
+
+        predictions = tf.convert_to_tensor(
+            self.meta_model.predict(X_processed)
+        )
+        return predictions
+
     def fit(self, X, y, **kwargs):
         """
         Fits semantic classifier
@@ -366,16 +378,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
         """
 
-        X_text, X_numerical = self._separate_features(X)
-
-        X_processed = self._tokenize(X_text)
-        X_processed['numerical_metadata'] = tf.convert_to_tensor(X_numerical)
-
-        predictions = tf.convert_to_tensor(
-            self.meta_model.predict(X_processed)
-        )
-
-        return tf.keras.activations.softmax(predictions).numpy()
+        return super().score(X)
 
     def predict(self, X):
         """
