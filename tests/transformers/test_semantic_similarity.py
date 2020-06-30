@@ -97,6 +97,7 @@ def test_save_and_load_semantic(tmp_path):
     assert pytest.approx(score_diff, 0)
 
 
+@pytest.mark.xfail(reason="Test requires too much memory")
 @pytest.mark.transformers
 def test_save_and_load_meta(tmp_path):
     classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=1,
@@ -106,7 +107,6 @@ def test_save_and_load_meta(tmp_path):
 
     # Save and load for Meta Models only accepts strings (not PosixPath)
     classifier._initialise_models()
-    
     classifier.save(str(tmp_path.absolute()) + '.h5')
     config_1 = classifier.config
 
