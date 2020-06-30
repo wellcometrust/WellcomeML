@@ -231,7 +231,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.trained_ = True
 
 
-class SemanticMetaBert(SemanticEquivalenceClassifier):
+class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
     """
     Class to fine tune Semantic Classifier, allowing the possibility of
     adding metadata to the classification. Extends
@@ -240,7 +240,7 @@ class SemanticMetaBert(SemanticEquivalenceClassifier):
     """
     def __init__(self, n_numerical_features, dropout_rate=0.1, **kwargs):
         """
-        Initialises SemanticMetaBert, with n_numerical_features
+        Initialises SemanticEquivalenceMetaClassifier, with n_numerical_features
 
         Args:
             n_numerical_features(int): Number of features of the model which
@@ -394,7 +394,6 @@ class SemanticMetaBert(SemanticEquivalenceClassifier):
 
     def save(self, path):
         """Saves meta model to path"""
-        os.makedirs(path, exist_ok=True)
         self.meta_model.save(path)
 
     def load(self, path):

@@ -2,7 +2,7 @@
 import pytest
 
 from wellcomeml.ml.bert_semantic_equivalence import \
-    SemanticEquivalenceClassifier, SemanticMetaBert
+    SemanticEquivalenceClassifier, SemanticEquivalenceMetaClassifier
 
 
 @pytest.mark.transformers
@@ -40,10 +40,10 @@ def test_semantic_similarity():
 
 @pytest.mark.transformers
 def test_semantic_meta_fit():
-    classifier = SemanticMetaBert(n_numerical_features=2,
-                                  pretrained="scibert",
-                                  batch_size=2,
-                                  eval_batch_size=1)
+    classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=2,
+                                                   pretrained="scibert",
+                                                   batch_size=2,
+                                                   eval_batch_size=1)
 
     X = [['This sentence has context_1', 'This one also has context_1', 0.1, 0.2],
          ['This sentence has context_2', 'This one also has context_2', 0.2, 0.2],
@@ -99,10 +99,10 @@ def test_save_and_load_semantic(tmp_path):
 
 @pytest.mark.transformers
 def test_save_and_load_meta(tmp_path):
-    classifier = SemanticMetaBert(n_numerical_features=1,
-                                    pretrained="bert",
-                                    batch_size=2,
-                                    eval_batch_size=1)
+    classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=1,
+                                                   pretrained="bert",
+                                                   batch_size=2,
+                                                   eval_batch_size=1)
 
     X = [('This sentence has context_1', 'This one also has context_1', 0.1),
          ('This sentence has context_2', 'This one also has context_2', 0.2),
@@ -113,11 +113,11 @@ def test_save_and_load_meta(tmp_path):
     classifier.fit(X, y, epochs=1)
     # Save and load for Meta Models only accepts strings (not PosixPath)
     
-    classifier.save(str(tmp_path.absolute()))
+    classifier.save(str(tmp_path.absolute()) + '.h5')
     scores_1 = classifier.score(X)
 
-    classifier = SemanticMetaBert(n_numerical_features=1)
-    classifier.load(str(tmp_path.absolute()))
+    classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=1)
+    classifier.load(str(tmp_path.absolute()) + '.h5')
     scores_2 = classifier.score(X)
 
     score_diff = sum([abs(diff) for diff in (scores_1-scores_2).flatten()])
