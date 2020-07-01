@@ -9,8 +9,11 @@ install:
   - pip install -r requirements_test.txt
 
 script:
-  - make test VIRTUALENV=~/virtualenv
-  - make test-transformers VIRTUALENV=~/virtualenv
+  - python -m spacy download en_core_web_sm
+  - python -m spacy download en_trf_bertbaseuncased_lg
+  - pip install git+https://github.com/epfml/sent2vec.git
+  - pytest -m  "not (integration or transformers)" --durations=0 --disable-warnings --tb=line --cov=wellcomeml ./tests
+  - export WELLCOMEML_ENV=development_transformers && $(VIRTUALENV)/pytest -m "transformers" --durations=0 --disable-warnings --cov-append --tb=line --cov=wellcomeml ./tests/transformers
 
 cache: pip
 
