@@ -216,9 +216,9 @@ def _load_data_spacy(data_path, inc_outside=True, merge_entities=True):
     X = []
     Y = []
     sentence_text = None
+    char_i = 0 # A counter to populate the start and end character indexes for each entity
     with open(data_path) as f:
         for line in f:
-            char_i = 0 # A counter to populate the start and end character indexes for each entity
             line = line.replace('\n', '')
             if line == '' or line[0:2] == 'ID':
                 # You are at the start of a new sentence
@@ -231,6 +231,7 @@ def _load_data_spacy(data_path, inc_outside=True, merge_entities=True):
                     Y.append(sentence_tags)
                 sentence_text = ''
                 sentence_tags = []
+                char_i = 0 # reset char counter for the next sentence
             else:
                 token, tag = line.split(' ')
                 # Add to the sentence
