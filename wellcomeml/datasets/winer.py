@@ -217,8 +217,8 @@ def _load_data_spacy(data_path, inc_outside=True, merge_entities=True):
     Y = []
     sentence_text = None
     with open(data_path) as f:
-        char_i = 0 # A counter to populate the start and end character indexes for each entity
         for line in f:
+            char_i = 0 # A counter to populate the start and end character indexes for each entity
             line = line.replace('\n', '')
             if line == '' or line[0:2] == 'ID':
                 # You are at the start of a new sentence
