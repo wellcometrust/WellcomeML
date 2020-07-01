@@ -5,7 +5,7 @@ python:
   - 3.8
 
 install:
-  - make virtualenv
+  - pip install -e .[deep-learning]
   - pip install -r requirements_test.txt
 
 script:
