@@ -3,7 +3,7 @@ import pytest
 from wellcomeml.ml import Sent2VecVectorizer
 
 
-@pytest.mark.xfail(reason="Consumes too much memory")
+@pytest.mark.skip(reason="Consumes too much memory")
 def test_fit_transform():
     X = [
         "Malaria is a disease that kills people",
