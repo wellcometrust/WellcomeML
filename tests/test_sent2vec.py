@@ -2,11 +2,8 @@ import pytest
 
 from wellcomeml.ml import Sent2VecVectorizer
 
-<<<<<<< HEAD
-=======
 
 @pytest.mark.skip(reason="Consumes too much memory")
->>>>>>> 75a38b9... Allow sent2vec to skip
 def test_fit_transform():
     X = [
         "Malaria is a disease that kills people",
