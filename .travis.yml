@@ -9,8 +9,8 @@ install:
   - pip install -r requirements_test.txt
 
 script:
-  - make test
-  - make test-transformers
+  - make test VIRTUALENV=~/virtualenv
+  - make test-transformers VIRTUALENV=~/virtualenv
 
 cache: pip
 
