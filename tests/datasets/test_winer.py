@@ -60,10 +60,10 @@ def test_length():
 def test_entity():
     X, Y = _load_data_spacy('tests/test_data/test_winer.txt', inc_outside=False)
 
-    start = Y[0][0]['start']
-    end = Y[0][0]['end']
+    start = Y[101][1]['start']
+    end = Y[101][1]['end']
 
-    assert X[0][start:end] == 'Communications in Gibraltar'
+    assert X[101][start:end] == 'Spain'
 
 def test_no_outside_entities():
     X, Y = _load_data_spacy('tests/test_data/test_winer.txt', inc_outside=False)
