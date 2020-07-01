@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := all
 
 VIRTUALENV := build/virtualenv
-PYTHON_VERSION := python3
+PYTHON_VERSION := python3.7
 
 $(VIRTUALENV)/.installed:
 	@if [ -d $(VIRTUALENV) ]; then rm -rf $(VIRTUALENV); fi
@@ -49,12 +49,12 @@ download_nonpypi_packages: $(VIRTUALENV)/.installed $(VIRTUALENV)/.non_pypi_pack
 
 .PHONY: test
 test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models $(VIRTUALENV)/.non_pypi_packages
-	$(VIRTUALENV)/bin/pytest -m "not (integration or transformers)" --disable-warnings --tb=line --cov=wellcomeml ./tests
+	$(VIRTUALENV)/bin/pytest -m  "not (integration or transformers)" --durations=0 --disable-warnings --tb=line --cov=wellcomeml ./tests
 
 .PHONY: test-transformers
 test-transformers:
 	$(VIRTUALENV)/bin/pip install -r requirements_transformers.txt
-	export WELLCOMEML_ENV=development_transformers && $(VIRTUALENV)/bin/pytest -m "transformers" --disable-warnings --cov-append --tb=line --cov=wellcomeml ./tests/transformers
+	export WELLCOMEML_ENV=development_transformers && $(VIRTUALENV)/bin/pytest -m "transformers" --durations=0 --disable-warnings --cov-append --tb=line --cov=wellcomeml ./tests/transformers
 
 
 .PHONY: test-integrations
