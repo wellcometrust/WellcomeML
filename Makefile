@@ -61,4 +61,8 @@ test-transformers:
 test-integrations:
 	$(VIRTUALENV)/bin/pytest -m "integration" --disable-warnings --tb=line ./tests
 
+.PHONY: run_codecov
+run_codecov:
+	$(VIRTUALENV)/bin/python -m codecov
+
 all: virtualenv
