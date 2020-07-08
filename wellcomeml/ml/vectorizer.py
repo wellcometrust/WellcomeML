@@ -12,13 +12,15 @@ from wellcomeml.ml.bert_vectorizer import BertVectorizer
 from wellcomeml.ml.keras_vectorizer import KerasVectorizer
 from wellcomeml.ml.doc2vec_vectorizer import Doc2VecVectorizer
 
+
 class Vectorizer(BaseEstimator, TransformerMixin):
     """
     Abstract class, sklearn-compatible, that can vectorize texts using
     various models.
 
     """
-    def __init__(self, embedding='tf-idf', **kwargs):
+
+    def __init__(self, embedding="tf-idf", **kwargs):
         """
         Args:
             embedding(str): One of `['bert', 'tf-idf']`
@@ -26,14 +28,14 @@ class Vectorizer(BaseEstimator, TransformerMixin):
         self.embedding = embedding
 
         vectorizer_dispatcher = {
-            'tf-idf': WellcomeTfidf,
-            'bert': BertVectorizer,
-            'keras': KerasVectorizer,
-            'doc2vec': Doc2VecVectorizer
+            "tf-idf": WellcomeTfidf,
+            "bert": BertVectorizer,
+            "keras": KerasVectorizer,
+            "doc2vec": Doc2VecVectorizer,
         }
 
         if not vectorizer_dispatcher.get(embedding):
-            raise ValueError(f'Model {embedding} not available')
+            raise ValueError(f"Model {embedding} not available")
 
         self.vectorizer = vectorizer_dispatcher.get(embedding)(**kwargs)
 
@@ -54,12 +56,13 @@ class Vectorizer(BaseEstimator, TransformerMixin):
             .transform method)
 
         """
-        save_method = getattr(self.vectorizer.__class__, 'save_transformed',
-                              None)
+        save_method = getattr(self.vectorizer.__class__, "save_transformed", None)
         if not save_method:
-            raise NotImplementedError(f'Method save_transformed not implemented'
-                                      f' for class '
-                                      f'{self.vectorizer.__class__.__name__}')
+            raise NotImplementedError(
+                f"Method save_transformed not implemented"
+                f" for class "
+                f"{self.vectorizer.__class__.__name__}"
+            )
 
         return save_method(path=path, X_transformed=X_transformed)
 
@@ -75,11 +78,12 @@ class Vectorizer(BaseEstimator, TransformerMixin):
             X_transformed (array), like the one returned by the the
             fit_transform function.
         """
-        load_method = getattr(self.vectorizer.__class__, 'load_transformed',
-                              None)
+        load_method = getattr(self.vectorizer.__class__, "load_transformed", None)
         if not load_method:
-            raise NotImplementedError(f'Method load_transformed not implemented'
-                                      f' for class '
-                                      f'{self.vectorizer.__class__.__name__}')
+            raise NotImplementedError(
+                f"Method load_transformed not implemented"
+                f" for class "
+                f"{self.vectorizer.__class__.__name__}"
+            )
 
         return load_method(path=path)

@@ -8,9 +8,8 @@ from wellcomeml.utils import check_cache_and_download
 
 
 class Sent2VecVectorizer(BaseEstimator, TransformerMixin):
-
     def __init__(self, pretrained=None):
-        self.pretrained=pretrained
+        self.pretrained = pretrained
 
     def fit(self, *_):
 
@@ -18,6 +17,7 @@ class Sent2VecVectorizer(BaseEstimator, TransformerMixin):
             import sent2vec
         except ImportError:
             from wellcomeml.__main__ import download
+
             download("non_pypi_packages")
             import sent2vec
 
@@ -27,7 +27,9 @@ class Sent2VecVectorizer(BaseEstimator, TransformerMixin):
             self.model.load_model(model_path)
         else:
             # Custom training not yet implemented
-            raise NotImplementedError("Fit only implemented for loading pretrained models")
+            raise NotImplementedError(
+                "Fit only implemented for loading pretrained models"
+            )
         return self
 
     def transform(self, X):

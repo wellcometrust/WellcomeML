@@ -12,8 +12,8 @@ import numpy as np
 from wellcomeml.ml import BertVectorizer
 
 
-class SimilarityEntityLinker():
-    def __init__(self, stopwords, embedding='tf-idf'):
+class SimilarityEntityLinker:
+    def __init__(self, stopwords, embedding="tf-idf"):
         """
         Input: 
             stopwords - list of stopwords
@@ -31,7 +31,7 @@ class SimilarityEntityLinker():
         """
         Clean a body of text
         """
-        text_split = text.replace("\n"," ")
+        text_split = text.replace("\n", " ")
 
         return text_split
 
@@ -45,7 +45,7 @@ class SimilarityEntityLinker():
 
         knowledge_base = {}
         for key, text in raw_knowledge_base.items():
-            if len(text.replace(" ","")) != 0:
+            if len(text.replace(" ", "")) != 0:
                 knowledge_base[key] = self._clean_text(text)
 
         return knowledge_base
@@ -60,11 +60,11 @@ class SimilarityEntityLinker():
         document_texts = list(documents.values())
         self.classifications = list(documents.keys())
 
-        if self.embedding == 'tf-idf':
+        if self.embedding == "tf-idf":
             self.vectorizer = TfidfVectorizer(stop_words=self.stopwords)
             self.corpus_matrix = self.vectorizer.fit_transform(document_texts)
         else:
-            self.vectorizer = BertVectorizer(sentence_embedding='mean_last')
+            self.vectorizer = BertVectorizer(sentence_embedding="mean_last")
             self.vectorizer.fit()
             self.corpus_matrix = self.vectorizer.transform(document_texts)
 
@@ -81,7 +81,7 @@ class SimilarityEntityLinker():
 
         return class_probabilities
 
-    def optimise_threshold(self, data, id_col='orcid', no_id_col='No ORCID'):
+    def optimise_threshold(self, data, id_col="orcid", no_id_col="No ORCID"):
         """
         Find the f1 scores when different similarity thresholds are used.
         Use half the maximum F1 score found as the optimal threshold.
@@ -90,15 +90,14 @@ class SimilarityEntityLinker():
         """
 
         y_true = [test_meta[id_col] for _, test_meta in data]
-        
-        # Find the best prediction and probability for each data point 
+
+        # Find the best prediction and probability for each data point
         probabilities = self.predict_proba(data)
         pred_entities = []
         pred_similarities = []
         for entity, similarity in zip(
-                np.argmax(probabilities, axis=1),
-                np.max(probabilities, axis=1)
-                ):
+            np.argmax(probabilities, axis=1), np.max(probabilities, axis=1)
+        ):
             pred_entities.append(self.classifications[entity])
             pred_similarities.append(similarity)
 
@@ -107,14 +106,17 @@ class SimilarityEntityLinker():
         f1_scores = []
         for similarity_threshold in np.linspace(0, 1, 40):
             pred_entities_temp = [
-                pred_entities[i] if sim <= similarity_threshold else no_id_col for i, sim in enumerate(pred_similarities)
-                ]
+                pred_entities[i] if sim <= similarity_threshold else no_id_col
+                for i, sim in enumerate(pred_similarities)
+            ]
             f1_scores.append(
-                f1_score(y_true, pred_entities_temp, average='weighted', zero_division=0)
+                f1_score(
+                    y_true, pred_entities_temp, average="weighted", zero_division=0
                 )
-        self.optimal_threshold = max(f1_scores)/2
+            )
+        self.optimal_threshold = max(f1_scores) / 2
 
-    def predict(self, data, similarity_threshold=None, no_id_col='No ORCID'):
+    def predict(self, data, similarity_threshold=None, no_id_col="No ORCID"):
         """
         Identify the most similar document to a sentence using TFIDF
 
@@ -151,9 +153,8 @@ class SimilarityEntityLinker():
 
         pred_entities = []
         for entity, similarity in zip(
-                np.argmax(probabilities, axis=1),
-                np.max(probabilities, axis=1)
-                ):
+            np.argmax(probabilities, axis=1), np.max(probabilities, axis=1)
+        ):
             if similarity > similarity_threshold:
                 pred_entities.append(self.classifications[entity])
             else:
@@ -163,6 +164,6 @@ class SimilarityEntityLinker():
 
     def evaluate(self, y_true, y_pred):
 
-        f1_micro = f1_score(y_true, y_pred, average = 'micro', zero_division = 0)
+        f1_micro = f1_score(y_true, y_pred, average="micro", zero_division=0)
 
         return f1_micro

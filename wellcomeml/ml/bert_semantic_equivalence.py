@@ -2,19 +2,14 @@ from collections import defaultdict
 import os
 
 import tensorflow as tf
-from transformers import (
-    BertConfig,
-    BertTokenizer,
-    TFBertForSequenceClassification
-)
+from transformers import BertConfig, BertTokenizer, TFBertForSequenceClassification
 
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
 from sklearn.utils.validation import check_is_fitted
 from sklearn.exceptions import NotFittedError
 
-from wellcomeml.ml.keras_utils import CategoricalMetrics, \
-    MetricMiniBatchHistory
+from wellcomeml.ml.keras_utils import CategoricalMetrics, MetricMiniBatchHistory
 
 
 class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
@@ -22,12 +17,16 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
     Class to fine-tune BERT-type models for semantic equivalence, for example
     paraphrase, textual similarity and other NLU tasks
     """
-    def __init__(self, pretrained='bert',
-                 batch_size=32,
-                 eval_batch_size=32*2,
-                 learning_rate=3e-5,
-                 test_size=0.2,
-                 max_length=128):
+
+    def __init__(
+        self,
+        pretrained="bert",
+        batch_size=32,
+        eval_batch_size=32 * 2,
+        learning_rate=3e-5,
+        test_size=0.2,
+        max_length=128,
+    ):
         """
 
         Args:
@@ -62,11 +61,11 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
     # we need to load the pytorch versions with the parameter `from_pt=True`
 
     def _initialise_models(self):
-        if self.pretrained == 'bert':
-            model_name = 'bert-base-cased'
+        if self.pretrained == "bert":
+            model_name = "bert-base-cased"
             from_pt = False
-        elif self.pretrained == 'scibert':
-            model_name = 'allenai/scibert_scivocab_cased'
+        elif self.pretrained == "scibert":
+            model_name = "allenai/scibert_scivocab_cased"
             from_pt = True
 
         self.config = BertConfig.from_pretrained(model_name, num_labels=2)
@@ -85,39 +84,33 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         def gen_train():
             for i in range(len(X)):
-                features = {k: pad(batch_encoding[k][i], self.max_length)
-                            for k in batch_encoding}
+                features = {
+                    k: pad(batch_encoding[k][i], self.max_length)
+                    for k in batch_encoding
+                }
 
                 yield (features, int(y[i]))
 
-        input_element_types = (
-            {feature: tf.int32 for feature in features},
-            tf.int64
-        )
+        input_element_types = ({feature: tf.int32 for feature in features}, tf.int64)
         input_element_tensors = (
             {feature: tf.TensorShape([None]) for feature in features},
-            tf.TensorShape([])
+            tf.TensorShape([]),
         )
 
         dataset = tf.data.Dataset.from_generator(
-            gen_train,
-            input_element_types,
-            input_element_tensors,
+            gen_train, input_element_types, input_element_tensors,
         )
 
         return dataset
 
     def _compile_model(self, metrics=[]):
-        opt = tf.keras.optimizers.Adam(learning_rate=self.learning_rate,
-                                       epsilon=1e-08)
+        opt = tf.keras.optimizers.Adam(learning_rate=self.learning_rate, epsilon=1e-08)
 
-        loss = tf.keras.losses.SparseCategoricalCrossentropy(
-            from_logits=True
-        )
+        loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
-        precision = CategoricalMetrics(metric='precision')
-        recall = CategoricalMetrics(metric='recall')
-        f1_score = CategoricalMetrics(metric='f1_score')
+        precision = CategoricalMetrics(metric="precision")
+        recall = CategoricalMetrics(metric="recall")
+        f1_score = CategoricalMetrics(metric="f1_score")
         accuracy = tf.keras.metrics.SparseCategoricalAccuracy("accuracy")
 
         metrics = [accuracy, precision, recall, f1_score] + metrics
@@ -126,9 +119,12 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
     def _tokenize(self, X):
         return self.tokenizer.batch_encode_plus(
-            X, max_length=self.max_length, add_special_tokens=True,
-            pad_to_max_length=True, return_tensors="tf"
-            )
+            X,
+            max_length=self.max_length,
+            add_special_tokens=True,
+            pad_to_max_length=True,
+            return_tensors="tf",
+        )
 
     def _prep_data_for_prediction(self, X):
         X_tokenized = self._tokenize(X)
@@ -154,21 +150,24 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             check_is_fitted(self)
         except NotFittedError:
             self._initialise_models()
-            
+
             # Train/val split
             X_train, X_valid, y_train, y_valid = train_test_split(
                 X, y, test_size=self.test_size, random_state=random_state
             )
-    
+
             # Generates tensorflow dataset
             self.train_dataset = self._prep_dataset_generator(X_train, y_train)
             self.valid_dataset = self._prep_dataset_generator(X_valid, y_valid)
-    
+
             # Generates mini-batches and stores in a class variable
-            self.train_dataset = self.train_dataset.shuffle(self.max_length).\
-                batch(self.batch_size).repeat(-1)
+            self.train_dataset = (
+                self.train_dataset.shuffle(self.max_length)
+                .batch(self.batch_size)
+                .repeat(-1)
+            )
             self.valid_dataset = self.valid_dataset.batch(self.eval_batch_size)
-    
+
             self._compile_model()
 
             self.train_steps = len(X_train) // self.batch_size
@@ -240,6 +239,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
     SemanticEquivalenceClassifier, and extends modules for data prep
     and model initialisation. Fit, predict, score remain intact
     """
+
     def __init__(self, n_numerical_features, dropout_rate=0.1, **kwargs):
         """
         Initialises SemanticEquivalenceMetaClassifier, with n_numerical_features
@@ -258,7 +258,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
     def _separate_features(self, X):
         X_text = [x[:2] for x in X]
-        X_numerical = [x[2:2+self.n_numerical_features] for x in X]
+        X_numerical = [x[2 : 2 + self.n_numerical_features] for x in X]
 
         return X_text, X_numerical
 
@@ -270,17 +270,18 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         text_features = ["input_ids", "attention_mask", "token_type_ids"]
         input_text_tensors = [
             tf.keras.layers.Input(
-                name=feature_name,
-                shape=tf.TensorShape([None]),
-                dtype=tf.int32
-            ) for feature_name in text_features
+                name=feature_name, shape=tf.TensorShape([None]), dtype=tf.int32
+            )
+            for feature_name in text_features
         ]
 
-        input_numerical_data_tensor = [tf.keras.layers.Input(
-            name="numerical_metadata",
-            shape=tf.TensorShape([self.n_numerical_features]),
-            dtype=tf.float32
-        )]
+        input_numerical_data_tensor = [
+            tf.keras.layers.Input(
+                name="numerical_metadata",
+                shape=tf.TensorShape([self.n_numerical_features]),
+                dtype=tf.float32,
+            )
+        ]
         # Calls the CLS layer of Bert
         x = super_model.bert(input_text_tensors)[1]
 
@@ -288,16 +289,14 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         x = super_model.dropout(x, training=False)
 
         # Concatenates with numerical features
-        x = tf.keras.layers.concatenate([x, input_numerical_data_tensor[0]],
-                                        name='concatenate')
+        x = tf.keras.layers.concatenate(
+            [x, input_numerical_data_tensor[0]], name="concatenate"
+        )
 
         # Dense layer that will be used for softmax prediction later
-        x = tf.keras.layers.Dense(2, name='dense_layer')(x)
+        x = tf.keras.layers.Dense(2, name="dense_layer")(x)
 
-        self.model = tf.keras.Model(
-            input_text_tensors + input_numerical_data_tensor,
-            x
-        )
+        self.model = tf.keras.Model(input_text_tensors + input_numerical_data_tensor, x)
 
     def _prep_dataset_generator(self, X, y):
         """Overrides/extends the super class data preparation"""
@@ -310,28 +309,31 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
         def gen_train():
             for i in range(len(X)):
-                features = {k: pad(batch_encoding_text[k][i],
-                                   self.max_length)
-                            for k in batch_encoding_text}
-                features['numerical_metadata'] = X_numerical[i]
+                features = {
+                    k: pad(batch_encoding_text[k][i], self.max_length)
+                    for k in batch_encoding_text
+                }
+                features["numerical_metadata"] = X_numerical[i]
 
                 yield (features, int(y[i]))
 
         input_element_types = (
-            {**{feature: tf.int32 for feature in text_features},
-             **{'numerical_metadata': tf.float32}},
-            tf.int64
+            {
+                **{feature: tf.int32 for feature in text_features},
+                **{"numerical_metadata": tf.float32},
+            },
+            tf.int64,
         )
         input_element_tensors = (
-            {**{feature: tf.TensorShape([None]) for feature in text_features},
-             **{'numerical_metadata': tf.TensorShape([self.n_numerical_features])}},
-            tf.TensorShape([])
+            {
+                **{feature: tf.TensorShape([None]) for feature in text_features},
+                **{"numerical_metadata": tf.TensorShape([self.n_numerical_features])},
+            },
+            tf.TensorShape([]),
         )
 
         dataset = tf.data.Dataset.from_generator(
-            gen_train,
-            input_element_types,
-            input_element_tensors,
+            gen_train, input_element_types, input_element_tensors,
         )
 
         return dataset
@@ -340,11 +342,9 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         X_text, X_numerical = self._separate_features(X)
 
         X_processed = self._tokenize(X_text)
-        X_processed['numerical_metadata'] = tf.convert_to_tensor(X_numerical)
+        X_processed["numerical_metadata"] = tf.convert_to_tensor(X_numerical)
 
-        predictions = tf.convert_to_tensor(
-            self.model.predict(X_processed)
-        )
+        predictions = tf.convert_to_tensor(self.model.predict(X_processed))
         return predictions
 
     def fit(self, X, y, **kwargs):
@@ -409,4 +409,4 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
 def pad(x, pad_len):
     """Old versions of transformers do not pad by default"""
-    return x + [0]*(pad_len-len(x))
+    return x + [0] * (pad_len - len(x))

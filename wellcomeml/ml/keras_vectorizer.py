@@ -4,17 +4,15 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
+
 class KerasVectorizer(BaseEstimator, TransformerMixin):
-    def __init__(self, vocab_size=None, sequence_length=None, oov_token='<OOV>'):
+    def __init__(self, vocab_size=None, sequence_length=None, oov_token="<OOV>"):
         self.vocab_size = vocab_size
         self.oov_token = oov_token
         self.sequence_length = sequence_length
 
     def fit(self, X, *_):
-        self.tokenizer = Tokenizer(
-            num_words=self.vocab_size,
-            oov_token=self.oov_token
-        )
+        self.tokenizer = Tokenizer(num_words=self.vocab_size, oov_token=self.oov_token)
         self.tokenizer.fit_on_texts(X)
         return self
 
@@ -27,7 +25,7 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
         with open(embeddings_path) as f:
             for line in f:
                 word, coefs = line.split(maxsplit=1)
-                coefs = np.fromstring(coefs, 'f', sep=' ')
+                coefs = np.fromstring(coefs, "f", sep=" ")
                 embeddings_index[word] = coefs
 
         emb_dim = len(coefs)

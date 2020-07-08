@@ -18,6 +18,7 @@ class WellcomeTfidf(TfidfVectorizer):
     Class to wrap some basic transformation and text
     vectorisation/embedding
     """
+
     def __init__(self, **kwargs):
         """
 
@@ -25,11 +26,11 @@ class WellcomeTfidf(TfidfVectorizer):
             Any sklearn "tfidfvectorizer" arguments (min_df, etc.)
 
         """
-        self.embedding = 'tf-idf'
+        self.embedding = "tf-idf"
 
         logger.info("Initialising frequency vectorizer.")
 
-        kwargs['stop_words'] = kwargs.get('stop_words', 'english')
+        kwargs["stop_words"] = kwargs.get("stop_words", "english")
 
         super().__init__(**kwargs)
 
@@ -49,7 +50,7 @@ class WellcomeTfidf(TfidfVectorizer):
 
         return X_transformed[()]
 
-    def regex_transform(self, X, remove_numbers='years', *_):
+    def regex_transform(self, X, remove_numbers="years", *_):
         """
         Extra regular expression transformations to clean text
         Args:
@@ -63,10 +64,10 @@ class WellcomeTfidf(TfidfVectorizer):
             A list of texts with the applied regex transformation
 
         """
-        if remove_numbers == 'years':
-            return [re.sub(r'[1-2]\d{3}', '', text) for text in X]
-        elif remove_numbers == 'digits':
-            return [re.sub(r'\d', '', text) for text in X]
+        if remove_numbers == "years":
+            return [re.sub(r"[1-2]\d{3}", "", text) for text in X]
+        elif remove_numbers == "digits":
+            return [re.sub(r"\d", "", text) for text in X]
         else:
             return X
 
@@ -83,28 +84,37 @@ class WellcomeTfidf(TfidfVectorizer):
         """
 
         try:
-            nlp = spacy.load('en_core_web_sm', disable=['ner', 'tagger', 'parser',
-                                                        'textcat'])
+            nlp = spacy.load(
+                "en_core_web_sm", disable=["ner", "tagger", "parser", "textcat"]
+            )
         except IOError:
             from wellcomeml.__main__ import download
+
             download("models")
             # pkg_resources need to be reloaded to pick up the newly installed models
             import pkg_resources, imp
+
             imp.reload(pkg_resources)
-            nlp = spacy.load('en_core_web_sm', disable=['ner', 'tagger', 'parser',
-                                                    'textcat'])
+            nlp = spacy.load(
+                "en_core_web_sm", disable=["ner", "tagger", "parser", "textcat"]
+            )
 
         logger.info("Using spacy pre-trained lemmatiser.")
         if remove_stopwords_and_punct:
             return [
-                [token.lemma_.lower() for token in doc
-                 if not token.is_stop and not token.is_punct and
-                 token.lemma_ != "-PRON-"]
+                [
+                    token.lemma_.lower()
+                    for token in doc
+                    if not token.is_stop
+                    and not token.is_punct
+                    and token.lemma_ != "-PRON-"
+                ]
                 for doc in nlp.tokenizer.pipe(X)
             ]
         else:
-            return [[token.lemma_.lower() for token in
-                     doc] for doc in nlp.tokenizer.pipe(X)]
+            return [
+                [token.lemma_.lower() for token in doc] for doc in nlp.tokenizer.pipe(X)
+            ]
 
     def transform(self, X, regex=True, spacy_lemmatizer=True, *_):
         if regex:
@@ -112,7 +122,7 @@ class WellcomeTfidf(TfidfVectorizer):
         if spacy_lemmatizer:
             X = self.spacy_lemmatizer(X)
 
-        X = [' '.join(text) for text in X]
+        X = [" ".join(text) for text in X]
 
         return super().transform(X)
 
@@ -124,7 +134,7 @@ class WellcomeTfidf(TfidfVectorizer):
 
         logger.info("Fitting vectorizer.")
 
-        X = [' '.join(text) for text in X]
+        X = [" ".join(text) for text in X]
         super().fit(X)
 
         return self

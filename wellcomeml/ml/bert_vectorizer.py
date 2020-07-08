@@ -13,7 +13,7 @@ from wellcomeml.logger import logger
 
 
 class BertVectorizer(BaseEstimator, TransformerMixin):
-    def __init__(self, pretrained='bert', sentence_embedding='mean_second_to_last'):
+    def __init__(self, pretrained="bert", sentence_embedding="mean_second_to_last"):
         """
         Bert vectorizer parameters
 
@@ -55,11 +55,11 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
         last_layer = output[2][-1]
         second_to_last_layer = output[2][-2]
 
-        if self.sentence_embedding == 'mean_second_to_last':
+        if self.sentence_embedding == "mean_second_to_last":
             embedded_x = second_to_last_layer.mean(dim=1)
-        elif self.sentence_embedding == 'mean_last':
+        elif self.sentence_embedding == "mean_last":
             embedded_x = last_layer.mean(dim=1)
-        elif self.sentence_embedding == 'sum_last':
+        elif self.sentence_embedding == "sum_last":
             embedded_x = last_layer.sum(dim=1)
         elif self.sentence_embedding == "mean_last_four":
             embedded_x = torch.stack(output[2][-4:]).mean(dim=0).mean(dim=1)
@@ -74,20 +74,19 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
         return np.array([self.bert_embedding(x) for x in X])
 
     def fit(self, *_):
-        model_name = 'bert-base-uncased' if self.pretrained == 'bert'\
-            else 'scibert_scivocab_uncased'
+        model_name = (
+            "bert-base-uncased"
+            if self.pretrained == "bert"
+            else "scibert_scivocab_uncased"
+        )
 
         # If model_name doesn't exist checks cache and change name to
         # full path
-        if model_name == 'scibert_scivocab_uncased':
+        if model_name == "scibert_scivocab_uncased":
             model_name = check_cache_and_download(model_name)
 
         logger.info("Using {} embedding".format(model_name))
-        self.model = BertModel.from_pretrained(model_name,
-                                               output_hidden_states=True)
+        self.model = BertModel.from_pretrained(model_name, output_hidden_states=True)
         self.tokenizer = BertTokenizer.from_pretrained(model_name)
         self.model.eval()
         return self
-
-
-

@@ -9,14 +9,16 @@ import os
 
 from spacy.vocab import Vocab
 from spacy.kb import KnowledgeBase
+
 # bin is also a spaCy package
 from bin.wiki_entity_linking.train_descriptions import EntityEncoder
 import spacy
 
-class SpacyKnowledgeBase(object):
 
-    def __init__(self, kb_model="en_core_web_lg", desc_width=64,
-                 input_dim=300, num_epochs=5):
+class SpacyKnowledgeBase(object):
+    def __init__(
+        self, kb_model="en_core_web_lg", desc_width=64, input_dim=300, num_epochs=5
+    ):
         """
         Input: 
             kb_model: spacy pretrained model with word embeddings
@@ -43,9 +45,10 @@ class SpacyKnowledgeBase(object):
         try:
             nlp = spacy.load(self.kb_model)
         except IOError:
-            subprocess.run(['python', '-m', 'spacy', 'download', self.kb_model])
+            subprocess.run(["python", "-m", "spacy", "download", self.kb_model])
             # pkg_resources need to be reloaded to pick up the newly installed models
             import pkg_resources, imp
+
             imp.reload(pkg_resources)
             nlp = spacy.load(self.kb_model)
 
@@ -61,18 +64,18 @@ class SpacyKnowledgeBase(object):
             entity_ids.append(key)
             descriptions.append(desc)
             freqs.append(freq)
-        
+
         # training entity description encodings
         # this part can easily be replaced with a custom entity encoder
         encoder = EntityEncoder(
             nlp=nlp,
             input_dim=self.input_dim,
             desc_width=self.desc_width,
-            epochs =self.num_epochs
+            epochs=self.num_epochs,
         )
-    
+
         encoder.train(description_list=descriptions, to_print=True)
-    
+
         # get the pretrained entity vectors
         embeddings = encoder.apply_encoder(descriptions)
 
@@ -82,9 +85,9 @@ class SpacyKnowledgeBase(object):
         # adding aliases, the entities need to be defined in the KB beforehand
         for alias in list_aliases:
             kb.add_alias(
-                alias=alias['alias'],
-                entities=alias['entities'],
-                probabilities=alias['probabilities'],  
+                alias=alias["alias"],
+                entities=alias["entities"],
+                probabilities=alias["probabilities"],
             )
         self.kb = kb
         return self.kb
@@ -100,7 +103,6 @@ class SpacyKnowledgeBase(object):
         vocab_path = os.path.join(output_dir, "vocab")
         self.kb.vocab.to_disk(vocab_path)
         print("Saved vocab to", vocab_path)
-    
 
     def load(self, output_dir):
         kb_path = os.path.join(output_dir, "kb")
@@ -114,13 +116,5 @@ class SpacyKnowledgeBase(object):
         return self.kb
 
     def __str__(self):
-        print(
-            self.kb.get_size_entities(),
-            "kb entities:",
-            self.kb.get_entity_strings()
-        )
-        print(
-            self.kb.get_size_aliases(),
-            "kb aliases:",
-            self.kb.get_alias_strings()
-        )
+        print(self.kb.get_size_entities(), "kb entities:", self.kb.get_entity_strings())
+        print(self.kb.get_size_aliases(), "kb aliases:", self.kb.get_alias_strings())

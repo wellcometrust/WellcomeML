@@ -4,12 +4,15 @@ from wellcomeml.logger import logger
 # Introduced a development_transformers env variable, that allows to
 # disable functions that use spacy.
 
-development_transformers_mode = \
+development_transformers_mode = (
     os.environ.get("WELLCOMEML_ENV", "") == "development_transformers"
+)
 
 if development_transformers_mode:
-    logger.warning("Running in development mode. Only loading modules that"
-                   " use new version of transformers.")
+    logger.warning(
+        "Running in development mode. Only loading modules that"
+        " use new version of transformers."
+    )
 
     from .bert_semantic_equivalence import SemanticEquivalenceClassifier
 else:
