@@ -93,7 +93,7 @@ def create_train_test(
     rejects O
     German LOC
     call O
-    
+
     Next 0
     sentence 0
 
