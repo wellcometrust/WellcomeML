@@ -3,12 +3,14 @@
 
 import en_core_web_sm
 import pytest
-import spacy
+
 from wellcomeml.spacy.spacy_doc_to_prodigy import SpacyDocToProdigy
+
 
 @pytest.fixture(scope="module")
 def nlp():
     return en_core_web_sm.load()
+
 
 def test_return_one_prodigy_doc_fails_if_passed_wrong_type():
 
@@ -21,17 +23,22 @@ def test_return_one_prodigy_doc_fails_if_passed_wrong_type():
         spacy_to_prodigy = SpacyDocToProdigy()
         spacy_to_prodigy.return_one_prodigy_doc(wrong_format)
 
+
 def test_SpacyDocToProdigy(nlp):
 
     # https://www.theguardian.com/world/2019/oct/30/pinochet-economic-model-current-crisis-chile
-    before = nlp("After 12 days of mass demonstrations, rioting and human rights violations, the government of President Sebastián Piñera must now find a way out of the crisis that has engulfed Chile.")
+    before = nlp("After 12 days of mass demonstrations, rioting and human rights violations,"
+                 " the government of President Sebastián Piñera must now find a way out of the"
+                 " crisis that has engulfed Chile.")
 
     stp = SpacyDocToProdigy()
     actual = stp.run([before])
 
     expected = [
         {
-            'text': 'After 12 days of mass demonstrations, rioting and human rights violations, the government of President Sebastián Piñera must now find a way out of the crisis that has engulfed Chile.',
+            'text': 'After 12 days of mass demonstrations, rioting and human rights violations,'
+                    ' the government of President Sebastián Piñera must now find a way out of the'
+                    ' crisis that has engulfed Chile.',
             'spans': [
                 {'token_start': 1, 'token_end': 3, 'start': 6, 'end': 13, 'label': 'DATE'},
                 {'token_start': 17, 'token_end': 19, 'start': 103, 'end': 119, 'label': 'PERSON'},
@@ -57,7 +64,7 @@ def test_SpacyDocToProdigy(nlp):
                 {'text': 'President', 'start': 93, 'end': 102, 'id': 16},
                 {'text': 'Sebastián', 'start': 103, 'end': 112, 'id': 17},
                 {'text': 'Piñera', 'start': 113, 'end': 119, 'id': 18},
-                {'text': 'must','start': 120, 'end': 124, 'id': 19},
+                {'text': 'must', 'start': 120, 'end': 124, 'id': 19},
                 {'text': 'now', 'start': 125, 'end': 128, 'id': 20},
                 {'text': 'find', 'start': 129, 'end': 133, 'id': 21},
                 {'text': 'a', 'start': 134, 'end': 135, 'id': 22},
@@ -76,4 +83,3 @@ def test_SpacyDocToProdigy(nlp):
     ]
 
     assert expected == actual
-
