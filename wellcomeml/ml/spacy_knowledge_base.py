@@ -5,6 +5,7 @@ and pretrains the entity encodings using the entity descriptions
 See https://spacy.io/usage/training#entity-linker for where I got this code from
 """
 from pathlib import Path
+import subprocess
 import os
 
 from spacy.vocab import Vocab
@@ -20,7 +21,7 @@ class SpacyKnowledgeBase(object):
         self, kb_model="en_core_web_lg", desc_width=64, input_dim=300, num_epochs=5
     ):
         """
-        Input: 
+        Input:
             kb_model: spacy pretrained model with word embeddings
             desc_width: length of entity vectors
             input_dim: dimension of pretrained input vectors
@@ -34,7 +35,7 @@ class SpacyKnowledgeBase(object):
     def train(self, entities, list_aliases):
         """
         entities: a dict of each entity, it's description and it's corpus frequency
-        list_aliases: a list of dicts for each entity e.g. 
+        list_aliases: a list of dicts for each entity e.g.
             [{
                 'alias':'Farrar',
                 'entities': ['Q1', 'Q2'],
@@ -47,7 +48,8 @@ class SpacyKnowledgeBase(object):
         except IOError:
             subprocess.run(["python", "-m", "spacy", "download", self.kb_model])
             # pkg_resources need to be reloaded to pick up the newly installed models
-            import pkg_resources, imp
+            import pkg_resources
+            import imp
 
             imp.reload(pkg_resources)
             nlp = spacy.load(self.kb_model)

@@ -84,7 +84,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
             nlp.add_pipe(TransformersTok2Vec.from_pretrained(nlp.vocab, path))
             self.nlp = nlp
         else:
-            logger.info(f"self.pretrained is not among bert, scibert")
+            logger.info(f"{self.pretrained} is not among bert, scibert")
             raise
         # TODO: Add a parameter for exclusive classes, non multilabel scenario
         self.textcat = self.nlp.create_pipe(
@@ -178,7 +178,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
                 epoch_seconds = time.time() - start_epoch
                 speed = nb_examples / epoch_seconds
                 logger.info(
-                    "{0:5d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}".format(
+                    "{0:5d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}\t{5:.2f}".format(
                         i, loss, p, r, f1, speed
                     )
                 )

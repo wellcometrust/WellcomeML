@@ -15,7 +15,7 @@ from wellcomeml.ml import BertVectorizer
 class SimilarityEntityLinker:
     def __init__(self, stopwords, embedding="tf-idf"):
         """
-        Input: 
+        Input:
             stopwords - list of stopwords
             embedding - How to embed the documents
                     in order to find which document in the corpus
@@ -39,7 +39,7 @@ class SimilarityEntityLinker:
         """
         Creates a cleaned version of the raw_knowledge_base
         which is a dictionary of each document's text.
-        
+
         Don't include any empty text information
         """
 
@@ -132,11 +132,11 @@ class SimilarityEntityLinker:
                 {metadata}),
                 ('A sentence about Smith',
                 {metadata})]
-                For this predict function the contents of 
+                For this predict function the contents of
                 {metadata} isn't important
-            similarity_threshold: The threshold by which to 
+            similarity_threshold: The threshold by which to
                 classify a match as being true or that there is
-                no match. If this is None then the best threshold 
+                no match. If this is None then the best threshold
                 will be found
         Output:
             pred_entities: a list of predictions

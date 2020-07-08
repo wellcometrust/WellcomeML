@@ -187,7 +187,6 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                 end_time = time.time() - start_time
                 examples_per_second = round(nb_examples / end_time, 2)
                 with self.textcat.model.use_params(optimizer.averages):
-                    Y_train_pred = self.predict(X_train)
                     Y_test_pred = self.predict(X_test)
                     p, r, f, _ = precision_recall_fscore_support(
                         Y_test, Y_test_pred, average="micro"

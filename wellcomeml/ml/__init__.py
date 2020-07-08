@@ -34,7 +34,7 @@ else:
         from .cnn import CNNClassifier
         from .bilstm import BiLSTMClassifier
         from .keras_vectorizer import KerasVectorizer
-        _all__ += [
+        __all__ += [
             Vectorizer, SpacyNER, SpacyClassifier, BertClassifier,
             BertVectorizer, SpacyKnowledgeBase, SpacyEntityLinker,
             SemanticEquivalenceClassifier, CNNClassifier,

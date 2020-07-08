@@ -92,7 +92,8 @@ class WellcomeTfidf(TfidfVectorizer):
 
             download("models")
             # pkg_resources need to be reloaded to pick up the newly installed models
-            import pkg_resources, imp
+            import pkg_resources
+            import imp
 
             imp.reload(pkg_resources)
             nlp = spacy.load(

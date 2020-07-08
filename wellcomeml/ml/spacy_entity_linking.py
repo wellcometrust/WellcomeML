@@ -116,10 +116,8 @@ class SpacyEntityLinker(object):
         pred_entities_ids = []
         for text, values in data:
             (start, end) = list(values["links"].keys())[0]
-            entity_text = text[start:end]
 
             doc = nlp_el.tokenizer(text)
-            entity_tokens = nlp_el.tokenizer(entity_text)
 
             # Set entity span to PERSON
             doc.ents = [

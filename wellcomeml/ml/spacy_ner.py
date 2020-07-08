@@ -81,7 +81,7 @@ class SpacyNER:
 
         for ent in doc.ents:
             pred_entities.append(
-                {"start": ent.start_char, "end": ent.end_char, "label": ent.label_,}
+                {"start": ent.start_char, "end": ent.end_char, "label": ent.label_}
             )
 
         return pred_entities
