@@ -240,6 +240,7 @@ def _load_data_spacy(data_path, inc_outside=True, merge_entities=True):
     X = []
     Y = []
     sentence_text = None
+    sentence_tags = None
     ent_start_index = (
         0  # A counter to populate the start and end character indexes for each entity
     )
