@@ -17,7 +17,7 @@ Examples:
 
 """
 
-about = {} # type: dict
+about = {}  # type: dict
 version_path = os.path.join(here, 'wellcomeml', '__version__.py')
 with open(version_path, 'r') as f:
     exec(f.read(), about)
