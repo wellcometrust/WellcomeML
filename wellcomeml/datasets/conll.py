@@ -8,15 +8,17 @@ def _load_data_spacy(data_path, inc_outside=True):
     """
     Load data in Spacy format:
     X = list of sentences (plural) / documents ['the cat ...', 'some dog...', ...]
-    Y = list of list of entity tags for each sentence [[{'start': 36, 'end': 46, 'label': 'PERSON'}, {..}, ..], ... ]
+    Y = list of list of entity tags for each sentence 
+        [[{'start': 36, 'end': 46, 'label': 'PERSON'}, {..}, ..], ... ]
     inc_outside = False: don't include none-entities in the output
 
     Raw format is:
-    '-DOCSTART- -X- O O\n\nEU NNP I-NP I-ORG\nrejects VBZ I-VP O\nGerman JJ I-NP I-MISC\ncall NN I-NP O\nto TO ...'
+    '-DOCSTART- -X- O O\n\nEU NNP I-NP I-ORG\nrejects VBZ I-VP O\nGerman JJ I-NP I-MISC...'
     where each article is separated by '-DOCSTART- -X- O O\n',
     each sentence is separate by a blank line,
     and the entity information is in the form
-    'EU NNP I-NP I-ORG' (A word, a part-of-speech (POS) tag, a syntactic chunk tag and the named entity tag)
+    'EU NNP I-NP I-ORG' (A word, a part-of-speech (POS) tag, 
+        a syntactic chunk tag and the named entity tag)
     """
 
     X = []
@@ -28,7 +30,7 @@ def _load_data_spacy(data_path, inc_outside=True):
             # Each sentence in the article is separated by a blank line
             sentences = article.split("\n\n")
             for sentence in sentences:
-                char_i = 0  # A counter to populate the start and end character indexes for each entity
+                char_i = 0  # A counter for the entity start and end character indices
                 sentence_text = ""
                 sentence_tags = []
                 entities = sentence.split("\n")

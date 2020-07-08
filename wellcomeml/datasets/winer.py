@@ -231,7 +231,8 @@ def _load_data_spacy(data_path, inc_outside=True, merge_entities=True):
 
     # Load data in Spacy format:
     # X = list of sentences (plural) / documents ['the cat ...', 'some dog...', ...]
-    # Y = list of list of entity tags for each sentence [[{'start': 36, 'end': 46, 'label': 'PERSON'}, {..}, ..], ... ]
+    # Y = list of list of entity tags for each sentence 
+    #       [[{'start': 36, 'end': 46, 'label': 'PERSON'}, {..}, ..], ... ]
     # inc_outside = False: don't include none-entities in the output
     # merge_entities if entities span over multiple tags do you want to merge them or not
     # e.g. John 3-B Smith 3-E -> John Smith 3
