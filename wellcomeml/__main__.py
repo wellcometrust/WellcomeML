@@ -1,6 +1,5 @@
 import subprocess
 import sys
-import os
 
 
 def download(download_target):
