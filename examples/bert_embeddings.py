@@ -6,19 +6,16 @@ from wellcomeml.ml import BertVectorizer
 
 
 X = [
-    'Elizabeth is the queen of England',
-    'Felipe is the king of Spain',
-    'I like to travel'
+    "Elizabeth is the queen of England",
+    "Felipe is the king of Spain",
+    "I like to travel",
 ]
-y = [1,1,0]
+y = [1, 1, 0]
 
 vectorizer = BertVectorizer()
 X_transformed = vectorizer.fit_transform(X)
 print(cosine_similarity(X_transformed))
 
-pipeline = Pipeline([
-    ('bert', BertVectorizer()),
-    ('svm', SVC(kernel='linear'))
-])
+pipeline = Pipeline([("bert", BertVectorizer()), ("svm", SVC(kernel="linear"))])
 pipeline.fit(X, y)
 print(pipeline.score(X, y))
