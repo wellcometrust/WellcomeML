@@ -1,5 +1,3 @@
-import boto3
-
 import json
 from io import BytesIO
 import gzip
@@ -14,7 +12,7 @@ class PolicyDocumentsDownloader:
         dir_path: the directory path within this s3 bucket to get policy data from
     """
     def __init__(self, s3, bucket_name, dir_path):
-        
+
         self.s3 = s3
         self.bucket_name = bucket_name
         self.dir_path = dir_path
@@ -67,7 +65,7 @@ class PolicyDocumentsDownloader:
                                 continue
                         hashes.append({
                             "source": key_name,
-                            "file_hash" : document['file_hash']
+                            "file_hash": document['file_hash']
                         })
                 print(str(len(hashes))+" documents")
 
@@ -82,7 +80,7 @@ class PolicyDocumentsDownloader:
 
         print("Downloading policy documents")
         documents = []
-        hashes_found = set() # A checker so we dont download duplicates
+        hashes_found = set()  # A checker so we dont download duplicates
         for key in self.pdf_keys:
             print("Loading "+key)
             key_name = os.path.split(key)[-1]
@@ -98,7 +96,7 @@ class PolicyDocumentsDownloader:
                         document["source"] = key_name
                         documents.append(document)
                         hashes_found.add(document['file_hash'])
-                            
+
                 print(str(len(documents))+" documents")
 
         return documents
@@ -107,8 +105,6 @@ class PolicyDocumentsDownloader:
         print("Saving data ...")
         with open(file_name, 'w', encoding='utf-8') as output_file:
             for document in documents:
-                json.dump(document, output_file) 
+                json.dump(document, output_file)
                 output_file.write("\n")
         print("Number of documents saved: " + str(len(documents)))
-
-
