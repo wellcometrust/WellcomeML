@@ -27,7 +27,6 @@ def test_wrong_model_dispatch_error():
         Vectorizer(embedding='embedding_that_doesnt_exist')
 
 
-
 def test_vectorizer_that_does_not_have_save(monkeypatch):
     X = ['This is a sentence']
 
@@ -43,4 +42,3 @@ def test_vectorizer_that_does_not_have_save(monkeypatch):
 
     with pytest.raises(NotImplementedError):
         vec.load_transformed(path='fake_path.npy')
-
