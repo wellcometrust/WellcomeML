@@ -3,10 +3,7 @@ TODO: Fill this
 """
 from pathlib import Path
 import random
-import os
 
-from spacy.vocab import Vocab
-from spacy.kb import KnowledgeBase
 from spacy.symbols import PERSON
 from spacy.tokens import Span
 from spacy.util import minibatch, compounding

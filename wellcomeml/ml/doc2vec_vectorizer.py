@@ -1,10 +1,8 @@
 """Doc2Vec sklearn wrapper"""
-from collections import Counter
 from pathlib import Path
 import multiprocessing
 import statistics
 import logging
-import json
 
 from sklearn.base import BaseEstimator, TransformerMixin
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument

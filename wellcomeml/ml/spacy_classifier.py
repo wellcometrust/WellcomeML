@@ -5,8 +5,8 @@ Train a convolutional neural network for multilabel classification
 of grants
 Adapted from https://github.com/explosion/spaCy/blob/master/examples/training/train_textcat.py
 """
-from spacy.util import minibatch, compounding, decaying
-from sklearn.metrics import f1_score, precision_score, recall_score
+from spacy.util import minibatch, compounding
+from sklearn.metrics import f1_score
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_recall_fscore_support

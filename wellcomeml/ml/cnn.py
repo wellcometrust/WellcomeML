@@ -12,11 +12,11 @@ Predict: softmax or sigmoid depending on number of outputs
 """
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score, precision_score, recall_score
+from sklearn.metrics import f1_score
 import tensorflow as tf
 
 from wellcomeml.ml.attention import HierarchicalAttention
-from wellcomeml.ml.keras_utils import Metrics, CategoricalMetrics
+from wellcomeml.ml.keras_utils import Metrics
 
 
 class CNNClassifier(BaseEstimator, ClassifierMixin):
