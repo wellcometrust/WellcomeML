@@ -48,13 +48,13 @@ def test_multilabel():
     est2 = MockEstimator(Y2_prob, multilabel=True)
 
     voting_classifier = WellcomeVotingClassifier(
-        estimators=[est1, est2], voting="soft"
+        estimators=[est1, est2], voting="soft", multilabel=True
     )
     X = ["mock", "data", "not used"]
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
 
-def test_multiclass():
+def test_binary():
     Y1_prob = np.array([
         [0.9, 0.1],
         [0.2, 0.8],
@@ -80,7 +80,7 @@ def test_multiclass():
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
 
-def test_binary():
+def test_multiclass():
     Y1_prob = np.array([
         [0.6, 0.1, 0.1, 0.2],
         [0.2, 0.3, 0.1, 0.4],
