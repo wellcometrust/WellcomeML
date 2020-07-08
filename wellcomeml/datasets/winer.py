@@ -4,7 +4,6 @@
 import tarfile
 import os
 from tqdm import tqdm
-import json
 import random
 
 from wellcomeml.datasets.download import check_cache_and_download
@@ -12,7 +11,6 @@ from wellcomeml.logger import logger
 
 
 def yield_article_entities(f):
-    article_entities = []
     for i, line in enumerate(f):
         line = line.decode("utf-8").replace("\n", "")  # because line is of type bytes
         if line.startswith("ID "):
@@ -218,7 +216,7 @@ def create_train_test(
                                     # For entities that spread over multiple words
                                     # it should be clear which word is the start of the
                                     # entity and which is the end
-                                    tags[(begin + 1) : (end - 1)] = [
+                                    tags[(begin + 1):(end - 1)] = [
                                         str(ent_type) + "-I"
                                     ] * (end - 1 - begin - 1)
                                     tags[end - 1] = str(ent_type) + "-E"
