@@ -20,7 +20,9 @@ class SpacyNER:
         X: a list of sentences,
             e.g. ['Professor Smith said', 'authors Smith and Chen found']
         y: a list of prodigy format spans for each element of X,
-            e.g. [{'start': 10, 'end': 15, 'label': 'PERSON'}, {'start': 8, 'end': 13, 'label': 'PERSON'}, {'start':18, 'end':22, 'label':'PERSON'}]
+            e.g. [{'start': 10, 'end': 15, 'label': 'PERSON'},
+                  {'start': 8, 'end': 13, 'label': 'PERSON'},
+                  {'start':18, 'end':22, 'label':'PERSON'}]
         """
 
         train_data = list(zip(X, y))
