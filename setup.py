@@ -49,7 +49,9 @@ setuptools.setup(
         'nervaluate',
         'twine',
         'gensim',
-        'cython'
+        'cython',
+        'flake8',
+        'black'
     ],
     extras_require={
         'deep-learning': [
