@@ -8,18 +8,20 @@ from wellcomeml.ml import Doc2VecVectorizer
 X = [
     "Malaria is a disease spread by mosquitos",
     "HIV is a virus that causes a disease named AIDS",
-    "Trump is the president of USA"
+    "Trump is the president of USA",
 ]
 
 doc2vec = Doc2VecVectorizer(min_count=1, vector_size=8, sample=0, negative=1)
 X_transformed = doc2vec.fit_transform(X)
 print(cosine_similarity(X_transformed))
 
-y = [1,1,0]
+y = [1, 1, 0]
 
-model = Pipeline([
-    ('doc2vec', Doc2VecVectorizer(min_count=1, vector_size=8)),
-    ('sgd', SGDClassifier())
-])
+model = Pipeline(
+    [
+        ("doc2vec", Doc2VecVectorizer(min_count=1, vector_size=8)),
+        ("sgd", SGDClassifier()),
+    ]
+)
 model.fit(X, y)
 print(model.score(X, y))

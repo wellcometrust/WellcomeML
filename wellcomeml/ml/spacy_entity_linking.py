@@ -43,7 +43,8 @@ class SpacyEntityLinker(object):
                 [('A sentence about Farrar',
                 {'links': {(17, 22): {'Q1': 1.0, 'Q2': 0.0}}})]
 
-        See https://spacy.io/usage/linguistic-features#entity-linking for where I got this code from
+        See https://spacy.io/usage/linguistic-features#entity-linking
+        for where I got this code from
         """
         # TODO: Replace n_iter with self.n_iter
         n_iter = self.n_iter

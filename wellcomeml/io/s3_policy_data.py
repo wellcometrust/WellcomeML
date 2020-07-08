@@ -61,7 +61,8 @@ class PolicyDocumentsDownloader:
                     document = json.loads(line)
                     if document['text']:
                         if word_list:
-                            if not any(word.lower() in document['text'].lower() for word in word_list):
+                            if not any(word.lower() in document['text'].lower()
+                                       for word in word_list):
                                 continue
                         hashes.append({
                             "source": key_name,

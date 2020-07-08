@@ -38,7 +38,9 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.nb_epochs = nb_epochs
         self.dropout = dropout
         self.nb_layers = nb_layers
-        self.hidden_size = hidden_size  # note that on current implementation CNN use same hidden size as embedding so if embedding matrix is passed, this is not used. in the future we can decouple
+        # note that on current implementation CNN use same hidden size as embedding
+        # so if embedding matrix is passed, this is not used. in the future we can decouple
+        self.hidden_size = hidden_size
         self.multilabel = multilabel
         self.attention = attention
 

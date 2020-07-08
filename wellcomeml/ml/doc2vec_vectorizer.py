@@ -30,7 +30,8 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
             vector_size: size of vector to represent text
             window_size: words left and right of context words used to create representation
             min_count: filter words that appear less than min_count. default: 2
-            negative: number of negative words to be used for training. if zero hierarchical softmax is used. default: 5
+            negative: number of negative words to be used for training.
+                      if zero hierarchical softmax is used. default: 5
             sample: threshold for downsampling high frequency words. default: 1e-5
             learning_rate: learning rate used by SGD. default: 0.025
             model: underlying model architecture, one of dm or dbow. default: dm
@@ -80,7 +81,8 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         #    workers=workers, min_count=self.min_count, epochs=self.epochs
         # )
         # self.model.build_vocab(tagged_documents)
-        # self.model.train(tagged_documents, total_examples=self.model.corpus_count, epochs=self.model.epochs)
+        # self.model.train(tagged_documents, total_examples=self.model.corpus_count,
+        #                  epochs=self.model.epochs)
         tagged_documents = list(self._yield_tagged_documents(X))
         self.model = Doc2Vec(
             tagged_documents,

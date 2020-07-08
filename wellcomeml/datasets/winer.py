@@ -4,7 +4,6 @@
 import tarfile
 import os
 from tqdm import tqdm
-import json
 import random
 
 from wellcomeml.datasets.download import check_cache_and_download
@@ -12,7 +11,6 @@ from wellcomeml.logger import logger
 
 
 def yield_article_entities(f):
-    article_entities = []
     for i, line in enumerate(f):
         line = line.decode("utf-8").replace("\n", "")  # because line is of type bytes
         if line.startswith("ID "):
@@ -95,7 +93,7 @@ def create_train_test(
     rejects O
     German LOC
     call O
-    
+
     Next 0
     sentence 0
 
@@ -218,7 +216,7 @@ def create_train_test(
                                     # For entities that spread over multiple words
                                     # it should be clear which word is the start of the
                                     # entity and which is the end
-                                    tags[(begin + 1) : (end - 1)] = [
+                                    tags[(begin + 1):(end - 1)] = [
                                         str(ent_type) + "-I"
                                     ] * (end - 1 - begin - 1)
                                     tags[end - 1] = str(ent_type) + "-E"
@@ -233,7 +231,8 @@ def _load_data_spacy(data_path, inc_outside=True, merge_entities=True):
 
     # Load data in Spacy format:
     # X = list of sentences (plural) / documents ['the cat ...', 'some dog...', ...]
-    # Y = list of list of entity tags for each sentence [[{'start': 36, 'end': 46, 'label': 'PERSON'}, {..}, ..], ... ]
+    # Y = list of list of entity tags for each sentence 
+    #       [[{'start': 36, 'end': 46, 'label': 'PERSON'}, {..}, ..], ... ]
     # inc_outside = False: don't include none-entities in the output
     # merge_entities if entities span over multiple tags do you want to merge them or not
     # e.g. John 3-B Smith 3-E -> John Smith 3
