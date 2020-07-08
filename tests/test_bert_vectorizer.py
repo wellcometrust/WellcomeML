@@ -19,6 +19,7 @@ def test_embed_one_sentence():
         X_embed = vec.fit_transform(X)
         assert(X_embed.shape == (1, 768))
 
+
 def test_embed_two_sentences():
     X = [
         "This is a sentence",
@@ -29,6 +30,7 @@ def test_embed_two_sentences():
         vec = bert_vectorizer.BertVectorizer(sentence_embedding=embedding)
         X_embed = vec.fit_transform(X)
         assert(X_embed.shape == (2, 768))
+
 
 def test_embed_long_sentence():
     X = ["This is a sentence"*100]
