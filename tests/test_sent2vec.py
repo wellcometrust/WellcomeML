@@ -15,6 +15,7 @@ def test_fit_transform():
     X_vec = sent2vec.transform(X)
     assert X_vec.shape == (3, 600)
 
+
 def test_fit():
     with pytest.raises(NotImplementedError):
         sent2vec = Sent2VecVectorizer()
