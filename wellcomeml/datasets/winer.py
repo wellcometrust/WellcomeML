@@ -198,7 +198,7 @@ def create_train_test(
                         # In the documents each sentence is a string of
                         # numbers corresponding to words in id2word, convert
                         # this string into a list of numbers for each sentence
-                        sent_wordidx = [l.split(" ") for l in sentences]
+                        sent_wordidx = [sentence.split(" ") for sentence in sentences]
                         # Go through each of the entites for this article
                         # and translate the word ids to their words to create
                         # the tokens and each entity.
@@ -231,7 +231,7 @@ def _load_data_spacy(data_path, inc_outside=True, merge_entities=True):
 
     # Load data in Spacy format:
     # X = list of sentences (plural) / documents ['the cat ...', 'some dog...', ...]
-    # Y = list of list of entity tags for each sentence 
+    # Y = list of list of entity tags for each sentence
     #       [[{'start': 36, 'end': 46, 'label': 'PERSON'}, {..}, ..], ... ]
     # inc_outside = False: don't include none-entities in the output
     # merge_entities if entities span over multiple tags do you want to merge them or not

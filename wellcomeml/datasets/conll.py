@@ -8,7 +8,7 @@ def _load_data_spacy(data_path, inc_outside=True):
     """
     Load data in Spacy format:
     X = list of sentences (plural) / documents ['the cat ...', 'some dog...', ...]
-    Y = list of list of entity tags for each sentence 
+    Y = list of list of entity tags for each sentence
         [[{'start': 36, 'end': 46, 'label': 'PERSON'}, {..}, ..], ... ]
     inc_outside = False: don't include none-entities in the output
 
@@ -17,7 +17,7 @@ def _load_data_spacy(data_path, inc_outside=True):
     where each article is separated by '-DOCSTART- -X- O O\n',
     each sentence is separate by a blank line,
     and the entity information is in the form
-    'EU NNP I-NP I-ORG' (A word, a part-of-speech (POS) tag, 
+    'EU NNP I-NP I-ORG' (A word, a part-of-speech (POS) tag,
         a syntactic chunk tag and the named entity tag)
     """
 

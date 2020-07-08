@@ -1,8 +1,17 @@
 from wellcomeml.ml import SimilarityEntityLinker
 
 entities_kb = {
-    "Michelle Williams (actor)": "American actress. She is the recipient of several accolades, including two Golden Globe Awards and a Primetime Emmy Award, in addition to nominations for four Academy Awards and one Tony Award.",
-    "Michelle Williams (musician)": "American entertainer. She rose to fame in the 2000s as a member of R&B girl group Destiny's Child, one of the best-selling female groups of all time with over 60 million records, of which more than 35 million copies sold with the trio lineup with Williams.",
+    "Michelle Williams (actor)": (
+        "American actress. She is the recipient of several accolades, including two Golden Globe"
+        " Awards and a Primetime Emmy Award, in addition to nominations for four Academy Awards "
+        "and one Tony Award."
+        ),
+    "Michelle Williams (musician)": (
+        "American entertainer. She rose to fame in the 2000s as a member of R&B girl group "
+        "Destiny's Child, one of the best-selling female groups of all time with over 60 "
+        "million records, of which more than 35 million copies sold with the trio lineup "
+        "with Williams."
+        ),
     "id_3": "  ",
 }
 
@@ -10,11 +19,18 @@ stopwords = ["the", "and", "if", "in", "a"]
 
 train_data = [
     (
-        "After Destiny's Child's disbanded in 2006, Michelle Williams released her first pop album, Unexpected (2008),",
+        (
+            "After Destiny's Child's disbanded in 2006, Michelle Williams released her first "
+            "pop album, Unexpected (2008),"
+        ),
         {"id": "Michelle Williams (musician)"},
     ),
     (
-        "On Broadway, Michelle Williams starred in revivals of the musical Cabaret in 2014 and the drama Blackbird in 2016, for which she received a nomination for the Tony Award for Best Actress in a Play.",
+        (
+            "On Broadway, Michelle Williams starred in revivals of the musical Cabaret in 2014 "
+            "and the drama Blackbird in 2016, for which she received a nomination for the Tony "
+            "Award for Best Actress in a Play."
+        ),
         {"id": "Michelle Williams (actor)"},
     ),
     (
