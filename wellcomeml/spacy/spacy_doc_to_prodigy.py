@@ -3,6 +3,7 @@
 
 import spacy
 
+
 class SpacyDocToProdigy:
     """Convert spacy documents into prodigy format
     """
@@ -35,15 +36,15 @@ class SpacyDocToProdigy:
         for token in doc:
             tokens.append({
                 "text": token.text,
-                "start":token.idx,
-                "end":token.idx + len(token.text),
+                "start": token.idx,
+                "end": token.idx + len(token.text),
                 "id": token.i,
             })
 
         for ent in doc.ents:
             spans.append({
-                "token_start":ent.start,
-                "token_end":ent.end,
+                "token_start": ent.start,
+                "token_end": ent.end,
                 "start": ent.start_char,
                 "end": ent.end_char,
                 "label": ent.label_,
