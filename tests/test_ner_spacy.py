@@ -15,18 +15,26 @@ def nlp():
 @pytest.fixture(scope="module")
 def X_train():
     return [
-        'n Journal of Psychiatry 158: 2071–4\nFreeman MP, Hibbeln JR, Wisner KL et al. (2006)'
-        '\nOmega-3 fatty acrd, (BKKBN)\n \nJakarta, Indonesia\n29. Drs Titut Prihyugiarto\n'
-        ' MSPA\n \nSenior Researcher for Reproductia Santé, 2008. \n118. Konradsen, F. et coll.'
-        ' Community uptake of safe storage boxes to reduce self-poted that the two treatments can'
-        ' \nbe combined. Contrarily, Wapf et al. \nnoted that many treatment perti-tuberculosis'
-        ' treatment in Mongolia. Int J Tuberc Lung Dis. 2015;19(6):657–62. \n160. Dudley L, Aze',
-        'he \nScottish Heart Health Study: cohort study. BMJ, 1997, 315:722–729. \nUmesawa M,'
-        ' Iso H, Date C et T.A., G. Marland, and R.J. Andres (2010). Global, Regional, and'
-        ' National Fossil-Fuel CO2 Emissions. Ian Gr\nMr Ian Graayy\nPrincipal Policy Officer'
-        ' (Public Health and Health Protection), Chartered Insti. \n3. \nFischer G and Stöver'
-        ' H. Assessing the current state of opioid-dependence treatment across Eurated by\nLlorca'
-        ' et al. (2014) or Pae et al. (2015), or when vortioxetine was assumed to be\nas effecti',
+        """n Journal of Psychiatry 158: 2071–4\nFreeman MP,
+           Hibbeln JR, Wisner KL et al. (2006)\nOmega-3 fatty ac""",
+        """rd, (BKKBN)\n \nJakarta, Indonesia\n29. Drs Titut Prihyugiarto
+           \n MSPA\n \nSenior Researcher for Reproducti""",
+        """a Santé, 2008. \n118. Konradsen, F. et coll.
+           Community uptake of safe storage boxes to reduce self-po""",
+        """ted that the two treatments can \nbe combined. Contrarily,
+           Wapf et al. \nnoted that many treatment per""",
+        """ti-tuberculosis treatment in Mongolia. Int J Tuberc Lung Dis.
+           2015;19(6):657–62. \n160. Dudley L, Aze""",
+        """he \nScottish Heart Health Study: cohort study. BMJ, 1997, 315:722–729.
+           \nUmesawa M, Iso H, Date C et """,
+        """T.A., G. Marland, and R.J. Andres (2010). Global, Regional,
+           and National Fossil-Fuel CO2 Emissions. """,
+        """Ian Gr\nMr Ian Graayy\nPrincipal Policy Officer
+           (Public Health and Health Protection), Chartered Insti""",
+        """. \n3. \nFischer G and Stöver H. Assessing the current
+           state of opioid-dependence treatment across Eur""",
+        """ated by\nLlorca et al. (2014) or Pae et al. (2015), or when
+           vortioxetine was assumed to be\nas effecti""",
     ]
 
 
