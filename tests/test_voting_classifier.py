@@ -1,4 +1,3 @@
-from sklearn.utils.validation import check_is_fitted
 import numpy as np
 
 from wellcomeml.ml import WellcomeVotingClassifier
@@ -28,6 +27,7 @@ class MockEstimator():
     def predict_proba(self, X):
         return self.Y_prob
 
+
 def test_multilabel():
     Y1_prob = np.array([
         [0.9, 0.5],
@@ -53,6 +53,7 @@ def test_multilabel():
     X = ["mock", "data", "not used"]
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
+
 
 def test_binary():
     Y1_prob = np.array([
@@ -80,6 +81,7 @@ def test_binary():
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
 
+
 def test_multiclass():
     Y1_prob = np.array([
         [0.6, 0.1, 0.1, 0.2],
@@ -105,6 +107,7 @@ def test_multiclass():
     X = ["mock", "data", "not used"]
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
+
 
 def test_hard_voting():
     Y1_prob = np.array([

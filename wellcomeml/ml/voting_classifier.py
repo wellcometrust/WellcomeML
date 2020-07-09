@@ -26,7 +26,7 @@ class WellcomeVotingClassifier(VotingClassifier):
     def _get_estimators(self):
         if type(self.estimators) == list:
             return [est for est in self.estimators]
-        else: # tuple with named estimators
+        else:  # tuple with named estimators
             return [est for _, est in self.estimators]
 
     def predict(self, X):
@@ -42,13 +42,13 @@ class WellcomeVotingClassifier(VotingClassifier):
                     return np.array(Y_prob > 0.5, dtype=int)
                 else:
                     return np.argmax(Y_prob, axis=1)
-            else: # hard voting
+            else:  # hard voting
                 Y_preds = [est.predict(X) for est in estimators]
                 if self.multilabel:
                     Y_preds = np.array(Y_preds)
                     axis = 0
                 else:
-                    Y_preds = np.column_stack(Y_preds)   
+                    Y_preds = np.column_stack(Y_preds)
                     axis = 1
                 return np.apply_along_axis(
                     lambda x: np.argmax(np.bincount(x)),
