@@ -3,10 +3,7 @@ TODO: Fill this
 """
 from pathlib import Path
 import random
-import os
 
-from spacy.vocab import Vocab
-from spacy.kb import KnowledgeBase
 from spacy.symbols import PERSON
 from spacy.tokens import Span
 from spacy.util import minibatch, compounding
@@ -32,8 +29,9 @@ class SpacyEntityLinker(object):
                         new_dict[kb_id] = value
                     else:
                         print(
-                            "Removed", kb_id,
-                            "from training because it is not in the KB."
+                            "Removed",
+                            kb_id,
+                            "from training because it is not in the KB.",
                         )
                 annotation["links"][offset] = new_dict
         return data
@@ -45,7 +43,8 @@ class SpacyEntityLinker(object):
                 [('A sentence about Farrar',
                 {'links': {(17, 22): {'Q1': 1.0, 'Q2': 0.0}}})]
 
-        See https://spacy.io/usage/linguistic-features#entity-linking for where I got this code from
+        See https://spacy.io/usage/linguistic-features#entity-linking
+        for where I got this code from
         """
         # TODO: Replace n_iter with self.n_iter
         n_iter = self.n_iter
@@ -56,13 +55,13 @@ class SpacyEntityLinker(object):
 
         nlp = spacy.blank("en", vocab=kb.vocab)
         nlp.vocab.vectors.name = "spacy_pretrained_vectors"
-    
+
         entity_linker = nlp.create_pipe("entity_linker")
         entity_linker.set_kb(kb)
-        nlp.add_pipe(entity_linker, last=True)        
+        nlp.add_pipe(entity_linker, last=True)
 
         data = self._remove_examples_not_in_kb(kb, data)
-        
+
         other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "entity_linker"]
         with nlp.disable_pipes(*other_pipes):
             optimizer = nlp.begin_training()
@@ -73,11 +72,7 @@ class SpacyEntityLinker(object):
                 for batch in batches:
                     texts, annotations = zip(*batch)
                     nlp.update(
-                        texts,
-                        annotations,
-                        drop=0.2,
-                        losses=losses,
-                        sgd=optimizer,
+                        texts, annotations, drop=0.2, losses=losses, sgd=optimizer,
                     )
                 if self.print_output:
                     print(itn, "Losses", losses)
@@ -108,7 +103,7 @@ class SpacyEntityLinker(object):
         Output:
            pred_entities_ids: ['Q1', 'Q1', 'Q2']
     """
-        # TODO: Replace nlp_el with self.nlp 
+        # TODO: Replace nlp_el with self.nlp
         nlp_el = self.nlp
 
         # IMPORTANT
@@ -118,14 +113,12 @@ class SpacyEntityLinker(object):
         #
         # If the code has more than one entities we predict the
         # first only  e.g. pred_entity_id = doc.ents[0].kb_id_
-        
+
         pred_entities_ids = []
         for text, values in data:
-            (start, end) = list(values['links'].keys())[0]
-            entity_text = text[start:end]
+            (start, end) = list(values["links"].keys())[0]
 
             doc = nlp_el.tokenizer(text)
-            entity_tokens = nlp_el.tokenizer(entity_text)
 
             # Set entity span to PERSON
             doc.ents = [
@@ -133,7 +126,7 @@ class SpacyEntityLinker(object):
                     doc,
                     self._get_token_nums(doc, start),
                     self._get_token_nums(doc, end),
-                    label=PERSON
+                    label=PERSON,
                 )
             ]
 

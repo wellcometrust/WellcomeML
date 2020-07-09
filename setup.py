@@ -17,7 +17,7 @@ Examples:
 
 """
 
-about = {} # type: dict
+about = {}  # type: dict
 version_path = os.path.join(here, 'wellcomeml', '__version__.py')
 with open(version_path, 'r') as f:
     exec(f.read(), about)
@@ -49,7 +49,9 @@ setuptools.setup(
         'nervaluate',
         'twine',
         'gensim',
-        'cython'
+        'cython',
+        'flake8',
+        'black'
     ],
     extras_require={
         'deep-learning': [

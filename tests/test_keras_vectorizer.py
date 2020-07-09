@@ -1,5 +1,6 @@
 from wellcomeml.ml import KerasVectorizer
 
+
 def test_vanilla():
     X = ["One", "Two", "Three Four"]
 
@@ -8,7 +9,8 @@ def test_vanilla():
 
     assert X_vec.shape[0] == 3
     assert X_vec.shape[1] == 2
-    assert X_vec.max() == 5 # 4 tokens including OOV
+    assert X_vec.max() == 5  # 4 tokens including OOV
+
 
 def test_sequence_length():
     X = ["One", "Two", "Three"]
@@ -18,6 +20,7 @@ def test_sequence_length():
     X_vec = keras_vectorizer.fit_transform(X)
 
     assert X_vec.shape[1] == sequence_length
+
 
 def test_vocab_size():
     X = ["One", "Two", "Three"]

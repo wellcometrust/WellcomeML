@@ -17,6 +17,7 @@ def temp_file():
 
     return temp_file_name
 
+
 def test_read_jsonl():
 
     expected = [{
@@ -42,6 +43,7 @@ def test_read_jsonl():
 
     actual = read_jsonl(TEST_JSONL)
     assert expected == actual
+
 
 def test_write_jsonl(temp_file):
 

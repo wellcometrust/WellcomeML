@@ -10,7 +10,7 @@ def test_vanilla():
         "Two nothing else",
         "Two and three"
     ]
-    Y = np.array([0,0,1,1])
+    Y = np.array([0, 0, 1, 1])
 
     model = Pipeline([
         ('vec', KerasVectorizer()),
@@ -18,6 +18,7 @@ def test_vanilla():
     ])
     model.fit(X, Y)
     assert model.score(X, Y) > 0.6
+
 
 def test_multilabel():
     X = [
@@ -28,11 +29,11 @@ def test_multilabel():
         "Two and three"
     ]
     Y = np.array([
-        [1,1,0,0],
-        [1,0,0,0],
-        [0,0,1,1],
-        [0,1,0,0],
-        [0,1,1,0]
+        [1, 1, 0, 0],
+        [1, 0, 0, 0],
+        [0, 0, 1, 1],
+        [0, 1, 0, 0],
+        [0, 1, 1, 0]
     ])
     model = Pipeline([
         ('vec', KerasVectorizer()),
@@ -40,4 +41,4 @@ def test_multilabel():
     ])
     model.fit(X, Y)
     assert model.score(X, Y) > 0.4
-    assert model.predict(X).shape == (5,4)
+    assert model.predict(X).shape == (5, 4)

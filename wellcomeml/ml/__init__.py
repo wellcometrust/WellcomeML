@@ -4,19 +4,23 @@ from wellcomeml.logger import logger
 # Introduced a development_transformers env variable, that allows to
 # disable functions that use spacy.
 
-development_transformers_mode = \
+development_transformers_mode = (
     os.environ.get("WELLCOMEML_ENV", "") == "development_transformers"
+)
 
 if development_transformers_mode:
-    logger.warning("Running in development mode. Only loading modules that"
-                   " use new version of transformers.")
+    logger.warning(
+        "Running in development mode. Only loading modules that"
+        " use new version of transformers."
+    )
 
     from .bert_semantic_equivalence import SemanticEquivalenceClassifier
+    __all__ = [SemanticEquivalenceClassifier]
 else:
     from .frequency_vectorizer import WellcomeTfidf
     from .doc2vec_vectorizer import Doc2VecVectorizer
     from .sent2vec_vectorizer import Sent2VecVectorizer
-
+    __all__ = [WellcomeTfidf, Doc2VecVectorizer, Sent2VecVectorizer]
     try:
         from .vectorizer import Vectorizer
         from .spacy_ner import SpacyNER
@@ -30,5 +34,11 @@ else:
         from .cnn import CNNClassifier
         from .bilstm import BiLSTMClassifier
         from .keras_vectorizer import KerasVectorizer
+        __all__ += [
+            Vectorizer, SpacyNER, SpacyClassifier, BertClassifier,
+            BertVectorizer, SpacyKnowledgeBase, SpacyEntityLinker,
+            SemanticEquivalenceClassifier, CNNClassifier,
+            BiLSTMClassifier, KerasVectorizer, SimilarityEntityLinker
+        ]
     except ImportError:
         logger.warning("Using WellcomeML without extras (transformers & torch).")

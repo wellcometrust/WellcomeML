@@ -20,14 +20,16 @@ class SpacyNER:
         X: a list of sentences,
             e.g. ['Professor Smith said', 'authors Smith and Chen found']
         y: a list of prodigy format spans for each element of X,
-            e.g. [{'start': 10, 'end': 15, 'label': 'PERSON'}, {'start': 8, 'end': 13, 'label': 'PERSON'}, {'start':18, 'end':22, 'label':'PERSON'}]
+            e.g. [{'start': 10, 'end': 15, 'label': 'PERSON'},
+                  {'start': 8, 'end': 13, 'label': 'PERSON'},
+                  {'start':18, 'end':22, 'label':'PERSON'}]
         """
 
         train_data = list(zip(X, y))
 
-        if 'ner' not in self.nlp_model.pipe_names:
+        if "ner" not in self.nlp_model.pipe_names:
             # If you are training on a blank model
-            ner = self.nlp_model.create_pipe('ner')
+            ner = self.nlp_model.create_pipe("ner")
             self.nlp_model.add_pipe(ner, last=True)
         else:
             ner = self.nlp_model.get_pipe("ner")
@@ -36,10 +38,10 @@ class SpacyNER:
 
         for spans in y:
             for span in spans:
-                ner.add_label(span['label'])
+                ner.add_label(span["label"])
 
-        other_pipes = [pipe for pipe in self.nlp_model.pipe_names if pipe != 'ner']
-        with self.nlp_model.disable_pipes(*other_pipes): # only train NER
+        other_pipes = [pipe for pipe in self.nlp_model.pipe_names if pipe != "ner"]
+        with self.nlp_model.disable_pipes(*other_pipes):  # only train NER
             optimizer = self.nlp_model.begin_training()
 
             for i in range(self.n_iter):
@@ -53,24 +55,23 @@ class SpacyNER:
                         [annotations],
                         sgd=optimizer,
                         losses=losses,
-                        drop=self.dropout
+                        drop=self.dropout,
                     )
 
                 if self.output:
-                    self._print_output(i, losses['ner'])
+                    self._print_output(i, losses["ner"])
 
         return self.nlp_model
 
     def _print_output(self, batch_i, loss):
 
-        dash = '-' * 15
+        dash = "-" * 15
 
         if batch_i == 0:
             print(dash)
-            print('{:8s}{:13s}'.format("BATCH |", "LOSS"))
+            print("{:8s}{:13s}".format("BATCH |", "LOSS"))
             print(dash)
-        print('{:<8d}{:<10.2f}'.format(batch_i, loss))
-
+        print("{:<8d}{:<10.2f}".format(batch_i, loss))
 
     def predict(self, text):
         """
@@ -81,11 +82,9 @@ class SpacyNER:
         pred_entities = []
 
         for ent in doc.ents:
-            pred_entities.append({
-                'start': ent.start_char,
-                'end': ent.end_char,
-                'label': ent.label_,
-            })
+            pred_entities.append(
+                {"start": ent.start_char, "end": ent.end_char, "label": ent.label_}
+            )
 
         return pred_entities
 
@@ -98,8 +97,8 @@ class SpacyNER:
         evaluator = Evaluator(y_true, y_pred, tags=tags)
         results, results_by_tag = evaluator.evaluate()
 
-        score = {tag: results_by_tag[tag]['partial']['f1'] for tag in tags}
-        score["Overall"] = results['partial']['f1']
+        score = {tag: results_by_tag[tag]["partial"]["f1"] for tag in tags}
+        score["Overall"] = results["partial"]["f1"]
         return score
 
     def save(self, file_name):
@@ -149,8 +148,6 @@ class SpacyNER:
         entities = []
 
         for span in spans:
-            entities.append(
-                [span['start'], span['end'], span['label']]
-            )
+            entities.append([span["start"], span["end"], span["label"]])
 
-        return {'entities': entities}
+        return {"entities": entities}

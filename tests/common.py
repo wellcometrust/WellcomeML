@@ -7,4 +7,5 @@ def get_path(p):
         p
     )
 
+
 TEST_JSONL = get_path('test_data/test_jsonl.jsonl')

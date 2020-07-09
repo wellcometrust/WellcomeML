@@ -1,5 +1,6 @@
 from wellcomeml.ml import Doc2VecVectorizer
 
+
 def test_fit_transform():
     X = [
         "Wellcome trust gives grants",
@@ -12,6 +13,7 @@ def test_fit_transform():
     doc2vec = Doc2VecVectorizer(vector_size=8, epochs=2)
     X_vec = doc2vec.fit_transform(X)
     assert X_vec.shape == (6, 8)
+
 
 def test_score():
     # It is quite difficult to construct a test where the score is reliably high

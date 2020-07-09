@@ -1,10 +1,8 @@
 """Doc2Vec sklearn wrapper"""
-from collections import Counter
 from pathlib import Path
 import multiprocessing
 import statistics
 import logging
-import json
 
 from sklearn.base import BaseEstimator, TransformerMixin
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
@@ -14,15 +12,26 @@ logging.getLogger("gensim").setLevel(logging.WARNING)
 
 
 class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
-    def __init__(self, vector_size=100, window_size=5, n_jobs=1,
-                 min_count=2, negative=5, sample=1e-5, epochs=20,
-                 learning_rate=0.025, model="dm", pretrained=None):
+    def __init__(
+        self,
+        vector_size=100,
+        window_size=5,
+        n_jobs=1,
+        min_count=2,
+        negative=5,
+        sample=1e-5,
+        epochs=20,
+        learning_rate=0.025,
+        model="dm",
+        pretrained=None,
+    ):
         """
         Args:
             vector_size: size of vector to represent text
             window_size: words left and right of context words used to create representation
             min_count: filter words that appear less than min_count. default: 2
-            negative: number of negative words to be used for training. if zero hierarchical softmax is used. default: 5
+            negative: number of negative words to be used for training.
+                      if zero hierarchical softmax is used. default: 5
             sample: threshold for downsampling high frequency words. default: 1e-5
             learning_rate: learning rate used by SGD. default: 0.025
             model: underlying model architecture, one of dm or dbow. default: dm
@@ -65,22 +74,28 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         # TODO: Debug streaming implementation below
         #    atm it gives different result than non streaming
 
-        #tagged_documents = self._yield_tagged_documents(X)
-            
-        #self.model = Doc2Vec(
+        # tagged_documents = self._yield_tagged_documents(X)
+
+        # self.model = Doc2Vec(
         #    vector_size=self.vector_size, window_size=self.window_size,
         #    workers=workers, min_count=self.min_count, epochs=self.epochs
-        #)
-        #self.model.build_vocab(tagged_documents)
-        #self.model.train(tagged_documents, total_examples=self.model.corpus_count, epochs=self.model.epochs)
+        # )
+        # self.model.build_vocab(tagged_documents)
+        # self.model.train(tagged_documents, total_examples=self.model.corpus_count,
+        #                  epochs=self.model.epochs)
         tagged_documents = list(self._yield_tagged_documents(X))
         self.model = Doc2Vec(
-            tagged_documents, vector_size=self.vector_size,
-            window_size=self.window_size, workers=workers,
-            min_count=self.min_count, epochs=self.epochs,
-            negative=self.negative, sample=self.sample,
-            alpha=self.learning_rate, dm=1 if self.model == "dm" else 0,
-            hs=1 if self.negative==0 else 0
+            tagged_documents,
+            vector_size=self.vector_size,
+            window_size=self.window_size,
+            workers=workers,
+            min_count=self.min_count,
+            epochs=self.epochs,
+            negative=self.negative,
+            sample=self.sample,
+            alpha=self.learning_rate,
+            dm=1 if self.model == "dm" else 0,
+            hs=1 if self.negative == 0 else 0,
         )
         return self
 
@@ -104,10 +119,12 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
 
         docvecs = self.transform(X)
         for doc_id, inferred_vector in enumerate(docvecs):
-            sims = self.model.docvecs.most_similar([inferred_vector], topn=len(self.model.docvecs))
+            sims = self.model.docvecs.most_similar(
+                [inferred_vector], topn=len(self.model.docvecs)
+            )
             rank = [docid for docid, sim in sims].index(doc_id)
-            correct.append(int(rank==0))
-        
+            correct.append(int(rank == 0))
+
         return statistics.mean(correct)
 
     def _get_model_path(self, model_dir):
