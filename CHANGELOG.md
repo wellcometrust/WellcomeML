@@ -1,3 +1,35 @@
+# 2020.07.0
+
+Models
+---
+* Adds Doc2VecVectorizer
+* Adds WellcomeVotingClassifier
+* Adds Sent2VecVectorizer
+* Adds SemanticEquivalenceMetaClassifier
+* Adds CategoricalMetrics and MetricMiniBatchHistory
+
+Datasets
+---
+* Adds CONLL dataset
+* Adds Winer dataset
+
+Features
+---
+* Automatically load models like en_core_web_sm and en_trf_bertbaseuncased_lg but also download packages like sent2vec, only when needed
+* Adds docs based on sphinx and read the docs
+
+Repo
+---
+* Adds pep8 / flake8 checks and address violations
+* Adds badges for build, codecov and license
+* Adds pull request template that forces link to issue or trello
+
+Bugs
+---
+* Fix dependency on non pypi packages for tests
+* Pin spacy transformers to 0.5.1
+* Fix codecov running in separate travis venv
+
 # 2020.5.1
 
 ## ML
