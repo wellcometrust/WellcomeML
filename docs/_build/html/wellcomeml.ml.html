@@ -113,6 +113,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.spacy_knowledge_base">wellcomeml.ml.spacy_knowledge_base module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.spacy_ner">wellcomeml.ml.spacy_ner module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.vectorizer">wellcomeml.ml.vectorizer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.voting_classifier">wellcomeml.ml.voting_classifier module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml">Module contents</a></li>
 </ul>
 </li>
@@ -386,14 +387,17 @@ paraphrase, textual similarity and other NLU tasks</p>
 <li><p><strong>epochs</strong> – number_of epochs</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A fitted model</p>
+</dd>
 </dl>
-<p>Returns:</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads model from path</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier.predict">
@@ -413,7 +417,8 @@ for X.</p>
 <dl class="py method">
 <dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Saves model to path</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier.score">
@@ -425,6 +430,85 @@ for X.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>An array of shape len(X) x 2 with scores for classes 0 and 1</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.bert_semantic_equivalence.</code><code class="sig-name descname">SemanticEquivalenceMetaClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_numerical_features</span></em>, <em class="sig-param"><span class="n">dropout_rate</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier" title="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier</span></code></a></p>
+<p>Class to fine tune Semantic Classifier, allowing the possibility of
+adding metadata to the classification. Extends
+SemanticEquivalenceClassifier, and extends modules for data prep
+and model initialisation. Fit, predict, score remain intact</p>
+<dl class="py method">
+<dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits semantic classifier</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>list of t-uples</em>) – Assumes that each element x of X has length</p></li>
+<li><p><strong>the first two components are texts and</strong> (<em>2+n_numerical_features</em><em>,</em>) – </p></li>
+<li><p><strong>components are numerical features</strong> (<em>remaining</em>) – </p></li>
+<li><p><strong>y</strong> – list of 0 (not similar) and 1s (similar)</p></li>
+<li><p><strong>random_state</strong> – a random state for the train_test_split</p></li>
+<li><p><strong>epochs</strong> – number_of epochs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of probabilities, of shape len(X) x 2</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads metamodel from path</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates scores for metadata semantic classifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>list of t-uples</em>) – Assumes that each element x of X has length</p></li>
+<li><p><strong>the first two components are texts and</strong> (<em>2+n_numerical_features</em><em>,</em>) – </p></li>
+<li><p><strong>components are numerical features</strong> (<em>remaining</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of predictions of length len(X)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves meta model to path</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.score">
+<code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates scores for metadata semantic classifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>list of t-uples</em>) – Assumes that each element x of X has length</p></li>
+<li><p><strong>the first two components are texts and</strong> (<em>2+n_numerical_features</em><em>,</em>) – </p></li>
+<li><p><strong>components are numerical features</strong> (<em>remaining</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array of probabilities, of shape len(X) x 2</p>
 </dd>
 </dl>
 </dd></dl>
@@ -849,7 +933,7 @@ are prefixed with <cite>val_</cite>.</p></li>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.keras_vectorizer.KerasVectorizer.build_embedding_matrix">
-<code class="sig-name descname">build_embedding_matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasVectorizer.build_embedding_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">build_embedding_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasVectorizer.build_embedding_matrix" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1087,7 +1171,8 @@ Input:</p>
 </dl>
 </dd>
 </dl>
-<p>See <a class="reference external" href="https://spacy.io/usage/linguistic-features#entity-linking">https://spacy.io/usage/linguistic-features#entity-linking</a> for where I got this code from</p>
+<p>See <a class="reference external" href="https://spacy.io/usage/linguistic-features#entity-linking">https://spacy.io/usage/linguistic-features#entity-linking</a>
+for where I got this code from</p>
 </dd></dl>
 
 </dd></dl>
@@ -1145,7 +1230,11 @@ probabilities are ‘prior probabilities’ and must sum to &lt; 1</p>
 <dd><dl class="simple">
 <dt>X: a list of sentences,</dt><dd><p>e.g. [‘Professor Smith said’, ‘authors Smith and Chen found’]</p>
 </dd>
-<dt>y: a list of prodigy format spans for each element of X,</dt><dd><p>e.g. [{‘start’: 10, ‘end’: 15, ‘label’: ‘PERSON’}, {‘start’: 8, ‘end’: 13, ‘label’: ‘PERSON’}, {‘start’:18, ‘end’:22, ‘label’:’PERSON’}]</p>
+<dt>y: a list of prodigy format spans for each element of X,</dt><dd><dl class="simple">
+<dt>e.g. [{‘start’: 10, ‘end’: 15, ‘label’: ‘PERSON’},</dt><dd><p>{‘start’: 8, ‘end’: 13, ‘label’: ‘PERSON’},
+{‘start’:18, ‘end’:22, ‘label’:’PERSON’}]</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -1232,6 +1321,40 @@ save_transformed method for the specific vectorizer.</p>
 <dl class="py method">
 <dt id="wellcomeml.ml.vectorizer.Vectorizer.transform">
 <code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">_</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.vectorizer.Vectorizer.transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-wellcomeml.ml.voting_classifier">
+<span id="wellcomeml-ml-voting-classifier-module"></span><h2>wellcomeml.ml.voting_classifier module<a class="headerlink" href="#module-wellcomeml.ml.voting_classifier" title="Permalink to this headline">¶</a></h2>
+<p>Voting classifier with ability to accept pretrained estimators
+and return results for multilabel Y</p>
+<p>Some of the code is taken from <a class="reference external" href="https://gist.github.com/tomquisel/a421235422fdf6b51ec2ccc5e3dee1b4">https://gist.github.com/tomquisel/a421235422fdf6b51ec2ccc5e3dee1b4</a></p>
+<dl class="py class">
+<dt id="wellcomeml.ml.voting_classifier.WellcomeVotingClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.voting_classifier.</code><code class="sig-name descname">WellcomeVotingClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">multilabel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.voting_classifier.WellcomeVotingClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble._voting.VotingClassifier</span></code></p>
+<dl class="py method">
+<dt id="wellcomeml.ml.voting_classifier.WellcomeVotingClassifier.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.voting_classifier.WellcomeVotingClassifier.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict class labels for X.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>maj</strong> – Predicted class labels.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array-like of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="wellcomeml.ml.voting_classifier.WellcomeVotingClassifier.steps">
+<code class="sig-name descname">steps</code><a class="headerlink" href="#wellcomeml.ml.voting_classifier.WellcomeVotingClassifier.steps" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -148,6 +148,14 @@ wellcomeml.ml.vectorizer module
    :undoc-members:
    :show-inheritance:
 
+wellcomeml.ml.voting\_classifier module
+---------------------------------------
+
+.. automodule:: wellcomeml.ml.voting_classifier
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------
