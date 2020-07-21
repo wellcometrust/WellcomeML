@@ -39,6 +39,21 @@ pip install wellcomeml-2020.1.0-py3-none-any.whl
 pip install wellcomeml-2020.1.0-py3-none-any.whl[deep-learning]
 ```
 
+Installing wellcomeml[deeplearning] on windows 
+
+Torch has a different installation for windows so it will not get automatically installed with wellcomeml[deeplearning].
+It needs to be installed first (this is for machines with no CUDA parallel computing platform for those that do look here https://pytorch.org/ for correct installation):
+
+```
+pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
+```
+
+Then install wellcomeml[deeplearning]:
+
+```
+pip install wellcomeml[deep-learning]
+```
+
 ## 2. Development
 
 ### 2.1 Build local virtualenv
