@@ -41,10 +41,11 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     install_requires=[
-        'numpy',
+        'numpy<1.19.0,>=1.16.0',
         'pandas',
         'boto3',
         'scikit-learn',
+        'scipy==1.4.1',
         'spacy==2.2.1',
         'nervaluate',
         'twine',
