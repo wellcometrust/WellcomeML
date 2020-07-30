@@ -1,3 +1,9 @@
+# 2020.07.1
+
+Bugs
+---
+* Fixes pypi conflict by pinning down dependencies.
+
 # 2020.07.0
 
 Models

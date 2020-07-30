@@ -24,7 +24,7 @@ copyright = '2020, Wellcome Data Labs'
 author = 'Wellcome Data Labs'
 
 # The full version, including alpha/beta/rc tags
-release = 'v2020.5.1'
+release = 'v2020.7.1'
 
 
 # -- General configuration ---------------------------------------------------
