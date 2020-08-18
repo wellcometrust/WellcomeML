@@ -27,4 +27,3 @@ external_logging_level = {'transformers': logging.WARNING}
 
 for package, level in external_logging_level.items():
     logging.getLogger(package).setLevel(level)
-
