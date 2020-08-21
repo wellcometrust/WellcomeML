@@ -26,6 +26,7 @@ else:
 
     try:
         from .vectorizer import Vectorizer
+        from .clustering import TextClustering
         from .spacy_ner import SpacyNER
         from .spacy_classifier import SpacyClassifier
         from .bert_classifier import BertClassifier
