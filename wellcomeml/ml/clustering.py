@@ -63,9 +63,6 @@ class TextClustering(object):
         self.cluster_names = None
         self.cluster_kws = None
 
-    def find_best_silhouette(self, param_grid):
-        pass
-
     def fit(self, X, *_):
         """
         Fits all clusters in the pipeline
