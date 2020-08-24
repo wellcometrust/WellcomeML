@@ -41,7 +41,7 @@ else:
         __all__ += [
             Vectorizer, TextClustering, SpacyNER, SpacyClassifier,
             BertClassifier, BertVectorizer, SpacyKnowledgeBase,
-            SpacyEntityLinker,SemanticEquivalenceClassifier, CNNClassifier,
+            SpacyEntityLinker, SemanticEquivalenceClassifier, CNNClassifier,
             BiLSTMClassifier, KerasVectorizer, SimilarityEntityLinker
         ]
     except ImportError:
