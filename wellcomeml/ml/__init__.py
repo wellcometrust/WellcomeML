@@ -39,9 +39,9 @@ else:
         from .bilstm import BiLSTMClassifier
         from .keras_vectorizer import KerasVectorizer
         __all__ += [
-            Vectorizer, SpacyNER, SpacyClassifier, BertClassifier,
-            BertVectorizer, SpacyKnowledgeBase, SpacyEntityLinker,
-            SemanticEquivalenceClassifier, CNNClassifier,
+            Vectorizer, TextClustering, SpacyNER, SpacyClassifier,
+            BertClassifier, BertVectorizer, SpacyKnowledgeBase,
+            SpacyEntityLinker,SemanticEquivalenceClassifier, CNNClassifier,
             BiLSTMClassifier, KerasVectorizer, SimilarityEntityLinker
         ]
     except ImportError:

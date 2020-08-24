@@ -1,4 +1,5 @@
 from copy import deepcopy
+import logging
 
 import numpy as np
 from sklearn.manifold import TSNE
@@ -8,6 +9,7 @@ from sklearn.cluster import DBSCAN
 import umap
 
 from wellcomeml.ml import Vectorizer
+from wellcomeml.logger import logger
 
 
 class TextClustering(object):
@@ -75,62 +77,131 @@ class TextClustering(object):
             A TextClustering object
 
         """
-        self.embedded_points = self.vectorizer.fit_transform(X)
-        self.reduced_points = self.reducer.fit_transform(self.embedded_points)
-        self.clustering.fit(self.reduced_points)
-        self.cluster_ids = self.clustering.labels_
+        self._fit_step(X, step='vectorizer')
+        self._fit_step(step='reducer')
+        self._fit_step(step='clustering')
 
         if self.embedding == 'tf-idf' and self.n_kw:
             self._find_keywords(self.embedded_points.toarray(), n_kw=self.n_kw)
 
         return self
 
-    def optimise(self, X, param_grid, n_cluster_range, noise_range):
-        """Optimises the clustering given a parameter grid """
+    def _fit_step(self, X=None, step='vectorizer'):
+        """Internal function for partial fitting only a certain step"""
+        if step == 'vectorizer':
+            self.embedded_points = self.vectorizer.fit_transform(X)
+        elif step == 'reducer':
+            self.reduced_points = \
+                self.reducer.fit_transform(self.embedded_points)
+        elif step == 'clustering':
+            self.clustering.fit(self.reduced_points)
+            self.cluster_ids = self.clustering.labels_
 
-        min_n_clusters = 0
-        max_n_clusters = 10**5
+    def optimise(self, X, param_grid, n_cluster_range=None, max_noise=0.2,
+                 verbose=False):
+        """
+        Optimises the clustering silhouette based on a parameter grid,
+        a range on number of clusters and a range on noise.
 
-        parameter_grid_object = ParameterGrid(param_grid=param_grid)
+        It is customised to avoid re-fitting of intermediate
+        steps (vectorizer and reducer) more than necessary.
+
+        Args:
+            X: A list of texts to be clustered
+            param_grid: A parameter grid, example:
+
+            param_grid = {'reducer': {'min_dist': [0.0, 0.2], 'n_neighbors': [
+            2,3,5], 'metric': ['cosine', 'euclidean']},
+            'clustering': {'min_samples': [2, 5], 'eps': [0.5, 1, 1.5]}}
+
+            n_cluster_range (2-uple of ints): A 2-uple describing the
+            max and min number of clusters (e.g.: (10, 20)). If unset,
+            will just choose the best silhopuette
+
+            max_noise (float in [0,1]): The maximum fraction of points
+            unclustered. Default: 0.2
+
+        Returns:
+            A dictionary containing "params_list", "silhouette" (the
+            silhouete for each parameter) and "best_clustering" (the best
+            clustering parameters)
+
+        """
+
+        min_n_clusters = (n_cluster_range[0] if n_cluster_range else 0)
+        max_n_clusters = (n_cluster_range[1] if n_cluster_range else 10**5)
+
+        # Linearises Dictionary to be compatible with grid search so it
+        # becomes one dictionary with 'step__parameter'
+        vectorizer_grid = ParameterGrid(
+            param_grid=param_grid.get('vectorizer', {})
+        )
+
+        reducer_grid = ParameterGrid(
+            param_grid=param_grid.get('reducer', {})
+        )
+
+        clustering_grid = ParameterGrid(
+            param_grid=param_grid.get('clustering', {})
+        )
 
         best_silhouette = -1
-        best_clustering = None
-
         params_list = []
         best_params = None
 
-        for params in parameter_grid_object:
-            self.set_params(params)
-            self.fit(X)
+        logging_level = logger.level
+        if verbose <= 1:
+            # Previously disable logging to allow the loading bar to run
+            # uninterruptly. Will reset after.
+            logging.getLogger().setLevel(logging.WARNING)
+            logger.setLevel(logging.WARNING)
 
-            silhouette = _clustering_score(self.clustering,
-                                           self.reduced_points)
-            n_clusters = len(np.unique(self.clustering.labels_))
-            noise = sum(self.clustering.labels_ == -1)
+        for vectorizer_param in vectorizer_grid:
+            self.vectorizer.set_params(**vectorizer_param)
+            self._fit_step(X, step='vectorizer')
+            for reducer_param in reducer_grid:
+                self.reducer.set_params(**reducer_param)
+                self._fit_step(step='reducer')
+                for clustering_param in clustering_grid:
+                    self.clustering.set_params(**clustering_param)
+                    self._fit_step(step='clustering')
 
-            # If there is noise, the label "-1" is added as a
-            # valid cluster number.
-            if noise > 0:
-                n_clusters -= 1
+                    silhouette = _clustering_score(self.clustering,
+                                                   self.reduced_points)
+                    n_clusters = len(np.unique(self.clustering.labels_))
+                    noise = sum(self.clustering.labels_ == -1)
 
-            params_list += [{
-                "params": params,
-                "silhouette": silhouette,
-                "n_clusters": n_clusters,
-                "noise": noise
-            }]
+                    # If there is noise, the label "-1" is added as a
+                    # valid cluster number, so we need to subtract it
 
-            if silhouette > best_silhouette and min_n_clusters <= \
-                    n_clusters <= max_n_clusters:
-                best_silhouette = silhouette
-                best_params = deepcopy(params)
+                    n_clusters -= 1*(noise > 0)
+                    params = {
+                        'vectorizer': vectorizer_param,
+                        'reducer': reducer_param,
+                        'clustering': clustering_param
+                    }
+                    params_list += [{
+                        "params": params,
+                        "silhouette": silhouette,
+                        "n_clusters": n_clusters,
+                        "noise": noise
+                    }]
 
+                    if silhouette > best_silhouette and min_n_clusters <= \
+                            n_clusters <= max_n_clusters and noise < max_noise:
+                        best_silhouette = silhouette
+                        best_params = deepcopy(params)
+
+        # Fits the pipeline again with the best parameters
         self.set_params(best_params)
+        self.fit(X)
+
+        logger.setLevel(logging_level)
 
         return {
             "params_list": params_list,
             "silhouette": best_silhouette,
-            "clustering": best_clustering
+            "best_params": best_params
         }
 
     def stability(self):
@@ -146,10 +217,23 @@ class TextClustering(object):
         self.cluster_ids = [dictionary.get(cluster_id, cluster_id) for
                             cluster_id in self.cluster_ids]
 
-    def set_params(self, params):
-        self.vectorizer.set_params(**params['vectorizer'])
-        self.reducer.set_params(**params['reducer'])
-        self.clustering.set_params(**params['clustering'])
+    def set_params(self, params, from_parameter_grid=False):
+        """
+        Set parameters of clustering, reducer and vectorizer
+
+        Args:
+            params: A dictionary of parameters
+            from_parameter_grid: Whether the dictionary is in the form of
+            sklearn parameter grid (e.g. {'clustering__eps': 1}), or a two
+            level dictionary (e.g. {'clustering': {'eps': 1}}) (default).
+
+        Returns:
+            None
+
+        """
+        self.vectorizer.set_params(**params.get('vectorizer', {}))
+        self.reducer.set_params(**params.get('reducer', {}))
+        self.clustering.set_params(**params.get('clustering', {}))
 
     def _find_keywords(self, X_transformed, n_kw=10):
         if self.embedding != 'tf-idf':
@@ -168,7 +252,7 @@ class TextClustering(object):
             aggregated[self.cluster_ids[i]] += X_transformed[i]
 
         kw_dictionary = {
-            key: ','.join(_find_words_from_frequency(aggregated,
+            key: ','.join(_find_words_from_frequency(vector,
                                                      idx_to_word,
                                                      n_kw=n_kw))
             for key, vector in aggregated.items()
@@ -196,8 +280,6 @@ def _find_words_from_frequency(vector, idx_to_word, n_kw=5):
 
     """
     sorted_idx = np.argsort(vector)[::-1]
-    import pdb
-    pdb.set_trace()
     # Tests if new words do not overlap with existing ones (this is to
     # exclude things like: 'cluster,clustering,clustered')
 
