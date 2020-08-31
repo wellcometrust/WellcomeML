@@ -62,12 +62,17 @@ class FeedForwardAttention(tf.keras.layers.Layer):
 class HierarchicalAttention(tf.keras.layers.Layer):
     """https://www.aclweb.org/anthology/N16-1174/"""
 
-    def __init__(self):
+    def __init__(self, attention_heads='same'):
         super(HierarchicalAttention, self).__init__()
+        self.attention_heads = attention_heads
 
     def build(self, input_shape):
+        if self.attention_heads == 'same':
+            nb_attention_heads = input_shape[-2]
+        else:
+            nb_attention_heads = self.attention_heads
         self.attention_matrix = self.add_weight(
-            shape=(input_shape[-1], input_shape[-2]),
+            shape=(input_shape[-1], nb_attention_heads),
             trainable=True,
             initializer="uniform",
         )
@@ -80,4 +85,4 @@ class HierarchicalAttention(tf.keras.layers.Layer):
         attention_scores = tf.nn.softmax(
             tf.math.tanh(tf.matmul(X, self.attention_matrix))
         )
-        return tf.matmul(attention_scores, X)
+        return tf.matmul(tf.transpose(attention_scores, perm=[0,2,1]), X)
