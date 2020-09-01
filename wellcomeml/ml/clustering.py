@@ -25,7 +25,7 @@ class TextClustering(object):
         cluster_kws: Keywords for the clusters (only if embedding=tf-idf)
     """
     def __init__(self, embedding='tf-idf', reducer='umap', clustering='dbscan',
-                 n_kw=10, params={}):
+                 cluster_reduced=True, n_kw=10, params={}):
         """
         Initialises a cluster pipeline
 
@@ -33,8 +33,10 @@ class TextClustering(object):
             embedding(str): 'tf-idf', 'bert', 'keras' or 'doc2vec'.
             reducer(str): 'umap' or 'tsne'
             clustering(str): Only 'dbscan' allowed for now
+            cluster_reduced(bool): Whether clustering will be applied after
+            reducing the datapoints with reducer, or straight after embedding
             n_kw(int): If n_kw > 0 and embedding='tf-idf', the model
-            outputs, besides a cluster id, a list of keyword for each
+            outputs, besides a cluster id, a list of keywords for each
             cluster.
             params(dict): Dictionary containing extra parameters for
             embedding, reducer or clustering models. Example:
@@ -44,6 +46,7 @@ class TextClustering(object):
         self.vectorizer = Vectorizer(embedding=embedding,
                                      **params.get('embedding', {}))
         self.n_kw = n_kw
+        self.cluster_reduced = cluster_reduced
 
         reducer_dispatcher = {
             'umap': umap.UMAP,
@@ -91,7 +94,11 @@ class TextClustering(object):
             self.reduced_points = \
                 self.reducer.fit_transform(self.embedded_points)
         elif step == 'clustering':
-            self.clustering.fit(self.reduced_points)
+            points = (
+                self.reduced_points if self.cluster_reduced else
+                self.embedded_points
+            )
+            self.clustering.fit(points)
             self.cluster_ids = self.clustering.labels_
 
     def optimise(self, X, param_grid, n_cluster_range=None, max_noise=0.2,
