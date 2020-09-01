@@ -44,6 +44,7 @@ def test_multilabel():
     assert model.score(X, Y) > 0.4
     assert model.predict(X).shape == (5, 4)
 
+
 def test_attention():
     X = [
         "One",
@@ -56,7 +57,7 @@ def test_attention():
     model = Pipeline([
         ('vec', KerasVectorizer()),
         ('clf', BiLSTMClassifier(
-                    nb_epochs=10, 
+                    nb_epochs=10,
                     attention=True,
                     attention_heads=10))
     ])
