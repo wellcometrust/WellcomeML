@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.manifold import TSNE
 from sklearn.model_selection import ParameterGrid
 from sklearn.metrics import silhouette_score
-from sklearn.cluster import DBSCAN
+from sklearn.cluster import DBSCAN, OPTICS, KMeans
 import umap
 
 from wellcomeml.ml import Vectorizer
@@ -55,7 +55,9 @@ class TextClustering(object):
         self.reducer = reducer_dispatcher[reducer](**params.get('reducer', {}))
 
         clustering_dispatcher = {
-            'dbscan': DBSCAN
+            'dbscan': DBSCAN,
+            'kmeans': KMeans,
+            'optics': OPTICS,
         }
 
         self.clustering = clustering_dispatcher[clustering](
