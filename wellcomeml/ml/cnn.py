@@ -18,7 +18,6 @@ from sklearn.metrics import f1_score
 import tensorflow as tf
 
 from wellcomeml.ml.attention import HierarchicalAttention
-from wellcomeml.ml.keras_utils import Metrics
 
 TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 METRIC_DICT = {
@@ -30,6 +29,7 @@ CALLBACK_DICT = {
     'tensorboard': tf.keras.callbacks.TensorBoard(log_dir=TENSORBOARD_LOG_DIR)
 }
 
+
 class CNNClassifier(BaseEstimator, ClassifierMixin):
     def __init__(
         self,
@@ -40,14 +40,14 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         dropout=0.2,
         nb_layers=4,
         hidden_size=100,
-        l2 = 1e-6,
-        dense_size = 32,
+        l2=1e-6,
+        dense_size=32,
         multilabel=False,
         attention=False,
         attention_heads='same',
-        metrics = ["precision", "recall"],
-        callbacks = ["tensorboard"],
-        feature_approach = "max"
+        metrics=["precision", "recall"],
+        callbacks=["tensorboard"],
+        feature_approach="max"
     ):
         self.context_window = context_window
         self.learning_rate = learning_rate
@@ -67,7 +67,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.callbacks = callbacks
         self.feature_approach = feature_approach
 
-    def _build_model(self, sequence_length, vocab_size, nb_outputs, embedding_matrix=None, metrics=["precision", "recall"]):
+    def _build_model(self, sequence_length, vocab_size, nb_outputs,
+                     embedding_matrix=None, metrics=["precision", "recall"]):
         def residual_conv_block(x1, l2):
             filters = x1.shape[2]
             x2 = tf.keras.layers.Conv1D(
@@ -96,7 +97,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             else "uniform"
         )
         emb_dim = embedding_matrix.shape[1] if embedding_matrix else self.hidden_size
-        
+
         l2 = tf.keras.regularizers.l2(self.l2)
         inp = tf.keras.layers.Input(shape=(sequence_length,))
         x = tf.keras.layers.Embedding(

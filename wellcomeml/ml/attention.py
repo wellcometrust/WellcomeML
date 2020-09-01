@@ -85,4 +85,4 @@ class HierarchicalAttention(tf.keras.layers.Layer):
         attention_scores = tf.nn.softmax(
             tf.math.tanh(tf.matmul(X, self.attention_matrix))
         )
-        return tf.matmul(tf.transpose(attention_scores, perm=[0,2,1]), X)
+        return tf.matmul(tf.transpose(attention_scores, perm=[0, 2, 1]), X)

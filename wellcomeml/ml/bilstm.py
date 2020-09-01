@@ -6,7 +6,6 @@ from sklearn.metrics import f1_score
 import tensorflow as tf
 
 from wellcomeml.ml.attention import HierarchicalAttention
-from wellcomeml.ml.keras_utils import Metrics
 
 TENSORBOARD_LOG_DIR = "logs/scalars/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 METRIC_DICT = {
@@ -17,6 +16,7 @@ METRIC_DICT = {
 CALLBACK_DICT = {
     'tensorboard': tf.keras.callbacks.TensorBoard(log_dir=TENSORBOARD_LOG_DIR)
 }
+
 
 class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
     def __init__(
@@ -51,7 +51,8 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         self.callbacks = callbacks
         self.feature_approach = feature_approach
 
-    def _build_model(self, sequence_length, vocab_size, nb_outputs, embedding_matrix=None, metrics=["precision", "recall"]):
+    def _build_model(self, sequence_length, vocab_size, nb_outputs,
+                     embedding_matrix=None, metrics=["precision", "recall"]):
         output_activation = (
             "sigmoid" if nb_outputs == 1 or self.multilabel else "softmax"
         )
@@ -110,7 +111,7 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
 
         optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate, clipnorm=1.0)
         metrics = [
-            METRIC_DICT[m] if m in METRIC_DICT else m 
+            METRIC_DICT[m] if m in METRIC_DICT else m
             for m in metrics
         ]
         model.compile(optimizer=optimizer, loss="binary_crossentropy", metrics=metrics)
@@ -121,8 +122,9 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         vocab_size = X.max() + 1
 
         nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
-        
-        self.model = self._build_model(sequence_length, vocab_size, nb_outputs, embedding_matrix, self.metrics)
+
+        self.model = self._build_model(sequence_length, vocab_size, nb_outputs,
+                                       embedding_matrix, self.metrics)
 
         X_train, X_val, Y_train, Y_val = train_test_split(
             X, Y, test_size=0.1, shuffle=True
