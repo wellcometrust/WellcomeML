@@ -6,6 +6,8 @@ from sklearn.manifold import TSNE
 from sklearn.model_selection import ParameterGrid
 from sklearn.metrics import silhouette_score
 from sklearn.cluster import DBSCAN, OPTICS, KMeans
+from sklearn.base import ClusterMixin
+from hdbscan import HDBSCAN
 import umap
 
 from wellcomeml.ml import Vectorizer
@@ -32,7 +34,8 @@ class TextClustering(object):
         Args:
             embedding(str): 'tf-idf', 'bert', 'keras' or 'doc2vec'.
             reducer(str): 'umap' or 'tsne'
-            clustering(str): Only 'dbscan' allowed for now
+            clustering(str): 'dbscan', 'kmeans', 'optics', 'hdbscan' or any
+            class that is a sklearn.base.ClusterMixin
             cluster_reduced(bool): Whether clustering will be applied after
             reducing the datapoints with reducer, or straight after embedding
             n_kw(int): If n_kw > 0 and embedding='tf-idf', the model
@@ -58,12 +61,18 @@ class TextClustering(object):
             'dbscan': DBSCAN,
             'kmeans': KMeans,
             'optics': OPTICS,
+            'hdbscan': HDBSCAN
         }
 
-        self.clustering = clustering_dispatcher[clustering](
-            **params.get('clustering', {})
-        )
-
+        if clustering in clustering_dispatcher:
+            self.clustering = clustering_dispatcher[clustering](
+                **params.get('clustering', {})
+            )
+        elif isinstance(clustering, ClusterMixin):
+            self.clustering = clustering(**params.get('clustering', {}))
+        else:
+            raise ValueError('clustering has to be one of the available '
+                             'clusters or a sklearn ClusterMixin.')
         self.cluster_ids = None
         self.cluster_names = None
         self.cluster_kws = None
