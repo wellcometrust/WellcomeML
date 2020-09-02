@@ -1,17 +1,21 @@
-from copy import deepcopy
+from collections import defaultdict
 import logging
+import os
 
 import numpy as np
-from sklearn.manifold import TSNE
-from sklearn.model_selection import ParameterGrid
-from sklearn.metrics import silhouette_score
-from sklearn.cluster import DBSCAN, OPTICS, KMeans
 from sklearn.base import ClusterMixin
+from sklearn.cluster import DBSCAN, OPTICS, KMeans
+from sklearn.manifold import TSNE
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import silhouette_score
+from sklearn.pipeline import Pipeline
 from hdbscan import HDBSCAN
 import umap
 
-from wellcomeml.ml import Vectorizer
+from wellcomeml.ml import vectorizer
 from wellcomeml.logger import logger
+
+CACHE_DIR = os.path.expanduser("~/.cache/wellcomeml")
 
 
 class TextClustering(object):
@@ -46,8 +50,8 @@ class TextClustering(object):
             {'clustering': {'eps': 0.1}, 'embedding': {'ngram_range': (1,2)}}
         """
         self.embedding = embedding
-        self.vectorizer = Vectorizer(embedding=embedding,
-                                     **params.get('embedding', {}))
+        self.vectorizer = vectorizer.Vectorizer(embedding=embedding,
+                                                **params.get('embedding', {}))
         self.n_kw = n_kw
         self.cluster_reduced = cluster_reduced
 
@@ -148,21 +152,44 @@ class TextClustering(object):
 
         # Linearises Dictionary to be compatible with grid search so it
         # becomes one dictionary with 'step__parameter'
-        vectorizer_grid = ParameterGrid(
-            param_grid=param_grid.get('vectorizer', {})
-        )
+        if self.cluster_reduced:
+            pipeline = Pipeline([('vectorizer', self.vectorizer),
+                                 ('reducer', self.reducer),
+                                 ('clustering', self.clustering)],
+                                memory=CACHE_DIR)
+            params = {
+                **{f'reducer__{key}': value for key, value in
+                   param_grid.get('reducer', {}).items()}
+            }
+        else:
+            self.vectorizer.cache_transformed = True
+            pipeline = Pipeline([('vectorizer', self.vectorizer),
+                                 ('clustering', self.clustering)],
+                                memory=CACHE_DIR)
+            params = {}
 
-        reducer_grid = ParameterGrid(
-            param_grid=param_grid.get('reducer', {})
-        )
+        params = {
+            **params,
+            **{f'vectorizer__{key}': value for key, value in
+               param_grid.get('vectorizer', {}).items()}
+        }
 
-        clustering_grid = ParameterGrid(
-            param_grid=param_grid.get('clustering', {})
-        )
+        params = {
+            **params,
+            **{f'clustering__{key}': value for key, value in
+               param_grid.get('clustering', {}).items()}
+        }
 
-        best_silhouette = -1
-        params_list = []
-        best_params = None
+        grid = GridSearchCV(
+            estimator=pipeline,
+            param_grid=params,
+            scoring={
+                'silhouette': _clustering_score,
+                'noise': _clustering_noise,
+                'number_of_clusters': _number_of_clusters
+            },
+            refit='silhouette'
+        )
 
         logging_level = logger.level
         if verbose <= 1:
@@ -171,53 +198,17 @@ class TextClustering(object):
             logging.getLogger().setLevel(logging.WARNING)
             logger.setLevel(logging.WARNING)
 
-        for vectorizer_param in vectorizer_grid:
-            self.vectorizer.set_params(**vectorizer_param)
-            self._fit_step(X, step='vectorizer')
-            for reducer_param in reducer_grid:
-                self.reducer.set_params(**reducer_param)
-                self._fit_step(step='reducer')
-                for clustering_param in clustering_grid:
-                    self.clustering.set_params(**clustering_param)
-                    self._fit_step(step='clustering')
-
-                    silhouette = _clustering_score(self.clustering,
-                                                   self.reduced_points)
-                    n_clusters = len(np.unique(self.clustering.labels_))
-                    noise = sum(self.clustering.labels_ == -1)
-
-                    # If there is noise, the label "-1" is added as a
-                    # valid cluster number, so we need to subtract it
-
-                    n_clusters -= 1*(noise > 0)
-                    params = {
-                        'vectorizer': vectorizer_param,
-                        'reducer': reducer_param,
-                        'clustering': clustering_param
-                    }
-                    params_list += [{
-                        "params": params,
-                        "silhouette": silhouette,
-                        "n_clusters": n_clusters,
-                        "noise": noise
-                    }]
-
-                    if silhouette > best_silhouette and min_n_clusters <= \
-                            n_clusters <= max_n_clusters and noise < max_noise:
-                        best_silhouette = silhouette
-                        best_params = deepcopy(params)
-
         # Fits the pipeline again with the best parameters
-        self.set_params(best_params)
+        grid.fit(X, y=None)
+
+        # Prunes result to actually optimise under constraints
+
+        self.set_params(grid.best_params_, from_parameter_grid=True)
         self.fit(X)
 
         logger.setLevel(logging_level)
 
-        return {
-            "params_list": params_list,
-            "silhouette": best_silhouette,
-            "best_params": best_params
-        }
+        return grid
 
     def stability(self):
         """Function to calculate how stable the clusters are"""
@@ -246,6 +237,17 @@ class TextClustering(object):
             None
 
         """
+        if from_parameter_grid:
+            # This is to convert from a sklearn parameter to a two-level
+            # dictionary, which is what we work with
+            new_params = defaultdict(dict)
+
+            for key, value in params.items():
+                level_1_key, level_2_key = key.split('__')
+                new_params[level_1_key][level_2_key] = value
+
+            params = new_params
+
         self.vectorizer.set_params(**params.get('vectorizer', {}))
         self.reducer.set_params(**params.get('reducer', {}))
         self.clustering.set_params(**params.get('clustering', {}))
@@ -317,14 +319,26 @@ def _find_words_from_frequency(vector, idx_to_word, n_kw=5):
     return current_kw_list
 
 
+def _number_of_clusters(estimator, X, y=None):
+    """Utility to return number of clusters, excluding noise (if exists)"""
+    label_set = set(estimator['clustering'].labels_)
+    return len(label_set)-1*(-1 in label_set)
+
+
+def _clustering_noise(estimator, X, y=None):
+    """Returns the clustering noise (predictions = -1)"""
+    return len([x for x in estimator['clustering'].labels_ if x == -1])
+
+
 def _clustering_score(estimator, X, y=None):
     """
     Scores a clustering based on the silhouette score
-    (function suitable to use with GridSearchCV)
 
     Args:
-        estimator: A sklearn estimator. Assumes the estimator has
-         labels_ with size equals to len(X)
+        estimator: A sklearn Pipeline. Assumes the estimator has a set
+        called 'embedding' and a step called 'clustering', which is a
+        sklearn.base.ClusterMixin
+
         X: A vector of size n x m, where n is the number of points and m
          the dimension of each point
 
@@ -333,7 +347,15 @@ def _clustering_score(estimator, X, y=None):
          or 0 if only one cluster has been found
 
     """
-    predicted_labels = estimator.labels_
+    if hasattr(estimator.named_steps, 'reducer'):
+        X_points = estimator.named_steps['reducer'].embedding_
+    elif hasattr(estimator.named_steps['vectorizer'], 'X_transformed'):
+        X_points = estimator.named_steps['vectorizer'].X_transformed
+    else:
+        X_points = estimator['vectorizer'].transform(X)
 
-    return silhouette_score(X, predicted_labels) if \
-        len(np.unique(predicted_labels)) > 1 else 0
+    predicted_labels = estimator['clustering'].labels_
+
+    return silhouette_score(X_points, predicted_labels) \
+        if 2 <= len(np.unique(predicted_labels)) <= len(predicted_labels)-1 \
+        else 0
