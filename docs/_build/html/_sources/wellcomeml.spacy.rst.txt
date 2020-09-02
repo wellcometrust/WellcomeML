@@ -12,7 +12,6 @@ wellcomeml.spacy.spacy\_doc\_to\_prodigy module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

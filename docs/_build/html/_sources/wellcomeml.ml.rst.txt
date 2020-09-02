@@ -156,7 +156,6 @@ wellcomeml.ml.voting\_classifier module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

@@ -12,7 +12,6 @@ wellcomeml.metrics.ner\_classification\_report module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 
