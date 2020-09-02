@@ -48,7 +48,7 @@ using a :class:`BertClassifier <wellcomeml.ml.bert_classifier>`
 
 Train a Spacy NER model
 ----------------------------
-Retrain a `spaCy NER classifier <https://spacy.io/usage/training#ner>` on new data using :class:`SpacyNER <wellcomeml.ml.spacy_ner>`.
+Retrain a `spaCy NER classifier <https://spacy.io/usage/training#ner>`_ on new data using :class:`SpacyNER <wellcomeml.ml.spacy_ner>`.
 
 .. code-block:: python
 
