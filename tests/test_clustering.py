@@ -35,6 +35,7 @@ def test_parameter_search():
 
     best_params = cluster.optimise(X, param_grid=param_grid, verbose=1)
 
-    assert len(best_params['params_list']) == 72
+    # Asserts it found a parameter
+    assert best_params is not None
     # Asserts that silhouette is at least positive
-    assert best_params['silhouette'] > 0
+    assert cluster.silhouette > 0
