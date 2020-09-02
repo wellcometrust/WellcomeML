@@ -47,6 +47,7 @@ setuptools.setup(
         'scikit-learn',
         'scipy==1.4.1',
         'spacy==2.2.1',
+        'umap-learn',
         'nervaluate',
         'twine',
         'gensim',
