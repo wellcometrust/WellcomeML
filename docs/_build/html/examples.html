@@ -90,6 +90,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#bert-and-scibert-vectorisers">Bert and Scibert Vectorisers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bert-and-scibert-classifiers">Bert and Scibert Classifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#train-a-spacy-ner-model">Train a Spacy NER model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#entity-linking">Entity Linking</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="wellcomeml.html">Core library documentation</a></li>
@@ -197,6 +199,125 @@ using a <a class="reference internal" href="wellcomeml.ml.html#module-wellcomeml
 <span class="n">bert</span> <span class="o">=</span> <span class="n">BertClassifier</span><span class="p">()</span>
 <span class="n">bert</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">bert</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="train-a-spacy-ner-model">
+<h2>Train a Spacy NER model<a class="headerlink" href="#train-a-spacy-ner-model" title="Permalink to this headline">¶</a></h2>
+<p>Retrain a <a class="reference external" href="https://spacy.io/usage/training#ner">spaCy NER classifier</a> on new data using <a class="reference internal" href="wellcomeml.ml.html#module-wellcomeml.ml.spacy_ner" title="wellcomeml.ml.spacy_ner"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpacyNER</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">from</span> <span class="nn">wellcomeml.ml</span> <span class="kn">import</span> <span class="n">SpacyNER</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;n Journal of Psychiatry 158: 2071–4</span><span class="se">\n</span><span class="s2">Freeman MP, Hibbeln JR, Wisner KL et al. (2006)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rd, (BKKBN)</span><span class="se">\n</span><span class="s2"> </span><span class="se">\n</span><span class="s2">Jakarta, Indonesia</span><span class="se">\n</span><span class="s2">29. Drs Titut Prihyugiarto</span><span class="se">\n</span><span class="s2"> MSPA</span><span class="se">\n</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;a Santé, 2008. </span><span class="se">\n</span><span class="s2">118. Konradsen, F. et coll. Community uptake of safe &quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">36</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="mi">46</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;PERSON&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">48</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="mi">58</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;PERSON&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">61</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="mi">69</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;PERSON&quot;</span><span class="p">},</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+      <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="mi">59</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;PERSON&quot;</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+      <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="mi">34</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;PERSON&quot;</span><span class="p">}</span>
+    <span class="p">],</span>
+<span class="p">]</span>
+<span class="n">person_tag_name</span> <span class="o">=</span> <span class="s2">&quot;PERSON&quot;</span>
+
+<span class="n">spacy_ner</span> <span class="o">=</span> <span class="n">SpacyNER</span><span class="p">(</span><span class="n">n_iter</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">spacy_ner</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;en_core_web_sm&quot;</span><span class="p">)</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy_ner</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Predict the entities in a piece of text</span>
+<span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Khumalo, Lungile, National Department of Health </span><span class="se">\n</span><span class="s2">• </span><span class="se">\n</span><span class="s2">Kistnasamy, &quot;</span>
+    <span class="s2">&quot;Dr Barry, National Department of He&quot;</span>
+    <span class="p">)</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">spacy_ner</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">text</span><span class="p">[</span><span class="n">entity</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]:</span><span class="n">entity</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]]</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">predictions</span>
+        <span class="k">if</span> <span class="n">entity</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">person_tag_name</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Evaluate the performance of the model on the training data</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="n">spacy_ner</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">spacy_ner</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">person_tag_name</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="entity-linking">
+<h2>Entity Linking<a class="headerlink" href="#entity-linking" title="Permalink to this headline">¶</a></h2>
+<p>Link sentences to the most similar document in a corpus using <a class="reference internal" href="wellcomeml.ml.html#module-wellcomeml.ml.similarity_entity_linking" title="wellcomeml.ml.similarity_entity_linking"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimilarityEntityLinker</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wellcomeml.ml</span> <span class="kn">import</span> <span class="n">SimilarityEntityLinker</span>
+
+<span class="n">entities_kb</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Michelle Williams (actor)&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;American actress. She is the recipient of several accolades, including two Golden Globe&quot;</span>
+        <span class="s2">&quot; Awards and a Primetime Emmy Award, in addition to nominations for four Academy Awards &quot;</span>
+        <span class="s2">&quot;and one Tony Award.&quot;</span>
+        <span class="p">),</span>
+    <span class="s2">&quot;Michelle Williams (musician)&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;American entertainer. She rose to fame in the 2000s as a member of R&amp;B girl group &quot;</span>
+        <span class="s2">&quot;Destiny&#39;s Child, one of the best-selling female groups of all time with over 60 &quot;</span>
+        <span class="s2">&quot;million records, of which more than 35 million copies sold with the trio lineup &quot;</span>
+        <span class="s2">&quot;with Williams.&quot;</span>
+        <span class="p">),</span>
+    <span class="s2">&quot;id_3&quot;</span><span class="p">:</span> <span class="s2">&quot;  &quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">stopwords</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;the&quot;</span><span class="p">,</span> <span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="s2">&quot;if&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">]</span>
+
+<span class="n">train_data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;After Destiny&#39;s Child&#39;s disbanded in 2006, Michelle Williams released her first &quot;</span>
+            <span class="s2">&quot;pop album, Unexpected (2008),&quot;</span>
+        <span class="p">),</span>
+        <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;Michelle Williams (musician)&quot;</span><span class="p">},</span>
+    <span class="p">),</span>
+    <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;On Broadway, Michelle Williams starred in revivals of the musical Cabaret in 2014 &quot;</span>
+            <span class="s2">&quot;and the drama Blackbird in 2016, for which she received a nomination for the Tony &quot;</span>
+            <span class="s2">&quot;Award for Best Actress in a Play.&quot;</span>
+        <span class="p">),</span>
+        <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;Michelle Williams (actor)&quot;</span><span class="p">},</span>
+    <span class="p">),</span>
+    <span class="p">(</span>
+        <span class="s2">&quot;Franklin would have ideally been awarded a Nobel Prize in Chemistry&quot;</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;No ID&quot;</span><span class="p">},</span>
+    <span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">entity_linker</span> <span class="o">=</span> <span class="n">SimilarityEntityLinker</span><span class="p">(</span><span class="n">stopwords</span><span class="o">=</span><span class="n">stopwords</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="s2">&quot;tf-idf&quot;</span><span class="p">)</span>
+<span class="n">entity_linker</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">entities_kb</span><span class="p">)</span>
+<span class="n">tfidf_predictions</span> <span class="o">=</span> <span class="n">entity_linker</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+    <span class="n">train_data</span><span class="p">,</span> <span class="n">similarity_threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">no_id_col</span><span class="o">=</span><span class="s2">&quot;No ID&quot;</span>
+<span class="p">)</span>
+
+<span class="n">entity_linker</span> <span class="o">=</span> <span class="n">SimilarityEntityLinker</span><span class="p">(</span><span class="n">stopwords</span><span class="o">=</span><span class="n">stopwords</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="s2">&quot;bert&quot;</span><span class="p">)</span>
+<span class="n">entity_linker</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">entities_kb</span><span class="p">)</span>
+<span class="n">bert_predictions</span> <span class="o">=</span> <span class="n">entity_linker</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+    <span class="n">train_data</span><span class="p">,</span> <span class="n">similarity_threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">no_id_col</span><span class="o">=</span><span class="s2">&quot;No ID&quot;</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TF-IDF Predictions:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_data</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tfidf_predictions</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;BERT Predictions:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_data</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">bert_predictions</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>

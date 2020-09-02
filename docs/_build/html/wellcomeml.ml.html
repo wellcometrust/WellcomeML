@@ -452,7 +452,8 @@ and model initialisation. Fit, predict, score remain intact</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>list of t-uples</em>) – Assumes that each element x of X has length</p></li>
-<li><p><strong>the first two components are texts and</strong> (<em>2+n_numerical_features</em><em>,</em>) – </p></li>
+<li><p><strong>2+n_numerical_features</strong> – </p></li>
+<li><p><strong>first two components are texts and</strong> (<em>the</em>) – </p></li>
 <li><p><strong>components are numerical features</strong> (<em>remaining</em>) – </p></li>
 <li><p><strong>y</strong> – list of 0 (not similar) and 1s (similar)</p></li>
 <li><p><strong>random_state</strong> – a random state for the train_test_split</p></li>
@@ -479,7 +480,8 @@ and model initialisation. Fit, predict, score remain intact</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>list of t-uples</em>) – Assumes that each element x of X has length</p></li>
-<li><p><strong>the first two components are texts and</strong> (<em>2+n_numerical_features</em><em>,</em>) – </p></li>
+<li><p><strong>2+n_numerical_features</strong> – </p></li>
+<li><p><strong>first two components are texts and</strong> (<em>the</em>) – </p></li>
 <li><p><strong>components are numerical features</strong> (<em>remaining</em>) – </p></li>
 </ul>
 </dd>
@@ -503,7 +505,8 @@ and model initialisation. Fit, predict, score remain intact</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>list of t-uples</em>) – Assumes that each element x of X has length</p></li>
-<li><p><strong>the first two components are texts and</strong> (<em>2+n_numerical_features</em><em>,</em>) – </p></li>
+<li><p><strong>2+n_numerical_features</strong> – </p></li>
+<li><p><strong>first two components are texts and</strong> (<em>the</em>) – </p></li>
 <li><p><strong>components are numerical features</strong> (<em>remaining</em>) – </p></li>
 </ul>
 </dd>
@@ -767,7 +770,8 @@ vectorisation/embedding</p>
 :param X: A list of texts (strings)
 :param *_:
 :param remove_numbers: Whether to remove years or all digits. Caveat:
-:param This does not only remove years, but <strong>any number</strong> between:
+:param This does not only remove years:
+:param but <strong>any number</strong> between:
 :param 1000 and 2999.:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -788,7 +792,8 @@ vectorisation/embedding</p>
 <dd><p>Uses spacy pre-trained lemmatisation model to
 :param X: A list of texts (strings)
 :param remove_stopwords_and_punct: Whether to remove stopwords,
-:param punctuation, pronouns:</p>
+:param punctuation:
+:param pronouns:</p>
 <p>Returns:</p>
 </dd></dl>
 
@@ -1354,7 +1359,7 @@ and return results for multilabel Y</p>
 
 <dl class="py attribute">
 <dt id="wellcomeml.ml.voting_classifier.WellcomeVotingClassifier.steps">
-<code class="sig-name descname">steps</code><a class="headerlink" href="#wellcomeml.ml.voting_classifier.WellcomeVotingClassifier.steps" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">steps</code><em class="property">: List<span class="p">[</span>Any<span class="p">]</span></em><a class="headerlink" href="#wellcomeml.ml.voting_classifier.WellcomeVotingClassifier.steps" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

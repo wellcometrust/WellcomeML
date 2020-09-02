@@ -20,7 +20,6 @@ wellcomeml.io.s3\_policy\_data module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 
