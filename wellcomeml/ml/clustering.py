@@ -80,6 +80,7 @@ class TextClustering(object):
         self.cluster_ids = None
         self.cluster_names = None
         self.cluster_kws = None
+        self.silhouette = None
 
     def fit(self, X, *_):
         """
@@ -186,7 +187,7 @@ class TextClustering(object):
             scoring={
                 'silhouette': _clustering_score,
                 'noise': _clustering_noise,
-                'number_of_clusters': _number_of_clusters
+                'n_clusters': _number_of_clusters
             },
             refit='silhouette'
         )
@@ -202,13 +203,29 @@ class TextClustering(object):
         grid.fit(X, y=None)
 
         # Prunes result to actually optimise under constraints
+        best_silhouette = -1000
+        best_params = {}
 
-        self.set_params(grid.best_params_, from_parameter_grid=True)
+        for params, silhouette, noise, n_clusters in zip(
+                grid.cv_results_['params'],
+                grid.cv_results_['mean_test_silhouette'],
+                grid.cv_results_['mean_test_noise'],
+                grid.cv_results_['mean_test_n_clusters']
+        ):
+            if min_n_clusters <= n_clusters <= max_n_clusters\
+                    and noise <= max_noise\
+                    and silhouette > best_silhouette:
+                best_silhouette = silhouette
+                best_params = params
+
+        self.silhouette = best_silhouette
+
+        self.set_params(best_params, from_parameter_grid=True)
         self.fit(X)
 
         logger.setLevel(logging_level)
 
-        return grid
+        return best_params
 
     def stability(self):
         """Function to calculate how stable the clusters are"""
