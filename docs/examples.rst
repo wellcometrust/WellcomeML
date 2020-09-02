@@ -44,3 +44,56 @@ using a :class:`BertClassifier <wellcomeml.ml.bert_classifier>`
     bert = BertClassifier()
     bert.fit(X, Y)
     print(bert.score(X, Y))
+
+
+Train a Spacy NER model
+----------------------------
+Retrain a `spaCy NER classifier <https://spacy.io/usage/training#ner>` on new data using :class:`SpacyNER <wellcomeml.ml.spacy_ner>`.
+
+.. code-block:: python
+
+    import random
+
+    from wellcomeml.ml import SpacyNER
+
+    X_train = [
+        "n Journal of Psychiatry 158: 2071–4\nFreeman MP, Hibbeln JR, Wisner KL et al. (2006)\n",
+        "rd, (BKKBN)\n \nJakarta, Indonesia\n29. Drs Titut Prihyugiarto\n MSPA\n \n",
+        "a Santé, 2008. \n118. Konradsen, F. et coll. Community uptake of safe ",
+    ]
+    y_train = [
+        [
+            {"start": 36, "end": 46, "label": "PERSON"},
+            {"start": 48, "end": 58, "label": "PERSON"},
+            {"start": 61, "end": 69, "label": "PERSON"},
+        ],
+        [
+          {"start": 41, "end": 59, "label": "PERSON"}
+        ],
+        [
+          {"start": 21, "end": 34, "label": "PERSON"}
+        ],
+    ]
+    person_tag_name = "PERSON"
+
+    spacy_ner = SpacyNER(n_iter=3, dropout=0.2, output=True)
+    spacy_ner.load("en_core_web_sm")
+    nlp = spacy_ner.fit(X_train, y_train)
+
+    # Predict the entities in a piece of text
+    text = (
+        "\nKhumalo, Lungile, National Department of Health \n• \nKistnasamy, "
+        "Dr Barry, National Department of He"
+        )
+    predictions = spacy_ner.predict(text)
+    print(
+        [
+            text[entity["start"]:entity["end"]]
+            for entity in predictions
+            if entity["label"] == person_tag_name
+        ]
+    )
+
+    # Evaluate the performance of the model on the training data
+    y_pred = [spacy_ner.predict(text) for text in X_train]
+    print(spacy_ner.score(y_train, y_pred, tags=[person_tag_name]))
