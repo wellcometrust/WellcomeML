@@ -199,9 +199,6 @@ class TextClustering(object):
             logging.getLogger().setLevel(logging.WARNING)
             logger.setLevel(logging.WARNING)
 
-        # Fits the pipeline again with the best parameters
-        grid.fit(X, y=None)
-
         # Prunes result to actually optimise under constraints
         best_silhouette = -1000
         best_params = {}
@@ -221,7 +218,8 @@ class TextClustering(object):
         self.silhouette = best_silhouette
 
         self.set_params(best_params, from_parameter_grid=True)
-        self.fit(X)
+        # Fits the pipeline again with the best parameters
+        grid.fit(X, y=None)
 
         logger.setLevel(logging_level)
 
