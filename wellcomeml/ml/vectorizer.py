@@ -20,12 +20,15 @@ class Vectorizer(BaseEstimator, TransformerMixin):
 
     """
 
-    def __init__(self, embedding="tf-idf", **kwargs):
+    def __init__(self, embedding="tf-idf", cache_transformed=False, **kwargs):
         """
         Args:
             embedding(str): One of `['bert', 'tf-idf']`
+            cache_transformed(bool): Caches the last transformed vector X (
+            useful if performing Grid-search as part of a pipeline)
         """
         self.embedding = embedding
+        self.cache_transformed = cache_transformed
 
         vectorizer_dispatcher = {
             "tf-idf": WellcomeTfidf,
@@ -43,7 +46,18 @@ class Vectorizer(BaseEstimator, TransformerMixin):
         return self.vectorizer.fit(X)
 
     def transform(self, X, *_):
-        return self.vectorizer.transform(X)
+        X_transformed = self.vectorizer.transform(X)
+
+        if self.cache_transformed:
+            self.X_transformed = X_transformed
+
+        return X_transformed
+
+    def fit_transform(self, X, y=None, *_):
+        # Slightly modified fit_transform so it can work with the
+        # cache_transformed
+        self.fit(X)
+        return self.transform(X)
 
     def save_transformed(self, path, X_transformed):
         """
