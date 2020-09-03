@@ -213,22 +213,22 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, X):
-        def binarize_output(x):
-            cats = self.nlp(x).cats
+        def binarize_output(doc):
+            cats = doc.cats
             out = [
                 1 if cats[label] > self.threshold else 0 for label in self.unique_labels
             ]
             return out
-
-        return np.array([binarize_output(x) for x in X])
+        doc_gen = self.nlp.pipe(X)
+        return np.array([binarize_output(doc) for doc in doc_gen])
 
     def predict_proba(self, X):
-        def get_proba(x):
-            cats = self.nlp(x).cats
+        def get_proba(doc):
+            cats = doc.cats
             out = [cats[label] for label in self.unique_labels]
             return out
-
-        return np.array([get_proba(x) for x in X])
+        doc_gen = self.nlp.pipe(X)
+        return np.array([get_proba(doc) for doc in doc_gen])
 
     def score(self, X, Y):
         Y_pred = self.predict(X)
