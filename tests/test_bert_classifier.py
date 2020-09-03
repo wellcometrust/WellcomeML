@@ -22,9 +22,14 @@ def test_multilabel():
 
     model = BertClassifier()
     model.fit(X, Y)
-    assert model.predict(X).sum() != 0
-    assert model.predict(X).sum() != Y.size
-    assert model.predict(X).shape == Y.shape
+    Y_pred = model.predict(X)
+    Y_prob_pred = model.predict_proba(X)
+    assert Y_pred.sum() != 0
+    assert Y_pred.sum() != Y.size
+    assert Y_prob_pred.max() <= 1
+    assert Y_prob_pred.min() >= 0
+    assert Y_pred.shape == Y.shape
+    assert Y_prob_pred.shape == Y.shape
     assert model.losses[0] > model.losses[-1]
 
 
@@ -48,7 +53,12 @@ def test_partial_fit():
     for epoch in range(5):
         for x, y in zip(X, Y):
             model.partial_fit([x], np.array([y]))
-    assert model.predict(X).sum() != 0
-    assert model.predict(X).sum() != np.array(Y).size
-    assert model.predict(X).shape == np.array(Y).shape
+    Y_pred = model.predict(X)
+    Y_prob_pred = model.predict_proba(X)
+    assert Y_pred.sum() != 0
+    assert Y_prob_pred.sum() != np.array(Y).size
+    assert Y_prob_pred.max() <= 1
+    assert Y_prob_pred.min() >= 0
+    assert Y_pred.shape == np.array(Y).shape
+    assert Y_prob_pred.shape == np.array(Y).shape
     assert model.losses[0] > model.losses[-1]
