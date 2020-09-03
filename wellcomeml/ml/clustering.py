@@ -202,7 +202,7 @@ class TextClustering(object):
         # Prunes result to actually optimise under constraints
         best_silhouette = -1000
         best_params = {}
-
+        grid.fit(X, y=None)
         for params, silhouette, noise, n_clusters in zip(
                 grid.cv_results_['params'],
                 grid.cv_results_['mean_test_silhouette'],
@@ -219,7 +219,7 @@ class TextClustering(object):
 
         self.set_params(best_params, from_parameter_grid=True)
         # Fits the pipeline again with the best parameters
-        grid.fit(X, y=None)
+        self.fit(X)
 
         logger.setLevel(logging_level)
 
