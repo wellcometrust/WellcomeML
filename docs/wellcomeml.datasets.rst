@@ -28,14 +28,6 @@ wellcomeml.datasets.hoc module
    :undoc-members:
    :show-inheritance:
 
-wellcomeml.datasets.temp\_get\_sample\_winer module
----------------------------------------------------
-
-.. automodule:: wellcomeml.datasets.temp_get_sample_winer
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 wellcomeml.datasets.winer module
 --------------------------------
 
