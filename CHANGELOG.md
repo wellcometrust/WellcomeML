@@ -4,6 +4,7 @@ Models
 ---
 * Add param l2, dense_size, attention_heads, metrics, callbacks, feature_approach to cnn and bilstm classifiers
 * Faster predictions in BertClassifier through the use of spacy's pipe
+* Adds TextClustering
 
 # 2020.07.1
 
