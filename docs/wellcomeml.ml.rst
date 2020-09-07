@@ -44,6 +44,14 @@ wellcomeml.ml.bilstm module
    :undoc-members:
    :show-inheritance:
 
+wellcomeml.ml.clustering module
+-------------------------------
+
+.. automodule:: wellcomeml.ml.clustering
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 wellcomeml.ml.cnn module
 ------------------------
 
