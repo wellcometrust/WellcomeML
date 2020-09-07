@@ -100,6 +100,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.bert_semantic_equivalence">wellcomeml.ml.bert_semantic_equivalence module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.bert_vectorizer">wellcomeml.ml.bert_vectorizer module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.bilstm">wellcomeml.ml.bilstm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wellcomeml-ml-clustering-module">wellcomeml.ml.clustering module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.cnn">wellcomeml.ml.cnn module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.constants">wellcomeml.ml.constants module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.doc2vec_vectorizer">wellcomeml.ml.doc2vec_vectorizer module</a></li>
@@ -107,7 +108,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.keras_utils">wellcomeml.ml.keras_utils module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.keras_vectorizer">wellcomeml.ml.keras_vectorizer module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.sent2vec_vectorizer">wellcomeml.ml.sent2vec_vectorizer module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.similarity_entity_linking">wellcomeml.ml.similarity_entity_linking module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wellcomeml-ml-similarity-entity-linking-module">wellcomeml.ml.similarity_entity_linking module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.spacy_classifier">wellcomeml.ml.spacy_classifier module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.spacy_entity_linking">wellcomeml.ml.spacy_entity_linking module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.spacy_knowledge_base">wellcomeml.ml.spacy_knowledge_base module</a></li>
@@ -605,6 +606,9 @@ each label set be correctly predicted.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="wellcomeml-ml-clustering-module">
+<h2>wellcomeml.ml.clustering module<a class="headerlink" href="#wellcomeml-ml-clustering-module" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="module-wellcomeml.ml.cnn">
 <span id="wellcomeml-ml-cnn-module"></span><h2>wellcomeml.ml.cnn module<a class="headerlink" href="#module-wellcomeml.ml.cnn" title="Permalink to this headline">¶</a></h2>
 <p>CNN architecture inspired from spacy for NLP tasks</p>
@@ -975,76 +979,8 @@ paper and codebase. <a class="reference external" href="https://github.com/epfml
 </dd></dl>
 
 </div>
-<div class="section" id="module-wellcomeml.ml.similarity_entity_linking">
-<span id="wellcomeml-ml-similarity-entity-linking-module"></span><h2>wellcomeml.ml.similarity_entity_linking module<a class="headerlink" href="#module-wellcomeml.ml.similarity_entity_linking" title="Permalink to this headline">¶</a></h2>
-<p>A class that for each of a list of sentences will find the most similar document in a corpus
-using the TFIDF vectors or a BERT embedding from the corpus documents.</p>
-<dl class="py class">
-<dt id="wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.similarity_entity_linking.</code><code class="sig-name descname">SimilarityEntityLinker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stopwords</span></em>, <em class="sig-param"><span class="n">embedding</span><span class="o">=</span><span class="default_value">'tf-idf'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y_true</span></em>, <em class="sig-param"><span class="n">y_pred</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>documents: dictionary of the texts from each of the corpus documents</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker.optimise_threshold">
-<code class="sig-name descname">optimise_threshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">id_col</span><span class="o">=</span><span class="default_value">'orcid'</span></em>, <em class="sig-param"><span class="n">no_id_col</span><span class="o">=</span><span class="default_value">'No ORCID'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker.optimise_threshold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the f1 scores when different similarity thresholds are used.
-Use half the maximum F1 score found as the optimal threshold.
-This value will be used as the value for the similarity
-threshold in predict, unless another value is given.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">similarity_threshold</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">no_id_col</span><span class="o">=</span><span class="default_value">'No ORCID'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Identify the most similar document to a sentence using TFIDF</p>
-<p>If the most similar document doesnt have a similarity value over
-a threshold then return they key ‘No ORCID’</p>
-<p>similarity_threshold can be specified, otherwise if you’ve optimised
-the threshold it will use this value</p>
-<dl class="simple">
-<dt>Input:</dt><dd><dl class="simple">
-<dt>data: a list of tuples in the form</dt><dd><p>[(‘A sentence about Farrar’,
-{metadata}),
-(‘A sentence about Smith’,
-{metadata})]
-For this predict function the contents of
-{metadata} isn’t important</p>
-</dd>
-<dt>similarity_threshold: The threshold by which to</dt><dd><p>classify a match as being true or that there is
-no match. If this is None then the best threshold
-will be found</p>
-</dd>
-</dl>
-</dd>
-<dt>Output:</dt><dd><dl class="simple">
-<dt>pred_entities: a list of predictions</dt><dd><p>of which document in the corpus each data
-point is likely to link to
-[‘0000-0002-2700-623X’, ‘0000-0002-6259-1606’, ‘No ORCID’]</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker.predict_proba">
-<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.similarity_entity_linking.SimilarityEntityLinker.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns probability estimates for each class
-in the same order as self.classifications</p>
-</dd></dl>
-
-</dd></dl>
-
+<div class="section" id="wellcomeml-ml-similarity-entity-linking-module">
+<h2>wellcomeml.ml.similarity_entity_linking module<a class="headerlink" href="#wellcomeml-ml-similarity-entity-linking-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-wellcomeml.ml.spacy_classifier">
 <span id="wellcomeml-ml-spacy-classifier-module"></span><h2>wellcomeml.ml.spacy_classifier module<a class="headerlink" href="#module-wellcomeml.ml.spacy_classifier" title="Permalink to this headline">¶</a></h2>
@@ -1282,7 +1218,7 @@ for entity types in the ‘tags’ list, e.g. [‘PERSON’, ‘LOC’]</p>
 or embed using bert, doc2vec etc</p>
 <dl class="py class">
 <dt id="wellcomeml.ml.vectorizer.Vectorizer">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.vectorizer.</code><code class="sig-name descname">Vectorizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embedding</span><span class="o">=</span><span class="default_value">'tf-idf'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.vectorizer.Vectorizer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.vectorizer.</code><code class="sig-name descname">Vectorizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embedding</span><span class="o">=</span><span class="default_value">'tf-idf'</span></em>, <em class="sig-param"><span class="n">cache_transformed</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.vectorizer.Vectorizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
 <p>Abstract class, sklearn-compatible, that can vectorize texts using
 various models.</p>
@@ -1290,6 +1226,29 @@ various models.</p>
 <dt id="wellcomeml.ml.vectorizer.Vectorizer.fit">
 <code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">_</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.vectorizer.Vectorizer.fit" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.vectorizer.Vectorizer.fit_transform">
+<code class="sig-name descname">fit_transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">_</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.vectorizer.Vectorizer.fit_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit to data, then transform it.</p>
+<p>Fits transformer to X and y with optional parameters fit_params
+and returns a transformed version of X.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix</em><em>, </em><em>dataframe} of shape</em><em>                 (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – </p></li>
+<li><p><strong>y</strong> (<em>ndarray of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Target values.</p></li>
+<li><p><strong>**fit_params</strong> (<em>dict</em>) – Additional fit parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>X_new</strong> – Transformed array.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray array of shape (n_samples, n_features_new)</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="wellcomeml.ml.vectorizer.Vectorizer.load_transformed">
