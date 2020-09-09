@@ -1,3 +1,5 @@
+import tempfile
+
 from wellcomeml.ml.bilstm import BiLSTMClassifier
 from wellcomeml.ml import KerasVectorizer
 from sklearn.pipeline import Pipeline
@@ -19,6 +21,28 @@ def test_vanilla():
     ])
     model.fit(X, Y)
     assert model.score(X, Y) > 0.6
+
+
+def test_save_load():
+    X = [
+        "One",
+        "One only",
+        "Two nothing else",
+        "Two and three"
+    ]
+    Y = np.array([0, 0, 1, 1])
+
+    vec = KerasVectorizer()
+    X_vec = vec.fit_transform(X)
+
+    model = BiLSTMClassifier()
+    model.fit(X_vec, Y)
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        model.save(tmp_dir)
+        loaded_model = BiLSTMClassifier()
+        loaded_model.load(tmp_dir)
+        assert loaded_model.score(X_vec, Y) > 0.6
 
 
 def test_multilabel():
