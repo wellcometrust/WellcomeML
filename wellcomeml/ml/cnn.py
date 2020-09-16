@@ -18,6 +18,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 from scipy.sparse import csr_matrix, vstack
 import tensorflow as tf
+import numpy as np
 
 from wellcomeml.ml.attention import HierarchicalAttention
 
@@ -51,7 +52,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         callbacks=["tensorboard"],
         feature_approach="max",
         early_stopping=False,
-        sparse_y = False
+        sparse_y=False
     ):
         self.context_window = context_window
         self.learning_rate = learning_rate
@@ -182,14 +183,14 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             callbacks.append(early_stopping)
         if self.sparse_y:
             train_data = self.yield_data(X_train, Y_train, self.batch_size)
-            test_data = self.yield_data(X_test, Y_test, self.batch_size)
+            val_data = self.yield_data(X_val, Y_val, self.batch_size)
             steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
-            validation_steps = math.ceil(X_test.shape[0] / self.batch_size)
+            validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
 
             self.model.fit(
                 x=train_data,
                 steps_per_epoch=steps_per_epoch,
-                validation_data=test_data,
+                validation_data=val_data,
                 validation_steps=validation_steps,
                 epochs=self.nb_epochs,
                 callbacks=callbacks)
@@ -208,7 +209,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         if self.sparse_y:
             Y_pred = []
             for i in range(0, X.shape[0], self.batch_size):
-                X_batch = X[i: i+batch_size]
+                X_batch = X[i: i+self.batch_size]
                 Y_pred_batch = self.model(X_batch) > 0.5
                 Y_pred.append(csr_matrix(Y_pred_batch))
             Y_pred = vstack(Y_pred)
