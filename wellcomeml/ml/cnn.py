@@ -48,7 +48,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         metrics=["precision", "recall"],
         callbacks=["tensorboard"],
         feature_approach="max",
-        early_stopping = False
+        early_stopping=False
     ):
         self.context_window = context_window
         self.learning_rate = learning_rate
@@ -163,7 +163,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             for c in self.callbacks
         ]
         if self.early_stopping:
-            early_stopping = tf.keras.callbacks.EarlyStopping(patience=5, restore_best_weights=True)
+            early_stopping = tf.keras.callbacks.EarlyStopping(
+                patience=5, restore_best_weights=True)
             callbacks.append(early_stopping)
         self.model.fit(
             X_train,
