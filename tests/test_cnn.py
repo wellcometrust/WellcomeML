@@ -1,5 +1,6 @@
 from wellcomeml.ml import CNNClassifier, KerasVectorizer
 from sklearn.pipeline import Pipeline
+from scipy.sparse import csr_matrix
 import numpy as np
 
 
@@ -38,6 +39,33 @@ def test_multilabel():
     model = Pipeline([
         ('vec', KerasVectorizer()),
         ('clf', CNNClassifier(multilabel=True))
+    ])
+    model.fit(X, Y)
+    assert model.score(X, Y) > 0.4
+    assert model.predict(X).shape == (5, 4)
+
+
+def test_sparse():
+    X = [
+        "One and two",
+        "One only",
+        "Three and four, nothing else",
+        "Two nothing else",
+        "Two and three"
+    ]
+    Y = csr_matrix(np.array([
+        [1, 1, 0, 0],
+        [1, 0, 0, 0],
+        [0, 0, 1, 1],
+        [0, 1, 0, 0],
+        [0, 1, 1, 0]
+    ]))
+    model = Pipeline([
+        ('vec', KerasVectorizer()),
+        ('clf', CNNClassifier(
+            multilabel=True,
+            batch_size=2,
+            sparse_y=True))
     ])
     model.fit(X, Y)
     assert model.score(X, Y) > 0.4

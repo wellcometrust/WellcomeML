@@ -74,7 +74,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.early_stopping = early_stopping
         self.sparse_y = sparse_y
 
-    def _yield_data(X, Y, batch_size, shuffle=True):
+    def _yield_data(self, X, Y, batch_size, shuffle=True):
         while True:
             if shuffle:
                 randomize = np.arange(len(X))
@@ -182,8 +182,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 patience=5, restore_best_weights=True)
             callbacks.append(early_stopping)
         if self.sparse_y:
-            train_data = self.yield_data(X_train, Y_train, self.batch_size)
-            val_data = self.yield_data(X_val, Y_val, self.batch_size)
+            train_data = self._yield_data(X_train, Y_train, self.batch_size)
+            val_data = self._yield_data(X_val, Y_val, self.batch_size)
             steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
             validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
 
