@@ -11,10 +11,12 @@ Predict: softmax or sigmoid depending on number of outputs
     and whether task is multilabel
 """
 from datetime import datetime
+import math
 
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
+from scipy.sparse import csr_matrix, vstack
 import tensorflow as tf
 
 from wellcomeml.ml.attention import HierarchicalAttention
@@ -48,7 +50,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         metrics=["precision", "recall"],
         callbacks=["tensorboard"],
         feature_approach="max",
-        early_stopping=False
+        early_stopping=False,
+        sparse_y = False
     ):
         self.context_window = context_window
         self.learning_rate = learning_rate
@@ -68,6 +71,17 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.callbacks = callbacks
         self.feature_approach = feature_approach
         self.early_stopping = early_stopping
+        self.sparse_y = sparse_y
+
+    def _yield_data(X, Y, batch_size, shuffle=True):
+        while True:
+            if shuffle:
+                randomize = np.arange(len(X))
+                np.random.shuffle(randomize)
+                X = X[randomize]
+                Y = Y[randomize]
+            for i in range(0, X.shape[0], batch_size):
+                yield X[i:i+batch_size, :], Y[i:i+batch_size, :].todense()
 
     def _build_model(self, sequence_length, vocab_size, nb_outputs,
                      embedding_matrix=None, metrics=["precision", "recall"]):
@@ -166,18 +180,41 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             early_stopping = tf.keras.callbacks.EarlyStopping(
                 patience=5, restore_best_weights=True)
             callbacks.append(early_stopping)
-        self.model.fit(
-            X_train,
-            Y_train,
-            epochs=self.nb_epochs,
-            batch_size=self.batch_size,
-            validation_data=(X_val, Y_val),
-            callbacks=callbacks,
-        )
+        if self.sparse_y:
+            train_data = self.yield_data(X_train, Y_train, self.batch_size)
+            test_data = self.yield_data(X_test, Y_test, self.batch_size)
+            steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
+            validation_steps = math.ceil(X_test.shape[0] / self.batch_size)
+
+            self.model.fit(
+                x=train_data,
+                steps_per_epoch=steps_per_epoch,
+                validation_data=test_data,
+                validation_steps=validation_steps,
+                epochs=self.nb_epochs,
+                callbacks=callbacks)
+        else:
+            self.model.fit(
+                X_train,
+                Y_train,
+                epochs=self.nb_epochs,
+                batch_size=self.batch_size,
+                validation_data=(X_val, Y_val),
+                callbacks=callbacks,
+            )
         return self
 
     def predict(self, X):
-        return self.model(X).numpy() > 0.5
+        if self.sparse_y:
+            Y_pred = []
+            for i in range(0, X.shape[0], self.batch_size):
+                X_batch = X[i: i+batch_size]
+                Y_pred_batch = self.model(X_batch) > 0.5
+                Y_pred.append(csr_matrix(Y_pred_batch))
+            Y_pred = vstack(Y_pred)
+            return Y_pred
+        else:
+            return self.model(X).numpy() > 0.5
 
     def score(self, X, Y):
         Y_pred = self.predict(X)
