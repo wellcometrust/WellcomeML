@@ -67,6 +67,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.metrics = metrics
         self.callbacks = callbacks
         self.feature_approach = feature_approach
+        self.early_stopping = early_stopping
 
     def _build_model(self, sequence_length, vocab_size, nb_outputs,
                      embedding_matrix=None, metrics=["precision", "recall"]):
