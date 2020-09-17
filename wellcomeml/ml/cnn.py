@@ -82,7 +82,11 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 X = X[randomize]
                 Y = Y[randomize]
             for i in range(0, X.shape[0], batch_size):
-                yield X[i:i+batch_size, :], Y[i:i+batch_size, :].todense()
+                X_batch = X[i:i+batch_size, :]
+                Y_batch = Y[i:i+batch_size, :]
+                if self.sparse_y:
+                    Y_batch = Y_batch.todense()
+                yield X_batch, Y_batch
 
     def _build_model(self, sequence_length, vocab_size, nb_outputs,
                      embedding_matrix=None, metrics=["precision", "recall"]):
