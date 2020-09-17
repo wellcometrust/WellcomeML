@@ -41,6 +41,7 @@ def test_save_load():
         model.save(tmp_dir)
         loaded_model = CNNClassifier()
         loaded_model.load(tmp_dir)
+        assert hasattr(loaded_model, 'model')
         assert loaded_model.score(X_vec, Y) > 0.6
 
 
