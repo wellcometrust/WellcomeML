@@ -155,3 +155,9 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
     def score(self, X, Y):
         Y_pred = self.predict(X)
         return f1_score(Y, Y_pred, average="micro")
+
+    def save(self, model_dir):
+        self.model.save(model_dir)
+
+    def load(self, model_dir):
+        self.model = tf.keras.models.load_model(model_dir)

@@ -182,3 +182,9 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
     def score(self, X, Y):
         Y_pred = self.predict(X)
         return f1_score(Y_pred, Y, average="micro")
+
+    def save(self, model_dir):
+        self.model.save(model_dir)
+
+    def load(self, model_dir):
+        self.model = tf.keras.models.load_model(model_dir)
