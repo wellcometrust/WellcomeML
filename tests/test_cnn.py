@@ -61,3 +61,25 @@ def test_attention():
     ])
     model.fit(X, Y)
     assert model.score(X, Y) > 0.6
+
+
+def test_early_stopping():
+    X = [
+        "One",
+        "One only",
+        "Two nothing else",
+        "Two and three"
+    ]
+    Y = np.array([0, 0, 1, 1])
+
+    model = Pipeline([
+        ('vec', KerasVectorizer()),
+        ('clf', CNNClassifier(
+                    early_stopping=True,
+                    nb_epochs=10000
+        ))
+    ])
+    # if early_stopping is not working it will take
+    # a lot of time to finish running this test
+    model.fit(X, Y)
+    assert model.score(X, Y) > 0.6

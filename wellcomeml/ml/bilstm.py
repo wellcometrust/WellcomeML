@@ -34,7 +34,8 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         attention=False,
         metrics=["precision", "recall"],
         callbacks=["tensorboard"],
-        feature_approach="max"
+        feature_approach="max",
+        early_stopping=False
     ):
         self.learning_rate = learning_rate
         self.batch_size = batch_size
@@ -50,6 +51,7 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         self.metrics = metrics
         self.callbacks = callbacks
         self.feature_approach = feature_approach
+        self.early_stopping = early_stopping
 
     def _build_model(self, sequence_length, vocab_size, nb_outputs,
                      embedding_matrix=None, metrics=["precision", "recall"]):
@@ -133,6 +135,10 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
             CALLBACK_DICT[c] if c in CALLBACK_DICT else c
             for c in self.callbacks
         ]
+        if self.early_stopping:
+            early_stopping = tf.keras.callbacks.EarlyStopping(
+                patience=5, restore_best_weights=True)
+            callbacks.append(early_stopping)
         self.model.fit(
             X_train,
             Y_train,
