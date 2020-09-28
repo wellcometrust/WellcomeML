@@ -177,7 +177,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         vocab_size = X.max() + 1
         nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
 
-        if tf.config.list_physical_devices('gpu'):
+        if tf.config.list_physical_devices('GPU'):
             strategy = tf.distribute.MirroredStrategy()
         else:  # use default strategy
             strategy = tf.distribute.get_strategy()

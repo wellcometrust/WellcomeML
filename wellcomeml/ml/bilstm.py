@@ -149,7 +149,7 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
 
         nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
 
-        if tf.config.list_physical_devices('gpu'):
+        if tf.config.list_physical_devices('GPU'):
             strategy = tf.distribute.MirroredStrategy()
         else:
             strategy = tf.distribute.get_strategy()
