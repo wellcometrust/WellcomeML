@@ -163,7 +163,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         strategy = tf.distribute.get_strategy()
         if isinstance(strategy, tf.distribute.MirroredStrategy):
             optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate)
-        else: # clipnorm is only supported in default strategy
+        else:  # clipnorm is only supported in default strategy
             optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate, clipnorm=1.0)
         metrics = [
             METRIC_DICT[m] if m in METRIC_DICT else m
@@ -182,7 +182,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         else:  # use default strategy
             strategy = tf.distribute.get_strategy()
         with strategy.scope():
-            self.model = self._build_model(sequence_length, vocab_size, nb_outputs, embedding_matrix)
+            self.model = self._build_model(sequence_length, vocab_size,
+                                           nb_outputs, embedding_matrix)
 
         X_train, X_val, Y_train, Y_val = train_test_split(
             X, Y, test_size=0.1, shuffle=True
