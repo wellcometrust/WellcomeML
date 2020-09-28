@@ -23,11 +23,6 @@ import numpy as np
 from wellcomeml.ml.attention import HierarchicalAttention
 
 TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-METRIC_DICT = {
-    'precision': tf.keras.metrics.Precision(name='precision'),
-    'recall': tf.keras.metrics.Recall(name='recall'),
-    'auc': tf.keras.metrics.AUC(name='auc')
-}
 CALLBACK_DICT = {
     'tensorboard': tf.keras.callbacks.TensorBoard(log_dir=TENSORBOARD_LOG_DIR)
 }
@@ -112,6 +107,12 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             else:
                 return x2
 
+        METRIC_DICT = {
+            'precision': tf.keras.metrics.Precision(name='precision'),
+            'recall': tf.keras.metrics.Recall(name='recall'),
+            'auc': tf.keras.metrics.AUC(name='auc')
+        }
+
         embeddings_initializer = (
             tf.keras.initializers.Constant(embedding_matrix)
             if embedding_matrix
@@ -159,7 +160,11 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         )(x)
         model = tf.keras.Model(inp, out)
 
-        optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate, clipnorm=1.0)
+        strategy = tf.distribute.get_strategy()
+        if isinstance(strategy, tf.distribute.MirroredStrategy):
+            optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate)
+        else: # clipnorm is only supported in default strategy
+            optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate, clipnorm=1.0)
         metrics = [
             METRIC_DICT[m] if m in METRIC_DICT else m
             for m in metrics
@@ -172,7 +177,12 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         vocab_size = X.max() + 1
         nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
 
-        self.model = self._build_model(sequence_length, vocab_size, nb_outputs, embedding_matrix)
+        if tf.config.list_physical_devices('gpu'):
+            strategy = tf.distribute.MirroredStrategy()
+        else:  # use default strategy
+            strategy = tf.distribute.get_strategy()
+        with strategy.scope():
+            self.model = self._build_model(sequence_length, vocab_size, nb_outputs, embedding_matrix)
 
         X_train, X_val, Y_train, Y_val = train_test_split(
             X, Y, test_size=0.1, shuffle=True
