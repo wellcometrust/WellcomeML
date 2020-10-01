@@ -233,8 +233,6 @@ class TextClustering(object):
                 grid.cv_results_['mean_test_noise'],
                 grid.cv_results_['mean_test_n_clusters']
         ):
-            import pdb
-            pdb.set_trace()
             if min_n_clusters <= n_clusters <= max_n_clusters\
                     and noise <= max_noise\
                     and silhouette > best_silhouette:
