@@ -224,7 +224,7 @@ class TextClustering(object):
             logger.setLevel(logging.WARNING)
 
         # Prunes result to actually optimise under constraints
-        best_silhouette = -1000
+        best_silhouette = 0
         best_params = {}
         grid.fit(X, y=None)
         for params, silhouette, noise, n_clusters in zip(
@@ -233,9 +233,10 @@ class TextClustering(object):
                 grid.cv_results_['mean_test_noise'],
                 grid.cv_results_['mean_test_n_clusters']
         ):
+
             if min_n_clusters <= n_clusters <= max_n_clusters\
                     and noise <= max_noise\
-                    and silhouette > best_silhouette:
+                    and silhouette >= best_silhouette:
                 best_silhouette = silhouette
                 best_params = params
 
