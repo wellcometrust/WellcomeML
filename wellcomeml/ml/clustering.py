@@ -155,16 +155,20 @@ class TextClustering(object):
         min_n_clusters = (n_cluster_range[0] if n_cluster_range else 0)
         max_n_clusters = (n_cluster_range[1] if n_cluster_range else 10**5)
 
+        # X might be transformed to be a vector, so we need to save the input
+        # texts
+
+        X_text = X
+
         # Linearises Dictionary to be compatible with grid search so it
         # becomes one dictionary with 'step__parameter'
-        if self.reducer_class == 'tsne':
+        if self.reducer == 'tsne':
             logger.warning("TSNE is not suitable for predicting on new data."
                            "Skipping Vectoriser/TSNE optimisation parameters")
             self.fit(X)
             X = self.reduced_points
 
-            pipeline = Pipeline([('vectorizer', self.vectorizer),
-                                 ('clustering', self.clustering_class)],
+            pipeline = Pipeline([('clustering', self.clustering_class)],
                                 memory=CACHE_DIR)
 
             params = {}
@@ -243,7 +247,7 @@ class TextClustering(object):
 
         self.set_params(best_params, from_parameter_grid=True)
         # Fits the pipeline again with the best parameters
-        self.fit(X)
+        self.fit(X_text)
 
         logger.setLevel(logging_level)
 
@@ -386,12 +390,19 @@ def _clustering_score(estimator, X, y=None):
          or 0 if only one cluster has been found
 
     """
+    # If has a reducer, uses the embeddings
     if hasattr(estimator.named_steps, 'reducer'):
         X_points = estimator.named_steps['reducer'].embedding_
-    elif hasattr(estimator.named_steps['vectorizer'], 'X_transformed'):
-        X_points = estimator.named_steps['vectorizer'].X_transformed
+    # If it does not, uses the vectorizer
+    elif estimator.named_steps.get('vectorizer'):
+        if hasattr(estimator.named_steps['vectorizer'], 'X_transformed'):
+            X_points = estimator.named_steps['vectorizer'].X_transformed
+        else:
+            X_points = estimator['vectorizer'].transform(X)
+    # If no reducer of vectorizers are present, it must be that X has
+    # already been reduced
     else:
-        X_points = estimator['vectorizer'].transform(X)
+        X_points = X
 
     predicted_labels = estimator['clustering'].labels_
 
