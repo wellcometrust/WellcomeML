@@ -52,4 +52,3 @@ def test_parameter_search(reducer):
     # not work)
     if reducer != "tsne":
         assert cluster.silhouette > 0
-
