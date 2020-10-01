@@ -370,8 +370,9 @@ def _number_of_clusters(estimator, X, y=None):
 
 def _clustering_noise(estimator, X, y=None):
     """Returns the clustering noise (predictions = -1)"""
-    return len([x for x in estimator['clustering'].labels_ if x == -1])/\
-           len(estimator['clustering'].labels_)
+    return len([x for x in estimator['clustering'].labels_ if x == -1]) /\
+        len(estimator['clustering'].labels_)
+
 
 def _clustering_score(estimator, X, y=None):
     """
