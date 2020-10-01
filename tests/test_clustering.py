@@ -39,3 +39,6 @@ def test_parameter_search():
     assert best_params is not None
     # Asserts that silhouette is at least positive
     assert cluster.silhouette > 0
+    # Asserts the cross-validation results are returned correctly
+    assert len(cluster.optimise_results['mean_test_silhouette']) == \
+           len(cluster.optimise_results['params'])

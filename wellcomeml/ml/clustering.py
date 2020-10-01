@@ -81,6 +81,7 @@ class TextClustering(object):
         self.cluster_names = None
         self.cluster_kws = None
         self.silhouette = None
+        self.optimise_results = {}
 
     def fit(self, X, *_):
         """
@@ -216,6 +217,10 @@ class TextClustering(object):
                 best_params = params
 
         self.silhouette = best_silhouette
+        self.optimise_results = {
+            key: value for key, value in grid.cv_results_.items()
+            if key[:5] != 'split'  # We don't need all cross-val split results
+        }
 
         self.set_params(best_params, from_parameter_grid=True)
         # Fits the pipeline again with the best parameters
