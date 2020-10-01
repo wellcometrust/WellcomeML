@@ -1,8 +1,11 @@
+import pytest
+
 from wellcomeml.ml import TextClustering
 
 
-def test_full_pipeline():
-    cluster = TextClustering()
+@pytest.mark.parametrize("reducer", ["tsne", "umap"])
+def test_full_pipeline(reducer):
+    cluster = TextClustering(reducer=reducer)
 
     X = ['Wellcome Trust',
          'The Wellcome Trust',
@@ -16,8 +19,9 @@ def test_full_pipeline():
     assert len(cluster.cluster_kws) == len(cluster.cluster_ids) == 6
 
 
-def test_parameter_search():
-    cluster = TextClustering()
+@pytest.mark.parametrize("reducer", ["tsne", "umap"])
+def test_parameter_search(reducer):
+    cluster = TextClustering(reducer=reducer)
     X = ['Wellcome Trust',
          'The Wellcome Trust',
          'Sir Henry Wellcome',
