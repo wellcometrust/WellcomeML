@@ -3,9 +3,11 @@ import pytest
 from wellcomeml.ml import TextClustering
 
 
-@pytest.mark.parametrize("reducer", ["tsne", "umap"])
-def test_full_pipeline(reducer):
-    cluster = TextClustering(reducer=reducer)
+@pytest.mark.parametrize("reducer,cluster_reduced", [("tsne", True),
+                                                     ("umap", True),
+                                                     ("umap", False)])
+def test_full_pipeline(reducer, cluster_reduced):
+    cluster = TextClustering(reducer=reducer, cluster_reduced=cluster_reduced)
 
     X = ['Wellcome Trust',
          'The Wellcome Trust',
@@ -37,12 +39,17 @@ def test_parameter_search(reducer):
                        'eps': [0.5, 1, 1.5]}
     }
 
-    best_params = cluster.optimise(X, param_grid=param_grid, verbose=1)
+    best_params = cluster.optimise(X, param_grid=param_grid,
+                                   verbose=1,
+                                   max_noise=1)
 
     # Asserts it found a parameter
     assert best_params is not None
-    # Asserts that silhouette is at least positive
-    assert cluster.silhouette > 0
     # Asserts the cross-validation results are returned correctly
     assert len(cluster.optimise_results['mean_test_silhouette']) == \
            len(cluster.optimise_results['params'])
+    # Asserts that silhouette is at least positive (for umap! - tsne dos
+    # not work)
+    if reducer != "tsne":
+        assert cluster.silhouette > 0
+
