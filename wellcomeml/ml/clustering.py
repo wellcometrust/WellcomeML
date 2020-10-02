@@ -241,8 +241,8 @@ class TextClustering(object):
                 best_params = params
 
         if not best_params:
-            logging.warning("Could not find any clustering model with the "
-                            "specified number of clusters and noise")
+            logger.warning("Could not find any clustering model with the "
+                           "specified number of clusters and noise")
 
         self.silhouette = best_silhouette
         self.optimise_results = {
