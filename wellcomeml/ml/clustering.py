@@ -78,8 +78,9 @@ class TextClustering(object):
             **params.get('reducer', {})
         )
 
-        if reducer_random_state and hasattr(self.reducer, 'random_state'):
-            self.reducer.random_state = reducer_random_state
+        if reducer_random_state and hasattr(self.reducer_class,
+                                            'random_state'):
+            self.reducer_class.random_state = reducer_random_state
 
         clustering_dispatcher = {
             'dbscan': DBSCAN,
@@ -98,13 +99,14 @@ class TextClustering(object):
             raise ValueError('clustering has to be one of the available '
                              'clusters or a sklearn ClusterMixin.')
 
-        if clustering_random_state and hasattr(self.clustering,
+        if clustering_random_state and hasattr(self.clustering_class,
                                                'random_state'):
-            self.clustering.random_state = clustering_random_state
+            self.clustering_class.random_state = clustering_random_state
 
         self.cluster_ids = None
         self.cluster_names = None
         self.cluster_kws = None
+        self.kw_dictionary = {}
         self.silhouette = None
         self.optimise_results = {}
 
@@ -338,7 +340,7 @@ class TextClustering(object):
         for i in range(len(X_transformed)):
             aggregated[self.cluster_ids[i]] += X_transformed[i]
 
-        kw_dictionary = {
+        self.kw_dictionary = {
             key: ','.join(_find_words_from_frequency(vector,
                                                      idx_to_word,
                                                      n_kw=n_kw))
@@ -346,7 +348,8 @@ class TextClustering(object):
         }
 
         self.cluster_kws = [
-            kw_dictionary.get(cluster_id) for cluster_id in self.cluster_ids
+            self.kw_dictionary.get(cluster_id) for cluster_id in
+            self.cluster_ids
         ]
 
 
