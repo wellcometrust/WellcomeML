@@ -59,7 +59,10 @@ class TextClustering(object):
             'umap': umap.UMAP,
             'tsne': TSNE
         }
-        self.reducer = reducer_dispatcher[reducer](**params.get('reducer', {}))
+        self.reducer = reducer
+        self.reducer_class = reducer_dispatcher[reducer](
+            **params.get('reducer', {})
+        )
 
         clustering_dispatcher = {
             'dbscan': DBSCAN,
@@ -69,11 +72,11 @@ class TextClustering(object):
         }
 
         if clustering in clustering_dispatcher:
-            self.clustering = clustering_dispatcher[clustering](
+            self.clustering_class = clustering_dispatcher[clustering](
                 **params.get('clustering', {})
             )
         elif isinstance(clustering, ClusterMixin):
-            self.clustering = clustering(**params.get('clustering', {}))
+            self.clustering_class = clustering(**params.get('clustering', {}))
         else:
             raise ValueError('clustering has to be one of the available '
                              'clusters or a sklearn ClusterMixin.')
@@ -81,6 +84,7 @@ class TextClustering(object):
         self.cluster_names = None
         self.cluster_kws = None
         self.silhouette = None
+        self.optimise_results = {}
 
     def fit(self, X, *_):
         """
@@ -108,14 +112,14 @@ class TextClustering(object):
             self.embedded_points = self.vectorizer.fit_transform(X)
         elif step == 'reducer':
             self.reduced_points = \
-                self.reducer.fit_transform(self.embedded_points)
+                self.reducer_class.fit_transform(self.embedded_points)
         elif step == 'clustering':
             points = (
                 self.reduced_points if self.cluster_reduced else
                 self.embedded_points
             )
-            self.clustering.fit(points)
-            self.cluster_ids = self.clustering.labels_
+            self.clustering_class.fit(points)
+            self.cluster_ids = self.clustering_class.labels_
 
     def optimise(self, X, param_grid, n_cluster_range=None, max_noise=0.2,
                  verbose=False):
@@ -151,29 +155,49 @@ class TextClustering(object):
         min_n_clusters = (n_cluster_range[0] if n_cluster_range else 0)
         max_n_clusters = (n_cluster_range[1] if n_cluster_range else 10**5)
 
+        # X might be transformed to be a vector, so we need to save the input
+        # texts
+
+        X_text = X
+
         # Linearises Dictionary to be compatible with grid search so it
         # becomes one dictionary with 'step__parameter'
-        if self.cluster_reduced:
+        if self.reducer == 'tsne':
+            logger.warning("TSNE is not suitable for predicting on new data."
+                           "Skipping Vectoriser/TSNE optimisation parameters")
+            self.fit(X)
+            X = self.reduced_points
+
+            pipeline = Pipeline([('clustering', self.clustering_class)],
+                                memory=CACHE_DIR)
+
+            params = {}
+
+        elif self.cluster_reduced:
             pipeline = Pipeline([('vectorizer', self.vectorizer),
-                                 ('reducer', self.reducer),
-                                 ('clustering', self.clustering)],
+                                 ('reducer', self.reducer_class),
+                                 ('clustering', self.clustering_class)],
                                 memory=CACHE_DIR)
             params = {
                 **{f'reducer__{key}': value for key, value in
                    param_grid.get('reducer', {}).items()}
             }
+
+            params = {
+                **params,
+                **{f'vectorizer__{key}': value for key, value in
+                   param_grid.get('vectorizer', {}).items()}
+            }
+
         else:
             self.vectorizer.cache_transformed = True
             pipeline = Pipeline([('vectorizer', self.vectorizer),
-                                 ('clustering', self.clustering)],
+                                 ('clustering', self.clustering_class)],
                                 memory=CACHE_DIR)
-            params = {}
-
-        params = {
-            **params,
-            **{f'vectorizer__{key}': value for key, value in
-               param_grid.get('vectorizer', {}).items()}
-        }
+            params = {
+                **{f'vectorizer__{key}': value for key, value in
+                   param_grid.get('vectorizer', {}).items()}
+            }
 
         params = {
             **params,
@@ -200,7 +224,7 @@ class TextClustering(object):
             logger.setLevel(logging.WARNING)
 
         # Prunes result to actually optimise under constraints
-        best_silhouette = -1000
+        best_silhouette = 0
         best_params = {}
         grid.fit(X, y=None)
         for params, silhouette, noise, n_clusters in zip(
@@ -209,17 +233,26 @@ class TextClustering(object):
                 grid.cv_results_['mean_test_noise'],
                 grid.cv_results_['mean_test_n_clusters']
         ):
+
             if min_n_clusters <= n_clusters <= max_n_clusters\
                     and noise <= max_noise\
                     and silhouette > best_silhouette:
                 best_silhouette = silhouette
                 best_params = params
 
+        if not best_params:
+            logger.warning("Could not find any clustering model with the "
+                           "specified number of clusters and noise")
+
         self.silhouette = best_silhouette
+        self.optimise_results = {
+            key: value for key, value in grid.cv_results_.items()
+            if key[:5] != 'split'  # We don't need all cross-val split results
+        }
 
         self.set_params(best_params, from_parameter_grid=True)
         # Fits the pipeline again with the best parameters
-        self.fit(X)
+        self.fit(X_text)
 
         logger.setLevel(logging_level)
 
@@ -264,8 +297,8 @@ class TextClustering(object):
             params = new_params
 
         self.vectorizer.set_params(**params.get('vectorizer', {}))
-        self.reducer.set_params(**params.get('reducer', {}))
-        self.clustering.set_params(**params.get('clustering', {}))
+        self.reducer_class.set_params(**params.get('reducer', {}))
+        self.clustering_class.set_params(**params.get('clustering', {}))
 
     def _find_keywords(self, X_transformed, n_kw=10):
         if self.embedding != 'tf-idf':
@@ -342,7 +375,8 @@ def _number_of_clusters(estimator, X, y=None):
 
 def _clustering_noise(estimator, X, y=None):
     """Returns the clustering noise (predictions = -1)"""
-    return len([x for x in estimator['clustering'].labels_ if x == -1])
+    return len([x for x in estimator['clustering'].labels_ if x == -1]) /\
+        len(estimator['clustering'].labels_)
 
 
 def _clustering_score(estimator, X, y=None):
@@ -362,12 +396,19 @@ def _clustering_score(estimator, X, y=None):
          or 0 if only one cluster has been found
 
     """
+    # If has a reducer, uses the embeddings
     if hasattr(estimator.named_steps, 'reducer'):
         X_points = estimator.named_steps['reducer'].embedding_
-    elif hasattr(estimator.named_steps['vectorizer'], 'X_transformed'):
-        X_points = estimator.named_steps['vectorizer'].X_transformed
+    # If it does not, uses the vectorizer
+    elif estimator.named_steps.get('vectorizer'):
+        if hasattr(estimator.named_steps['vectorizer'], 'X_transformed'):
+            X_points = estimator.named_steps['vectorizer'].X_transformed
+        else:
+            X_points = estimator['vectorizer'].transform(X)
+    # If no reducer of vectorizers are present, it must be that X has
+    # already been reduced
     else:
-        X_points = estimator['vectorizer'].transform(X)
+        X_points = X
 
     predicted_labels = estimator['clustering'].labels_
 
