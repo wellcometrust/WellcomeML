@@ -31,7 +31,9 @@ class TextClustering(object):
         cluster_kws: Keywords for the clusters (only if embedding=tf-idf)
     """
     def __init__(self, embedding='tf-idf', reducer='umap', clustering='dbscan',
-                 cluster_reduced=True, n_kw=10, params={}):
+                 cluster_reduced=True, n_kw=10, params={},
+                 embedding_random_state=None, reducer_random_state=None,
+                 clustering_random_state=None):
         """
         Initialises a cluster pipeline
 
@@ -48,10 +50,22 @@ class TextClustering(object):
             params(dict): Dictionary containing extra parameters for
             embedding, reducer or clustering models. Example:
             {'clustering': {'eps': 0.1}, 'embedding': {'ngram_range': (1,2)}}
+            embedding_random_state(int): Determines random number generation
+            for embedding, if applicable
+            reducer_random_state(int): Determines random number generation
+            for reducer, if applicable
+            clustering_random_state(int): Determines random number generation
+            for clustering, if applicable
+
         """
         self.embedding = embedding
         self.vectorizer = vectorizer.Vectorizer(embedding=embedding,
                                                 **params.get('embedding', {}))
+
+        if embedding_random_state and hasattr(self.vectorizer.vectorizer,
+                                              'random_state'):
+            self.vectorizer.vectorizer.random_state = embedding_random_state
+
         self.n_kw = n_kw
         self.cluster_reduced = cluster_reduced
 
@@ -63,6 +77,9 @@ class TextClustering(object):
         self.reducer_class = reducer_dispatcher[reducer](
             **params.get('reducer', {})
         )
+
+        if reducer_random_state and hasattr(self.reducer, 'random_state'):
+            self.reducer.random_state = reducer_random_state
 
         clustering_dispatcher = {
             'dbscan': DBSCAN,
@@ -80,6 +97,11 @@ class TextClustering(object):
         else:
             raise ValueError('clustering has to be one of the available '
                              'clusters or a sklearn ClusterMixin.')
+
+        if clustering_random_state and hasattr(self.clustering,
+                                               'random_state'):
+            self.clustering.random_state = clustering_random_state
+
         self.cluster_ids = None
         self.cluster_names = None
         self.cluster_kws = None
