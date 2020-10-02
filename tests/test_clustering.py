@@ -23,6 +23,7 @@ def test_full_pipeline(reducer, cluster_reduced):
 
     assert len(cluster.cluster_kws) == len(cluster.cluster_ids) == 6
 
+
 @pytest.mark.parametrize("reducer", ["tsne", "umap"])
 def test_parameter_search(reducer):
     cluster = TextClustering(reducer=reducer)
