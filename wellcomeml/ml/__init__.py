@@ -15,14 +15,14 @@ if development_transformers_mode:
     )
 
     from .bert_semantic_equivalence import SemanticEquivalenceClassifier
-    __all__ = [SemanticEquivalenceClassifier]
+    __all__ = ['SemanticEquivalenceClassifier']
 else:
     from .frequency_vectorizer import WellcomeTfidf
     from .doc2vec_vectorizer import Doc2VecVectorizer
     from .sent2vec_vectorizer import Sent2VecVectorizer
     from .voting_classifier import WellcomeVotingClassifier
-    __all__ = [WellcomeTfidf, Doc2VecVectorizer,
-               Sent2VecVectorizer, WellcomeVotingClassifier]
+    __all__ = ['WellcomeTfidf', 'Doc2VecVectorizer',
+               'Sent2VecVectorizer', 'WellcomeVotingClassifier']
 
     try:
         from .vectorizer import Vectorizer
@@ -39,10 +39,11 @@ else:
         from .bilstm import BiLSTMClassifier
         from .keras_vectorizer import KerasVectorizer
         __all__ += [
-            Vectorizer, TextClustering, SpacyNER, SpacyClassifier,
-            BertClassifier, BertVectorizer, SpacyKnowledgeBase,
-            SpacyEntityLinker, SemanticEquivalenceClassifier, CNNClassifier,
-            BiLSTMClassifier, KerasVectorizer, SimilarityEntityLinker
+            'Vectorizer', 'TextClustering', 'SpacyNER', 'SpacyClassifier',
+            'BertClassifier', 'BertVectorizer', 'SpacyKnowledgeBase',
+            'SpacyEntityLinker', 'SemanticEquivalenceClassifier',
+            'CNNClassifier', 'BiLSTMClassifier', 'KerasVectorizer',
+            'SimilarityEntityLinker'
         ]
     except ImportError:
         logger.warning("Using WellcomeML without extras (transformers & torch).")
