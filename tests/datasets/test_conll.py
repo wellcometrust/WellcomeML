@@ -1,4 +1,4 @@
-from wellcomeml.datasets.conll import _load_data_spacy
+from wellcomeml.datasets.conll import _load_data_spacy, load_conll
 
 
 def test_length():
