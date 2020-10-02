@@ -172,6 +172,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         return model
 
     def fit(self, X, Y, embedding_matrix=None):
+        X = np.array(X)
+        Y = np.array(Y)
         sequence_length = X.shape[1]
         vocab_size = X.max() + 1
         nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
@@ -214,6 +216,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, X):
+        X = np.array(X)
+        Y = np.array(Y)
         if self.sparse_y:
             Y_pred = []
             for i in range(0, X.shape[0], self.batch_size):
@@ -226,6 +230,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             return self.model(X).numpy() > 0.5
 
     def score(self, X, Y):
+        X = np.array(X)
+        Y = np.array(Y)
         Y_pred = self.predict(X)
         return f1_score(Y_pred, Y, average="micro")
 
