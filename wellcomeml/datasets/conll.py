@@ -55,8 +55,19 @@ def _load_data_spacy(data_path, inc_outside=True):
     return X, Y
 
 
-def load_conll(split="train", shuffle=True, inc_outside=True):
-    path = check_cache_and_download("conll")
+def load_conll(split="train", shuffle=True, inc_outside=True, dataset: str = "conll"):
+    """Load the conll dataset
+
+    Args:
+        split(str): Which split of the data to collect, one of ["train", "test",
+            "evaluate"].
+        shuffle(bool): Should the data be shuffled with random.shuffle?
+        inc_outside(bool): Should outside charavters be included?
+        dataset(str): Which dataset to load. This defaults to "conll" and should
+            only be altered for test purposes in which case it should be set to
+            "test_conll".
+    """
+    path = check_cache_and_download(dataset)
 
     if split == "train":
         train_data_path = os.path.join(path, "eng.train")
