@@ -216,6 +216,36 @@
 </div>
 <div class="section" id="module-wellcomeml.spacy">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.spacy" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="wellcomeml.spacy.SpacyDocToProdigy">
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.spacy.</code><code class="sig-name descname">SpacyDocToProdigy</code><a class="headerlink" href="#wellcomeml.spacy.SpacyDocToProdigy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Convert spacy documents into prodigy format</p>
+<dl class="py method">
+<dt id="wellcomeml.spacy.SpacyDocToProdigy.return_one_prodigy_doc">
+<code class="sig-name descname">return_one_prodigy_doc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.spacy.SpacyDocToProdigy.return_one_prodigy_doc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given one spacy document, yield a prodigy style dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>doc</strong> (<em>spacy.tokens.doc.Doc</em>) – A spacy document</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Prodigy style document</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.spacy.SpacyDocToProdigy.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">docs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.spacy.SpacyDocToProdigy.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cycle through docs and return prodigy docs.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 

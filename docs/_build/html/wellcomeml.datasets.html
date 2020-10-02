@@ -225,16 +225,20 @@ This NE_path file gives the entities, but they need to be linked
 to the sentences they came from, which involves translating
 them from the vectorised form in the docs_path file
 using the vocab_path file.</p>
-<p>NE_path: File path to the WiNER raw data named entities
-vocab_path: File path to the WiNER raw data vocab dictionary
-docs_path: File path to the WiNER raw data documents texts</p>
-<blockquote>
-<div><p>(words coded according to the vocab)</p>
-</div></blockquote>
-<p>train_processed_path: Output file path for the training data
-test_processed_path: Output file path for the testing data
-n_sample: Number of files to get data from, each file contains about 1000 documents
-prop_train: Proportion of the file sample that will be in the training data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>NE_path</strong> – File path to the WiNER raw data named entities</p></li>
+<li><p><strong>vocab_path</strong> – File path to the WiNER raw data vocab dictionary</p></li>
+<li><p><strong>docs_path</strong> – File path to the WiNER raw data documents texts
+(words coded according to the vocab)</p></li>
+<li><p><strong>train_processed_path</strong> – Output file path for the training data</p></li>
+<li><p><strong>test_processed_path</strong> – Output file path for the testing data</p></li>
+<li><p><strong>n_sample</strong> – Number of files to get data from, each file contains about 1000 documents</p></li>
+<li><p><strong>prop_train</strong> – Proportion of the file sample that will be in the training data</p></li>
+</ul>
+</dd>
+</dl>
 <p>Utilise the three datasources to get the entities from a sample
 of documents and save to a training and testing dataset files
 in the form:</p>
@@ -268,6 +272,11 @@ document</p>
 </div>
 <div class="section" id="module-wellcomeml.datasets">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.datasets" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="wellcomeml.datasets.load_hoc">
+<code class="sig-prename descclassname">wellcomeml.datasets.</code><code class="sig-name descname">load_hoc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">split</span><span class="o">=</span><span class="default_value">'train'</span></em>, <em class="sig-param"><span class="n">shuffle</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.load_hoc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 </div>
 
