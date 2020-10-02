@@ -33,6 +33,8 @@ release = 'v2020.7.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 
+autodoc_inherit_docstrings = False
+
 extensions = [
     "sphinx_rtd_theme",
     "sphinx.ext.napoleon"
