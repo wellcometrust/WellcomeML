@@ -7,7 +7,10 @@ from wellcomeml.ml import TextClustering
                                                      ("umap", True),
                                                      ("umap", False)])
 def test_full_pipeline(reducer, cluster_reduced):
-    cluster = TextClustering(reducer=reducer, cluster_reduced=cluster_reduced)
+    cluster = TextClustering(reducer=reducer, cluster_reduced=cluster_reduced,
+                             embedding_random_state=42,
+                             reducer_random_state=43,
+                             clustering_random_state=44)
 
     X = ['Wellcome Trust',
          'The Wellcome Trust',
