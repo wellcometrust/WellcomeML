@@ -10,7 +10,7 @@ wellcomeml.ml.attention module
 .. automodule:: wellcomeml.ml.attention
    :members:
    :undoc-members:
-   :show-inheritance:
+   :no-inherited-members:
 
 wellcomeml.ml.bert\_classifier module
 -------------------------------------
@@ -90,7 +90,7 @@ wellcomeml.ml.keras\_utils module
 .. automodule:: wellcomeml.ml.keras_utils
    :members:
    :undoc-members:
-   :show-inheritance:
+   :no-inherited-members:
 
 wellcomeml.ml.keras\_vectorizer module
 --------------------------------------
