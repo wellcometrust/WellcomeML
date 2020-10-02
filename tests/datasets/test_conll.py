@@ -22,3 +22,12 @@ def test_no_outside_entities():
     outside_entities = [entity for entities in Y for entity in entities if entity['label'] == 'O']
 
     assert len(outside_entities) == 0
+
+
+def test_load_conll():
+    X, y = load_conll(dataset="test_conll")
+
+    assert isinstance(X, tuple)
+    assert isinstance(y, tuple)
+    assert len(X) == 4
+    assert len(y) == 4
