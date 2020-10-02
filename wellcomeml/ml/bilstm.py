@@ -206,7 +206,6 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
 
     def predict(self, X, *_):
         X = np.array(X)
-        Y = np.array(Y)
         if self.sparse_y:
             Y_pred = []
             for i in range(0, X.shape[0], self.batch_size):
