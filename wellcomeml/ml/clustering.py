@@ -236,10 +236,14 @@ class TextClustering(object):
 
             if min_n_clusters <= n_clusters <= max_n_clusters\
                     and noise <= max_noise\
-                    and silhouette >= best_silhouette:
+                    and silhouette > best_silhouette:
                 best_silhouette = silhouette
                 best_params = params
 
+        if not best_params:
+            logging.warning(f"Could not find any clustering model with the "
+                            f"specified number of clusters and noise")
+            
         self.silhouette = best_silhouette
         self.optimise_results = {
             key: value for key, value in grid.cv_results_.items()
