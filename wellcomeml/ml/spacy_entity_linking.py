@@ -38,10 +38,11 @@ class SpacyEntityLinker(object):
 
     def train(self, data):
         """
-        Input:
-            data: list of training data in the form
-                [('A sentence about Farrar',
-                {'links': {(17, 22): {'Q1': 1.0, 'Q2': 0.0}}})]
+        Args:
+            data: list of training data in the form::
+
+                    [('A sentence about Farrar',
+                    {'links': {(17, 22): {'Q1': 1.0, 'Q2': 0.0}}})]
 
         See https://spacy.io/usage/linguistic-features#entity-linking
         for where I got this code from
@@ -96,12 +97,15 @@ class SpacyEntityLinker(object):
     def predict(self, data):
         """
         See how well the model predicts which entity you are referring to in your data
-        Input:
-            data: list of test data in the form
-                [('A sentence about Farrar',
-                {'links': {(17, 22): {'Q1': 1.0, 'Q2': 0.0}}})]
-        Output:
-           pred_entities_ids: ['Q1', 'Q1', 'Q2']
+
+        Args:
+            data: list of test data in the form::
+
+                    [('A sentence about Farrar',
+                    {'links': {(17, 22): {'Q1': 1.0, 'Q2': 0.0}}})]
+
+        Returns:
+            list: pred_entities_ids: ['Q1', 'Q1', 'Q2']
     """
         # TODO: Replace nlp_el with self.nlp
         nlp_el = self.nlp

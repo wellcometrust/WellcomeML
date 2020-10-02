@@ -36,7 +36,7 @@ class CategoricalMetrics(tf.keras.metrics.Metric):
         Args:
             metric: 'precision', 'recall' or 'f1'
             from_logits: Similar to keras 'from_logits'. If True, calculates
-                        a softmax activation on input
+                a softmax activation on input
             threshold: a threshold to calculate predictions
             binary: whether input is binary or not (in which case does average)
             pos: the positive label (between [0, n_classes])

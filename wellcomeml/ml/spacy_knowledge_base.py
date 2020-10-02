@@ -34,14 +34,17 @@ class SpacyKnowledgeBase(object):
 
     def train(self, entities, list_aliases):
         """
-        entities: a dict of each entity, it's description and it's corpus frequency
-        list_aliases: a list of dicts for each entity e.g.
-            [{
-                'alias':'Farrar',
-                'entities': ['Q1', 'Q2'],
-                'probabilities': [0.4, 0.6]
-            }]
-            probabilities are 'prior probabilities' and must sum to < 1
+        Args:
+            entities: a dict of each entity, it's description and it's corpus frequency
+            list_aliases: a list of dicts for each entity e.g.::
+
+                    [{
+                        'alias':'Farrar',
+                        'entities': ['Q1', 'Q2'],
+                        'probabilities': [0.4, 0.6]
+                    }]
+
+                probabilities are 'prior probabilities' and must sum to < 1
         """
         try:
             nlp = spacy.load(self.kb_model)

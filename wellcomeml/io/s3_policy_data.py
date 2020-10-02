@@ -7,7 +7,8 @@ import os
 class PolicyDocumentsDownloader:
     """
     Interact with S3 to get policy document texts
-    Input:
+
+    Args:
         bucket_name: the S3 bucket name to get data from
         dir_path: the directory path within this s3 bucket to get policy data from
     """
@@ -43,10 +44,12 @@ class PolicyDocumentsDownloader:
     def get_hashes(self, word_list=None):
         """
         Get a list of policy document hashes from the S3 location
-        Input:
-            word_list: a list of words to look for in documents, if None then get hashes for all
-        Output:
-            hashes: a list of dicts with the file hash and the policy doc source where it is from
+
+        Args:
+            word_list(list): a list of words to look for in documents, if None then get hashes for
+                all
+        Returns:
+            list: a list of dicts with the file hash and the policy doc source where it is from
         """
 
         print("Getting hashes for policy documents")
@@ -75,7 +78,8 @@ class PolicyDocumentsDownloader:
     def download(self, hash_list=None):
         """
         Download the policy document data from S3
-        Input:
+
+        Args:
             hash_list: a list of hashes to specifically download, if None then download all
         """
 

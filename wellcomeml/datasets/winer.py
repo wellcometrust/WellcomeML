@@ -74,14 +74,15 @@ def create_train_test(
     them from the vectorised form in the docs_path file
     using the vocab_path file.
 
-    NE_path: File path to the WiNER raw data named entities
-    vocab_path: File path to the WiNER raw data vocab dictionary
-    docs_path: File path to the WiNER raw data documents texts
+    Args:
+        NE_path: File path to the WiNER raw data named entities
+        vocab_path: File path to the WiNER raw data vocab dictionary
+        docs_path: File path to the WiNER raw data documents texts
             (words coded according to the vocab)
-    train_processed_path: Output file path for the training data
-    test_processed_path: Output file path for the testing data
-    n_sample: Number of files to get data from, each file contains about 1000 documents
-    prop_train: Proportion of the file sample that will be in the training data
+        train_processed_path: Output file path for the training data
+        test_processed_path: Output file path for the testing data
+        n_sample: Number of files to get data from, each file contains about 1000 documents
+        prop_train: Proportion of the file sample that will be in the training data
 
     Utilise the three datasources to get the entities from a sample
     of documents and save to a training and testing dataset files
