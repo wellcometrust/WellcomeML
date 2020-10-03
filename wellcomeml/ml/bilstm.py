@@ -153,8 +153,10 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         return model
 
     def fit(self, X, Y, embedding_matrix=None, *_):
-        X = np.array(X)
-        Y = np.array(Y)
+        if isinstance(X, list):
+            X = np.array(X)
+        if isinstance(Y, list):
+            Y = np.array(Y)
         sequence_length = X.shape[1]
         vocab_size = X.max() + 1
         nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
@@ -205,7 +207,8 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, X, *_):
-        X = np.array(X)
+        if isinstance(X, list):
+            X = np.array(X)
         if self.sparse_y:
             Y_pred = []
             for i in range(0, X.shape[0], self.batch_size):
@@ -222,8 +225,10 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         return self.model(X).numpy()
 
     def score(self, X, Y):
-        X = np.array(X)
-        Y = np.array(Y)
+        if isinstance(X, list):
+            X = np.array(X)
+        if isinstance(Y, list):
+            Y = np.array(Y)
         Y_pred = self.predict(X)
         return f1_score(Y, Y_pred, average="micro")
 
