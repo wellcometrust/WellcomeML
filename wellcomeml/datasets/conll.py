@@ -26,19 +26,24 @@ def _load_data_spacy(data_path, inc_outside=True):
     with open(data_path) as f:
         articles = f.read().split("-DOCSTART- -X- O O\n\n")
         articles = articles[1:]  # The first will be blank
+
         for article in articles:
             # Each sentence in the article is separated by a blank line
             sentences = article.split("\n\n")
+
             for sentence in sentences:
                 char_i = 0  # A counter for the entity start and end character indices
                 sentence_text = ""
                 sentence_tags = []
                 entities = sentence.split("\n")
+
                 for entity in entities:
                     # Due to the splitting on '\n' sometimes we are left with empty elements
+
                     if len(entity) != 0:
                         token, _, _, tag = entity.split(" ")
                         sentence_text += token + " "
+
                         if tag != "O" or inc_outside:
                             sentence_tags.append(
                                 {
@@ -48,6 +53,7 @@ def _load_data_spacy(data_path, inc_outside=True):
                                 }
                             )
                         char_i += len(token) + 1  # plus 1 for the space separating
+
                 if sentence_tags != []:
                     X.append(sentence_text)
                     Y.append(sentence_tags)
@@ -69,17 +75,17 @@ def load_conll(split="train", shuffle=True, inc_outside=True, dataset: str = "co
     """
     path = check_cache_and_download(dataset)
 
-    if split == "train":
-        train_data_path = os.path.join(path, "eng.train")
-        X, Y = _load_data_spacy(train_data_path, inc_outside=inc_outside)
-    elif split == "test":
-        test_data_path = os.path.join(path, "eng.testa")
-        X, Y = _load_data_spacy(test_data_path, inc_outside=inc_outside)
-    elif split == "evaluate":
-        eval_data_path = os.path.join(path, "eng.testb")
-        X, Y = _load_data_spacy(eval_data_path, inc_outside=inc_outside)
-    else:
-        raise ValueError(
+    map = {
+        "train": "eng.train",
+        "test": "eng.testa",
+        "evaluate": "eng.testb"
+    }
+
+    try:
+        data_path = os.path.join(path, map[split])
+        X, Y = _load_data_spacy(data_path, inc_outside=inc_outside)
+    except:
+        raise KeyError(
             f"Split argument {split} is not one of train, test or evaluate"
         )
 
