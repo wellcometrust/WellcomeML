@@ -75,19 +75,13 @@ def load_conll(split="train", shuffle=True, inc_outside=True, dataset: str = "co
     """
     path = check_cache_and_download(dataset)
 
-    map = {
-        "train": "eng.train",
-        "test": "eng.testa",
-        "evaluate": "eng.testb"
-    }
+    map = {"train": "eng.train", "test": "eng.testa", "evaluate": "eng.testb"}
 
     try:
         data_path = os.path.join(path, map[split])
         X, Y = _load_data_spacy(data_path, inc_outside=inc_outside)
-    except:
-        raise KeyError(
-            f"Split argument {split} is not one of train, test or evaluate"
-        )
+    except KeyError:
+        raise KeyError(f"Split argument {split} is not one of train, test or evaluate")
 
     if shuffle:
         data = list(zip(X, Y))
