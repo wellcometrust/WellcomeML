@@ -224,20 +224,24 @@
 <dt id="wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader">
 <em class="property">class </em><code class="sig-prename descclassname">wellcomeml.io.s3_policy_data.</code><code class="sig-name descname">PolicyDocumentsDownloader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s3</span></em>, <em class="sig-param"><span class="n">bucket_name</span></em>, <em class="sig-param"><span class="n">dir_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Interact with S3 to get policy document texts
-Input:</p>
-<blockquote>
-<div><p>bucket_name: the S3 bucket name to get data from
-dir_path: the directory path within this s3 bucket to get policy data from</p>
-</div></blockquote>
+<p>Interact with S3 to get policy document texts</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bucket_name</strong> – the S3 bucket name to get data from</p></li>
+<li><p><strong>dir_path</strong> – the directory path within this s3 bucket to get policy data from</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.download">
 <code class="sig-name descname">download</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hash_list</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.download" title="Permalink to this definition">¶</a></dt>
-<dd><p>Download the policy document data from S3
-Input:</p>
-<blockquote>
-<div><p>hash_list: a list of hashes to specifically download, if None then download all</p>
-</div></blockquote>
+<dd><p>Download the policy document data from S3</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>hash_list</strong> – a list of hashes to specifically download, if None then download all</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -250,13 +254,17 @@ Get a list of all keys to look for pdfs in the S3 bucket.</p>
 <dl class="py method">
 <dt id="wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.get_hashes">
 <code class="sig-name descname">get_hashes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word_list</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.get_hashes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of policy document hashes from the S3 location
-Input:</p>
-<blockquote>
-<div><p>word_list: a list of words to look for in documents, if None then get hashes for all</p>
-</div></blockquote>
-<dl class="simple">
-<dt>Output:</dt><dd><p>hashes: a list of dicts with the file hash and the policy doc source where it is from</p>
+<dd><p>Get a list of policy document hashes from the S3 location</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>word_list</strong> (<em>list</em>) – a list of words to look for in documents, if None then get hashes for
+all</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of dicts with the file hash and the policy doc source where it is from</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -271,6 +279,94 @@ Input:</p>
 </div>
 <div class="section" id="module-wellcomeml.io">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.io" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="wellcomeml.io.PolicyDocumentsDownloader">
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.io.</code><code class="sig-name descname">PolicyDocumentsDownloader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s3</span></em>, <em class="sig-param"><span class="n">bucket_name</span></em>, <em class="sig-param"><span class="n">dir_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Interact with S3 to get policy document texts</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bucket_name</strong> – the S3 bucket name to get data from</p></li>
+<li><p><strong>dir_path</strong> – the directory path within this s3 bucket to get policy data from</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="wellcomeml.io.PolicyDocumentsDownloader.download">
+<code class="sig-name descname">download</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hash_list</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the policy document data from S3</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>hash_list</strong> – a list of hashes to specifically download, if None then download all</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.io.PolicyDocumentsDownloader.get_all_s3_keys">
+<code class="sig-name descname">get_all_s3_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.get_all_s3_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://alexwlchan.net/2017/07/listing-s3-keys/">https://alexwlchan.net/2017/07/listing-s3-keys/</a>
+Get a list of all keys to look for pdfs in the S3 bucket.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.io.PolicyDocumentsDownloader.get_hashes">
+<code class="sig-name descname">get_hashes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word_list</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.get_hashes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of policy document hashes from the S3 location</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>word_list</strong> (<em>list</em>) – a list of words to look for in documents, if None then get hashes for
+all</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of dicts with the file hash and the policy doc source where it is from</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.io.PolicyDocumentsDownloader.save_json">
+<code class="sig-name descname">save_json</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span></em>, <em class="sig-param"><span class="n">file_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.save_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="wellcomeml.io.read_jsonl">
+<code class="sig-prename descclassname">wellcomeml.io.</code><code class="sig-name descname">read_jsonl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.read_jsonl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a list from a jsonl file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_file</strong> (<em>str</em>) – File to be loaded.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="wellcomeml.io.write_jsonl">
+<code class="sig-prename descclassname">wellcomeml.io.</code><code class="sig-name descname">write_jsonl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_data</span></em>, <em class="sig-param"><span class="n">output_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.write_jsonl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a dict to jsonl (line delimited json)</p>
+<p>Output format will look like:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">{'a':</span> <span class="pre">0}</span>
+<span class="pre">{'b':</span> <span class="pre">1}</span>
+<span class="pre">{'c':</span> <span class="pre">2}</span>
+<span class="pre">{'d':</span> <span class="pre">3}</span>
+<span class="pre">`</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_data</strong> (<em>dict</em>) – A dict to be written to json.</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Filename to which the jsonl will be saved.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 

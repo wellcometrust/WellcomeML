@@ -186,17 +186,25 @@
 <dl class="py function">
 <dt id="wellcomeml.metrics.ner_classification_report.ner_classification_report">
 <code class="sig-prename descclassname">wellcomeml.metrics.ner_classification_report.</code><code class="sig-name descname">ner_classification_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y_true</span></em>, <em class="sig-param"><span class="n">y_pred</span></em>, <em class="sig-param"><span class="n">groups</span></em>, <em class="sig-param"><span class="n">tags</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.ner_classification_report.ner_classification_report" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the model’s performance for each grouping of data
-for the NER labels given in ‘tags’</p>
-<dl class="simple">
-<dt>Input:</dt><dd><p>y_pred: a list of predicted entities
-y_true: a list of gold entities
-groups: (str) the group each of the pred or gold entities belong to</p>
+<dd><p>Evaluate the model’s performance for each grouping of data for the NER
+labels given in ‘tags’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> – a list of predicted entities</p></li>
+<li><p><strong>y_true</strong> – a list of gold entities</p></li>
+<li><p><strong>groups</strong> – (str) the group each of the pred or gold entities belong to</p></li>
+</ul>
 </dd>
-<dt>Output:</dt><dd><dl class="simple">
-<dt>report: evaluation metrics for each group</dt><dd><p>in a nice format for printing</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>evaluation metrics for each group</dt><dd><p>in a nice format for printing</p>
 </dd>
 </dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>report</p>
 </dd>
 </dl>
 </dd></dl>
@@ -204,6 +212,32 @@ groups: (str) the group each of the pred or gold entities belong to</p>
 </div>
 <div class="section" id="module-wellcomeml.metrics">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.metrics" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="wellcomeml.metrics.ner_classification_report">
+<code class="sig-prename descclassname">wellcomeml.metrics.</code><code class="sig-name descname">ner_classification_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y_true</span></em>, <em class="sig-param"><span class="n">y_pred</span></em>, <em class="sig-param"><span class="n">groups</span></em>, <em class="sig-param"><span class="n">tags</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.ner_classification_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the model’s performance for each grouping of data for the NER
+labels given in ‘tags’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> – a list of predicted entities</p></li>
+<li><p><strong>y_true</strong> – a list of gold entities</p></li>
+<li><p><strong>groups</strong> – (str) the group each of the pred or gold entities belong to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>evaluation metrics for each group</dt><dd><p>in a nice format for printing</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>report</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 
