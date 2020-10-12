@@ -31,3 +31,8 @@ def test_load_conll():
     assert isinstance(y, tuple)
     assert len(X) == 4
     assert len(y) == 4
+
+
+def test_load_conll_raises_KeyError():
+    with pytest.raises(KeyError):
+        load_conll(split="wrong_argument")
