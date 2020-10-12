@@ -1,3 +1,6 @@
+import tempfile
+import os
+
 from wellcomeml.ml import KerasVectorizer
 
 
@@ -30,3 +33,25 @@ def test_vocab_size():
     X_vec = keras_vectorizer.fit_transform(X)
 
     assert X_vec.max() == vocab_size
+
+def test_build_embedding_matrix():
+
+    X = ["One", "Two", "Three"]
+
+    vocab_size = 1
+    keras_vectorizer = KerasVectorizer(vocab_size=vocab_size)
+    X_vec = keras_vectorizer.fit(X)
+
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        embeddings_path = os.path.join(tmp_dir, "embeddings.csv")
+        embeddings = ['one 0 1 0 0 0', 'two 0 0 1 0 0', 'three 0 0 0 1 0', 'four 0 0 0 0 1']
+        with open(embeddings_path, "w") as embeddings_path_tmp:
+            for line in embeddings:
+                embeddings_path_tmp.write(line)
+                embeddings_path_tmp.write('\n')
+        embedding_matrix = keras_vectorizer.build_embedding_matrix(embeddings_path)
+
+        assert embedding_matrix.shape==(5,5)
+
+        

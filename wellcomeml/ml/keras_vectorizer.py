@@ -4,6 +4,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import numpy as np
+import gensim.downloader as api
 
 
 class KerasVectorizer(BaseEstimator, TransformerMixin):
@@ -21,13 +22,17 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
         sequences = self.tokenizer.texts_to_sequences(X)
         return pad_sequences(sequences, maxlen=self.sequence_length)
 
-    def build_embedding_matrix(self, embeddings_path):
-        embeddings_index = {}
-        with open(embeddings_path) as f:
-            for line in f:
-                word, coefs = line.split(maxsplit=1)
-                coefs = np.fromstring(coefs, "f", sep=" ")
-                embeddings_index[word] = coefs
+    def build_embedding_matrix(self, embeddings_path, word_vectors='glove'):
+        if my_file.exists(embeddings_path):
+            embeddings_index = {}
+            with open(embeddings_path) as f:
+                for line in f:
+                    word, coefs = line.split(maxsplit=1)
+                    coefs = np.fromstring(coefs, "f", sep=" ")
+                    embeddings_index[word] = coefs
+        elif word_vectors:
+            if word_vectors == 'glove':
+                embeddings_index = api.load("glove-twitter-25")
 
         emb_dim = len(coefs)
         num_words = len(self.tokenizer.word_index) + 1
