@@ -10,6 +10,7 @@ from os import path
 
 from wellcomeml.logger import logger
 
+
 class KerasVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, vocab_size=None, sequence_length=None, oov_token="<OOV>"):
         self.vocab_size = vocab_size
@@ -50,9 +51,7 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
                         embeddings_index[word] = coefs
                     emb_dim = len(coefs)
             else:
-                logger.error(
-                    "Incorrect local embeddings path"
-                    )
+                logger.error("Incorrect local embeddings path")
                 return
         elif word_vectors:
             try:
@@ -61,7 +60,7 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
             except ValueError:
                 logger.error(
                     "Incorrect GenSim word vector model name, try e.g. 'glove-twitter-25'"
-                    )
+                )
                 return
         else:
             logger.error("No local or GenSim word embeddings given")
@@ -74,7 +73,7 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
             if embeddings_path:
                 embedding_vector = embeddings_index.get(word)
             else:
-                # get_vector will error if the word isn't in the vocab 
+                # get_vector will error if the word isn't in the vocab
                 try:
                     embedding_vector = embeddings_index.get_vector(word)
                 except KeyError:
