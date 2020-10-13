@@ -40,8 +40,7 @@ def test_build_embedding_matrix():
 
     vocab_size = 1
     keras_vectorizer = KerasVectorizer(vocab_size=vocab_size)
-    X_vec = keras_vectorizer.fit(X)
-
+    keras_vectorizer.fit(X)
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         embeddings_path = os.path.join(tmp_dir, "embeddings.csv")
@@ -50,8 +49,24 @@ def test_build_embedding_matrix():
             for line in embeddings:
                 embeddings_path_tmp.write(line)
                 embeddings_path_tmp.write('\n')
-        embedding_matrix = keras_vectorizer.build_embedding_matrix(embeddings_path)
+        embedding_matrix = keras_vectorizer.build_embedding_matrix(
+            embeddings_path=embeddings_path
+            )
 
         assert embedding_matrix.shape==(5,5)
+
+def test_build_embedding_matrix_word_vectors():
+
+    X = ["One", "Two", "Three"]
+
+    vocab_size = 1
+    keras_vectorizer = KerasVectorizer(vocab_size=vocab_size)
+    keras_vectorizer.fit(X)
+
+    embedding_matrix = keras_vectorizer.build_embedding_matrix(
+        word_vectors='glove-twitter-25'
+        )
+
+    assert embedding_matrix.shape==(5,25)
 
         
