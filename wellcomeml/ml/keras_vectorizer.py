@@ -8,8 +8,6 @@ import gensim.downloader as api
 
 from os import path
 
-from wellcomeml.logger import logger
-
 
 class KerasVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, vocab_size=None, sequence_length=None, oov_token="<OOV>"):
@@ -26,51 +24,52 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
         sequences = self.tokenizer.texts_to_sequences(X)
         return pad_sequences(sequences, maxlen=self.sequence_length)
 
-    def build_embedding_matrix(self, embeddings_path=None, word_vectors=None):
+    def build_embedding_matrix(self, embeddings_name_or_path=None):
         """
         Builds an embedding matrix from either a local embeddings path
         or a gensim pre-trained word vector path
 
         Args:
-            embeddings_path: A local directory to word embeddings
-            word_vectors: The name of a GenSim pre-trained word vector model
-                e.g. 'glove-twitter-25', for the complete list:
-                https://github.com/RaRe-Technologies/gensim-data#models
+            embeddings_name_or_path:
+                Can be either:
+                - A local directory to word embeddings
+                - The name of a GenSim pre-trained word vector model
+                    e.g. 'glove-twitter-25', for the complete list:
+                    https://github.com/RaRe-Technologies/gensim-data#models
 
         Returns:
             An embedding matrix
 
         """
-        if embeddings_path:
-            if path.exists(embeddings_path):
+        local_embeddings = False
+        if path.isfile(embeddings_name_or_path):
+            try:
                 embeddings_index = {}
-                with open(embeddings_path) as f:
+                with open(embeddings_name_or_path) as f:
                     for line in f:
                         word, coefs = line.split(maxsplit=1)
                         coefs = np.fromstring(coefs, "f", sep=" ")
                         embeddings_index[word] = coefs
                     emb_dim = len(coefs)
-            else:
-                logger.error("Incorrect local embeddings path")
-                return
-        elif word_vectors:
+                local_embeddings = True
+            except TypeError:
+                raise TypeError("Incorrect local embeddings path")
+        elif embeddings_name_or_path:
             try:
-                embeddings_index = api.load(word_vectors)
+                embeddings_index = api.load(embeddings_name_or_path)
                 emb_dim = embeddings_index.vector_size
             except ValueError:
-                logger.error(
+                raise ValueError(
                     "Incorrect GenSim word vector model name, try e.g. 'glove-twitter-25'"
                 )
-                return
         else:
-            logger.error("No local or GenSim word embeddings given")
-            return
+            raise TypeError("No local or GenSim word embeddings given")
 
         num_words = len(self.tokenizer.word_index) + 1
 
         embedding_matrix = np.zeros((num_words, emb_dim))
         for word, i in self.tokenizer.word_index.items():
-            if embeddings_path:
+            if local_embeddings:
                 embedding_vector = embeddings_index.get(word)
             else:
                 # get_vector will error if the word isn't in the vocab

@@ -56,7 +56,7 @@ def test_build_embedding_matrix():
                 embeddings_path_tmp.write(line)
                 embeddings_path_tmp.write("\n")
         embedding_matrix = keras_vectorizer.build_embedding_matrix(
-            embeddings_path=embeddings_path
+            embeddings_name_or_path=embeddings_path
         )
 
         assert embedding_matrix.shape == (5, 5)
@@ -71,7 +71,7 @@ def test_build_embedding_matrix_word_vectors():
     keras_vectorizer.fit(X)
 
     embedding_matrix = keras_vectorizer.build_embedding_matrix(
-        word_vectors="glove-twitter-25"
+        embeddings_name_or_path="glove-twitter-25"
     )
 
     assert embedding_matrix.shape == (5, 25)
