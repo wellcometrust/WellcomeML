@@ -24,6 +24,11 @@ DATA_DISPATCH = {
         "path": "datasets/ner/conll.tar",
         "file_name": "conll.tar",
     },
+    "test_conll": {
+        "bucket": "datalabs-public",
+        "path": "datasets/ner/test_conll.tar.gz",
+        "file_name": "test_conll.tar.gz",
+    },
 }
 
 

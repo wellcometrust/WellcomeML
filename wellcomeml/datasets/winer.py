@@ -217,7 +217,7 @@ def create_train_test(
                                     # For entities that spread over multiple words
                                     # it should be clear which word is the start of the
                                     # entity and which is the end
-                                    tags[(begin + 1):(end - 1)] = [
+                                    tags[(begin + 1): (end - 1)] = [
                                         str(ent_type) + "-I"
                                     ] * (end - 1 - begin - 1)
                                     tags[end - 1] = str(ent_type) + "-E"
