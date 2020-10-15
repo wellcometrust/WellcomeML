@@ -2,7 +2,8 @@ from collections import defaultdict
 import os
 
 import tensorflow as tf
-from transformers import BertConfig, BertTokenizer, TFBertForSequenceClassification
+from transformers import BertConfig, BertTokenizer, \
+    TFBertForSequenceClassification
 
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
@@ -285,16 +286,15 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         # Calls the CLS layer of Bert
         x = super_model.bert(input_text_tensors)[1]
 
-        # Drop out layer to the Bert features
-        x = super_model.dropout(x, training=False)
-
         # Concatenates with numerical features
         x = tf.keras.layers.concatenate(
             [x, input_numerical_data_tensor[0]], name="concatenate"
         )
 
+        x = tf.keras.layers.BatchNormalization(name="batch_norm")(x)
         # Dense layer that will be used for softmax prediction later
         x = tf.keras.layers.Dense(2, name="dense_layer")(x)
+
 
         self.model = tf.keras.Model(input_text_tensors + input_numerical_data_tensor, x)
 
