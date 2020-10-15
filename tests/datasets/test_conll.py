@@ -1,4 +1,5 @@
 from wellcomeml.datasets.conll import _load_data_spacy, load_conll
+import pytest
 
 
 def test_length():
