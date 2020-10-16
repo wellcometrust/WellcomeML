@@ -43,6 +43,8 @@ def test_semantic_meta_fit():
     classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=2,
                                                    pretrained="scibert",
                                                    batch_size=2,
+                                                   dropout=True,
+                                                   batch_norm=True,
                                                    eval_batch_size=1)
 
     X = [['This sentence has context_1', 'This one also has context_1', 0.1, 0.2],
