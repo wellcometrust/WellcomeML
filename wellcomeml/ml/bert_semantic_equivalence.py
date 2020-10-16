@@ -61,7 +61,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
     # Bert models have a tensorflow checkopoint, otherwise,
     # we need to load the pytorch versions with the parameter `from_pt=True`
 
-    def _initialise_models(self):
+    def initialise_models(self):
         if self.pretrained == "bert":
             model_name = "bert-base-cased"
             from_pt = False
@@ -151,7 +151,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         try:
             check_is_fitted(self)
         except NotFittedError:
-            self._initialise_models()
+            self.initialise_models()
 
             # Train/val split
             X_train, X_valid, y_train, y_valid = train_test_split(
@@ -229,7 +229,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
     def load(self, path):
         """Loads model from path"""
-        self._initialise_models()
+        self.initialise_models()
         self.model = TFBertForSequenceClassification.from_pretrained(path)
         self.trained_ = True
 
@@ -270,9 +270,9 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
         return X_text, X_numerical
 
-    def _initialise_models(self):
+    def initialise_models(self):
         """Extends/overrides super class initialisation of model"""
-        super_model = super()._initialise_models()
+        super_model = super().initialise_models()
 
         # Define text input features
         text_features = ["input_ids", "attention_mask", "token_type_ids"]
@@ -416,7 +416,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
     def load(self, path):
         """Loads metamodel from path"""
-        self._initialise_models()
+        self.initialise_models()
         self.model = tf.keras.models.load_model(path)
         self.trained_ = True
 
