@@ -105,7 +105,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         return dataset
 
     def _compile_model(self, metrics=[]):
-        opt = tf.keras.optimizers.Adam(learning_rate=self.learning_rate, epsilon=1e-08)
+        opt = tf.keras.optimizers.Adam(learning_rate=self.learning_rate,
+                                       epsilon=1e-08)
 
         loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
@@ -241,19 +242,25 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
     and model initialisation. Fit, predict, score remain intact
     """
 
-    def __init__(self, n_numerical_features, dropout_rate=0.1, **kwargs):
+    def __init__(self, n_numerical_features, dropout=False,
+                 batch_norm=False, dropout_rate=0.1, **kwargs):
         """
         Initialises SemanticEquivalenceMetaClassifier, with n_numerical_features
 
         Args:
             n_numerical_features(int): Number of features of the model which
             are not text
+            dropout(bool): Whether to dropout before concatenating features
+            batch_norm(bool): Whether to apply batch normalisation after the
+            last dense layer
             dropout_rate(float): Dropout rate after concatenating features
             (default = 0.1)
             **kwargs: Any kwarg to `SemanticEquivalenceClassifier`
         """
         super().__init__(**kwargs)
         self.n_numerical_features = n_numerical_features
+        self.dropout = dropout
+        self.batch_norm = batch_norm
         self.dropout_rate = dropout_rate
         self.model = None
 
@@ -286,17 +293,24 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         # Calls the CLS layer of Bert
         x = super_model.bert(input_text_tensors)[1]
 
+        # Drop out layer to the Bert features if self.dropout=True
+        x = (tf.keras.layers.Dropout(self.dropout_rate)(x)
+             if self.dropout else x)
+
         # Concatenates with numerical features
         x = tf.keras.layers.concatenate(
             [x, input_numerical_data_tensor[0]], name="concatenate"
         )
 
-        x = tf.keras.layers.BatchNormalization(name="batch_norm")(x)
+        # Batch norm to the concatenated layer if self.batch_norm=True
+        x = (tf.keras.layers.BatchNormalization(name="batch_norm")(x)
+             if self.batch_norm else x)
+
         # Dense layer that will be used for softmax prediction later
         x = tf.keras.layers.Dense(2, name="dense_layer")(x)
 
-
-        self.model = tf.keras.Model(input_text_tensors + input_numerical_data_tensor, x)
+        self.model = tf.keras.Model(input_text_tensors +
+                                    input_numerical_data_tensor, x)
 
     def _prep_dataset_generator(self, X, y):
         """Overrides/extends the super class data preparation"""
