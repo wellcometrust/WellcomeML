@@ -256,24 +256,22 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
     and model initialisation. Fit, predict, score remain intact
     """
 
-    def __init__(self, n_numerical_features, dropout=False,
-                 batch_norm=False, dropout_rate=0.1, **kwargs):
+    def __init__(self, n_numerical_features, dropout_rate=0,
+                 batch_norm=False,  **kwargs):
         """
         Initialises SemanticEquivalenceMetaClassifier, with n_numerical_features
 
         Args:
             n_numerical_features(int): Number of features of the model which
             are not text
-            dropout(bool): Whether to dropout before concatenating features
+            dropout_rate(float): Dropout rate after concatenating features
+            (default = 0, i.e. no dropout)
             batch_norm(bool): Whether to apply batch normalisation after the
             last dense layer
-            dropout_rate(float): Dropout rate after concatenating features
-            (default = 0.1)
             **kwargs: Any kwarg to `SemanticEquivalenceClassifier`
         """
         super().__init__(**kwargs)
         self.n_numerical_features = n_numerical_features
-        self.dropout = dropout
         self.batch_norm = batch_norm
         self.dropout_rate = dropout_rate
         self.model = None
@@ -309,7 +307,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
         # Drop out layer to the Bert features if self.dropout=True
         x = (tf.keras.layers.Dropout(self.dropout_rate)(x)
-             if self.dropout else x)
+             if self.dropout_rate > 0 else x)
 
         # Concatenates with numerical features
         x = tf.keras.layers.concatenate(
