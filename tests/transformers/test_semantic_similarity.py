@@ -69,10 +69,8 @@ def test_semantic_meta_fit():
     classifier.fit(X, y, epochs=3)
 
     loss_initial = classifier.history['loss'][0]
-    loss_epoch_2 = classifier.history['loss'][2]
     scores = classifier.score(X)
 
-    assert loss_epoch_2 < loss_initial
     assert len(classifier.predict(X)) == 3
     assert (scores > 0).sum() == 6
     assert (scores < 1).sum() == 6
@@ -85,6 +83,11 @@ def test_semantic_meta_fit():
     # not re-training from scratch
 
     assert len(classifier.history['loss']) == 5
+
+    loss_final = classifier.history['loss'][4]
+
+    # Asserts loss is decreasing
+    assert loss_final < loss_initial
 
 
 @pytest.mark.transformers
