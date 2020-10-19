@@ -305,7 +305,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         # Calls the CLS layer of Bert
         x = super_model.bert(input_text_tensors)[1]
 
-        # Drop out layer to the Bert features if rate > 0 
+        # Drop out layer to the Bert features if rate > 0
         x = (tf.keras.layers.Dropout(self.dropout_rate)(x)
              if self.dropout_rate > 0 else x)
 
