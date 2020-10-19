@@ -2,7 +2,8 @@ from collections import defaultdict
 import os
 
 import tensorflow as tf
-from transformers import BertConfig, BertTokenizer, TFBertForSequenceClassification
+from transformers import BertConfig, BertTokenizer, \
+    TFBertForSequenceClassification
 
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
@@ -60,7 +61,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
     # Bert models have a tensorflow checkopoint, otherwise,
     # we need to load the pytorch versions with the parameter `from_pt=True`
 
-    def _initialise_models(self):
+    def initialise_models(self):
         if self.pretrained == "bert":
             model_name = "bert-base-cased"
             from_pt = False
@@ -104,7 +105,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         return dataset
 
     def _compile_model(self, metrics=[]):
-        opt = tf.keras.optimizers.Adam(learning_rate=self.learning_rate, epsilon=1e-08)
+        opt = tf.keras.optimizers.Adam(learning_rate=self.learning_rate,
+                                       epsilon=1e-08)
 
         loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
@@ -149,7 +151,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         try:
             check_is_fitted(self)
         except NotFittedError:
-            self._initialise_models()
+            self.initialise_models()
 
             # Train/val split
             X_train, X_valid, y_train, y_valid = train_test_split(
@@ -227,7 +229,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
     def load(self, path):
         """Loads model from path"""
-        self._initialise_models()
+        self.initialise_models()
         self.model = TFBertForSequenceClassification.from_pretrained(path)
         self.trained_ = True
 
@@ -240,19 +242,25 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
     and model initialisation. Fit, predict, score remain intact
     """
 
-    def __init__(self, n_numerical_features, dropout_rate=0.1, **kwargs):
+    def __init__(self, n_numerical_features, dropout=False,
+                 batch_norm=False, dropout_rate=0.1, **kwargs):
         """
         Initialises SemanticEquivalenceMetaClassifier, with n_numerical_features
 
         Args:
             n_numerical_features(int): Number of features of the model which
             are not text
+            dropout(bool): Whether to dropout before concatenating features
+            batch_norm(bool): Whether to apply batch normalisation after the
+            last dense layer
             dropout_rate(float): Dropout rate after concatenating features
             (default = 0.1)
             **kwargs: Any kwarg to `SemanticEquivalenceClassifier`
         """
         super().__init__(**kwargs)
         self.n_numerical_features = n_numerical_features
+        self.dropout = dropout
+        self.batch_norm = batch_norm
         self.dropout_rate = dropout_rate
         self.model = None
 
@@ -262,9 +270,9 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
         return X_text, X_numerical
 
-    def _initialise_models(self):
+    def initialise_models(self):
         """Extends/overrides super class initialisation of model"""
-        super_model = super()._initialise_models()
+        super_model = super().initialise_models()
 
         # Define text input features
         text_features = ["input_ids", "attention_mask", "token_type_ids"]
@@ -285,18 +293,24 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         # Calls the CLS layer of Bert
         x = super_model.bert(input_text_tensors)[1]
 
-        # Drop out layer to the Bert features
-        x = super_model.dropout(x, training=False)
+        # Drop out layer to the Bert features if self.dropout=True
+        x = (tf.keras.layers.Dropout(self.dropout_rate)(x)
+             if self.dropout else x)
 
         # Concatenates with numerical features
         x = tf.keras.layers.concatenate(
             [x, input_numerical_data_tensor[0]], name="concatenate"
         )
 
+        # Batch norm to the concatenated layer if self.batch_norm=True
+        x = (tf.keras.layers.BatchNormalization(name="batch_norm")(x)
+             if self.batch_norm else x)
+
         # Dense layer that will be used for softmax prediction later
         x = tf.keras.layers.Dense(2, name="dense_layer")(x)
 
-        self.model = tf.keras.Model(input_text_tensors + input_numerical_data_tensor, x)
+        self.model = tf.keras.Model(input_text_tensors +
+                                    input_numerical_data_tensor, x)
 
     def _prep_dataset_generator(self, X, y):
         """Overrides/extends the super class data preparation"""
@@ -402,7 +416,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
     def load(self, path):
         """Loads metamodel from path"""
-        self._initialise_models()
+        self.initialise_models()
         self.model = tf.keras.models.load_model(path)
         self.trained_ = True
 

@@ -1,8 +1,21 @@
 # encoding: utf-8
 import pytest
+import random as python_random
+
+import numpy as np
+import tensorflow as tf
 
 from wellcomeml.ml.bert_semantic_equivalence import \
     SemanticEquivalenceClassifier, SemanticEquivalenceMetaClassifier
+
+
+# Random seeds for test reproducibility
+# Based on keras docs
+# https://keras.io/getting_started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
+
+np.random.seed(42)
+python_random.seed(42)
+tf.random.set_seed(42)
 
 
 @pytest.mark.transformers
@@ -43,7 +56,9 @@ def test_semantic_meta_fit():
     classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=2,
                                                    pretrained="scibert",
                                                    batch_size=2,
-                                                   eval_batch_size=1)
+                                                   eval_batch_size=1,
+                                                   dropout=True,
+                                                   batch_norm=True)
 
     X = [['This sentence has context_1', 'This one also has context_1', 0.1, 0.2],
          ['This sentence has context_2', 'This one also has context_2', 0.2, 0.2],
@@ -54,10 +69,8 @@ def test_semantic_meta_fit():
     classifier.fit(X, y, epochs=3)
 
     loss_initial = classifier.history['loss'][0]
-    loss_epoch_2 = classifier.history['loss'][2]
     scores = classifier.score(X)
 
-    assert loss_epoch_2 < loss_initial
     assert len(classifier.predict(X)) == 3
     assert (scores > 0).sum() == 6
     assert (scores < 1).sum() == 6
@@ -70,6 +83,11 @@ def test_semantic_meta_fit():
     # not re-training from scratch
 
     assert len(classifier.history['loss']) == 5
+
+    loss_final = classifier.history['loss'][4]
+
+    # Asserts loss is decreasing
+    assert loss_final < loss_initial
 
 
 @pytest.mark.transformers
@@ -103,10 +121,12 @@ def test_save_and_load_meta(tmp_path):
     classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=1,
                                                    pretrained="bert",
                                                    batch_size=2,
-                                                   eval_batch_size=1)
+                                                   eval_batch_size=1,
+                                                   dropout=True,
+                                                   batch_norm=True)
 
     # Save and load for Meta Models only accepts strings (not PosixPath)
-    classifier._initialise_models()
+    classifier.initialise_models()
     classifier.save(str(tmp_path.absolute()) + '.h5')
     config_1 = classifier.config
 
