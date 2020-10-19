@@ -46,6 +46,7 @@ def test_save_load():
         assert hasattr(loaded_model, 'model')
         assert loaded_model.score(X_vec, Y) > 0.6
 
+
 def test_save_load_attention():
     X = [
         "One",
@@ -67,6 +68,7 @@ def test_save_load_attention():
         loaded_model.load(tmp_dir)
         assert hasattr(loaded_model, 'model')
         assert loaded_model.score(X_vec, Y) > 0.6
+
 
 def test_multilabel():
     X = [
