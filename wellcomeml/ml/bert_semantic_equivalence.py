@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import datetime
 import os
 
 import tensorflow as tf
@@ -11,6 +12,14 @@ from sklearn.utils.validation import check_is_fitted
 from sklearn.exceptions import NotFittedError
 
 from wellcomeml.ml.keras_utils import CategoricalMetrics, MetricMiniBatchHistory
+
+TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+CALLBACK_DICT = {
+    'tensorboard': tf.keras.callbacks.TensorBoard(
+        log_dir=TENSORBOARD_LOG_DIR,
+        update_freq='batch'),
+    'minibatch_history': MetricMiniBatchHistory()
+}
 
 
 class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
@@ -27,6 +36,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         learning_rate=3e-5,
         test_size=0.2,
         max_length=128,
+        callbacks=['tensorboard', 'minibatch_history']
     ):
         """
 
@@ -39,6 +49,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             max_length: Maximum length of text in characters.
              Zero pads every text smaller than this number and cuts out
              any text bigger than that number
+            callbacks: List of callbacks as defined in .CALLBACK_DICT.keys()
         """
         self.pretrained = pretrained
         self.batch_size = batch_size
@@ -46,6 +57,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.learning_rate = learning_rate
         self.test_size = test_size
         self.max_length = max_length
+        self.callbacks = callbacks
 
         # Defines attributes that will be initialised later
         self.config = None
@@ -175,13 +187,15 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             self.train_steps = len(X_train) // self.batch_size
             self.valid_steps = len(X_valid) // self.eval_batch_size
         finally:
+            callback_objs = [CALLBACK_DICT[c] for c in self.callbacks]
+
             history = self.model.fit(
                 self.train_dataset,
                 epochs=epochs,
                 steps_per_epoch=self.train_steps,
                 validation_data=self.valid_dataset,
                 validation_steps=self.valid_steps,
-                callbacks=[MetricMiniBatchHistory()],
+                callbacks=callback_objs,
                 **kwargs
             )
 
