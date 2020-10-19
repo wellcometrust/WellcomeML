@@ -134,15 +134,15 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         )(x)
         model = tf.keras.Model(inp, out)
 
-        learning_rate = tf.keras.optimizers.schedulers.ExponentialDecay(
+        learning_rate = tf.keras.optimizers.schedules.ExponentialDecay(
             self.learning_rate, steps_per_epoch, self.learning_rate_decay,
             staircase=True
         )
         strategy = tf.distribute.get_strategy()
         if isinstance(strategy, tf.distribute.MirroredStrategy):
-            optimizer = tf.keras.optimizers.Adam(self.learning_rate)
+            optimizer = tf.keras.optimizers.Adam(learning_rate)
         else:  # clipnorm is only supported in default strategy
-            optimizer = tf.keras.optimizers.Adam(self.learning_rate, clipnorm=1.0)
+            optimizer = tf.keras.optimizers.Adam(learning_rate, clipnorm=1.0)
         metrics = [
             METRIC_DICT[m] if m in METRIC_DICT else m
             for m in metrics
@@ -155,6 +155,9 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         vocab_size = X.max() + 1
         nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
 
+        X_train, X_val, Y_train, Y_val = train_test_split(
+            X, Y, test_size=0.1, shuffle=True
+        )
         steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
         validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
 
@@ -167,9 +170,6 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
                 sequence_length, vocab_size, nb_outputs,
                 steps_per_epoch, embedding_matrix, self.metrics)
 
-        X_train, X_val, Y_train, Y_val = train_test_split(
-            X, Y, test_size=0.1, shuffle=True
-        )
         callbacks = [
             CALLBACK_DICT[c] if c in CALLBACK_DICT else c
             for c in self.callbacks

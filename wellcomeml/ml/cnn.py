@@ -167,7 +167,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         )(x)
         model = tf.keras.Model(inp, out)
 
-        learning_rate = tf.keras.optimizers.schedulers.ExponentialDecay(
+        learning_rate = tf.keras.optimizers.schedules.ExponentialDecay(
             self.learning_rate, steps_per_epoch, self.learning_rate_decay,
             staircase=True
         )
@@ -188,6 +188,9 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         vocab_size = X.max() + 1
         nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
 
+        X_train, X_val, Y_train, Y_val = train_test_split(
+            X, Y, test_size=0.1, shuffle=True
+        )
         steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
         validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
 
@@ -200,9 +203,6 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 sequence_length, vocab_size, nb_outputs,
                 steps_per_epoch, embedding_matrix)
 
-        X_train, X_val, Y_train, Y_val = train_test_split(
-            X, Y, test_size=0.1, shuffle=True
-        )
         callbacks = [
             CALLBACK_DICT[c] if c in CALLBACK_DICT else c
             for c in self.callbacks
