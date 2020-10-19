@@ -59,12 +59,12 @@ def test_save_load_attention():
     vec = KerasVectorizer()
     X_vec = vec.fit_transform(X)
 
-    model = BiLSTMClassifier()
+    model = BiLSTMClassifier(attention=True)
     model.fit(X_vec, Y)
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         model.save(tmp_dir)
-        loaded_model = BiLSTMClassifier(attention=True)
+        loaded_model = BiLSTMClassifier()
         loaded_model.load(tmp_dir)
         assert hasattr(loaded_model, 'model')
         assert loaded_model.score(X_vec, Y) > 0.6
