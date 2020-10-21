@@ -75,6 +75,7 @@ class HierarchicalAttention(tf.keras.layers.Layer):
             shape=(input_shape[-1], nb_attention_heads),
             trainable=True,
             initializer="uniform",
+            name="attention_matrix"
         )
 
     def call(self, X):
