@@ -52,8 +52,19 @@ def test_save_load():
 
 
 def test_save_load_attention():
-    # what if this tests just exists?
-    pass
+    X = [
+        "One",
+        "One only",
+        "Two nothing else",
+        "Two and three"
+    ]
+    Y = np.array([0, 0, 1, 1])
+
+    vec = KerasVectorizer()
+    X_vec = vec.fit_transform(X)
+
+    model = CNNClassifier(attention=True)
+    model.fit(X_vec, Y)
 
 
 def test_multilabel():
