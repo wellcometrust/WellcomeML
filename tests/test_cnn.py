@@ -6,6 +6,11 @@ from scipy.sparse import csr_matrix
 import numpy as np
 
 
+def test_fake():
+    # maybe the number of tests controls the seed
+    pass
+
+
 def test_vanilla():
     X = [
         "One",
