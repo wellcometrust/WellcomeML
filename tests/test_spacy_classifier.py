@@ -1,8 +1,11 @@
 # encoding: utf-8
 
 import numpy as np
+import spacy
 
 from wellcomeml.ml import SpacyClassifier
+
+spacy.util.fix_random_seed()
 
 
 def test_multilabel():
