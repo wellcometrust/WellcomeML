@@ -63,6 +63,8 @@ def test_save_load_attention():
     vec = KerasVectorizer()
     X_vec = vec.fit_transform(X)
 
+    model = CNNClassifier(attention=True)
+    model.fit(X_vec, Y)
 
 def test_multilabel():
     X = [
