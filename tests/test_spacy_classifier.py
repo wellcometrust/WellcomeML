@@ -68,5 +68,5 @@ def test_partial_fit():
     model = SpacyClassifier()
     for x, y in zip(X, Y):
         model.partial_fit([x], [y])
-    assert model.score(X, Y) > 0.3
+    assert model.score(X, Y) > 0.2
     assert model.predict(X).shape == (5, 4)
