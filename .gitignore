@@ -17,3 +17,4 @@ dist
 **/.envrc
 *.coverage
 notebooks
+logs/*
