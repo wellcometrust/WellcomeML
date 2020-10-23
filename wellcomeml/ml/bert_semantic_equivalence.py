@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import datetime
 import os
 
 import tensorflow as tf
@@ -11,6 +12,14 @@ from sklearn.utils.validation import check_is_fitted
 from sklearn.exceptions import NotFittedError
 
 from wellcomeml.ml.keras_utils import CategoricalMetrics, MetricMiniBatchHistory
+
+TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+CALLBACK_DICT = {
+    'tensorboard': tf.keras.callbacks.TensorBoard(
+        log_dir=TENSORBOARD_LOG_DIR,
+        update_freq='batch'),
+    'minibatch_history': MetricMiniBatchHistory()
+}
 
 
 class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
@@ -27,6 +36,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         learning_rate=3e-5,
         test_size=0.2,
         max_length=128,
+        callbacks=['tensorboard', 'minibatch_history']
     ):
         """
 
@@ -39,6 +49,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             max_length: Maximum length of text in characters.
              Zero pads every text smaller than this number and cuts out
              any text bigger than that number
+            callbacks: List of callbacks as defined in .CALLBACK_DICT.keys()
         """
         self.pretrained = pretrained
         self.batch_size = batch_size
@@ -46,6 +57,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.learning_rate = learning_rate
         self.test_size = test_size
         self.max_length = max_length
+        self.callbacks = callbacks
 
         # Defines attributes that will be initialised later
         self.config = None
@@ -175,13 +187,15 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             self.train_steps = len(X_train) // self.batch_size
             self.valid_steps = len(X_valid) // self.eval_batch_size
         finally:
+            callback_objs = [CALLBACK_DICT[c] for c in self.callbacks]
+
             history = self.model.fit(
                 self.train_dataset,
                 epochs=epochs,
                 steps_per_epoch=self.train_steps,
                 validation_data=self.valid_dataset,
                 validation_steps=self.valid_steps,
-                callbacks=[MetricMiniBatchHistory()],
+                callbacks=callback_objs,
                 **kwargs
             )
 
@@ -242,24 +256,22 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
     and model initialisation. Fit, predict, score remain intact
     """
 
-    def __init__(self, n_numerical_features, dropout=False,
-                 batch_norm=False, dropout_rate=0.1, **kwargs):
+    def __init__(self, n_numerical_features, dropout_rate=0,
+                 batch_norm=False,  **kwargs):
         """
         Initialises SemanticEquivalenceMetaClassifier, with n_numerical_features
 
         Args:
             n_numerical_features(int): Number of features of the model which
             are not text
-            dropout(bool): Whether to dropout before concatenating features
+            dropout_rate(float): Dropout rate after concatenating features
+            (default = 0, i.e. no dropout)
             batch_norm(bool): Whether to apply batch normalisation after the
             last dense layer
-            dropout_rate(float): Dropout rate after concatenating features
-            (default = 0.1)
             **kwargs: Any kwarg to `SemanticEquivalenceClassifier`
         """
         super().__init__(**kwargs)
         self.n_numerical_features = n_numerical_features
-        self.dropout = dropout
         self.batch_norm = batch_norm
         self.dropout_rate = dropout_rate
         self.model = None
@@ -293,9 +305,9 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         # Calls the CLS layer of Bert
         x = super_model.bert(input_text_tensors)[1]
 
-        # Drop out layer to the Bert features if self.dropout=True
+        # Drop out layer to the Bert features if rate > 0
         x = (tf.keras.layers.Dropout(self.dropout_rate)(x)
-             if self.dropout else x)
+             if self.dropout_rate > 0 else x)
 
         # Concatenates with numerical features
         x = tf.keras.layers.concatenate(

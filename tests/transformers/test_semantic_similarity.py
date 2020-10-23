@@ -57,7 +57,7 @@ def test_semantic_meta_fit():
                                                    pretrained="scibert",
                                                    batch_size=2,
                                                    eval_batch_size=1,
-                                                   dropout=True,
+                                                   dropout_rate=0.1,
                                                    batch_norm=True)
 
     X = [['This sentence has context_1', 'This one also has context_1', 0.1, 0.2],
