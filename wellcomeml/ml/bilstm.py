@@ -20,6 +20,7 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
     def __init__(
         self,
         learning_rate=0.01,
+        learning_rate_decay=1,
         batch_size=32,
         nb_epochs=5,
         dropout=0.1,
@@ -37,6 +38,7 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         sparse_y=False
     ):
         self.learning_rate = learning_rate
+        self.learning_rate_decay = learning_rate_decay
         self.batch_size = batch_size
         self.nb_epochs = nb_epochs
         self.dropout = dropout
@@ -68,7 +70,8 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
                 yield X_batch, Y_batch
 
     def _build_model(self, sequence_length, vocab_size, nb_outputs,
-                     embedding_matrix=None, metrics=["precision", "recall"]):
+                     steps_per_epoch, embedding_matrix=None,
+                     metrics=["precision", "recall"]):
         output_activation = (
             "sigmoid" if nb_outputs == 1 or self.multilabel else "softmax"
         )
@@ -131,11 +134,15 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         )(x)
         model = tf.keras.Model(inp, out)
 
+        learning_rate = tf.keras.optimizers.schedules.ExponentialDecay(
+            self.learning_rate, steps_per_epoch, self.learning_rate_decay,
+            staircase=True
+        )
         strategy = tf.distribute.get_strategy()
         if isinstance(strategy, tf.distribute.MirroredStrategy):
-            optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate)
+            optimizer = tf.keras.optimizers.Adam(learning_rate)
         else:  # clipnorm is only supported in default strategy
-            optimizer = tf.keras.optimizers.Adam(lr=self.learning_rate, clipnorm=1.0)
+            optimizer = tf.keras.optimizers.Adam(learning_rate, clipnorm=1.0)
         metrics = [
             METRIC_DICT[m] if m in METRIC_DICT else m
             for m in metrics
@@ -146,20 +153,23 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
     def fit(self, X, Y, embedding_matrix=None, *_):
         sequence_length = X.shape[1]
         vocab_size = X.max() + 1
-
         nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
+
+        X_train, X_val, Y_train, Y_val = train_test_split(
+            X, Y, test_size=0.1, shuffle=True
+        )
+        steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
+        validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
 
         if tf.config.list_physical_devices('GPU'):
             strategy = tf.distribute.MirroredStrategy()
         else:
             strategy = tf.distribute.get_strategy()
         with strategy.scope():
-            self.model = self._build_model(sequence_length, vocab_size, nb_outputs,
-                                           embedding_matrix, self.metrics)
+            self.model = self._build_model(
+                sequence_length, vocab_size, nb_outputs,
+                steps_per_epoch, embedding_matrix, self.metrics)
 
-        X_train, X_val, Y_train, Y_val = train_test_split(
-            X, Y, test_size=0.1, shuffle=True
-        )
         callbacks = [
             CALLBACK_DICT[c] if c in CALLBACK_DICT else c
             for c in self.callbacks
@@ -171,8 +181,6 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         if self.sparse_y:
             train_data = self._yield_data(X_train, Y_train, self.batch_size)
             val_data = self._yield_data(X_val, Y_val, self.batch_size)
-            steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
-            validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
 
             self.model.fit(
                 x=train_data,
