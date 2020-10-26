@@ -52,7 +52,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         callbacks=["tensorboard"],
         feature_approach="max",
         early_stopping=False,
-        sparse_y=False
+        sparse_y=False,
+        threshold=0.5
     ):
         self.context_window = context_window
         self.learning_rate = learning_rate
@@ -74,6 +75,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.feature_approach = feature_approach
         self.early_stopping = early_stopping
         self.sparse_y = sparse_y
+        self.threshold = threshold
 
     def _yield_data(self, X, Y, batch_size, shuffle=True):
         while True:
@@ -238,12 +240,12 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             Y_pred = []
             for i in range(0, X.shape[0], self.batch_size):
                 X_batch = X[i: i+self.batch_size]
-                Y_pred_batch = self.model(X_batch) > 0.5
+                Y_pred_batch = self.model(X_batch) > self.threshold
                 Y_pred.append(csr_matrix(Y_pred_batch))
             Y_pred = vstack(Y_pred)
             return Y_pred
         else:
-            return self.model(X).numpy() > 0.5
+            return self.model(X).numpy() > self.threshold
 
     def predict_proba(self, X):
         if self.sparse_y:
