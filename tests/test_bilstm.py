@@ -162,3 +162,41 @@ def test_early_stopping():
     # a lot of time to finish running this test
     model.fit(X, Y)
     assert model.score(X, Y) > 0.6
+
+
+def test_predict_proba():
+    X = [
+        "One",
+        "One only",
+        "Two nothing else",
+        "Two and three"
+    ]
+    Y = np.array([0, 0, 1, 1])
+
+    model = Pipeline([
+        ('vec', KerasVectorizer()),
+        ('clf', BiLSTMClassifier())
+    ])
+    model.fit(X, Y)
+    Y_pred_prob = model.predict_proba(X)
+    assert sum(Y_pred_prob >= 0) == Y.shape[0]
+    assert sum(Y_pred_prob <= 1) == Y.shape[0]
+
+
+def test_threshold():
+    X = [
+        "One",
+        "One only",
+        "Two nothing else",
+        "Two and three"
+    ]
+    Y = np.array([0, 0, 1, 1])
+
+    model = Pipeline([
+        ('vec', KerasVectorizer()),
+        ('clf', BiLSTMClassifier(threshold=0.1))
+    ])
+    model.fit(X, Y)
+    Y_pred_expected = model.predict_proba(X) > 0.1
+    Y_pred = model.predict(X)
+    assert np.array_equal(Y_pred_expected, Y_pred)
