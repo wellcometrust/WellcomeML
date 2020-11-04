@@ -24,6 +24,7 @@ from scipy.sparse import csr_matrix, vstack
 import tensorflow as tf
 import numpy as np
 
+from wellcomeml.ml.learning_rate_schedules import ExponentialDecayWithWarmRestarts
 from wellcomeml.ml.attention import HierarchicalAttention
 
 TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -38,6 +39,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         context_window=3,
         learning_rate=0.001,
         learning_rate_decay=1,
+        warm_restarts=False,
         batch_size=32,
         nb_epochs=5,
         dropout=0.2,
@@ -53,11 +55,13 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         feature_approach="max",
         early_stopping=False,
         sparse_y=False,
-        threshold=0.5
+        threshold=0.5,
+        model_checkpoint_path=None
     ):
         self.context_window = context_window
         self.learning_rate = learning_rate
         self.learning_rate_decay = learning_rate_decay
+        self.warm_restarts = warm_restarts
         self.batch_size = batch_size
         self.nb_epochs = nb_epochs
         self.dropout = dropout
@@ -76,6 +80,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.early_stopping = early_stopping
         self.sparse_y = sparse_y
         self.threshold = threshold
+        self.model_checkpoint_path = model_checkpoint_path
 
     def _yield_data(self, X, Y, batch_size, shuffle=True):
         while True:
@@ -169,10 +174,16 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         )(x)
         model = tf.keras.Model(inp, out)
 
-        learning_rate = tf.keras.optimizers.schedules.ExponentialDecay(
-            self.learning_rate, steps_per_epoch, self.learning_rate_decay,
-            staircase=True
-        )
+        if self.warm_restarts:
+            learning_rate = ExponentialDecayWithWarmRestarts(
+                self.learning_rate, steps_per_epoch,
+                self.learning_rate_decay, epochs=self.nb_epochs
+            )
+        else:
+            learning_rate = tf.keras.optimizers.schedules.ExponentialDecay(
+                self.learning_rate, steps_per_epoch,
+                self.learning_rate_decay, staircase=True
+            )
         strategy = tf.distribute.get_strategy()
         if isinstance(strategy, tf.distribute.MirroredStrategy):
             optimizer = tf.keras.optimizers.Adam(learning_rate)
@@ -209,6 +220,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             CALLBACK_DICT[c] if c in CALLBACK_DICT else c
             for c in self.callbacks
         ]
+        if self.model_checkpoint_path:
+            callbacks.append(tf.keras.callbacks.ModelCheckpoint(self.model_checkpoint_path))
         if self.early_stopping:
             early_stopping = tf.keras.callbacks.EarlyStopping(
                 patience=5, restore_best_weights=True)
