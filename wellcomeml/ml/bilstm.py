@@ -218,11 +218,11 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
             Y_pred = vstack(Y_pred)
             return Y_pred
         else:
-            return self.model.predict(X).numpy() > self.threshold
+            return self.model.predict(X, self.batch_size).numpy() > self.threshold
 
     def predict_proba(self, X):
         # sparse_y not relevant as probs are dense
-        return self.model.predict(X).numpy()
+        return self.model.predict(X, self.batch_size).numpy()
 
     def score(self, X, Y):
         if isinstance(X, list):
