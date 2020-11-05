@@ -236,4 +236,9 @@ class BiLSTMClassifier(BaseEstimator, ClassifierMixin):
         self.model.save(model_dir)
 
     def load(self, model_dir):
-        self.model = tf.keras.models.load_model(model_dir)
+        if tf.config.list_physical_devices('GPU'):
+            strategy = tf.distribute.MirroredStrategy()
+        else:  # use default strategy
+            strategy = tf.distribute.get_strategy()
+        with strategy.scope():
+            self.model = tf.keras.models.load_model(model_dir)
