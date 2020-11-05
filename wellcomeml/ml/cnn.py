@@ -246,16 +246,16 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             Y_pred = []
             for i in range(0, X.shape[0], self.batch_size):
                 X_batch = X[i: i+self.batch_size]
-                Y_pred_batch = self.model(X_batch) > self.threshold
+                Y_pred_batch = self.model.predict(X_batch) > self.threshold
                 Y_pred.append(csr_matrix(Y_pred_batch))
             Y_pred = vstack(Y_pred)
             return Y_pred
         else:
-            return self.model(X).numpy() > self.threshold
+            return self.model.predict(X).numpy() > self.threshold
 
     def predict_proba(self, X):
         # sparse_y not relevant as probs are dense
-        return self.model(X).numpy()
+        return self.model.predict(X).numpy()
 
     def score(self, X, Y):
         if isinstance(X, list):
