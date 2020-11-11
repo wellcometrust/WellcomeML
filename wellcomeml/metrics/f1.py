@@ -68,7 +68,7 @@ class GlobalF1(Callback):
     >>>     validation_data=(X_test, y_test),
     >>>     batch_size=1024,
     >>>     verbose=2,
-    >>>     callbacks=[early_stopping, glbal_f1],
+    >>>     callbacks=[early_stopping, global_f1],
     >>> )
     """
 
