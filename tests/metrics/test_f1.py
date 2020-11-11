@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-import os
-import tempfile
-
 import numpy as np
-
 import pytest
 import tensorflow as tf
+
 from wellcomeml.metrics import f1_loss, f1_metric
 
 
@@ -85,7 +82,9 @@ def test_f1_metric(data, model):
     """ Test whether the f1_metrics are output"""
 
     model.compile(
-        loss="binary_crossentropy", optimizer="adam", metrics=[f1_metric],
+        loss="binary_crossentropy",
+        optimizer="adam",
+        metrics=[f1_metric],
     )
 
     history = model.fit(
@@ -106,10 +105,12 @@ def test_f1_loss(data, model):
     """ Test to see if it runs, don't test the loss itself """
 
     model.compile(
-        loss=f1_loss, optimizer="adam", metrics=["accuracy"],
+        loss=f1_loss,
+        optimizer="adam",
+        metrics=["accuracy"],
     )
 
-    history = model.fit(
+    model.fit(
         data["X_train"],
         data["y_train"],
         epochs=5,
@@ -117,5 +118,3 @@ def test_f1_loss(data, model):
         batch_size=1024,
         verbose=0,
     )
-
-

@@ -2,12 +2,11 @@
 # coding: utf-8
 
 import os
-import tempfile
 
 import numpy as np
-
 import pytest
 import tensorflow as tf
+
 from wellcomeml.ml.keras_utils import Metrics
 
 
@@ -42,14 +41,16 @@ def test_metrics_callback(data, model, tmpdir):
     history_path = os.path.join(tmpdir, "test_f1.csv")
 
     model.compile(
-        loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"],
+        loss="binary_crossentropy",
+        optimizer="adam",
+        metrics=["accuracy"],
     )
 
     metrics = Metrics(
         validation_data=(data["X_test"], data["y_test"]), history_path=history_path
     )
 
-    history = model.fit(
+    model.fit(
         data["X_train"],
         data["y_train"],
         epochs=5,
