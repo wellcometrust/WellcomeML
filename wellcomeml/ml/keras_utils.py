@@ -1,12 +1,34 @@
 from collections import defaultdict
 
-from sklearn.metrics import f1_score, precision_score, recall_score
+import pandas as pd
 import tensorflow as tf
+from sklearn.metrics import f1_score, precision_score, recall_score
 
 
 class Metrics(tf.keras.callbacks.Callback):
-    def __init__(self, validation_data):
+    """Calculate global F1, precision, and recall, against a complete test set
+    not just batch level metrics as with f1_metric.
+
+    >>> global_f1 = GlobalF1(validation=(X_test, y_test), history.csv)
+    >>>
+    >>> history = model.fit(
+    >>>     X_train,
+    >>>     y_train,
+    >>>     epochs=100,
+    >>>     validation_data=(X_test, y_test),
+    >>>     batch_size=1024,
+    >>>     verbose=2,
+    >>>     callbacks=[early_stopping, global_f1],
+    >>> )
+    """
+    def __init__(self, validation_data, history_path: str = None):
         self.validation_data = validation_data
+        self.history_path = history_path
+
+    def on_train_begin(self, logs={}):
+        self.f1s = []
+        self.recalls = []
+        self.precisions = []
 
     def on_epoch_end(self, epoch, logs):
         X_val = self.validation_data[0]
@@ -16,8 +38,25 @@ class Metrics(tf.keras.callbacks.Callback):
         f1 = round(f1_score(Y_val, Y_pred, average="micro"), 4)
         p = round(precision_score(Y_val, Y_pred, average="micro"), 4)
         r = round(recall_score(Y_val, Y_pred, average="micro"), 4)
+
+        self.f1s.append(f1)
+        self.recalls.append(r)
+        self.precisions.append(p)
+
         print(f" - val metrics: P {p:.4f} R {r:.4f} F {f1:.4f}")
+
         return
+
+    def on_train_end(self, logs={}):
+        """Write metrics to csv file"""
+
+        if self.history_path:
+            history = {}
+            history["f1"] = self.f1s
+            history["precision"] = self.precisions
+            history["recall"] = self.recalls
+            history_df = pd.DataFrame(history)
+            history_df.to_csv(self.history_path, index_label="epoch")
 
 
 class CategoricalMetrics(tf.keras.metrics.Metric):
@@ -55,7 +94,7 @@ class CategoricalMetrics(tf.keras.metrics.Metric):
         if self.from_logits:
             y_pred = tf.keras.activations.softmax(y_pred)
 
-        greater_than_threshold = tf.cast(y_pred[:, self.pos:] > self.threshold, "bool")
+        greater_than_threshold = tf.cast(y_pred[:, self.pos :] > self.threshold, "bool")
         positive = tf.cast(y_true, "int32") == self.pos
 
         # Epsilon added to denominators to avoid division by zero

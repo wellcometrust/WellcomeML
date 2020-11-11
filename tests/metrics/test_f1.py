@@ -8,7 +8,7 @@ import numpy as np
 
 import pytest
 import tensorflow as tf
-from wellcomeml.metrics import GlobalF1, f1_loss, f1_metric
+from wellcomeml.metrics import f1_loss, f1_metric
 
 
 @pytest.fixture(scope="module")
@@ -119,26 +119,3 @@ def test_f1_loss(data, model):
     )
 
 
-def test_globalf1_callback(data, model, tmpdir):
-
-    history_path = os.path.join(tmpdir, "test_f1.csv")
-
-    model.compile(
-        loss=f1_loss, optimizer="adam", metrics=["accuracy"],
-    )
-
-    metrics = GlobalF1(
-        validation=(data["X_test"], data["y_test"]), history_path=history_path
-    )
-
-    history = model.fit(
-        data["X_train"],
-        data["y_train"],
-        epochs=5,
-        validation_data=(data["X_test"], data["y_test"]),
-        batch_size=1024,
-        verbose=0,
-        callbacks=[metrics],
-    )
-
-    assert os.path.exists(history_path)
