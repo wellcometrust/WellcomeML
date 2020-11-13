@@ -112,7 +112,7 @@ class CategoricalMetrics(tf.keras.metrics.Metric):
         if self.from_logits:
             y_pred = tf.keras.activations.softmax(y_pred)
 
-        greater_than_threshold = tf.cast(y_pred[:, self.pos :] > self.threshold, "bool")
+        greater_than_threshold = tf.cast(y_pred[:, self.pos:] > self.threshold, "bool")
         positive = tf.cast(y_true, "int32") == self.pos
 
         # Epsilon added to denominators to avoid division by zero
