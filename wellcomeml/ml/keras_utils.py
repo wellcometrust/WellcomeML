@@ -9,7 +9,7 @@ class Metrics(tf.keras.callbacks.Callback):
     """Calculate global F1, precision, and recall, against a complete test set
     not just batch level metrics as with f1_metric.
 
-    >>> global_f1 = GlobalF1(validation=(X_test, y_test), history.csv)
+    >>> metrics = Metrics(validation=(X_test, y_test), history.csv)
     >>>
     >>> history = model.fit(
     >>>     X_train,
@@ -18,12 +18,20 @@ class Metrics(tf.keras.callbacks.Callback):
     >>>     validation_data=(X_test, y_test),
     >>>     batch_size=1024,
     >>>     verbose=2,
-    >>>     callbacks=[early_stopping, global_f1],
+    >>>     callbacks=[early_stopping, metrics],
     >>> )
     """
-    def __init__(self, validation_data, history_path: str = None):
-        self.validation_data = validation_data
+    def __init__(
+        self,
+        validation,
+        history_path: str = None,
+        append: bool = False,
+        average: str = "micro",
+    ):
+        self.validation = validation
         self.history_path = history_path
+        self.append = append
+        self.average = average
 
     def on_train_begin(self, logs={}):
         self.f1s = []
@@ -35,9 +43,9 @@ class Metrics(tf.keras.callbacks.Callback):
         Y_val = self.validation_data[1]
 
         Y_pred = self.model.predict(X_val) > 0.5
-        f1 = round(f1_score(Y_val, Y_pred, average="micro"), 4)
-        p = round(precision_score(Y_val, Y_pred, average="micro"), 4)
-        r = round(recall_score(Y_val, Y_pred, average="micro"), 4)
+        f1 = round(f1_score(Y_val, Y_pred, average=self.average), 4)
+        p = round(precision_score(Y_val, Y_pred, average=self.average), 4)
+        r = round(recall_score(Y_val, Y_pred, average=self.average), 4)
 
         self.f1s.append(f1)
         self.recalls.append(r)
@@ -49,14 +57,26 @@ class Metrics(tf.keras.callbacks.Callback):
 
     def on_train_end(self, logs={}):
         """Write metrics to csv file"""
-
+        
         if self.history_path:
+            mode = "w"
+            header = True
+
+            if self.append:
+                mode = "a"
+                header = False
+                
             history = {}
             history["f1"] = self.f1s
             history["precision"] = self.precisions
             history["recall"] = self.recalls
             history_df = pd.DataFrame(history)
-            history_df.to_csv(self.history_path, index_label="epoch")
+            history_df.to_csv(
+                self.history_path, 
+                index_label="epoch"
+                mode=mode,
+                header=header
+            )
 
 
 class CategoricalMetrics(tf.keras.metrics.Metric):
