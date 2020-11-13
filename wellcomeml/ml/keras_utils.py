@@ -21,6 +21,7 @@ class Metrics(tf.keras.callbacks.Callback):
     >>>     callbacks=[early_stopping, metrics],
     >>> )
     """
+
     def __init__(
         self,
         validation,
@@ -57,7 +58,7 @@ class Metrics(tf.keras.callbacks.Callback):
 
     def on_train_end(self, logs={}):
         """Write metrics to csv file"""
-        
+
         if self.history_path:
             mode = "w"
             header = True
@@ -65,17 +66,14 @@ class Metrics(tf.keras.callbacks.Callback):
             if self.append:
                 mode = "a"
                 header = False
-                
+
             history = {}
             history["f1"] = self.f1s
             history["precision"] = self.precisions
             history["recall"] = self.recalls
             history_df = pd.DataFrame(history)
             history_df.to_csv(
-                self.history_path, 
-                index_label="epoch"
-                mode=mode,
-                header=header
+                self.history_path, index_label="epoch", mode=mode, header=header
             )
 
 
@@ -114,7 +112,7 @@ class CategoricalMetrics(tf.keras.metrics.Metric):
         if self.from_logits:
             y_pred = tf.keras.activations.softmax(y_pred)
 
-        greater_than_threshold = tf.cast(y_pred[:, self.pos:] > self.threshold, "bool")
+        greater_than_threshold = tf.cast(y_pred[:, self.pos :] > self.threshold, "bool")
         positive = tf.cast(y_true, "int32") == self.pos
 
         # Epsilon added to denominators to avoid division by zero
