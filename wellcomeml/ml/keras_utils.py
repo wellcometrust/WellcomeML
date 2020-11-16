@@ -1,6 +1,6 @@
+import csv
 from collections import defaultdict
 
-import pandas as pd
 import tensorflow as tf
 from sklearn.metrics import f1_score, precision_score, recall_score
 
@@ -9,7 +9,7 @@ class Metrics(tf.keras.callbacks.Callback):
     """Calculate global F1, precision, and recall, against a complete test set
     not just batch level metrics as with f1_metric.
 
-    >>> metrics = Metrics(validation=(X_test, y_test), history.csv)
+    >>> metrics = Metrics(validation_data=(X_test, y_test), history.csv)
     >>>
     >>> history = model.fit(
     >>>     X_train,
@@ -24,12 +24,12 @@ class Metrics(tf.keras.callbacks.Callback):
 
     def __init__(
         self,
-        validation,
+        validation_data,
         history_path: str = None,
         append: bool = False,
         average: str = "micro",
     ):
-        self.validation = validation
+        self.validation_data = validation_data
         self.history_path = history_path
         self.append = append
         self.average = average
@@ -67,14 +67,12 @@ class Metrics(tf.keras.callbacks.Callback):
                 mode = "a"
                 header = False
 
-            history = {}
-            history["f1"] = self.f1s
-            history["precision"] = self.precisions
-            history["recall"] = self.recalls
-            history_df = pd.DataFrame(history)
-            history_df.to_csv(
-                self.history_path, index_label="epoch", mode=mode, header=header
-            )
+            with open(self.history_path, mode=mode) as fb:
+                history_writer = csv.writer(fb, delimiter=",")
+                history_writer.writerow(["epoch", "precision", "recall", "f1"])
+
+                for i, row in enumerate(zip(self.precisions, self.recalls, self.f1s)):
+                    history_writer.writerow([i] + list(row))
 
 
 class CategoricalMetrics(tf.keras.metrics.Metric):
