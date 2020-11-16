@@ -69,7 +69,8 @@ class Metrics(tf.keras.callbacks.Callback):
 
             with open(self.history_path, mode=mode) as fb:
                 history_writer = csv.writer(fb, delimiter=",")
-                history_writer.writerow(["epoch", "precision", "recall", "f1"])
+                if header:
+                    history_writer.writerow(["epoch", "precision", "recall", "f1"])
 
                 for i, row in enumerate(zip(self.precisions, self.recalls, self.f1s)):
                     history_writer.writerow([i] + list(row))
