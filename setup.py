@@ -54,7 +54,8 @@ setuptools.setup(
         'hdbscan',
         'cython',
         'flake8',
-        'black'
+        'black',
+        'tqdm'
     ],
     extras_require={
         'deep-learning': [
