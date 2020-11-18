@@ -3,7 +3,7 @@
 Models
 ---
 
-## CNN/BiLSTM
+### CNN/BiLSTM
 - predict_proba
 - threshold param default 0.5
 - learning_rate decay param default 1
@@ -12,13 +12,13 @@ Models
 - sparse_y param default false
 - save and load methods
 
-## SemanticEquivalenceClassifier
+### SemanticEquivalenceClassifier
 - callbacks param with default tensorboard and minibatch history
 - dropout_rate param default 0.1
 - dropout param default true
 - batch_norm param default true
 
-## KerasVectorizer
+### KerasVectorizer
 - accepts gensim compatible word vector names and downloads and caches them
 
 Metrics
