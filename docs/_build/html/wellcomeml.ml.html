@@ -205,7 +205,8 @@
 <dl class="py class">
 <dt id="wellcomeml.ml.attention.FeedForwardAttention">
 <em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.attention.</code><code class="sig-name descname">FeedForwardAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.attention.FeedForwardAttention" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="https://colinraffel.com/publications/iclr2016feed.pdf">https://colinraffel.com/publications/iclr2016feed.pdf</a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tensorflow.python.keras.engine.base_layer.Layer</span></code></p>
+<p><a class="reference external" href="https://colinraffel.com/publications/iclr2016feed.pdf">https://colinraffel.com/publications/iclr2016feed.pdf</a></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.attention.FeedForwardAttention.build">
 <code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_shape</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.attention.FeedForwardAttention.build" title="Permalink to this definition">¶</a></dt>
@@ -223,7 +224,8 @@ Out: (batch_size, embedding_dimension)</p>
 <dl class="py class">
 <dt id="wellcomeml.ml.attention.HierarchicalAttention">
 <em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.attention.</code><code class="sig-name descname">HierarchicalAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.attention.HierarchicalAttention" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="https://www.aclweb.org/anthology/N16-1174/">https://www.aclweb.org/anthology/N16-1174/</a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tensorflow.python.keras.engine.base_layer.Layer</span></code></p>
+<p><a class="reference external" href="https://www.aclweb.org/anthology/N16-1174/">https://www.aclweb.org/anthology/N16-1174/</a></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.attention.HierarchicalAttention.build">
 <code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_shape</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.attention.HierarchicalAttention.build" title="Permalink to this definition">¶</a></dt>
@@ -241,7 +243,8 @@ Out: (batch_size, sequence_length, embedding_dimension)</p>
 <dl class="py class">
 <dt id="wellcomeml.ml.attention.SelfAttention">
 <em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.attention.</code><code class="sig-name descname">SelfAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.attention.SelfAttention" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf">https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf</a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tensorflow.python.keras.engine.base_layer.Layer</span></code></p>
+<p><a class="reference external" href="https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf">https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf</a></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.attention.SelfAttention.build">
 <code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_shape</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.attention.SelfAttention.build" title="Permalink to this definition">¶</a></dt>
@@ -313,7 +316,7 @@ Adapted from <a class="reference external" href="https://github.com/explosion/sp
 <span id="wellcomeml-ml-bert-semantic-equivalence-module"></span><h2>wellcomeml.ml.bert_semantic_equivalence module<a class="headerlink" href="#module-wellcomeml.ml.bert_semantic_equivalence" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.bert_semantic_equivalence.</code><code class="sig-name descname">SemanticEquivalenceClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pretrained</span><span class="o">=</span><span class="default_value">'bert'</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">eval_batch_size</span><span class="o">=</span><span class="default_value">64</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">3e-05</span></em>, <em class="sig-param"><span class="n">test_size</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">max_length</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.bert_semantic_equivalence.</code><code class="sig-name descname">SemanticEquivalenceClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pretrained</span><span class="o">=</span><span class="default_value">'bert'</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">eval_batch_size</span><span class="o">=</span><span class="default_value">64</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">3e-05</span></em>, <em class="sig-param"><span class="n">test_size</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">max_length</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="o">=</span><span class="default_value">['tensorboard', 'minibatch_history']</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
 <p>Class to fine-tune BERT-type models for semantic equivalence, for example
 paraphrase, textual similarity and other NLU tasks</p>
@@ -335,6 +338,11 @@ paraphrase, textual similarity and other NLU tasks</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier.initialise_models">
+<code class="sig-name descname">initialise_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier.initialise_models" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier.load">
@@ -381,7 +389,7 @@ for X.</p>
 
 <dl class="py class">
 <dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.bert_semantic_equivalence.</code><code class="sig-name descname">SemanticEquivalenceMetaClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_numerical_features</span></em>, <em class="sig-param"><span class="n">dropout_rate</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.bert_semantic_equivalence.</code><code class="sig-name descname">SemanticEquivalenceMetaClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_numerical_features</span></em>, <em class="sig-param"><span class="n">dropout_rate</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">batch_norm</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier" title="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier</span></code></a></p>
 <p>Class to fine tune Semantic Classifier, allowing the possibility of
 adding metadata to the classification. Extends
@@ -407,6 +415,12 @@ and model initialisation. Fit, predict, score remain intact</p>
 <dd class="field-even"><p>Array of probabilities, of shape len(X) x 2</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.initialise_models">
+<code class="sig-name descname">initialise_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceMetaClassifier.initialise_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends/overrides super class initialisation of model</p>
 </dd></dl>
 
 <dl class="py method">
@@ -509,7 +523,7 @@ and model initialisation. Fit, predict, score remain intact</p>
 <span id="wellcomeml-ml-bilstm-module"></span><h2>wellcomeml.ml.bilstm module<a class="headerlink" href="#module-wellcomeml.ml.bilstm" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="wellcomeml.ml.bilstm.BiLSTMClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.bilstm.</code><code class="sig-name descname">BiLSTMClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">nb_epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">dropout</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">nb_layers</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">hidden_size</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">dense_size</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">l2</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">attention_heads</span><span class="o">=</span><span class="default_value">'same'</span></em>, <em class="sig-param"><span class="n">multilabel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">['precision', 'recall']</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="o">=</span><span class="default_value">['tensorboard']</span></em>, <em class="sig-param"><span class="n">feature_approach</span><span class="o">=</span><span class="default_value">'max'</span></em>, <em class="sig-param"><span class="n">early_stopping</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sparse_y</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bilstm.BiLSTMClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.bilstm.</code><code class="sig-name descname">BiLSTMClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">learning_rate_decay</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">nb_epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">dropout</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">nb_layers</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">hidden_size</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">dense_size</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">l2</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">attention_heads</span><span class="o">=</span><span class="default_value">'same'</span></em>, <em class="sig-param"><span class="n">multilabel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">['precision', 'recall']</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="o">=</span><span class="default_value">['tensorboard']</span></em>, <em class="sig-param"><span class="n">feature_approach</span><span class="o">=</span><span class="default_value">'max'</span></em>, <em class="sig-param"><span class="n">early_stopping</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sparse_y</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bilstm.BiLSTMClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.bilstm.BiLSTMClassifier.fit">
@@ -524,6 +538,11 @@ and model initialisation. Fit, predict, score remain intact</p>
 <dl class="py method">
 <dt id="wellcomeml.ml.bilstm.BiLSTMClassifier.predict">
 <code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">_</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bilstm.BiLSTMClassifier.predict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.bilstm.BiLSTMClassifier.predict_proba">
+<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bilstm.BiLSTMClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -684,7 +703,7 @@ and whether task is multilabel</p>
 </div></blockquote>
 <dl class="py class">
 <dt id="wellcomeml.ml.cnn.CNNClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.cnn.</code><code class="sig-name descname">CNNClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context_window</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">nb_epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">dropout</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">nb_layers</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">hidden_size</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">l2</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">dense_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">multilabel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention_heads</span><span class="o">=</span><span class="default_value">'same'</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">['precision', 'recall']</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="o">=</span><span class="default_value">['tensorboard']</span></em>, <em class="sig-param"><span class="n">feature_approach</span><span class="o">=</span><span class="default_value">'max'</span></em>, <em class="sig-param"><span class="n">early_stopping</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sparse_y</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.cnn.CNNClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.cnn.</code><code class="sig-name descname">CNNClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context_window</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">learning_rate_decay</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">nb_epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">dropout</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">nb_layers</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">hidden_size</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">l2</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">dense_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">multilabel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention_heads</span><span class="o">=</span><span class="default_value">'same'</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">['precision', 'recall']</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="o">=</span><span class="default_value">['tensorboard']</span></em>, <em class="sig-param"><span class="n">feature_approach</span><span class="o">=</span><span class="default_value">'max'</span></em>, <em class="sig-param"><span class="n">early_stopping</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sparse_y</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.cnn.CNNClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.cnn.CNNClassifier.fit">
@@ -699,6 +718,11 @@ and whether task is multilabel</p>
 <dl class="py method">
 <dt id="wellcomeml.ml.cnn.CNNClassifier.predict">
 <code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.cnn.CNNClassifier.predict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.cnn.CNNClassifier.predict_proba">
+<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.cnn.CNNClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -846,7 +870,8 @@ vectorisation/embedding</p>
 <dl class="py class">
 <dt id="wellcomeml.ml.keras_utils.CategoricalMetrics">
 <em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.keras_utils.</code><code class="sig-name descname">CategoricalMetrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_utils.CategoricalMetrics" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tensorflow.python.keras.metrics.Metric</span></code></p>
+<dl class="py method">
 <dt id="wellcomeml.ml.keras_utils.CategoricalMetrics.reset_states">
 <code class="sig-name descname">reset_states</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_utils.CategoricalMetrics.reset_states" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -866,7 +891,8 @@ vectorisation/embedding</p>
 <dl class="py class">
 <dt id="wellcomeml.ml.keras_utils.MetricMiniBatchHistory">
 <em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.keras_utils.</code><code class="sig-name descname">MetricMiniBatchHistory</code><a class="headerlink" href="#wellcomeml.ml.keras_utils.MetricMiniBatchHistory" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tensorflow.python.keras.callbacks.Callback</span></code></p>
+<dl class="py method">
 <dt id="wellcomeml.ml.keras_utils.MetricMiniBatchHistory.on_batch_end">
 <code class="sig-name descname">on_batch_end</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">batch</span></em>, <em class="sig-param"><span class="n">logs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_utils.MetricMiniBatchHistory.on_batch_end" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -880,11 +906,38 @@ vectorisation/embedding</p>
 
 <dl class="py class">
 <dt id="wellcomeml.ml.keras_utils.Metrics">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.keras_utils.</code><code class="sig-name descname">Metrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">validation_data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_utils.Metrics" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.keras_utils.</code><code class="sig-name descname">Metrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">validation_data</span></em>, <em class="sig-param"><span class="n">history_path</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">append</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">average</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'micro'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_utils.Metrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tensorflow.python.keras.callbacks.Callback</span></code></p>
+<p>Calculate global F1, precision, and recall, against a complete test set
+not just batch level metrics as with f1_metric.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span> <span class="o">=</span> <span class="n">Metrics</span><span class="p">(</span><span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">),</span> <span class="n">history</span><span class="o">.</span><span class="n">csv</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">X_train</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">y_train</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">early_stopping</span><span class="p">,</span> <span class="n">metrics</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
 <dt id="wellcomeml.ml.keras_utils.Metrics.on_epoch_end">
 <code class="sig-name descname">on_epoch_end</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">epoch</span></em>, <em class="sig-param"><span class="n">logs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_utils.Metrics.on_epoch_end" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.keras_utils.Metrics.on_train_begin">
+<code class="sig-name descname">on_train_begin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">logs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_utils.Metrics.on_train_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.keras_utils.Metrics.on_train_end">
+<code class="sig-name descname">on_train_end</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">logs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_utils.Metrics.on_train_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write metrics to csv file</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -897,8 +950,25 @@ vectorisation/embedding</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.keras_vectorizer.KerasVectorizer.build_embedding_matrix">
-<code class="sig-name descname">build_embedding_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasVectorizer.build_embedding_matrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">build_embedding_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings_name_or_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasVectorizer.build_embedding_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds an embedding matrix from either a local embeddings path
+or a gensim pre-trained word vector path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>embeddings_name_or_path</strong> – <p>Can be either:
+- A local directory to word embeddings
+- The name of a GenSim pre-trained word vector model</p>
+<blockquote>
+<div><p>e.g. ‘glove-twitter-25’, for the complete list:
+<a class="reference external" href="https://github.com/RaRe-Technologies/gensim-data#models">https://github.com/RaRe-Technologies/gensim-data#models</a></p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An embedding matrix</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="wellcomeml.ml.keras_vectorizer.KerasVectorizer.fit">
@@ -1387,7 +1457,7 @@ and return results for multilabel Y</p>
 
 <dl class="py class">
 <dt id="wellcomeml.ml.BiLSTMClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.</code><code class="sig-name descname">BiLSTMClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">nb_epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">dropout</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">nb_layers</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">hidden_size</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">dense_size</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">l2</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">attention_heads</span><span class="o">=</span><span class="default_value">'same'</span></em>, <em class="sig-param"><span class="n">multilabel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">['precision', 'recall']</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="o">=</span><span class="default_value">['tensorboard']</span></em>, <em class="sig-param"><span class="n">feature_approach</span><span class="o">=</span><span class="default_value">'max'</span></em>, <em class="sig-param"><span class="n">early_stopping</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sparse_y</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BiLSTMClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.</code><code class="sig-name descname">BiLSTMClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">learning_rate_decay</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">nb_epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">dropout</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">nb_layers</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">hidden_size</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">dense_size</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">l2</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">attention_heads</span><span class="o">=</span><span class="default_value">'same'</span></em>, <em class="sig-param"><span class="n">multilabel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">['precision', 'recall']</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="o">=</span><span class="default_value">['tensorboard']</span></em>, <em class="sig-param"><span class="n">feature_approach</span><span class="o">=</span><span class="default_value">'max'</span></em>, <em class="sig-param"><span class="n">early_stopping</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sparse_y</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BiLSTMClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.BiLSTMClassifier.fit">
@@ -1405,6 +1475,11 @@ and return results for multilabel Y</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="wellcomeml.ml.BiLSTMClassifier.predict_proba">
+<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BiLSTMClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="wellcomeml.ml.BiLSTMClassifier.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_dir</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BiLSTMClassifier.save" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1418,7 +1493,7 @@ and return results for multilabel Y</p>
 
 <dl class="py class">
 <dt id="wellcomeml.ml.CNNClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.</code><code class="sig-name descname">CNNClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context_window</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">nb_epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">dropout</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">nb_layers</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">hidden_size</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">l2</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">dense_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">multilabel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention_heads</span><span class="o">=</span><span class="default_value">'same'</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">['precision', 'recall']</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="o">=</span><span class="default_value">['tensorboard']</span></em>, <em class="sig-param"><span class="n">feature_approach</span><span class="o">=</span><span class="default_value">'max'</span></em>, <em class="sig-param"><span class="n">early_stopping</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sparse_y</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.CNNClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.</code><code class="sig-name descname">CNNClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context_window</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">learning_rate_decay</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">nb_epochs</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">dropout</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">nb_layers</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">hidden_size</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">l2</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">dense_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">multilabel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">attention_heads</span><span class="o">=</span><span class="default_value">'same'</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">['precision', 'recall']</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="o">=</span><span class="default_value">['tensorboard']</span></em>, <em class="sig-param"><span class="n">feature_approach</span><span class="o">=</span><span class="default_value">'max'</span></em>, <em class="sig-param"><span class="n">early_stopping</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sparse_y</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.CNNClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.CNNClassifier.fit">
@@ -1433,6 +1508,11 @@ and return results for multilabel Y</p>
 <dl class="py method">
 <dt id="wellcomeml.ml.CNNClassifier.predict">
 <code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.CNNClassifier.predict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.CNNClassifier.predict_proba">
+<code class="sig-name descname">predict_proba</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.CNNClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1511,8 +1591,25 @@ and return results for multilabel Y</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.KerasVectorizer.build_embedding_matrix">
-<code class="sig-name descname">build_embedding_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.KerasVectorizer.build_embedding_matrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">build_embedding_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings_name_or_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.KerasVectorizer.build_embedding_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds an embedding matrix from either a local embeddings path
+or a gensim pre-trained word vector path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>embeddings_name_or_path</strong> – <p>Can be either:
+- A local directory to word embeddings
+- The name of a GenSim pre-trained word vector model</p>
+<blockquote>
+<div><p>e.g. ‘glove-twitter-25’, for the complete list:
+<a class="reference external" href="https://github.com/RaRe-Technologies/gensim-data#models">https://github.com/RaRe-Technologies/gensim-data#models</a></p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An embedding matrix</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="wellcomeml.ml.KerasVectorizer.fit">
@@ -1528,7 +1625,7 @@ and return results for multilabel Y</p>
 
 <dl class="py class">
 <dt id="wellcomeml.ml.SemanticEquivalenceClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.</code><code class="sig-name descname">SemanticEquivalenceClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pretrained</span><span class="o">=</span><span class="default_value">'bert'</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">eval_batch_size</span><span class="o">=</span><span class="default_value">64</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">3e-05</span></em>, <em class="sig-param"><span class="n">test_size</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">max_length</span><span class="o">=</span><span class="default_value">128</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SemanticEquivalenceClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.ml.</code><code class="sig-name descname">SemanticEquivalenceClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pretrained</span><span class="o">=</span><span class="default_value">'bert'</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">32</span></em>, <em class="sig-param"><span class="n">eval_batch_size</span><span class="o">=</span><span class="default_value">64</span></em>, <em class="sig-param"><span class="n">learning_rate</span><span class="o">=</span><span class="default_value">3e-05</span></em>, <em class="sig-param"><span class="n">test_size</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">max_length</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="o">=</span><span class="default_value">['tensorboard', 'minibatch_history']</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SemanticEquivalenceClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
 <p>Class to fine-tune BERT-type models for semantic equivalence, for example
 paraphrase, textual similarity and other NLU tasks</p>
@@ -1550,6 +1647,11 @@ paraphrase, textual similarity and other NLU tasks</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.SemanticEquivalenceClassifier.initialise_models">
+<code class="sig-name descname">initialise_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SemanticEquivalenceClassifier.initialise_models" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="wellcomeml.ml.SemanticEquivalenceClassifier.load">
