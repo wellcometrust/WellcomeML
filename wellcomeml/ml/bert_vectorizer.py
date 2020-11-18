@@ -7,6 +7,7 @@ from transformers import BertModel, BertTokenizer
 from sklearn.base import BaseEstimator, TransformerMixin
 import numpy as np
 import torch
+import tqdm
 
 from wellcomeml.utils import check_cache_and_download
 from wellcomeml.logger import logger
@@ -71,7 +72,7 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
         return embedded_x.cpu().numpy().flatten()
 
     def transform(self, X, *_):
-        return np.array([self.bert_embedding(x) for x in X])
+        return np.array([self.bert_embedding(x) for x in tqdm.tqdm(X)])
 
     def fit(self, *_):
         model_name = (
