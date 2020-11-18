@@ -1,3 +1,36 @@
+# 2020.11.0
+
+Models
+---
+
+## CNN/BiLSTM
+- predict_proba
+- threshold param default 0.5
+- learning_rate decay param default 1
+- run training on multiple GPUs if more than one GPUs available
+- early_stopping param default false
+- sparse_y param default false
+- save and load methods
+
+## SemanticEquivalenceClassifier
+- callbacks param with default tensorboard and minibatch history
+- dropout_rate param default 0.1
+- dropout param default true
+- batch_norm param default true
+
+## KerasVectorizer
+- accepts gensim compatible word vector names and downloads and caches them
+
+Metrics
+---
+- f1 loss and metric
+
+Bug fixes
+---
+- #157 about saving CNN/BiLSTM with attention layer
+- #80  that fixes indentation and other doc issues
+- #134 which allows to use tsne as reducer in clustering
+
 # 2020.9.0
 
 Models
