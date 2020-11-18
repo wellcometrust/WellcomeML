@@ -4,6 +4,14 @@ wellcomeml.metrics package
 Submodules
 ----------
 
+wellcomeml.metrics.f1 module
+----------------------------
+
+.. automodule:: wellcomeml.metrics.f1
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 wellcomeml.metrics.ner\_classification\_report module
 -----------------------------------------------------
 
