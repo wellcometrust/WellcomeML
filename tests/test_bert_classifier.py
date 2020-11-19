@@ -63,6 +63,7 @@ def test_partial_fit():
     assert Y_prob_pred.shape == np.array(Y).shape
     assert model.losses[0] > model.losses[-1]
 
+
 def test_scibert():
     X = [
         "One and two",
