@@ -30,6 +30,7 @@ import torch
 import random
 import time
 
+from wellcomeml.utils import check_cache_and_download
 from wellcomeml.logger import logger
 
 
@@ -76,7 +77,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
             self.nlp = spacy.load("en_trf_bertbaseuncased_lg")
         elif self.pretrained == "scibert":
             name = "scibert-scivocab-uncased"
-            path = "models/scibert_scivocab_uncased"
+            path = check_cache_and_download("scibert_scivocab_uncased")
 
             nlp = TransformersLanguage(trf_name=name, meta={"lang": "en"})
             nlp.add_pipe(nlp.create_pipe("sentencizer"))
