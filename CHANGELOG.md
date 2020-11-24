@@ -1,3 +1,10 @@
+# 2020.11.1
+
+Bug fixes
+---
+- #179 Dataclasses dependency version conflict coming from spacy-transformers
+- #177 BertClassifier path for scibert when fine tuning not working
+
 # 2020.11.0
 
 Models
