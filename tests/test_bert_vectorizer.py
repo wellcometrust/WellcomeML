@@ -33,7 +33,7 @@ def test_embed_two_sentences():
 
 
 def test_embed_long_sentence():
-    X = ["This is a sentence"*100]
+    X = ["This is a sentence"*500]
 
     for embedding in EMBEDDING_TYPES:
         vec = bert_vectorizer.BertVectorizer(sentence_embedding=embedding)
@@ -42,7 +42,7 @@ def test_embed_long_sentence():
 
 
 def test_embed_scibert():
-    X = ["This is a sentence"*100]
+    X = ["This is a sentence"]
     for embedding in EMBEDDING_TYPES:
         vec = bert_vectorizer.BertVectorizer(pretrained='scibert',
                                              sentence_embedding=embedding)
@@ -53,7 +53,7 @@ def test_embed_scibert():
 def test_save_and_load(tmpdir):
     tmpfile = tmpdir.join('test.npy')
 
-    X = ["This is a sentence"*100]
+    X = ["This is a sentence"]
     for pretrained in ['bert', 'scibert']:
         for embedding in EMBEDDING_TYPES:
             vec = bert_vectorizer.BertVectorizer(

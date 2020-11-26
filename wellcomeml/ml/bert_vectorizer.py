@@ -40,14 +40,15 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
         return np.load(path)
 
     def bert_embedding(self, x):
-        # Max sequence length is 512 for BERT
-        if len(x) > 512:
-            embedded_a = self.bert_embedding(x[:512])
-            embedded_b = self.bert_embedding(x[512:])
+        tokenized_x = self.tokenizer.tokenize(x)
+
+        # Max sequence length is 512 for BERT. 510 without CLS and SEP
+        if len(tokenized_x) > 510:
+            embedded_a = self.bert_embedding(" ".join(tokenized_x[:510]))
+            embedded_b = self.bert_embedding(" ".join(tokenized_x[510:]))
             return embedded_a + embedded_b
 
-        tokenized_x = self.tokenizer.tokenize("[CLS] " + x + " [SEP]")
-        indexed_tokens = self.tokenizer.convert_tokens_to_ids(tokenized_x)
+        indexed_tokens = self.tokenizer.convert_tokens_to_ids(["[CLS]"] + tokenized_x + ["[SEP]"])
 
         tokens_tensor = torch.tensor([indexed_tokens])
         segments_tensor = torch.zeros(tokens_tensor.shape, dtype=torch.long)
