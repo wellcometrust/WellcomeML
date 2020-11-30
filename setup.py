@@ -46,7 +46,7 @@ setuptools.setup(
         'boto3',
         'scikit-learn',
         'scipy==1.4.1',
-        'spacy==2.2.1',
+        'spacy==2.3',
         'umap-learn',
         'nervaluate',
         'twine',
@@ -61,8 +61,8 @@ setuptools.setup(
         'deep-learning': [
             'tensorflow',
             'torch',
-            'transformers<=2.0.0',
-            'spacy-transformers==0.5.1',
+            'transformers<2.9.0',
+            'spacy-transformers==0.6.1',
             'dataclasses==0.6'  # spacy transformers needs this pinned
         ]
     },
