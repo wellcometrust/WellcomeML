@@ -1,5 +1,6 @@
 import random
 
+from spacy.training import Example
 import spacy
 from nervaluate import Evaluator
 
@@ -50,9 +51,10 @@ class SpacyNER:
 
                 for text, spans in train_data:
                     annotations = self._spans_to_entities(spans)
+                    doc = self.nlp_model.make_doc(text)
+                    example = Example.from_dict(doc, annotations)
                     self.nlp_model.update(
-                        [text],
-                        [annotations],
+                        [example],
                         sgd=optimizer,
                         losses=losses,
                         drop=self.dropout,
@@ -137,9 +139,9 @@ class SpacyNER:
         ```
         {
             'entities': [
-                    [36, 46, 'PERSON'],
-                    [48, 58, 'PERSON'],
-                    [61, 69, 'PERSON'],
+                    (36, 46, 'PERSON'),
+                    (48, 58, 'PERSON'),
+                    (61, 69, 'PERSON'),
                 ]
         }
         ```
@@ -148,6 +150,6 @@ class SpacyNER:
         entities = []
 
         for span in spans:
-            entities.append([span["start"], span["end"], span["label"]])
+            entities.append((span["start"], span["end"], span["label"]))
 
         return {"entities": entities}

@@ -46,7 +46,7 @@ setuptools.setup(
         'boto3',
         'scikit-learn',
         'scipy==1.4.1',
-        'spacy-nightly[transformers]',
+        'spacy-nightly[transformers,lookups]',
         'umap-learn',
         'nervaluate',
         'twine',
