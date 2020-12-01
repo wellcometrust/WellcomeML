@@ -31,7 +31,7 @@ $(VIRTUALENV)/.models:
 	touch $@
 
 $(VIRTUALENV)/.deep_learning_models:
-	$(VIRTUALENV)/bin/python -m spacy download en_trf_bertbaseuncased_lg
+	$(VIRTUALENV)/bin/python -m spacy download en_core_web_trf
 	touch $@
 
 $(VIRTUALENV)/.non_pypi_packages:

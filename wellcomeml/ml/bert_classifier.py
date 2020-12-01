@@ -74,7 +74,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
 
     def _init_nlp(self):
         if self.pretrained == "bert":
-            self.nlp = spacy.load("en_trf_bertbaseuncased_lg")
+            self.nlp = spacy.load("en_core_web_trf")
         elif self.pretrained == "scibert":
             name = "scibert-scivocab-uncased"
             path = check_cache_and_download("scibert_scivocab_uncased")

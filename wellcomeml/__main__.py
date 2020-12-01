@@ -8,7 +8,7 @@ def download(download_target):
             'python', '-m', 'spacy', 'download', 'en_core_web_sm'])
     elif download_target == "deeplearning-models":
         subprocess.run([
-            'python', '-m', 'spacy', 'download', 'en_trf_bertbaseuncased_lg'])
+            'python', '-m', 'spacy', 'download', 'en_core_web_trf'])
     elif download_target == "non_pypi_packages":
         subprocess.run([
             'pip', 'install', 'git+https://github.com/epfml/sent2vec.git'])
