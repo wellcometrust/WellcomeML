@@ -110,11 +110,11 @@ class WellcomeTfidf(TfidfVectorizer):
                     and not token.is_punct
                     and token.lemma_ != "-PRON-"
                 ]
-                for doc in nlp.tokenizer.pipe(X)
+                for doc in nlp.pipe(X)
             ]
         else:
             return [
-                [token.lemma_.lower() for token in doc] for doc in nlp.tokenizer.pipe(X)
+                [token.lemma_.lower() for token in doc] for doc in nlp.pipe(X)
             ]
 
     def transform(self, X, regex=True, spacy_lemmatizer=True, *_):
@@ -133,9 +133,11 @@ class WellcomeTfidf(TfidfVectorizer):
         if spacy_lemmatizer:
             X = self.spacy_lemmatizer(X)
 
+
         logger.info("Fitting vectorizer.")
 
         X = [" ".join(text) for text in X]
+
         super().fit(X)
 
         return self
