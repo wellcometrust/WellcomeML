@@ -29,7 +29,7 @@ else:
         from .clustering import TextClustering
         from .spacy_ner import SpacyNER
         from .spacy_classifier import SpacyClassifier
-        from .bert_classifier import BertClassifier
+#        from .bert_classifier import BertClassifier
         from .bert_vectorizer import BertVectorizer
         from .spacy_knowledge_base import SpacyKnowledgeBase
         from .spacy_entity_linking import SpacyEntityLinker
