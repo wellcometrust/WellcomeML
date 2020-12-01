@@ -5,6 +5,7 @@ Train a convolutional neural network for multilabel classification
 of grants
 Adapted from https://github.com/explosion/spaCy/blob/master/examples/training/train_textcat.py
 """
+from spacy.training import Example
 from spacy.util import minibatch, compounding
 from sklearn.metrics import f1_score
 from sklearn.base import BaseEstimator, ClassifierMixin
@@ -34,7 +35,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         learning_rate=0.001,
         dropout=0.1,
         shuffle=True,
-        architecture="simple_cnn",
+        architecture="spacy.TextCatCNN.v1",
         multilabel=True,
         pre_trained_vectors_path=None,
     ):
@@ -69,14 +70,25 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
     def _init_nlp(self):
         self.nlp = spacy.blank("en")
 
-        self.textcat = self.nlp.create_pipe(
+        self.textcat = self.nlp.add_pipe(
             "textcat",
             config={
-                "architecture": self.architecture,
-                "exclusive_classes": not self.multilabel,
-            },
+                "model": {
+                    "@architectures": self.architecture,
+                    "tok2vec": {
+                        "@architectures": "spacy.HashEmbedCNN.v1",
+                        "pretrained_vectors": False,
+                        "width": 96,
+                        "depth": 4,
+                        "embed_size": 2000,
+                        "window_size": 1,
+                        "maxout_pieces": 3,
+                        "subword_features": True
+                    },
+                    "exclusive_classes": not self.multilabel
+                }
+            }
         )
-        self.nlp.add_pipe(self.textcat, last=True)
 
         for label in self.unique_labels:
             self.textcat.add_label(label)
@@ -140,7 +152,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
         with self.nlp.disable_pipes(*other_pipes):  # only train textcat
             optimizer = self.nlp.begin_training()
-            optimizer.alpha = self.learning_rate
+            # NEEDS FIXING optimizer.alpha = self.learning_rate
             # optimizer.L2 = 1e-4
 
             if self.pre_trained_vectors_path:
@@ -175,10 +187,15 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                 batches = minibatch(train_data, size=batch_sizes)
                 for batch in batches:
                     texts, annotations = zip(*batch)
+                    examples = []
+                    for training_example in batch:
+                        text, annotation = training_example
+                        doc = self.nlp.make_doc(text)
+                        example = Example.from_dict(doc, annotation)
+                        examples.append(example)
                     next_dropout = self.dropout  # next(dropout)
                     self.nlp.update(
-                        texts,
-                        annotations,
+                        examples,
                         sgd=optimizer,
                         drop=next_dropout,
                         losses=losses,
@@ -186,9 +203,10 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                     nb_examples += len(texts)
                 end_time = time.time() - start_time
                 examples_per_second = round(nb_examples / end_time, 2)
-                with self.textcat.model.use_params(optimizer.averages):
-                    Y_test_pred = self.predict(X_test)
-                    p, r, f, _ = precision_recall_fscore_support(
+                # FIX this
+                # with self.textcat.use_params(optimizer.averages):
+                Y_test_pred = self.predict(X_test)
+                p, r, f, _ = precision_recall_fscore_support(
                         Y_test, Y_test_pred, average="micro"
                     )
                 loss = losses["textcat"]
@@ -229,13 +247,21 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                 train_cats.append(cats)
         annotations = [{"cats": cats} for cats in train_cats]
 
+        examples = []
+        for training_example in zip(texts, annotations):
+            text, annotation = training_example
+            doc = self.nlp.make_doc(text)
+            example = Example.from_dict(doc, annotation)
+            examples.append(example)
+
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
         with self.nlp.disable_pipes(*other_pipes):  # only train textcat
             if not hasattr(self, "optimizer"):
                 self.optimizer = self.nlp.begin_training()
-                self.optimizer.alpha = self.learning_rate
+                # FIX this
+                # self.optimizer.alpha = self.learning_rate
 
-            self.nlp.update(texts, annotations, sgd=self.optimizer, drop=self.dropout)
+            self.nlp.update(examples, sgd=self.optimizer, drop=self.dropout)
 
         return self
 
