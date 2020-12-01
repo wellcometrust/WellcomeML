@@ -56,7 +56,6 @@ class SpacyKnowledgeBase(object):
             nlp = spacy.load(self.kb_model)
 
         print("Loaded model '%s'" % self.kb_model)
-        kb = KnowledgeBase(vocab=nlp.vocab, entity_vector_length=self.desc_width)
 
         # set up the data
         entity_ids = []
@@ -67,6 +66,8 @@ class SpacyKnowledgeBase(object):
             entity_ids.append(key)
             embeddings.append(nlp(desc).vector)
             freqs.append(freq)
+            
+        kb = KnowledgeBase(vocab=nlp.vocab, entity_vector_length=len(embeddings[0]))
 
         # set the entities, can also be done by calling `kb.add_entity` for each entity
         kb.set_entities(entity_list=entity_ids, freq_list=freqs, vector_list=embeddings)
