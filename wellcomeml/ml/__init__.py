@@ -31,8 +31,8 @@ else:
         from .spacy_classifier import SpacyClassifier
         from .bert_classifier import BertClassifier
         from .bert_vectorizer import BertVectorizer
-#        from .spacy_knowledge_base import SpacyKnowledgeBase
-#        from .spacy_entity_linking import SpacyEntityLinker
+        from .spacy_knowledge_base import SpacyKnowledgeBase
+        from .spacy_entity_linking import SpacyEntityLinker
         from .similarity_entity_linking import SimilarityEntityLinker
         from .bert_semantic_equivalence import SemanticEquivalenceClassifier
         from .cnn import CNNClassifier
