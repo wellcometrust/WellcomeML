@@ -4,6 +4,7 @@ TODO: Fill this
 from pathlib import Path
 import random
 
+from spacy.training import Example
 from spacy.symbols import PERSON
 from spacy.tokens import Span
 from spacy.util import minibatch, compounding
@@ -63,17 +64,22 @@ class SpacyEntityLinker(object):
 
         data = self._remove_examples_not_in_kb(kb, data)
 
+        examples = []
+        for text, annotation in data:
+            doc = self.nlp_model.make_doc(text)
+            example = Example.from_dict(doc, annotation)
+            examples.append(example)
+
         other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "entity_linker"]
         with nlp.select_pipes(disable=other_pipes):
-            optimizer = nlp.begin_training()
+            optimizer = nlp.initialize(lambda: examples)
             for itn in range(n_iter):
-                random.shuffle(data)
+                random.shuffle(examples)
                 losses = {}
-                batches = minibatch(data, size=compounding(4.0, 32.0, 1.001))
-                for batch in batches:
-                    texts, annotations = zip(*batch)
+                batches = minibatch(examples, size=compounding(4.0, 32.0, 1.001))
+                for batch in examples:
                     nlp.update(
-                        texts, annotations, drop=0.2, losses=losses, sgd=optimizer,
+                        batch, drop=0.2, losses=losses, sgd=optimizer,
                     )
                 if self.print_output:
                     print(itn, "Losses", losses)
