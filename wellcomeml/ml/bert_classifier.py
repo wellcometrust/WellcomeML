@@ -140,7 +140,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
         examples = self._data_to_examples(train_data)
                         
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe not in ["textcat", "transformer"]]
-        with self.nlp.disable_pipes(*other_pipes):  # only train textcat and transformer
+        with self.nlp.select_pipes(disable=other_pipes):  # only train textcat and transformer
             optimizer = self.nlp.initialize(lambda: examples)
             optimizer.learn_rate = self.learning_rate
             optimizer.L2 = self.l2
@@ -205,7 +205,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
         examples = self._data_to_examples(zip(texts, annotations))
         
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe not in ["transformer", "textcat"]]
-        with self.nlp.disable_pipes(*other_pipes):  # only train textcat and transformer
+        with self.nlp.select_pipes(disable=other_pipes):  # only train textcat and transformer
             if not hasattr(self, "optimizer"):
                 self.optimizer = self.nlp.initialize(lambda: examples)
                 self.optimizer.learn_rate = self.learning_rate

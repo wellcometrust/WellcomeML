@@ -64,7 +64,7 @@ class SpacyEntityLinker(object):
         data = self._remove_examples_not_in_kb(kb, data)
 
         other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "entity_linker"]
-        with nlp.disable_pipes(*other_pipes):
+        with nlp.select_pipes(disable=other_pipes):
             optimizer = nlp.begin_training()
             for itn in range(n_iter):
                 random.shuffle(data)
