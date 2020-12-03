@@ -117,6 +117,16 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         # Do we need to convert to numpy?
         return np.array(data)
 
+    def _data_to_examples(self, data):
+        """convert list of text, annotation to list of examples"""
+        examples = []
+        for training_example in data:
+            text, annotation = training_example
+            doc = self.nlp.make_doc(text)
+            example = Example.from_dict(doc, annotation)
+            examples.append(example)
+            return examples
+
     def fit(self, X, Y):
         """
         Args:
@@ -149,10 +159,14 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                     cats = {label: label == y for label in self.unique_labels}
                 yield (x, {"cats": cats})
 
+        # Not memory efficient
+        train_data = [item for item in yield_train_data(X_train, Y_train)]
+        examples = self._data_to_examples(train_data)
+        
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
-        with self.nlp.disable_pipes(*other_pipes):  # only train textcat
-            optimizer = self.nlp.begin_training()
-            # NEEDS FIXING optimizer.alpha = self.learning_rate
+        with self.nlp.select_pipes(disable=other_pipes):  # only train textcat
+            optimizer = self.nlp.initialize(lambda: examples)
+            optimizer.learn_rate = self.learning_rate
             # optimizer.L2 = 1e-4
 
             if self.pre_trained_vectors_path:
@@ -172,35 +186,19 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                 nb_examples = 0
                 losses = {}
 
-                def shuffle(X_train, Y_train):
-                    # this is not memory friendly but there should be
-                    # memory from deleting X, Y
-                    d = list(zip(X_train, Y_train))
-                    random.shuffle(d)
-                    X_train, Y_train = zip(*d)
-                    return X_train, Y_train
-
                 if self.shuffle:
-                    X_train, Y_train = shuffle(X_train, Y_train)
+                    random.shuffle(examples)
 
-                train_data = yield_train_data(X_train, Y_train)
-                batches = minibatch(train_data, size=batch_sizes)
+                batches = minibatch(examples, size=batch_sizes)
                 for batch in batches:
-                    texts, annotations = zip(*batch)
-                    examples = []
-                    for training_example in batch:
-                        text, annotation = training_example
-                        doc = self.nlp.make_doc(text)
-                        example = Example.from_dict(doc, annotation)
-                        examples.append(example)
                     next_dropout = self.dropout  # next(dropout)
                     self.nlp.update(
-                        examples,
+                        batch,
                         sgd=optimizer,
                         drop=next_dropout,
                         losses=losses,
                     )
-                    nb_examples += len(texts)
+                    nb_examples += len(batch)
                 end_time = time.time() - start_time
                 examples_per_second = round(nb_examples / end_time, 2)
                 # FIX this
@@ -255,11 +253,10 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
             examples.append(example)
 
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
-        with self.nlp.disable_pipes(*other_pipes):  # only train textcat
+        with self.nlp.select_pipes(disable=other_pipes):  # only train textcat
             if not hasattr(self, "optimizer"):
-                self.optimizer = self.nlp.begin_training()
-                # FIX this
-                # self.optimizer.alpha = self.learning_rate
+                self.optimizer = self.nlp.initialize(lambda: examples)
+                self.optimizer.learn_rate = self.learning_rate
 
             self.nlp.update(examples, sgd=self.optimizer, drop=self.dropout)
 
