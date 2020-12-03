@@ -77,7 +77,7 @@ class SpacyEntityLinker(object):
                 random.shuffle(examples)
                 losses = {}
                 batches = minibatch(examples, size=compounding(4.0, 32.0, 1.001))
-                for batch in examples:
+                for batch in batches:
                     nlp.update(
                         batch, drop=0.2, losses=losses, sgd=optimizer,
                     )
