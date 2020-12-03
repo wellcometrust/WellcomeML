@@ -1,6 +1,5 @@
 # encoding: utf-8
 import numpy as np
-import pytest
 
 from wellcomeml.ml.bert_classifier import BertClassifier
 
