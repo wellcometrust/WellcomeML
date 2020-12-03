@@ -5,21 +5,8 @@ Train a convolutional neural network for multilabel classification
 of grants
 Adapted from https://github.com/explosion/spaCy/blob/master/examples/training/train_textcat.py
 """
-from spacy_transformers import (
-    TransformersLanguage,
-    TransformersWordPiecer,
-    TransformersTok2Vec,
-)
-from spacy_transformers.model_registry import (
-    register_model,
-    get_last_hidden,
-    flatten_add_lengths,
-)
+from spacy.training import Example
 from spacy.util import minibatch, compounding
-from spacy._ml import zero_init, logistic
-from thinc.t2v import Pooling, mean_pool
-from thinc.v2v import Affine
-from thinc.api import chain
 from sklearn.metrics import precision_recall_fscore_support, f1_score
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import train_test_split
@@ -32,18 +19,6 @@ import time
 
 from wellcomeml.utils import check_cache_and_download
 from wellcomeml.logger import logger
-
-
-@register_model("sigmoid_last_hidden")
-def sigmoid_last_hidden(nr_class, *, exclusive_classes=False, **cfg):
-    width = cfg["token_vector_width"]
-    return chain(
-        get_last_hidden,
-        flatten_add_lengths,
-        Pooling(mean_pool),
-        zero_init(Affine(nr_class, width, drop_factor=0.0)),
-        logistic,
-    )
 
 
 is_using_gpu = spacy.prefer_gpu()
@@ -73,30 +48,47 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
         self.validation_split = validation_split
 
     def _init_nlp(self):
+        self.nlp = spacy.blank("en")
         if self.pretrained == "bert":
-            self.nlp = spacy.load("en_core_web_trf")
+            transformer = self.nlp.add_pipe(
+                "transformer",
+                config={
+                    "model": {
+                        "@architectures": "spacy-transformers.TransformerModel.v1",
+                        "name": "bert-base-uncased",
+                        "tokenizer_config": {"use_fast": "true"},
+                    }
+                }
+            )
         elif self.pretrained == "scibert":
-            name = "scibert-scivocab-uncased"
-            path = check_cache_and_download("scibert_scivocab_uncased")
-
-            nlp = TransformersLanguage(trf_name=name, meta={"lang": "en"})
-            nlp.add_pipe(nlp.create_pipe("sentencizer"))
-            nlp.add_pipe(TransformersWordPiecer.from_pretrained(nlp.vocab, path))
-            nlp.add_pipe(TransformersTok2Vec.from_pretrained(nlp.vocab, path))
-            self.nlp = nlp
+            transformer = self.nlp.add_pipe(
+                "transformer",
+                config={
+                    "model": {
+                        "@architectures": "spacy-transformers.TransformerModel.v1",
+                        "name": "allenai/scibert_scivocab_uncased",
+                        "tokenizer_config": {"use_fast": "true"},
+                    }
+                }
+            )
         else:
             logger.info(f"{self.pretrained} is not among bert, scibert")
             raise
         # TODO: Add a parameter for exclusive classes, non multilabel scenario
-        self.textcat = self.nlp.create_pipe(
-            "trf_textcat",
-            config={"exclusive_classes": False, "architecture": "sigmoid_last_hidden"},
+        self.textcat = self.nlp.add_pipe(
+            "textcat",
+            config={
+                "model": {
+                    "@architectures": "spacy.TextCatCNN.v1",
+                    "exclusive_classes": False,
+                    "tok2vec": {
+                        "@architectures": "spacy-transformers.TransformerListener.v1",
+                        "grad_factor": 1.0,
+                        "pooling": {"@layers": "reduce_mean.v1"}
+                    }
+                }
+            }
         )
-
-        self.nlp.add_pipe(self.textcat, last=True)
-
-        for label in self.unique_labels:
-            self.textcat.add_label(label)
 
     def load(self, model_dir):
         self.nlp = spacy.load(model_dir)
@@ -119,6 +111,16 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
         # Do we need to convert to numpy?
         return np.array(data)
 
+    def _data_to_examples(self, data):
+        """convert list of text, annotation to list of examples"""
+        examples = []
+        for training_example in data:
+            text, annotation = training_example
+            doc = self.nlp.make_doc(text)
+            example = Example.from_dict(doc, annotation)
+            examples.append(example)
+        return examples
+
     def fit(self, X, Y):
         X_train, X_test, Y_train, Y_test = train_test_split(
             X, Y, random_state=42, test_size=self.validation_split
@@ -135,11 +137,12 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
         ]
 
         train_data = list(zip(train_texts, [{"cats": cats} for cats in train_cats]))
-
-        other_pipes = [pipe for pipe in self.nlp.pipe_names if "trf" not in pipe]
-        with self.nlp.disable_pipes(*other_pipes):  # only train textcat
-            optimizer = self.nlp.resume_training()
-            optimizer.alpha = self.learning_rate
+        examples = self._data_to_examples(train_data)
+                        
+        other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe not in ["textcat", "transformer"]]
+        with self.nlp.disable_pipes(*other_pipes):  # only train textcat and transformer
+            optimizer = self.nlp.initialize(lambda: examples)
+            optimizer.learn_rate = self.learning_rate
             optimizer.L2 = self.l2
             logger.info("Training the model...")
             logger.info(
@@ -155,25 +158,25 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
                 nb_examples = 0
                 losses = {}
                 # batch up the examples using spaCy's minibatch
-                random.shuffle(train_data)
-                batches = minibatch(train_data, size=batch_sizes)
+                random.shuffle(examples)
+                batches = minibatch(examples, size=batch_sizes)
                 for batch in batches:
-                    texts, annotations = zip(*batch)
+#                    texts, annotations = zip(*batch)
                     next_dropout = self.dropout  # next(dropout)
                     self.nlp.update(
-                        texts,
-                        annotations,
+                        examples,
                         sgd=optimizer,
                         drop=next_dropout,
                         losses=losses,
                     )
-                    nb_examples += len(texts)
-                with self.textcat.model.use_params(optimizer.averages):
-                    Y_test_pred = self.predict(X_test)
-                    p, r, f1, _ = precision_recall_fscore_support(
+                    nb_examples += len(batch)
+                # FIX
+                #with self.textcat.model.use_params(optimizer.averages):
+                Y_test_pred = self.predict(X_test)
+                p, r, f1, _ = precision_recall_fscore_support(
                         Y_test, Y_test_pred, average="micro"
                     )
-                loss = losses["trf_textcat"]
+                loss = losses["textcat"]
                 self.losses.append(loss)
 
                 epoch_seconds = time.time() - start_epoch
@@ -199,18 +202,19 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
             for tags in train_tags
         ]
         annotations = [{"cats": cats} for cats in train_cats]
-
-        other_pipes = [pipe for pipe in self.nlp.pipe_names if "trf" not in pipe]
-        with self.nlp.disable_pipes(*other_pipes):  # only train textcat
+        examples = self._data_to_examples(zip(texts, annotations))
+        
+        other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe not in ["transformer", "textcat"]]
+        with self.nlp.disable_pipes(*other_pipes):  # only train textcat and transformer
             if not hasattr(self, "optimizer"):
-                self.optimizer = self.nlp.resume_training()
-                self.optimizer.alpha = self.learning_rate
+                self.optimizer = self.nlp.initialize(lambda: examples)
+                self.optimizer.learn_rate = self.learning_rate
 
             losses = {}
             self.nlp.update(
-                texts, annotations, sgd=self.optimizer, drop=self.dropout, losses=losses
+                examples, sgd=self.optimizer, drop=self.dropout, losses=losses
             )
-            self.losses.append(losses["trf_textcat"])
+            self.losses.append(losses["textcat"])
         return self
 
     def predict(self, X):
