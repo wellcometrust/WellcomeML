@@ -47,6 +47,7 @@ class BertClassifier(BaseEstimator, TransformerMixin):
            random_seed(int): controls random seed for reproducibility
            from_pt(bool): flag about pretrained model in pytorch or tensorflow
         """
+
         self.learning_rate = learning_rate
         self.epochs = epochs  # used to be n_iterations
         self.batch_size = batch_size
@@ -104,6 +105,7 @@ class BertClassifier(BaseEstimator, TransformerMixin):
         if repeat:
             dataset = dataset.repeat(self.epochs)
         return dataset
+
 
     def fit(self, X, Y):
         """
