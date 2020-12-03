@@ -87,7 +87,7 @@ class SpacyKnowledgeBase(object):
         if not output_dir.exists():
             output_dir.mkdir()
         kb_path = os.path.join(output_dir, "kb")
-        self.kb.dump(kb_path)
+        self.kb.to_disk(kb_path)
         print("Saved KB to", kb_path)
 
         vocab_path = os.path.join(output_dir, "vocab")
@@ -101,7 +101,7 @@ class SpacyKnowledgeBase(object):
         print("Loading KB from", kb_path)
         vocab = Vocab().from_disk(vocab_path)
         kb = KnowledgeBase(vocab=vocab)
-        kb.load_bulk(kb_path)
+        kb.from_disk(kb_path)
         self.kb = kb
         return self.kb
 
