@@ -58,15 +58,19 @@ class SpacyEntityLinker(object):
         nlp = spacy.blank("en", vocab=kb.vocab)
         nlp.vocab.vectors.name = "spacy_pretrained_vectors"
 
+        def create_kb(vocab):
+            kb = SpacyKnowledgeBase()
+            kb.load(kb_path)
+            return kb
+
         entity_linker = nlp.add_pipe("entity_linker")
-        entity_linker.set_kb(kb)
-        nlp.add_pipe(entity_linker, last=True)
+        entity_linker.set_kb(create_kb)
 
         data = self._remove_examples_not_in_kb(kb, data)
 
         examples = []
         for text, annotation in data:
-            doc = self.nlp_model.make_doc(text)
+            doc = nlp.make_doc(text)
             example = Example.from_dict(doc, annotation)
             examples.append(example)
 
