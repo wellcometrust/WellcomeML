@@ -1,4 +1,3 @@
-import os
 from wellcomeml.logger import logger
 
 
@@ -18,7 +17,6 @@ try:
     from .spacy_knowledge_base import SpacyKnowledgeBase
     from .spacy_entity_linking import SpacyEntityLinker
     from .similarity_entity_linking import SimilarityEntityLinker
-    from .bert_semantic_equivalence import SemanticEquivalenceClassifier
     from .cnn import CNNClassifier
     from .bilstm import BiLSTMClassifier
     from .keras_vectorizer import KerasVectorizer
