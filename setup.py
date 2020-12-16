@@ -46,7 +46,7 @@ setuptools.setup(
         'boto3',
         'scikit-learn',
         'scipy==1.4.1',
-        'spacy==2.3',
+        'spacy==2.3.5',
         'umap-learn',
         'nervaluate',
         'twine',
