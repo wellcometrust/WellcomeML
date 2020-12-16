@@ -66,7 +66,7 @@ class SpacyKnowledgeBase(object):
             entity_ids.append(key)
             embeddings.append(nlp(desc).vector)
             freqs.append(freq)
-            
+
         kb = KnowledgeBase(vocab=nlp.vocab, entity_vector_length=len(embeddings[0]))
 
         # set the entities, can also be done by calling `kb.add_entity` for each entity

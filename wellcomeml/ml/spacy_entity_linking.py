@@ -62,7 +62,7 @@ class SpacyEntityLinker(object):
         self.nlp = spacy.load("en_core_web_sm")
         self.nlp.vocab.vectors.name = "spacy_pretrained_vectors"
 
-        self.nlp.add_pipe(self.nlp.create_pipe('sentencizer'))
+        self.nlp.add_pipe(self.nlp.create_pipe("sentencizer"))
 
         # Create the Entity Linker component and add it to the pipeline.
         if "entity_linker" not in self.nlp.pipe_names:
@@ -73,7 +73,9 @@ class SpacyEntityLinker(object):
         data = self._remove_examples_not_in_kb(data)
 
         pipe_exceptions = ["entity_linker"]
-        other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe not in pipe_exceptions]
+        other_pipes = [
+            pipe for pipe in self.nlp.pipe_names if pipe not in pipe_exceptions
+        ]
         with self.nlp.disable_pipes(*other_pipes):
             optimizer = self.nlp.begin_training()
             for itn in range(n_iter):
@@ -83,7 +85,11 @@ class SpacyEntityLinker(object):
                 for batch in batches:
                     texts, annotations = zip(*batch)
                     self.nlp.update(
-                        texts, annotations, drop=0.2, losses=losses, sgd=optimizer,
+                        texts,
+                        annotations,
+                        drop=0.2,
+                        losses=losses,
+                        sgd=optimizer,
                     )
                 if self.print_output:
                     print(itn, "Losses", losses)
@@ -116,13 +122,13 @@ class SpacyEntityLinker(object):
         Returns:
             list: pred_entities_ids: [['Q1'], ['Q1'], ['Q2']
         """
-        pred_entities_ids = []   
+        pred_entities_ids = []
         for text, annotation in data:
             doc = self.nlp(text)
-            names = [text[s:e] for s,e in annotation['links'].keys()]
+            names = [text[s:e] for s, e in annotation["links"].keys()]
             doc_entities_ids = []
             for ent in doc.ents:
-                if ((ent.label_ == 'PERSON') and (ent.text in names)):
+                if (ent.label_ == "PERSON") and (ent.text in names):
                     doc_entities_ids.append(ent.kb_id_)
             pred_entities_ids.append(doc_entities_ids)
 
