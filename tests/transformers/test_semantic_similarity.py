@@ -18,7 +18,6 @@ python_random.seed(42)
 tf.random.set_seed(42)
 
 
-@pytest.mark.transformers
 def test_semantic_similarity():
     classifier = SemanticEquivalenceClassifier(pretrained="scibert",
                                                batch_size=2,
@@ -51,7 +50,6 @@ def test_semantic_similarity():
     assert len(classifier.history['loss']) == 5
 
 
-@pytest.mark.transformers
 def test_semantic_meta_fit():
     classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=2,
                                                    pretrained="scibert",
@@ -90,7 +88,6 @@ def test_semantic_meta_fit():
     assert loss_final < loss_initial
 
 
-@pytest.mark.transformers
 def test_save_and_load_semantic(tmp_path):
     classifier_1 = SemanticEquivalenceClassifier(pretrained="scibert",
                                                  batch_size=2,
@@ -116,7 +113,6 @@ def test_save_and_load_semantic(tmp_path):
 
 
 @pytest.mark.skip(reason="Test requires too much memory")
-@pytest.mark.transformers
 def test_save_and_load_meta(tmp_path):
     classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=1,
                                                    pretrained="bert",

@@ -49,13 +49,7 @@ download_nonpypi_packages: $(VIRTUALENV)/.installed $(VIRTUALENV)/.non_pypi_pack
 
 .PHONY: test
 test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models $(VIRTUALENV)/.non_pypi_packages
-	$(VIRTUALENV)/bin/pytest -m  "not (integration or transformers)" -s -v --durations=0 --disable-warnings --tb=line --cov=wellcomeml ./tests
-
-.PHONY: test-transformers
-test-transformers:
-	$(VIRTUALENV)/bin/pip install -r requirements_transformers.txt
-	export WELLCOMEML_ENV=development_transformers && $(VIRTUALENV)/bin/pytest -m "transformers" -s -v --durations=0 --disable-warnings --cov-append --tb=line --cov=wellcomeml ./tests/transformers
-
+	$(VIRTUALENV)/bin/pytest -m  "not (integration)" -s -v --durations=0 --disable-warnings --tb=line --cov=wellcomeml ./tests
 
 .PHONY: test-integrations
 test-integrations:
