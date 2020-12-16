@@ -4,8 +4,6 @@ TODO: Fill this
 from pathlib import Path
 import random
 
-from spacy.symbols import PERSON
-from spacy.tokens import Span
 from spacy.util import minibatch, compounding
 import spacy
 

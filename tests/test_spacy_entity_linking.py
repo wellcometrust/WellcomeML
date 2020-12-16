@@ -48,7 +48,8 @@ def data():
         ),
         (
             "On Broadway, Michelle Williams starred in revivals of the musical Cabaret in 2014"
-            " and the drama Blackbird in 2016. For which she received a nomination for the Tony Award"
+            " and the drama Blackbird in 2016."
+            " For which she received a nomination for the Tony Award"
             " for Best Actress in a Play.",
             {"links": {(13, 30): {"id_1": 1.0, "id_2": 0.0}}},
         ),
