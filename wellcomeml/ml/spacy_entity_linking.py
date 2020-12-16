@@ -18,10 +18,14 @@ class SpacyEntityLinker(object):
         self.n_iter = n_iter
         self.print_output = print_output
 
-    def _remove_examples_not_in_kb(self, kb, data):
-        # Remove examples with unknown identifiers to the knowlege base
-        kb_ids = kb.get_entity_strings()
+    def _remove_examples_not_in_kb(self, data):
+        # Remove examples with unknown identifiers to the knowledge base
+        kb_ids = self.nlp.get_pipe("entity_linker").kb.get_entity_strings()
+        train_docs = []
         for text, annotation in data:
+            with self.nlp.disable_pipes("entity_linker"):
+                doc = self.nlp(text)
+            annotation_clean = annotation
             for offset, kb_id_dict in annotation["links"].items():
                 new_dict = {}
                 for kb_id, value in kb_id_dict.items():
@@ -33,8 +37,9 @@ class SpacyEntityLinker(object):
                             kb_id,
                             "from training because it is not in the KB.",
                         )
-                annotation["links"][offset] = new_dict
-        return data
+                annotation_clean["links"][offset] = new_dict
+            train_docs.append((doc, annotation_clean))
+        return train_docs
 
     def train(self, data):
         """
@@ -54,31 +59,35 @@ class SpacyEntityLinker(object):
         kb = kb.load(self.kb_path)
         print("Loaded Knowledge Base from '%s'" % self.kb_path)
 
-        nlp = spacy.blank("en", vocab=kb.vocab)
-        nlp.vocab.vectors.name = "spacy_pretrained_vectors"
+        self.nlp = spacy.load("en_core_web_sm")
+        self.nlp.vocab.vectors.name = "spacy_pretrained_vectors"
 
-        entity_linker = nlp.create_pipe("entity_linker")
-        entity_linker.set_kb(kb)
-        nlp.add_pipe(entity_linker, last=True)
+        self.nlp.add_pipe(self.nlp.create_pipe('sentencizer'))
 
-        data = self._remove_examples_not_in_kb(kb, data)
+        # Create the Entity Linker component and add it to the pipeline.
+        if "entity_linker" not in self.nlp.pipe_names:
+            entity_linker = self.nlp.create_pipe("entity_linker")
+            entity_linker.set_kb(kb)
+            self.nlp.add_pipe(entity_linker, last=True)
 
-        other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "entity_linker"]
-        with nlp.disable_pipes(*other_pipes):
-            optimizer = nlp.begin_training()
+        data = self._remove_examples_not_in_kb(data)
+
+        pipe_exceptions = ["entity_linker"]
+        other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe not in pipe_exceptions]
+        with self.nlp.disable_pipes(*other_pipes):
+            optimizer = self.nlp.begin_training()
             for itn in range(n_iter):
                 random.shuffle(data)
                 losses = {}
                 batches = minibatch(data, size=compounding(4.0, 32.0, 1.001))
                 for batch in batches:
                     texts, annotations = zip(*batch)
-                    nlp.update(
+                    self.nlp.update(
                         texts, annotations, drop=0.2, losses=losses, sgd=optimizer,
                     )
                 if self.print_output:
                     print(itn, "Losses", losses)
 
-        self.nlp = nlp
         return self.nlp
 
     def _get_token_nums(self, doc, char_idx):
@@ -105,39 +114,17 @@ class SpacyEntityLinker(object):
                     {'links': {(17, 22): {'Q1': 1.0, 'Q2': 0.0}}})]
 
         Returns:
-            list: pred_entities_ids: ['Q1', 'Q1', 'Q2']
-    """
-        # TODO: Replace nlp_el with self.nlp
-        nlp_el = self.nlp
-
-        # IMPORTANT
-        #
-        # This code assumes each training example has one entity
-        # e.g. (start, end) = list(values['links'].keys())[0]
-        #
-        # If the code has more than one entities we predict the
-        # first only  e.g. pred_entity_id = doc.ents[0].kb_id_
-
-        pred_entities_ids = []
-        for text, values in data:
-            (start, end) = list(values["links"].keys())[0]
-
-            doc = nlp_el.tokenizer(text)
-
-            # Set entity span to PERSON
-            doc.ents = [
-                Span(
-                    doc,
-                    self._get_token_nums(doc, start),
-                    self._get_token_nums(doc, end),
-                    label=PERSON,
-                )
-            ]
-
-            doc = nlp_el.get_pipe("entity_linker")(doc)
-
-            pred_entity_id = doc.ents[0].kb_id_
-            pred_entities_ids.append(pred_entity_id)
+            list: pred_entities_ids: [['Q1'], ['Q1'], ['Q2']
+        """
+        pred_entities_ids = []   
+        for text, annotation in data:
+            doc = self.nlp(text)
+            names = [text[s:e] for s,e in annotation['links'].keys()]
+            doc_entities_ids = []
+            for ent in doc.ents:
+                if ((ent.label_ == 'PERSON') and (ent.text in names)):
+                    doc_entities_ids.append(ent.kb_id_)
+            pred_entities_ids.append(doc_entities_ids)
 
         return pred_entities_ids
 
