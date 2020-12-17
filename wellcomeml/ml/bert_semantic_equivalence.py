@@ -234,7 +234,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             An array of 0s and 1s
 
         """
-        return self.score(X).argmax(axis=1)
+        return self.score(X).argmax(axis=2).flatten()
 
     def save(self, path):
         """Saves model to path"""
