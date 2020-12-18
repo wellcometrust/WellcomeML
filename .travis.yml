@@ -8,7 +8,7 @@ install:
   - make virtualenv
 
 script:
-  - make test
+  - travis_wait make test
 
 cache: pip
 
