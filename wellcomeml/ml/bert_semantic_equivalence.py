@@ -142,7 +142,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
     def _prep_data_for_prediction(self, X):
         X_tokenized = self._tokenize(X)
-        return tf.convert_to_tensor(self.model.predict(X_tokenized))
+        predictions = self.model.predict(X_tokenized)[0]  # Issue 188
+        return tf.convert_to_tensor(predictions)
 
     def fit(self, X, y, random_state=None, epochs=3, metrics=[], **kwargs):
         """
@@ -234,7 +235,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             An array of 0s and 1s
 
         """
-        return self.score(X).argmax(axis=2).flatten()
+        return self.score(X).argmax(axis=1)
 
     def save(self, path):
         """Saves model to path"""
