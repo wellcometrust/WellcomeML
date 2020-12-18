@@ -64,7 +64,7 @@ def test_semantic_meta_fit():
 
     y = [1, 1, 0]
 
-    classifier.fit(X, y, epochs=3)
+    classifier.fit(X, y, epochs=5)
 
     loss_initial = classifier.history['loss'][0]
     scores = classifier.score(X)
@@ -80,9 +80,9 @@ def test_semantic_meta_fit():
     # Asserts that the classifier model is adding to the history, and still
     # not re-training from scratch
 
-    assert len(classifier.history['loss']) == 5
+    assert len(classifier.history['loss']) == 7
 
-    loss_final = classifier.history['loss'][4]
+    loss_final = classifier.history['loss'][-1]
 
     # Asserts loss is decreasing
     assert loss_final < loss_initial
