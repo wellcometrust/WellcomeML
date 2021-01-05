@@ -36,7 +36,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         learning_rate=3e-5,
         test_size=0.2,
         max_length=128,
-        callbacks=[]
+        callbacks=['tensorboard']
     ):
         """
 
