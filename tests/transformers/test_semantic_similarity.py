@@ -17,7 +17,7 @@ np.random.seed(42)
 python_random.seed(42)
 tf.random.set_seed(42)
 
-
+@pytest.mark.skip(reason="Test is too long")
 def test_semantic_similarity():
     classifier = SemanticEquivalenceClassifier(pretrained="scibert",
                                                batch_size=2,
@@ -49,7 +49,7 @@ def test_semantic_similarity():
 
     assert len(classifier.history['loss']) == 5
 
-
+@pytest.mark.skip(reason="Test is too long")
 def test_semantic_meta_fit():
     classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=2,
                                                    pretrained="scibert",
@@ -87,7 +87,7 @@ def test_semantic_meta_fit():
     # Asserts loss is decreasing
     assert loss_final < loss_initial
 
-
+@pytest.mark.skip(reason="Test is too long")
 def test_save_and_load_semantic(tmp_path):
     classifier_1 = SemanticEquivalenceClassifier(pretrained="scibert",
                                                  batch_size=2,
