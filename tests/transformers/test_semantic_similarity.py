@@ -18,7 +18,6 @@ python_random.seed(42)
 tf.random.set_seed(42)
 
 
-@pytest.mark.skip(reason="Test is too long")
 def test_semantic_similarity():
     classifier = SemanticEquivalenceClassifier(pretrained="scibert",
                                                batch_size=2,
