@@ -18,7 +18,7 @@ classifier = SemanticEquivalenceClassifier(
     pretrained="scibert", batch_size=8, eval_batch_size=16
 )
 
-classifier.fit(X, y, epochs=3)
+classifier.fit(X, y, epochs=1)
 
 test_pair = (
     "the FCC will not request personal identifying information ",
