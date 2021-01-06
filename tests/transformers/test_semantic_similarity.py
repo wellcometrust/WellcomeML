@@ -50,7 +50,6 @@ def test_semantic_similarity():
     assert len(classifier.history['loss']) == 5
 
 
-@pytest.mark.skip(reason="Test is too long")
 def test_semantic_meta_fit():
     classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=2,
                                                    pretrained="scibert",
