@@ -88,7 +88,7 @@ def test_semantic_meta_fit():
     assert loss_final < loss_initial
 
 
-@pytest.mark.skip(reason="Test is too long")
+@pytest.mark.skip(reason="Test requires too much memory")
 def test_save_and_load_semantic(tmp_path):
     classifier_1 = SemanticEquivalenceClassifier(pretrained="scibert",
                                                  batch_size=2,
