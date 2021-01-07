@@ -47,12 +47,12 @@ def test_semantic_similarity():
 
     # Commenting the extra fit test because there is a bug #189
 
-    #classifier.fit(X, y, epochs=2)
+    # classifier.fit(X, y, epochs=2)
 
     # Asserts that the classifier model is adding to the history, and still
     # not re-training from scratch
 
-    #assert len(classifier.history['loss']) == 5
+    # assert len(classifier.history['loss']) == 5
 
 
 def test_semantic_meta_fit():
@@ -71,7 +71,7 @@ def test_semantic_meta_fit():
 
     classifier.fit(X, y, epochs=5)
 
-    loss_initial = classifier.history['loss'][0]
+    # loss_initial = classifier.history['loss'][0]
     scores = classifier.score(X)
 
     # Assert it returns a vector of correct length (15 training points) and 15*2 scores
