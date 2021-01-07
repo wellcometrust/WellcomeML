@@ -15,7 +15,7 @@ from wellcomeml.ml.keras_utils import CategoricalMetrics, MetricMiniBatchHistory
 
 TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 CALLBACK_DICT = {
-    'tensorboard': tf.keras.callbacks.TensorBoard(log_dir=TENSORBOARD_LOG_DIR),
+    'tensorboard': tf.keras.callbacks.TensorBoard(log_dir=TENSORBOARD_LOG_DIR, update_freq=1),
     'minibatch_history': MetricMiniBatchHistory()
 }
 
