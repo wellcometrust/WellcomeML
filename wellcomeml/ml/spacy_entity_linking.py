@@ -4,6 +4,12 @@ TODO: Fill this
 from pathlib import Path
 import random
 
+<<<<<<< HEAD
+=======
+from spacy.training import Example
+from spacy.symbols import PERSON
+from spacy.tokens import Span
+>>>>>>> e5190f8... Resolve begin_training to initialize
 from spacy.util import minibatch, compounding
 import spacy
 
@@ -70,6 +76,13 @@ class SpacyEntityLinker(object):
 
         data = self._remove_examples_not_in_kb(data)
 
+        examples = []
+        for text, annotation in data:
+            doc = self.nlp_model.make_doc(text)
+            example = Example.from_dict(doc, annotation)
+            examples.append(example)
+
+
         pipe_exceptions = ["entity_linker"]
         other_pipes = [
             pipe for pipe in self.nlp.pipe_names if pipe not in pipe_exceptions
@@ -78,7 +91,7 @@ class SpacyEntityLinker(object):
             optimizer = self.nlp.begin_training()
 
             for itn in range(n_iter):
-                random.shuffle(data)
+                random.shuffle(examples)
                 losses = {}
                 batches = minibatch(data, size=compounding(4.0, 32.0, 1.001))
                 for batch in batches:
