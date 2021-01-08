@@ -42,7 +42,7 @@ class SpacyNER:
                 ner.add_label(span["label"])
 
         other_pipes = [pipe for pipe in self.nlp_model.pipe_names if pipe != "ner"]
-        with self.nlp_model.disable_pipes(*other_pipes):  # only train NER
+        with self.nlp_model.select_pipes(disable=other_pipes):  # only train NER
             optimizer = self.nlp_model.begin_training()
 
             for i in range(self.n_iter):
