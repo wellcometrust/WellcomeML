@@ -4,12 +4,11 @@ TODO: Fill this
 from pathlib import Path
 import random
 
-<<<<<<< HEAD
-=======
+
 from spacy.training import Example
 from spacy.symbols import PERSON
 from spacy.tokens import Span
->>>>>>> e5190f8... Resolve begin_training to initialize
+
 from spacy.util import minibatch, compounding
 import spacy
 
