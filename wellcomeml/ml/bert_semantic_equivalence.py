@@ -140,7 +140,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
     def _prep_data_for_prediction(self, X):
         X_tokenized = self._tokenize(X)
-        predictions = self.model.predict(X_tokenized)[0]  # Issue 188
+        predictions = self.model(X_tokenized)[0]  # Issue 188
         return tf.convert_to_tensor(predictions)
 
     def fit(self, X, y, random_state=None, epochs=3, metrics=[], **kwargs):
