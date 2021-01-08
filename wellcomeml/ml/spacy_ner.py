@@ -30,7 +30,7 @@ class SpacyNER:
 
         if "ner" not in self.nlp_model.pipe_names:
             # If you are training on a blank model
-            ner = self.nlp_model.create_pipe("ner")
+            ner = self.nlp_model.add_pipe("ner")
             self.nlp_model.add_pipe(ner, last=True)
         else:
             ner = self.nlp_model.get_pipe("ner")
