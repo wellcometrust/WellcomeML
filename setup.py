@@ -62,8 +62,8 @@ setuptools.setup(
             'tensorflow==2.4.0',
             'torch',
             'transformers==3.0.0',
-#            'spacy-transformers==0.6.1',
-#            'dataclasses==0.6'  # spacy transformers needs this pinned
+            # 'spacy-transformers==0.6.1',
+            # 'dataclasses==0.6'  # spacy transformers needs this pinned
         ]
     },
     tests_require=[
