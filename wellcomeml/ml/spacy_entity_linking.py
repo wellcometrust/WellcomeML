@@ -66,7 +66,17 @@ class SpacyEntityLinker(object):
         self.nlp = spacy.load("en_core_web_sm")
         self.nlp.vocab.vectors.name = "spacy_pretrained_vectors"
 
+
         self.nlp.add_pipe(self.nlp.create_pipe("sentencizer"))
+
+        def create_kb(vocab):
+            kb = SpacyKnowledgeBase()
+            kb.load(kb_path)
+            return kb
+
+        entity_linker = nlp.add_pipe("entity_linker")
+        entity_linker.set_kb(create_kb)
+
 
         # Create the Entity Linker component and add it to the pipeline.
         if "entity_linker" not in self.nlp.pipe_names:
@@ -78,7 +88,7 @@ class SpacyEntityLinker(object):
 
         examples = []
         for text, annotation in data:
-            doc = self.nlp_model.make_doc(text)
+            doc = nlp.make_doc(text)
             example = Example.from_dict(doc, annotation)
             examples.append(example)
 
