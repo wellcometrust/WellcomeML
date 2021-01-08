@@ -4,15 +4,10 @@ TODO: Fill this
 from pathlib import Path
 import random
 
-
 from spacy.training import Example
-from spacy.symbols import PERSON
-from spacy.tokens import Span
-
 from spacy.util import minibatch, compounding
 import spacy
-
-from wellcomeml.ml.spacy_knowledge_base import SpacyKnowledgeBase
+from spacy.kb import KnowledgeBase
 
 
 class SpacyEntityLinker(object):
@@ -21,12 +16,14 @@ class SpacyEntityLinker(object):
         self.n_iter = n_iter
         self.print_output = print_output
 
-    def _remove_examples_not_in_kb(self, data):
+    def _format_examples(self, data):
         # Remove examples with unknown identifiers to the knowledge base
+        # Convert text to spacy.tokens.doc.Doc format
+        # Return list of Examples objects
         kb_ids = self.nlp.get_pipe("entity_linker").kb.get_entity_strings()
-        train_docs = []
+        examples = []
         for text, annotation in data:
-            with self.nlp.disable_pipes("entity_linker"):
+            with self.nlp.select_pipes(disable="entity_linker"):
                 doc = self.nlp(text)
             annotation_clean = annotation
             for offset, kb_id_dict in annotation["links"].items():
@@ -41,8 +38,9 @@ class SpacyEntityLinker(object):
                             "from training because it is not in the KB.",
                         )
                 annotation_clean["links"][offset] = new_dict
-            train_docs.append((doc, annotation_clean))
-        return train_docs
+            example = Example.from_dict(doc, annotation_clean)
+            examples.append(example)
+        return examples
 
     def train(self, data):
         """
@@ -57,54 +55,41 @@ class SpacyEntityLinker(object):
         """
         n_iter = self.n_iter
 
-        kb = SpacyKnowledgeBase()
-        kb = kb.load(self.kb_path)
-        print("Loaded Knowledge Base from '%s'" % self.kb_path)
+        vocab_folder = self.kb_path + "/vocab"
+        kb_folder = self.kb_path + "/kb"
 
         self.nlp = spacy.load("en_core_web_sm")
-        self.nlp.vocab.vectors.name = "spacy_pretrained_vectors"
-
-        self.nlp.add_pipe(self.nlp.create_pipe("sentencizer"))
+        self.nlp.vocab.from_disk(vocab_folder)
+        self.nlp.add_pipe("sentencizer", before="parser")
 
         def create_kb(vocab):
-            kb = SpacyKnowledgeBase()
-            kb = kb.load(self.kb_path)
+            entity_vector_length = 300
+            kb = KnowledgeBase(vocab=vocab, entity_vector_length=entity_vector_length)
+            kb.from_disk(kb_folder)
             return kb
 
         entity_linker = self.nlp.add_pipe("entity_linker")
         entity_linker.set_kb(create_kb)
 
-        data = self._remove_examples_not_in_kb(data)
+        examples = self._format_examples(data)
 
-        examples = []
-        for text, annotation in data:
-            doc = self.nlp.make_doc(text)
-            example = Example.from_dict(doc, annotation)
-            examples.append(example)
-
-        pipe_exceptions = ["entity_linker"]
-        other_pipes = [
-            pipe for pipe in self.nlp.pipe_names if pipe not in pipe_exceptions
-        ]
-        with self.nlp.disable_pipes(*other_pipes):
-            optimizer = self.nlp.begin_training()
-
+        optimizer = entity_linker.initialize(
+            lambda: iter(examples), nlp=self.nlp, kb_loader=create_kb
+        )
+        with self.nlp.select_pipes(enable=[]):
             for itn in range(n_iter):
                 random.shuffle(examples)
                 losses = {}
-                batches = minibatch(data, size=compounding(4.0, 32.0, 1.001))
+                batches = minibatch(examples, size=compounding(4.0, 32.0, 1.001))
                 for batch in batches:
-                    texts, annotations = zip(*batch)
                     self.nlp.update(
-                        texts,
-                        annotations,
+                        batch,
                         drop=0.2,
                         losses=losses,
                         sgd=optimizer,
-
                     )
-                if self.print_output:
-                    print(itn, "Losses", losses)
+                    if self.print_output:
+                        print(itn, "Losses", losses)
 
         return self.nlp
 
