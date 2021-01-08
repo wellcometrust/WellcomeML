@@ -65,26 +65,30 @@ def test_kb_train(entities, list_aliases):
     assert kb.kb.get_alias_strings() == ["Michelle Williams"]
 
 
-# def test_el_train(entities, list_aliases, data):
+def test_el_train(entities, list_aliases, data):
 
-#     with tempfile.TemporaryDirectory() as tmp_dir:
-#         temp_kb = SpacyKnowledgeBase(kb_model="en_core_web_sm")
-#         temp_kb.train(entities, list_aliases)
-#         temp_kb.save(tmp_dir)
-#         el = SpacyEntityLinker(tmp_dir, print_output=False)
-#         el.train(data)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        temp_kb = SpacyKnowledgeBase(kb_model="en_core_web_sm")
+        temp_kb.train(entities, list_aliases)
+        temp_kb.save(tmp_dir)
+        el = SpacyEntityLinker(tmp_dir, print_output=False)
+        el.train(data)
 
-#         assert "entity_linker" in el.nlp.pipe_names
+        assert "entity_linker" in el.nlp.pipe_names
 
 
-# def test_el_predict(entities, list_aliases, data):
+def test_el_predict(entities, list_aliases, data):
 
-#     with tempfile.TemporaryDirectory() as tmp_dir:
-#         temp_kb = SpacyKnowledgeBase(kb_model="en_core_web_sm")
-#         temp_kb.train(entities, list_aliases)
-#         temp_kb.save(tmp_dir)
-#         el = SpacyEntityLinker(tmp_dir, print_output=False)
-#         el.train(data)
-#         predicted_ids = el.predict(data)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        temp_kb = SpacyKnowledgeBase(kb_model="en_core_web_sm")
+        temp_kb.train(entities, list_aliases)
+        temp_kb.save(tmp_dir)
+        el = SpacyEntityLinker(tmp_dir, print_output=False)
+        el.train(data)
+        predicted_ids = el.predict(data)
 
-#         assert predicted_ids == [["id_2"], ["id_1"]]
+        entity_ids = temp_kb.kb.get_entity_strings()
+        bad_entity_ids = [p for p in predicted_ids if p[0] not in entity_ids]
+
+        assert len(predicted_ids) == 2
+        assert len(bad_entity_ids) == 0
