@@ -102,6 +102,7 @@ class SpacyEntityLinker(object):
                         drop=0.2,
                         losses=losses,
                         sgd=optimizer,
+
                     )
                 if self.print_output:
                     print(itn, "Losses", losses)
