@@ -76,6 +76,7 @@ class SpacyEntityLinker(object):
         ]
         with self.nlp.disable_pipes(*other_pipes):
             optimizer = self.nlp.begin_training()
+
             for itn in range(n_iter):
                 random.shuffle(data)
                 losses = {}

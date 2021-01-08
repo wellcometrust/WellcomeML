@@ -141,6 +141,7 @@ class BertClassifier(BaseEstimator, TransformerMixin):
             train_data, validation_data=val_data, epochs=self.epochs,
             steps_per_epoch=steps_per_epoch, validation_steps=val_steps_per_epoch)
         self.losses = history.history["loss"]
+
         return self
 
     def _predict_proba(self, X):
