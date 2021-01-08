@@ -67,7 +67,8 @@ class SpacyKnowledgeBase(object):
             embeddings.append(nlp(desc).vector)
             freqs.append(freq)
 
-        kb = KnowledgeBase(vocab=nlp.vocab, entity_vector_length=len(embeddings[0]))
+        self.entity_vector_length = len(embeddings[0]) # This is needed in loading a kb
+        kb = KnowledgeBase(vocab=nlp.vocab, entity_vector_length=self.entity_vector_length)
 
         # set the entities, can also be done by calling `kb.add_entity` for each entity
         kb.set_entities(entity_list=entity_ids, freq_list=freqs, vector_list=embeddings)
@@ -94,13 +95,25 @@ class SpacyKnowledgeBase(object):
         self.kb.vocab.to_disk(vocab_path)
         print("Saved vocab to", vocab_path)
 
+        kb_info_path = os.path.join(output_dir, "kb_info.txt")
+        with open(kb_info_path, 'w') as file:
+            # The first line must be the entity_vector_length for load to work
+            file.write(f"{self.entity_vector_length} \n") 
+            file.write(f"{self.kb_model} \n")
+        print("Saved knowledge base info to", kb_info_path)
+
     def load(self, output_dir):
         kb_path = os.path.join(output_dir, "kb")
         vocab_path = os.path.join(output_dir, "vocab")
+        kb_info_path = os.path.join(output_dir, "kb_info.txt")
         print("Loading vocab from", vocab_path)
         print("Loading KB from", kb_path)
+        print("Loading KB info from", kb_info_path)
+        with open(kb_info_path, 'r') as file:
+            # The first line is the entity_vector_length
+            entity_vector_length = int(file.readline().strip())
         vocab = Vocab().from_disk(vocab_path)
-        kb = KnowledgeBase(vocab=vocab)
+        kb = KnowledgeBase(vocab=vocab, entity_vector_length=entity_vector_length)
         kb.from_disk(kb_path)
         self.kb = kb
         return self.kb

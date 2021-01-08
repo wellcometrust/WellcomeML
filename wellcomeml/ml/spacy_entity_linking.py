@@ -59,6 +59,7 @@ class SpacyEntityLinker(object):
         # TODO: Replace n_iter with self.n_iter
         n_iter = self.n_iter
 
+
         kb = SpacyKnowledgeBase()
         kb = kb.load(self.kb_path)
         print("Loaded Knowledge Base from '%s'" % self.kb_path)
@@ -71,7 +72,7 @@ class SpacyEntityLinker(object):
 
         def create_kb(vocab):
             kb = SpacyKnowledgeBase()
-            kb.load(kb_path)
+            kb = kb.load(self.kb_path)
             return kb
 
         entity_linker = nlp.add_pipe("entity_linker")

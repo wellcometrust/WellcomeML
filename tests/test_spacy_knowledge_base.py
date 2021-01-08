@@ -1,7 +1,8 @@
 import pytest
 
 from wellcomeml.ml import SpacyKnowledgeBase
-
+from wellcomeml.ml import SpacyEntityLinker
+import tempfile
 
 @pytest.fixture(scope="module")
 def entities():
@@ -29,6 +30,18 @@ def list_aliases():
         'probabilities': [0.7, 0.3]
                     }]
 
+@pytest.fixture(scope="module")
+def data():
+    return [
+            ("After Destiny's Child's disbanded in 2006. Michelle Williams released her first "
+            "pop album, Unexpected (2008),", 
+            {'links': {(43, 60): {'id_1': 0.0, 'id_2': 1.0}}}),
+            (
+            "On Broadway, Michelle Williams starred in revivals of the musical Cabaret in 2014"
+            " and the drama Blackbird in 2016. For which she received a nomination for the Tony Award"
+            " for Best Actress in a Play.",
+            {'links': {(13, 30): {'id_1': 1.0, 'id_2': 0.0}}})
+            ]
 
 def test_kb_train(entities, list_aliases):
 
@@ -37,3 +50,14 @@ def test_kb_train(entities, list_aliases):
 
     assert sorted(kb.kb.get_entity_strings()) == ['id_1', 'id_2']
     assert kb.kb.get_alias_strings() == ['Michelle Williams']
+
+
+# def test_el_train(entities, list_aliases, data):
+
+#     with tempfile.TemporaryDirectory() as tmp_dir:
+#         temp_kb = SpacyKnowledgeBase(kb_model="en_core_web_md")
+#         temp_kb.train(entities, list_aliases)
+#         temp_kb.save(tmp_dir)
+#         el = SpacyEntityLinker(tmp_dir)
+#         el.train(data)
+    
