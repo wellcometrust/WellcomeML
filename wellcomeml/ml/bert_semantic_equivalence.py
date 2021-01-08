@@ -15,9 +15,7 @@ from wellcomeml.ml.keras_utils import CategoricalMetrics, MetricMiniBatchHistory
 
 TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 CALLBACK_DICT = {
-    'tensorboard': tf.keras.callbacks.TensorBoard(
-        log_dir=TENSORBOARD_LOG_DIR,
-        update_freq='batch'),
+    'tensorboard': tf.keras.callbacks.TensorBoard(log_dir=TENSORBOARD_LOG_DIR, update_freq=1),
     'minibatch_history': MetricMiniBatchHistory()
 }
 
@@ -36,7 +34,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         learning_rate=3e-5,
         test_size=0.2,
         max_length=128,
-        callbacks=['tensorboard', 'minibatch_history']
+        callbacks=['tensorboard']
     ):
         """
 
@@ -142,7 +140,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
     def _prep_data_for_prediction(self, X):
         X_tokenized = self._tokenize(X)
-        return tf.convert_to_tensor(self.model.predict(X_tokenized))
+        predictions = self.model.predict(X_tokenized)[0]  # Issue 188
+        return tf.convert_to_tensor(predictions)
 
     def fit(self, X, y, random_state=None, epochs=3, metrics=[], **kwargs):
         """

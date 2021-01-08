@@ -9,7 +9,6 @@ install:
 
 script:
   - make test
-  - make test-transformers
 
 cache: pip
 

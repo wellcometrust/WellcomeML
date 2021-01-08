@@ -11,8 +11,6 @@ import os
 from spacy.vocab import Vocab
 from spacy.kb import KnowledgeBase
 
-# bin is also a spaCy package
-from bin.wiki_entity_linking.train_descriptions import EntityEncoder
 import spacy
 
 
@@ -58,31 +56,18 @@ class SpacyKnowledgeBase(object):
             nlp = spacy.load(self.kb_model)
 
         print("Loaded model '%s'" % self.kb_model)
-        kb = KnowledgeBase(vocab=nlp.vocab, entity_vector_length=self.desc_width)
 
         # set up the data
         entity_ids = []
-        descriptions = []
+        embeddings = []
         freqs = []
         for key, value in entities.items():
             desc, freq = value
             entity_ids.append(key)
-            descriptions.append(desc)
+            embeddings.append(nlp(desc).vector)
             freqs.append(freq)
 
-        # training entity description encodings
-        # this part can easily be replaced with a custom entity encoder
-        encoder = EntityEncoder(
-            nlp=nlp,
-            input_dim=self.input_dim,
-            desc_width=self.desc_width,
-            epochs=self.num_epochs,
-        )
-
-        encoder.train(description_list=descriptions, to_print=True)
-
-        # get the pretrained entity vectors
-        embeddings = encoder.apply_encoder(descriptions)
+        kb = KnowledgeBase(vocab=nlp.vocab, entity_vector_length=len(embeddings[0]))
 
         # set the entities, can also be done by calling `kb.add_entity` for each entity
         kb.set_entities(entity_list=entity_ids, freq_list=freqs, vector_list=embeddings)

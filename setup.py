@@ -41,12 +41,12 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     install_requires=[
-        'numpy<1.19.0,>=1.16.0',
+        'numpy==1.19.2',
         'pandas',
         'boto3',
         'scikit-learn',
         'scipy==1.4.1',
-        'spacy==2.2.1',
+        'spacy==2.3.5',
         'umap-learn',
         'nervaluate',
         'twine',
@@ -59,10 +59,10 @@ setuptools.setup(
     ],
     extras_require={
         'deep-learning': [
-            'tensorflow',
+            'tensorflow==2.4.0',
             'torch',
-            'transformers<=2.0.0',
-            'spacy-transformers==0.5.1',
+            'transformers<2.9.0',
+            'spacy-transformers==0.6.1',
             'dataclasses==0.6'  # spacy transformers needs this pinned
         ]
     },
