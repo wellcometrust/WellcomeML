@@ -133,7 +133,6 @@ class WellcomeTfidf(TfidfVectorizer):
         if spacy_lemmatizer:
             X = self.spacy_lemmatizer(X)
 
-
         logger.info("Fitting vectorizer.")
 
         X = [" ".join(text) for text in X]

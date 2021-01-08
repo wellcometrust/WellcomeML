@@ -47,7 +47,7 @@ class SpacyNER:
             doc = self.nlp_model.make_doc(text)
             example = Example.from_dict(doc, annotations)
             examples.append(example)
-                    
+
         other_pipes = [pipe for pipe in self.nlp_model.pipe_names if pipe != "ner"]
         with self.nlp_model.select_pipes(disable=other_pipes):  # only train NER
             optimizer = self.nlp_model.initialize(lambda: examples)

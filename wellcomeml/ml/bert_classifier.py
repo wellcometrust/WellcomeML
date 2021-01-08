@@ -17,7 +17,6 @@ import torch
 import random
 import time
 
-from wellcomeml.utils import check_cache_and_download
 from wellcomeml.logger import logger
 
 
@@ -50,30 +49,22 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
     def _init_nlp(self):
         self.nlp = spacy.blank("en")
         if self.pretrained == "bert":
-            transformer = self.nlp.add_pipe(
-                "transformer",
-                config={
-                    "model": {
-                        "@architectures": "spacy-transformers.TransformerModel.v1",
-                        "name": "bert-base-uncased",
-                        "tokenizer_config": {"use_fast": "true"},
-                    }
-                }
-            )
+            transformer_name = "bert-base-uncased"
         elif self.pretrained == "scibert":
-            transformer = self.nlp.add_pipe(
-                "transformer",
-                config={
-                    "model": {
-                        "@architectures": "spacy-transformers.TransformerModel.v1",
-                        "name": "allenai/scibert_scivocab_uncased",
-                        "tokenizer_config": {"use_fast": "true"},
-                    }
-                }
-            )
+            transformer_name = "allenai/scibert_scivocab_uncased"
         else:
             logger.info(f"{self.pretrained} is not among bert, scibert")
             raise
+        self.nlp.add_pipe(
+            "transformer",
+            config={
+                "model": {
+                    "@architectures": "spacy-transformers.TransformerModel.v1",
+                    "name": transformer_name,
+                    "tokenizer_config": {"use_fast": "true"},
+                }
+            }
+        )
         # TODO: Add a parameter for exclusive classes, non multilabel scenario
         self.textcat = self.nlp.add_pipe(
             "textcat",
@@ -138,8 +129,11 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
 
         train_data = list(zip(train_texts, [{"cats": cats} for cats in train_cats]))
         examples = self._data_to_examples(train_data)
-                        
-        other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe not in ["textcat", "transformer"]]
+
+        other_pipes = [
+            pipe for pipe in self.nlp.pipe_names
+            if pipe not in ["textcat", "transformer"]
+        ]
         with self.nlp.select_pipes(disable=other_pipes):  # only train textcat and transformer
             optimizer = self.nlp.initialize(lambda: examples)
             optimizer.learn_rate = self.learning_rate
@@ -161,7 +155,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
                 random.shuffle(examples)
                 batches = minibatch(examples, size=batch_sizes)
                 for batch in batches:
-#                    texts, annotations = zip(*batch)
+                    # texts, annotations = zip(*batch)
                     next_dropout = self.dropout  # next(dropout)
                     self.nlp.update(
                         examples,
@@ -171,7 +165,7 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
                     )
                     nb_examples += len(batch)
                 # FIX
-                #with self.textcat.model.use_params(optimizer.averages):
+                # with self.textcat.model.use_params(optimizer.averages):
                 Y_test_pred = self.predict(X_test)
                 p, r, f1, _ = precision_recall_fscore_support(
                         Y_test, Y_test_pred, average="micro"
@@ -203,8 +197,11 @@ class BertClassifier(BaseEstimator, ClassifierMixin):
         ]
         annotations = [{"cats": cats} for cats in train_cats]
         examples = self._data_to_examples(zip(texts, annotations))
-        
-        other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe not in ["transformer", "textcat"]]
+
+        other_pipes = [
+            pipe for pipe in self.nlp.pipe_names
+            if pipe not in ["transformer", "textcat"]
+        ]
         with self.nlp.select_pipes(disable=other_pipes):  # only train textcat and transformer
             if not hasattr(self, "optimizer"):
                 self.optimizer = self.nlp.initialize(lambda: examples)

@@ -162,7 +162,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         # Not memory efficient
         train_data = [item for item in yield_train_data(X_train, Y_train)]
         examples = self._data_to_examples(train_data)
-        
+
         other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
         with self.nlp.select_pipes(disable=other_pipes):  # only train textcat
             optimizer = self.nlp.initialize(lambda: examples)
