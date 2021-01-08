@@ -41,18 +41,22 @@ class SpacyNER:
             for span in spans:
                 ner.add_label(span["label"])
 
+        examples = []
+        for text, spans in train_data:
+            annotations = self._spans_to_entities(spans)
+            doc = self.nlp_model.make_doc(text)
+            example = Example.from_dict(doc, annotations)
+            examples.append(example)
+                    
         other_pipes = [pipe for pipe in self.nlp_model.pipe_names if pipe != "ner"]
         with self.nlp_model.select_pipes(disable=other_pipes):  # only train NER
-            optimizer = self.nlp_model.begin_training()
+            optimizer = self.nlp_model.initialize(lambda: examples)
 
             for i in range(self.n_iter):
                 random.shuffle(train_data)
                 losses = {}
 
-                for text, spans in train_data:
-                    annotations = self._spans_to_entities(spans)
-                    doc = self.nlp_model.make_doc(text)
-                    example = Example.from_dict(doc, annotations)
+                for example in examples:
                     self.nlp_model.update(
                         [example],
                         sgd=optimizer,
