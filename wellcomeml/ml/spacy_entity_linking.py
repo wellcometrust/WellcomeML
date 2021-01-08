@@ -94,6 +94,7 @@ class SpacyEntityLinker(object):
             examples.append(example)
 
 
+
         pipe_exceptions = ["entity_linker"]
         other_pipes = [
             pipe for pipe in self.nlp.pipe_names if pipe not in pipe_exceptions
