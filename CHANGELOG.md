@@ -1,3 +1,14 @@
+# 2021.01.1
+
+Major changes
+---
+- Upgrade spacy to 2.3, transformers to < 2.9 and spacy-tranformers to 0.6
+- Transformers functionality (e.g. `SemanticEquivalenceClassifier` and `SemanticEquivalenceClassifier`) are now enabled automatically with extras 'deep-learning'
+
+Bug fixes
+---
+- #173 Fix BertVectorizer for long sequences
+
 # 2020.11.1
 
 Bug fixes
