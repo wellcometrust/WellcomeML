@@ -74,14 +74,16 @@ make update-docs
 
 Verify that `_build/html/index.html` has generated correctly and submit a PR.
 
-### 2.3 Build the wheel (and upload to aws s3/pypi/github)
+### 2.3 Release a new version (and upload to aws s3/pypi/github)
 
 The checklist for a new release is:
 
 - [ ] Changed `wellcomeml/__version__.py`
 - [ ] Add changelog
 - [ ] `make dist`
-- [ ] Verify new package was generated correctly on `pip` and GitHub releases
+- [ ] Verify new package was generated correctly on the [pip registry](https://pypi.org/project
+/wellcomeml)
+/] and GitHub releases 
 
 Create a [github token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with artifact write access and export it to the env variables:
 ```bash
