@@ -76,6 +76,13 @@ Verify that `_build/html/index.html` has generated correctly and submit a PR.
 
 ### 2.3 Build the wheel (and upload to aws s3/pypi/github)
 
+The checklist for a new release is:
+
+- [ ] Changed `wellcomeml/__version__.py`
+- [ ] Add changelog
+- [ ] `make dist`
+- [ ] Verify new package was generated correctly on `pip` and GitHub releases
+
 Create a [github token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with artifact write access and export it to the env variables:
 ```bash
 export GITHUB_TOKEN=...
