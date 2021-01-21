@@ -1,236 +1,191 @@
-#!/usr/bin/env python
-# coding: utf8
 """
-Train a convolutional neural network for multilabel classification
-of grants
-Adapted from https://github.com/explosion/spaCy/blob/master/examples/training/train_textcat.py
+Implements BertClassifier, an sklearn compatible BERT
+classifier class that can be used for text classification
+tasks
 """
-from spacy_transformers import (
-    TransformersLanguage,
-    TransformersWordPiecer,
-    TransformersTok2Vec,
-)
-from spacy_transformers.model_registry import (
-    register_model,
-    get_last_hidden,
-    flatten_add_lengths,
-)
-from spacy.util import minibatch, compounding
-from spacy._ml import zero_init, logistic
-from thinc.t2v import Pooling, mean_pool
-from thinc.v2v import Affine
-from thinc.api import chain
-from sklearn.metrics import precision_recall_fscore_support, f1_score
-from sklearn.base import BaseEstimator, ClassifierMixin
+from transformers import BertTokenizer, TFBertForSequenceClassification
+from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
-import numpy as np
-import spacy
-import torch
+from sklearn.metrics import f1_score
+import tensorflow as tf
 
-import random
-import time
-
-from wellcomeml.utils import check_cache_and_download
-from wellcomeml.logger import logger
+import math
+import os
 
 
-@register_model("sigmoid_last_hidden")
-def sigmoid_last_hidden(nr_class, *, exclusive_classes=False, **cfg):
-    width = cfg["token_vector_width"]
-    return chain(
-        get_last_hidden,
-        flatten_add_lengths,
-        Pooling(mean_pool),
-        zero_init(Affine(nr_class, width, drop_factor=0.0)),
-        logistic,
-    )
+PRETRAINED_CONFIG = {
+    "bert": {
+        "name": "bert-base-uncased",
+        "from_pt": False
+    },
+    "scibert": {
+        "name": "allenai/scibert_scivocab_uncased",
+        "from_pt": True
+    }
+}
 
 
-is_using_gpu = spacy.prefer_gpu()
-if is_using_gpu:
-    torch.set_default_tensor_type("torch.cuda.FloatTensor")
-
-
-class BertClassifier(BaseEstimator, ClassifierMixin):
-    def __init__(
-        self,
-        threshold=0.5,
-        n_iterations=5,
-        pretrained="bert",
-        batch_size=8,
-        learning_rate=1e-5,
-        dropout=0.1,
-        l2=1e-4,
-        validation_split=0.1,
-    ):
-        self.threshold = threshold
-        self.batch_size = batch_size
-        self.dropout = dropout
+class BertClassifier(BaseEstimator, TransformerMixin):
+    """
+    Class to fine-tune BERT like models for a text
+    classification task
+    """
+    def __init__(self, learning_rate=5e-5, epochs=5, batch_size=8,
+                 pretrained="bert-base-uncased", threshold=0.5,
+                 validation_split=0.1, max_length=512, multilabel=True,
+                 from_pt=False):
+        """
+        Args:
+           learning_rate(float): learning rate to optimize model, default 5e-5
+           epochs(int): number of epochs to train the model, default 5
+           batch_size(int): batch size to be used in training, default 8
+           pretrained(str): bert, scibert or any transformers compatible, default bert-base-uncased
+           threshold(float): threshold upon which to assign class, default 0.5
+           validation_split(float): split for validation set during training, default 0.1
+           max_length(int): maximum number of tokens, controls padding and truncation, default 512
+           multilabel(bool): flag on whether the problem is multilabel i.e. Y a matrix or a column
+           random_seed(int): controls random seed for reproducibility
+           from_pt(bool): flag about pretrained model in pytorch or tensorflow
+        """
         self.learning_rate = learning_rate
-        self.n_iterations = n_iterations
+        self.epochs = epochs  # used to be n_iterations
+        self.batch_size = batch_size
         self.pretrained = pretrained
-        self.l2 = l2
+        self.threshold = threshold
         self.validation_split = validation_split
+        self.max_length = max_length
+        self.multilabel = multilabel
+        self.random_seed = 42
+        self.from_pt = from_pt
 
-    def _init_nlp(self):
-        if self.pretrained == "bert":
-            self.nlp = spacy.load("en_trf_bertbaseuncased_lg")
-        elif self.pretrained == "scibert":
-            name = "scibert-scivocab-uncased"
-            path = check_cache_and_download("scibert_scivocab_uncased")
+    def _init_model(self, num_labels=2):
+        config = {
+            "name": self.pretrained,
+            "from_pt": self.from_pt
+        }
+        if self.pretrained in PRETRAINED_CONFIG:
+            config = PRETRAINED_CONFIG[self.pretrained]
 
-            nlp = TransformersLanguage(trf_name=name, meta={"lang": "en"})
-            nlp.add_pipe(nlp.create_pipe("sentencizer"))
-            nlp.add_pipe(TransformersWordPiecer.from_pretrained(nlp.vocab, path))
-            nlp.add_pipe(TransformersTok2Vec.from_pretrained(nlp.vocab, path))
-            self.nlp = nlp
+        pretrained = config["name"]
+        from_pt = config["from_pt"]
+
+        self.tokenizer = BertTokenizer.from_pretrained(pretrained)
+        self.model = TFBertForSequenceClassification.from_pretrained(
+            pretrained, from_pt=from_pt, num_labels=num_labels)
+
+    def _transform_data(self, input_ids, attention_mask, labels=None):
+        input_data = {
+            "input_ids": input_ids,
+            "attention_mask": attention_mask
+        }
+        if labels is not None:
+            return input_data, labels
         else:
-            logger.info(f"{self.pretrained} is not among bert, scibert")
-            raise
-        # TODO: Add a parameter for exclusive classes, non multilabel scenario
-        self.textcat = self.nlp.create_pipe(
-            "trf_textcat",
-            config={"exclusive_classes": False, "architecture": "sigmoid_last_hidden"},
+            return input_data
+
+    def _prepare_data(self, X, Y=None, shuffle=False, repeat=False):
+        X_vec = self.tokenizer.batch_encode_plus(
+            X, max_length=self.max_length, pad_to_max_length=True,
+            add_special_tokens=True, return_token_type_ids=False
         )
 
-        self.nlp.add_pipe(self.textcat, last=True)
-
-        for label in self.unique_labels:
-            self.textcat.add_label(label)
-
-    def load(self, model_dir):
-        self.nlp = spacy.load(model_dir)
-        # another hack to get the labels from textcat since
-        # spacy does not serialise every attribute
-        for pipe_name, pipe in self.nlp.pipeline:
-            # to cover case of textcat and trf_textcat
-            if "textcat" in pipe_name:
-                self.unique_labels = pipe.labels
-
-    def save(self, output_dir):
-        self.nlp.to_disk(output_dir)
-
-    def _label_binarizer_inverse_transform(self, Y_train):
-        "Transforms Y matrix to labels which are the non zero indices"
-        data = []
-        for row in Y_train:
-            row_data = [str(i) for i, item in enumerate(row) if item]
-            data.append(row_data)
-        # Do we need to convert to numpy?
-        return np.array(data)
+        if Y is not None:
+            dataset = tf.data.Dataset.from_tensor_slices(
+                (X_vec["input_ids"], X_vec["attention_mask"], Y)
+            )
+        else:
+            dataset = tf.data.Dataset.from_tensor_slices(
+                (X_vec["input_ids"], X_vec["attention_mask"])
+            )
+        dataset = dataset.map(self._transform_data)
+        if shuffle:
+            dataset = dataset.shuffle(100, seed=self.random_seed)
+        dataset = dataset.batch(self.batch_size)
+        if repeat:
+            dataset = dataset.repeat(self.epochs)
+        return dataset
 
     def fit(self, X, Y):
+        """
+        Fine tune BERT to text data and Y vector
+
+        Args:
+           X: list or numpy array of texts (n_samples,)
+           Y: list or numpy array of classes (n_samples, n_classes)
+        """
+        num_labels = len(Y[0])
+        self._init_model(num_labels)
+
         X_train, X_test, Y_train, Y_test = train_test_split(
-            X, Y, random_state=42, test_size=self.validation_split
+            X, Y, random_state=self.random_seed, test_size=self.validation_split
         )
-        self.unique_labels = [str(i) for i in range(Y_train.shape[1])]
-        self._init_nlp()
-        n_iter = self.n_iterations
-        train_texts = X_train
-        train_tags = self._label_binarizer_inverse_transform(Y_train)
 
-        train_cats = [
-            {label: label in tags for label in self.unique_labels}
-            for tags in train_tags
-        ]
+        train_data = self._prepare_data(X_train, Y_train, shuffle=True, repeat=True)
+        val_data = self._prepare_data(X_test, Y_test)
 
-        train_data = list(zip(train_texts, [{"cats": cats} for cats in train_cats]))
+        steps_per_epoch = math.ceil(len(X_train) / self.batch_size)
+        val_steps_per_epoch = math.ceil(len(X_test) / self.batch_size)
 
-        other_pipes = [pipe for pipe in self.nlp.pipe_names if "trf" not in pipe]
-        with self.nlp.disable_pipes(*other_pipes):  # only train textcat
-            optimizer = self.nlp.resume_training()
-            optimizer.alpha = self.learning_rate
-            optimizer.L2 = self.l2
-            logger.info("Training the model...")
-            logger.info(
-                "{:^5}\t{:^5}\t{:^5}\t{:^5}\t{:^5}\t{:^5}".format(
-                    "ITER", "LOSS", "P", "R", "F", "TF"
-                )
-            )
-            batch_sizes = compounding(4.0, self.batch_size, 1.001)
-            # dropout = decaying(0.6, 0.2, 1e-4)
-            self.losses = []
-            for i in range(n_iter):
-                start_epoch = time.time()
-                nb_examples = 0
-                losses = {}
-                # batch up the examples using spaCy's minibatch
-                random.shuffle(train_data)
-                batches = minibatch(train_data, size=batch_sizes)
-                for batch in batches:
-                    texts, annotations = zip(*batch)
-                    next_dropout = self.dropout  # next(dropout)
-                    self.nlp.update(
-                        texts,
-                        annotations,
-                        sgd=optimizer,
-                        drop=next_dropout,
-                        losses=losses,
-                    )
-                    nb_examples += len(texts)
-                with self.textcat.model.use_params(optimizer.averages):
-                    Y_test_pred = self.predict(X_test)
-                    p, r, f1, _ = precision_recall_fscore_support(
-                        Y_test, Y_test_pred, average="micro"
-                    )
-                loss = losses["trf_textcat"]
-                self.losses.append(loss)
+        optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate)
+        if self.multilabel:
+            loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+        else:
+            loss = tf.keras.losses.CategoricalCrossentropy(from_logits=True)
+        #  TODO: Fix error when adding metrics
+        #  metrics = [tf.keras.metrics.Precision(), tf.keras.metrics.Recall()]
+        self.model.compile(optimizer=optimizer, loss=loss)
 
-                epoch_seconds = time.time() - start_epoch
-                speed = nb_examples / epoch_seconds
-                logger.info(
-                    "{0:5d}\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}\t{5:.2f}".format(
-                        i, loss, p, r, f1, speed
-                    )
-                )
+        history = self.model.fit(
+            train_data, validation_data=val_data, epochs=self.epochs,
+            steps_per_epoch=steps_per_epoch, validation_steps=val_steps_per_epoch)
+        self.losses = history.history["loss"]
         return self
 
-    def partial_fit(self, X, Y, classes=None):
-        if not hasattr(self, "unique_labels"):
-            self.unique_labels = [str(i) for i in range(Y.shape[1])]
-            self._init_nlp()
-            self.losses = []
-
-        texts = X
-
-        train_tags = self._label_binarizer_inverse_transform(Y)
-        train_cats = [
-            {label: label in tags for label in self.unique_labels}
-            for tags in train_tags
-        ]
-        annotations = [{"cats": cats} for cats in train_cats]
-
-        other_pipes = [pipe for pipe in self.nlp.pipe_names if "trf" not in pipe]
-        with self.nlp.disable_pipes(*other_pipes):  # only train textcat
-            if not hasattr(self, "optimizer"):
-                self.optimizer = self.nlp.resume_training()
-                self.optimizer.alpha = self.learning_rate
-
-            losses = {}
-            self.nlp.update(
-                texts, annotations, sgd=self.optimizer, drop=self.dropout, losses=losses
-            )
-            self.losses.append(losses["trf_textcat"])
-        return self
+    def _predict_proba(self, X):
+        dataset = self._prepare_data(X)
+        out = self.model.predict(dataset)[0]
+        if self.multilabel:
+            return tf.nn.sigmoid(out).numpy()
+        else:
+            return tf.nn.softmax(out).numpy()
 
     def predict(self, X):
-        def binarize_output(doc):
-            cats = doc.cats
-            out = [
-                1 if cats[label] > self.threshold else 0 for label in self.unique_labels
-            ]
-            return out
-        doc_gen = self.nlp.pipe(X)
-        return np.array([binarize_output(doc) for doc in doc_gen])
+        """
+        Predict vector Y on text data X
+
+        Args:
+           X: list or numpy array of texts (n_samples)
+        Returns:
+           Y_pred: numpy array of predictions Y (n_samples, n_classes)
+        """
+        Y_pred_proba = self._predict_proba(X)
+        if self.multilabel:
+            return Y_pred_proba > self.threshold
+        else:
+            return Y_pred_proba == Y_pred_proba.max(axis=1)[:, None]
 
     def predict_proba(self, X):
-        def get_proba(doc):
-            cats = doc.cats
-            out = [cats[label] for label in self.unique_labels]
-            return out
-        doc_gen = self.nlp.pipe(X)
-        return np.array([get_proba(doc) for doc in doc_gen])
+        """
+        Predict probabilities for classes on text data X
+
+        Args:
+           X: list or numpy arrray of texts (n_samples)
+        Returns:
+           Y_pred_proba: numpy array of probabilities for each class (n_samples, n_classes)
+        """
+        return self._predict_proba(X)
 
     def score(self, X, Y):
+        """Micro f1 score of X data against ground truth Y"""
         Y_pred = self.predict(X)
-        return f1_score(Y_pred, Y, average="micro")
+        return f1_score(Y, Y_pred, average="micro")
+
+    def save(self, model_path):
+        """Saves model in directory model_path"""
+        os.makedirs(model_path, exist_ok=True)
+        self.model.save_pretrained(model_path)
+
+    def load(self, model_path):
+        """Loads model from directory model_path. Tokenizer initialised from param pretrained"""
+        self.init_model()
+        self.model = TFBertForSequenceClassification.from_pretrained(model_path)
