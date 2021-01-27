@@ -33,7 +33,7 @@ class BertClassifier(BaseEstimator, TransformerMixin):
     def __init__(self, learning_rate=5e-5, epochs=5, batch_size=8,
                  pretrained="bert-base-uncased", threshold=0.5,
                  validation_split=0.1, max_length=512, multilabel=True,
-                 from_pt=False):
+                 from_pt=False, random_seed=42):
         """
         Args:
            learning_rate(float): learning rate to optimize model, default 5e-5
@@ -55,7 +55,7 @@ class BertClassifier(BaseEstimator, TransformerMixin):
         self.validation_split = validation_split
         self.max_length = max_length
         self.multilabel = multilabel
-        self.random_seed = 42
+        self.random_seed = random_seed
         self.from_pt = from_pt
 
     def _init_model(self, num_labels=2):
