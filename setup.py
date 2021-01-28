@@ -63,7 +63,8 @@ setuptools.setup(
             'torch',
             'transformers<2.9.0',
             'spacy-transformers==0.6.1',
-            'dataclasses==0.6'  # spacy transformers needs this pinned
+            'dataclasses==0.6',  # spacy transformers needs this pinned
+            'tokenizers==0.5.2'
         ]
     },
     tests_require=[
