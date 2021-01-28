@@ -8,20 +8,46 @@ import gensim.downloader as api
 
 from os import path
 
+from wellcomeml.ml.transformers_tokenizer import TransformersTokenizer
+
+
+class KerasTokenizer():
+    def __init__(self, vocab_size=None, oov_token="<OOV>"):
+        self.vocab_size = vocab_size
+        self.oov_token = oov_token
+
+    def fit(self, texts):
+        self.tokenizer = Tokenizer(num_words=self.vocab_size, oov_token=self.oov_token)
+        self.tokenizer.fit_on_texts(texts)
+
+    def encode(self, texts):
+        return self.tokenizer.texts_to_sequences(texts)
+
 
 class KerasVectorizer(BaseEstimator, TransformerMixin):
-    def __init__(self, vocab_size=None, sequence_length=None, oov_token="<OOV>"):
+    def __init__(self, vocab_size=None, sequence_length=None, oov_token="<OOV>",
+                 tokenizer_library="keras"):
         self.vocab_size = vocab_size
         self.oov_token = oov_token
         self.sequence_length = sequence_length
+        self.tokenizer_library = tokenizer_library
 
     def fit(self, X, *_):
-        self.tokenizer = Tokenizer(num_words=self.vocab_size, oov_token=self.oov_token)
-        self.tokenizer.fit_on_texts(X)
+        if self.tokenizer_library == "keras":
+            self.tokenizer = KerasTokenizer(
+                vocab_size=self.vocab_size, oov_token=self.oov_token)
+        elif self.tokenizer_library == "transformers":
+            if self.vocab_size is None:
+                self.tokenizer = TransformersTokenizer()
+            else:
+                self.tokenizer = TransformersTokenizer(
+                    vocab_size=self.vocab_size
+                )
+        self.tokenizer.fit(X)
         return self
 
     def transform(self, X, *_):
-        sequences = self.tokenizer.texts_to_sequences(X)
+        sequences = self.tokenizer.encode(X)
         return pad_sequences(sequences, maxlen=self.sequence_length)
 
     def build_embedding_matrix(self, embeddings_name_or_path=None):
