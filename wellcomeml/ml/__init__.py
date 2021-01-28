@@ -21,12 +21,14 @@ try:
     from .bilstm import BiLSTMClassifier
     from .keras_vectorizer import KerasVectorizer
     from .bert_semantic_equivalence import SemanticEquivalenceClassifier
+    from .transformers_tokenizer import TransformersTokenizer
     __all__ += [
         'Vectorizer', 'TextClustering', 'SpacyNER', 'SpacyClassifier',
         'BertClassifier', 'BertVectorizer', 'SpacyKnowledgeBase',
         'SpacyEntityLinker', 'SemanticEquivalenceClassifier',
         'CNNClassifier', 'BiLSTMClassifier', 'KerasVectorizer',
-        'SimilarityEntityLinker', 'SemanticEquivalenceClassifier'
+        'SimilarityEntityLinker', 'SemanticEquivalenceClassifier',
+        'TransformersTokenizer'
     ]
 except ImportError as e:
     logger.error(e)
