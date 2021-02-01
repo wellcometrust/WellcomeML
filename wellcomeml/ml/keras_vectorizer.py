@@ -1,4 +1,6 @@
 """
+Implements KerasTokenizer that abstracts Keras tokenisation
+and encoding and KerasVectorizer that is sklearn compatible
 """
 from sklearn.base import BaseEstimator, TransformerMixin
 from tensorflow.keras.preprocessing.text import Tokenizer
@@ -15,6 +17,10 @@ class KerasTokenizer():
     def __init__(self, vocab_size=None, oov_token="<OOV>"):
         self.vocab_size = vocab_size
         self.oov_token = oov_token
+
+    @property
+    def vocab(self):
+        return self.tokenizer.word_index
 
     def fit(self, texts):
         self.tokenizer = Tokenizer(num_words=self.vocab_size, oov_token=self.oov_token)
@@ -91,10 +97,10 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
         else:
             raise TypeError("No local or GenSim word embeddings given")
 
-        num_words = len(self.tokenizer.word_index) + 1
+        num_words = len(self.tokenizer.vocab) + 1
 
         embedding_matrix = np.zeros((num_words, emb_dim))
-        for word, i in self.tokenizer.word_index.items():
+        for word, i in self.tokenizer.vocab.items():
             if local_embeddings:
                 embedding_vector = embeddings_index.get(word)
             else:
