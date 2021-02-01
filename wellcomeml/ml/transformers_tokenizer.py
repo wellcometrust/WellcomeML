@@ -24,6 +24,11 @@ class TransformersTokenizer:
         self.vocab_size = vocab_size
         self.unk_token = unk_token
 
+    def __getstate__(self):
+        attributes = self.__dict__.copy()
+        del attributes['trainer']
+        return attributes
+
     def _init_tokenizer(self):
         if self.model == "wordpiece":
             model = WordPiece(unk_token=self.unk_token)

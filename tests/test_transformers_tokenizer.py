@@ -1,4 +1,5 @@
 import tempfile
+import pickle
 
 import pytest
 
@@ -59,6 +60,17 @@ def test_save(tokenizer, tmp_path):
     loaded_tokenizer = TransformersTokenizer()
     loaded_tokenizer.load(tmp_path)
     tokens = loaded_tokenizer.tokenize("This is a test")
+    assert len(tokens) == 4
+
+
+def test_pickle(tokenizer, tmp_path):
+    with open(tmp_path, "wb") as f:
+        f.write(pickle.dumps(tokenizer))
+
+    with open(tmp_path, "rb") as f:
+        unpickled_tokenizer = pickle.loads(f.read())
+
+    tokens = unpickled_tokenizer.tokenize("This is a test")
     assert len(tokens) == 4
 
 
