@@ -11,6 +11,7 @@ texts = [
     "Don't split"
 ]
 
+
 @pytest.fixture(scope="module")
 def tokenizer():
     tokenizer = TransformersTokenizer()
@@ -49,6 +50,7 @@ def test_encode_batch(tokenizer):
 
 def test_unknown_token(tokenizer):
     tokens = tokenizer.tokenize("I have not seen this before")
+    assert "[UNK]" in tokens
 
 
 def test_save(tokenizer, tmp_path):
