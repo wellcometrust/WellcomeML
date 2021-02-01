@@ -16,7 +16,7 @@ from tokenizers import Tokenizer
 
 class TransformersTokenizer:
     def __init__(self, lowercase=True,
-                 pre_tokenizer="bytelevel", model="wordpiece",
+                 pre_tokenizer="whitespace", model="wordpiece",
                  vocab_size=30_000, unk_token="[UNK]"):
         self.lowercase = lowercase
         self.pre_tokenizer = pre_tokenizer
@@ -27,10 +27,14 @@ class TransformersTokenizer:
     def _init_tokenizer(self):
         if self.model == "wordpiece":
             model = WordPiece(unk_token=self.unk_token)
-            self.trainer = WordPieceTrainer(vocab_size=self.vocab_size)
+            self.trainer = WordPieceTrainer(
+                vocab_size=self.vocab_size,
+                special_tokens=[self.unk_token])
         elif self.model == "bpe":
             model = BPE(unk_token=self.unk_token)
-            self.trainer = BpeTrainer(vocab_size=self.vocab_size)
+            self.trainer = BpeTrainer(
+                vocab_size=self.vocab_size,
+                special_tokens=[self.unk_token])
         else:
             raise NotImplementedError
 
@@ -49,6 +53,10 @@ class TransformersTokenizer:
         self.tokenizer = Tokenizer(model)
         self.tokenizer.normalizer = normalizers
         self.tokenizer.pre_tokenizer = pre_tokenizer
+
+    @property
+    def vocab(self):
+        return self.tokenizer.get_vocab()
 
     def fit(self, texts):
         self._init_tokenizer()
@@ -79,3 +87,4 @@ class TransformersTokenizer:
 
     def load(self, tokenizer_path):
         self.tokenizer = Tokenizer.from_file(tokenizer_path)
+        return self
