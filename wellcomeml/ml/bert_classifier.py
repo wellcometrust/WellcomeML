@@ -83,7 +83,6 @@ class BertClassifier(BaseEstimator, TransformerMixin):
         else:
             return input_data
 
-
     def _prepare_data(self, X, Y=None, shuffle=False, repeat=False):
         X_vec = self.tokenizer.batch_encode_plus(
             X, max_length=self.max_length, pad_to_max_length=True,
@@ -105,7 +104,6 @@ class BertClassifier(BaseEstimator, TransformerMixin):
         if repeat:
             dataset = dataset.repeat(self.epochs)
         return dataset
-
 
     def fit(self, X, Y):
         """
