@@ -41,33 +41,33 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     install_requires=[
-        'numpy==1.19.2',
-        'pandas',
-        'boto3',
-        'scikit-learn',
+        'numpy==1.20.0',
+        'pandas==1.2.1',
+        'boto3==1.16.63',
+        'scikit-learn==0.24.1',
         'scipy==1.4.1',
         'spacy==2.3.5',
-        'umap-learn',
-        'nervaluate',
-        'twine',
-        'gensim',
-        'hdbscan',
+        'umap-learn==0.5.0',
+        'nervaluate==0.1.8',
+        'twine==3.3.0',
+        'gensim==3.8.3',
+        'hdbscan==0.8.26',
         'cython',
-        'flake8',
-        'black',
-        'tqdm'
+        'flake8==3.8.4',
+        'black==20.8b1',
+        'tqdm==4.56.0'
     ],
     extras_require={
         'deep-learning': [
             'tensorflow==2.4.0',
-            'torch',
+            'torch==1.7.1',
             'transformers<2.9.0',
             'spacy-transformers==0.6.1',
             'dataclasses==0.6'  # spacy transformers needs this pinned
         ]
     },
     tests_require=[
-        'pytest',
-        'pytest-cov'
+        'pytest==6.2.2',
+        'pytest-cov==2.11.1'
     ]
 )
