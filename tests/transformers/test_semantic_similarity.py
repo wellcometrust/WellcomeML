@@ -18,6 +18,7 @@ python_random.seed(42)
 tf.random.set_seed(42)
 
 
+@pytest.mark.skip(reason="Theory: Test takes too much time")
 def test_semantic_similarity():
     classifier = SemanticEquivalenceClassifier(pretrained="scibert",
                                                batch_size=6,
@@ -55,6 +56,7 @@ def test_semantic_similarity():
     # assert len(classifier.history['loss']) == 5
 
 
+@pytest.mark.skip(reason="Theory: Test takes too much time")
 def test_semantic_meta_fit():
     classifier = SemanticEquivalenceMetaClassifier(n_numerical_features=2,
                                                    pretrained="scibert",
