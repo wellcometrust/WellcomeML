@@ -9,7 +9,7 @@ from sklearn.manifold import TSNE
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import silhouette_score
 from sklearn.pipeline import Pipeline
-from hdbscan import HDBSCAN
+#from hdbscan import HDBSCAN
 import umap
 
 from wellcomeml.ml import vectorizer
@@ -86,7 +86,7 @@ class TextClustering(object):
             'dbscan': DBSCAN,
             'kmeans': KMeans,
             'optics': OPTICS,
-            'hdbscan': HDBSCAN
+#            'hdbscan': HDBSCAN
         }
 
         if clustering in clustering_dispatcher:
