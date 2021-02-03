@@ -7,9 +7,10 @@ $(VIRTUALENV)/.installed:
 	@if [ -d $(VIRTUALENV) ]; then rm -rf $(VIRTUALENV); fi
 	@mkdir -p $(VIRTUALENV)
 	virtualenv --python $(PYTHON_VERSION) $(VIRTUALENV)
-	$(VIRTUALENV)/bin/pip3 install -r requirements_test.txt
-	$(VIRTUALENV)/bin/pip3 install -r docs/requirements.txt # Installs requirements to docs
-	$(VIRTUALENV)/bin/pip3 install -e .[deep-learning]
+#	$(VIRTUALENV)/bin/pip3 install --upgrade pip
+	$(VIRTUALENV)/bin/pip3 install --use-deprecated=legacy-resolver -r requirements_test.txt
+	$(VIRTUALENV)/bin/pip3 install --use-deprecated=legacy-resolver -r docs/requirements.txt # Installs requirements to docs
+	$(VIRTUALENV)/bin/pip3 install --use-deprecated=legacy-resolver -e .[deep-learning]
 	touch $@
 
 .PHONY: update-docs
