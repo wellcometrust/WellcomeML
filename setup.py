@@ -46,7 +46,7 @@ setuptools.setup(
         'boto3',
         'scikit-learn',
         'scipy==1.4.1',
-        'spacy-nightly[transformers,lookups]',
+        'spacy[transformers,lookups]==3.0.0',
         'umap-learn',
         'nervaluate',
         'twine',
@@ -61,9 +61,7 @@ setuptools.setup(
         'deep-learning': [
             'tensorflow==2.4.0',
             'torch',
-            'transformers==3.0.0',
-            # 'spacy-transformers==0.6.1',
-            # 'dataclasses==0.6'  # spacy transformers needs this pinned
+            'transformers'
         ]
     },
     tests_require=[
