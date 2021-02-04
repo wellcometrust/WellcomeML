@@ -51,7 +51,7 @@ setuptools.setup(
         'nervaluate',
         'twine',
         'gensim',
-        'hdbscan',
+        # 'hdbscan',
         'cython',
         'flake8',
         'black',
