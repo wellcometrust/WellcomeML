@@ -6,6 +6,7 @@ import numpy as np
 from wellcomeml.ml import BertClassifier
 
 
+@pytest.mark.skip("Theory: Too much memory")
 def test_multilabel():
     X = [
         "One and two",
@@ -35,6 +36,7 @@ def test_multilabel():
     assert model.losses[0] > model.losses[-1]
 
 
+@pytest.mark.skip("Theory: Too much memory")
 def test_multiclass():
     X = [
         "One oh yes",
@@ -64,7 +66,7 @@ def test_multiclass():
     assert model.losses[0] > model.losses[-1]
 
 
-@pytest.mark.skip("Theory: Downloading scibert stalls build")
+@pytest.mark.skip("Theory: Too much memory")
 def test_scibert():
     X = [
         "One and two",
