@@ -70,8 +70,9 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
     def _init_nlp(self):
         self.nlp = spacy.blank("en")
 
+        self.pipe_name = "textcat_multilabel" if self.multilabel else "textcat"
         self.textcat = self.nlp.add_pipe(
-            "textcat",
+            self.pipe_name,
             config={
                 "model": {
                     "@architectures": self.architecture,
@@ -163,7 +164,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
         train_data = [item for item in yield_train_data(X_train, Y_train)]
         examples = self._data_to_examples(train_data)
 
-        other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
+        other_pipes = [pipe for pipe in self.nlp.pipe_names if "textcat" not in pipe]
         with self.nlp.select_pipes(disable=other_pipes):  # only train textcat
             optimizer = self.nlp.initialize(lambda: examples)
             optimizer.learn_rate = self.learning_rate
@@ -207,7 +208,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
                 p, r, f, _ = precision_recall_fscore_support(
                         Y_test, Y_test_pred, average="micro"
                     )
-                loss = losses["textcat"]
+                loss = losses[self.pipe_name]
                 logger.info(
                     "{0:2d}\t\t{1:.3f}\t{2:.3f}\t{3:.3f}\t{4:.3f}\t{5:.2f} ex/s".format(
                         i, loss, p, r, f, examples_per_second
@@ -252,7 +253,7 @@ class SpacyClassifier(BaseEstimator, ClassifierMixin):
             example = Example.from_dict(doc, annotation)
             examples.append(example)
 
-        other_pipes = [pipe for pipe in self.nlp.pipe_names if pipe != "textcat"]
+        other_pipes = [pipe for pipe in self.nlp.pipe_names if "textcat" not in pipe]
         with self.nlp.select_pipes(disable=other_pipes):  # only train textcat
             if not hasattr(self, "optimizer"):
                 self.optimizer = self.nlp.initialize(lambda: examples)
