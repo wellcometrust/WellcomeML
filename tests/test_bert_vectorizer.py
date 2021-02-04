@@ -51,7 +51,7 @@ def test_embed_scibert():
         assert(X_embed.shape == (1, 768))
 
 
-@pytest.mark.skip("Theory: Build killed")
+@pytest.mark.skip("Reason: Build killed or stalls. Issue #200")
 def test_save_and_load(tmpdir):
     tmpfile = tmpdir.join('test.npy')
 
