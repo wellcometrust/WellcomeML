@@ -1,4 +1,16 @@
-# 2021.01.1
+# 2021.2.0
+
+Major changes
+---
+- Upgrade spacy to v3.0
+- Add native HuggingFace support (#191), re-writting `BertClassifier` using transformers
+- Disables HDBscan from the possible clustering techniques due to a conflict with the new numpy version (#197)
+
+Bug fixes
+---
+- Resolves issues #195 and #198 with thew pip reference resolver, introduced in pip>20.3
+
+# 2021.1.1
 
 Major changes
 ---
