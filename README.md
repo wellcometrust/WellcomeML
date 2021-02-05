@@ -76,24 +76,22 @@ Verify that `_build/html/index.html` has generated correctly and submit a PR.
 
 ### 2.3 Release a new version (and upload to aws s3/pypi/github)
 
+First create a [github token](https://help.github.com/en/github/authenticating-to-github/creating-a
+-personal-access-token-for-the-command-line), if you haven't one, with artifact write access and
+ export
+ it to the env variables:
+```bash
+export GITHUB_TOKEN=...
+```
+
 The checklist for a new release is:
 
 - [ ] Changed `wellcomeml/__version__.py`
 - [ ] Add changelog
 - [ ] `make dist`
-- [ ] Verify new package was generated correctly on the [pip registry](https://pypi.org/project
-/wellcomeml)
-/] and GitHub releases 
+- [ ] Verify new package was generated correctly on the [pip registry](https://pypi.org/project/wellcomeml)
+ and GitHub releases 
 
-Create a [github token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with artifact write access and export it to the env variables:
-```bash
-export GITHUB_TOKEN=...
-```
-After making changes, in order to build a new release, run:
-
-```
-make dist
-```
 
 ### 2.4 (Optional) Installing from other locations
 
