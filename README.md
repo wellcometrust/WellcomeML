@@ -86,7 +86,7 @@ export GITHUB_TOKEN=...
 
 The checklist for a new release is:
 
-- [ ] Changed `wellcomeml/__version__.py`
+- [ ] Change `wellcomeml/__version__.py`
 - [ ] Add changelog
 - [ ] `make dist`
 - [ ] Verify new package was generated correctly on the [pip registry](https://pypi.org/project/wellcomeml)
