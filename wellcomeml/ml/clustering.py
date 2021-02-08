@@ -2,6 +2,9 @@ from collections import defaultdict
 import logging
 import os
 
+from wellcomeml.ml import vectorizer
+from wellcomeml.logger import logger
+
 import numpy as np
 from sklearn.base import ClusterMixin
 from sklearn.cluster import DBSCAN, OPTICS, KMeans
@@ -9,11 +12,16 @@ from sklearn.manifold import TSNE
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import silhouette_score
 from sklearn.pipeline import Pipeline
-#  from hdbscan import HDBSCAN
+try:
+    from hdbscan import HDBSCAN
+    HDBSCAN_INSTALLED = True
+except ValueError:
+    HDBSCAN_INSTALLED = False
+    logger.warning(
+        "If you want to use hdbscan you need to run"
+        "pip3 install hdbscan --no-cache-dir --no-binary :all: --no-build-isolation"
+    )
 import umap
-
-from wellcomeml.ml import vectorizer
-from wellcomeml.logger import logger
 
 CACHE_DIR = os.path.expanduser("~/.cache/wellcomeml")
 
@@ -85,9 +93,10 @@ class TextClustering(object):
         clustering_dispatcher = {
             'dbscan': DBSCAN,
             'kmeans': KMeans,
-            'optics': OPTICS,
-            # 'hdbscan': HDBSCAN
+            'optics': OPTICS
         }
+        if HDBSCAN_INSTALLED:
+            clustering_dispatcher['hdbscan'] == HDBSCAN
 
         if clustering in clustering_dispatcher:
             self.clustering_class = clustering_dispatcher[clustering](

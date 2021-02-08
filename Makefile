@@ -10,6 +10,7 @@ $(VIRTUALENV)/.installed:
 	$(VIRTUALENV)/bin/pip3 install -r requirements_test.txt
 	$(VIRTUALENV)/bin/pip3 install -r docs/requirements.txt # Installs requirements to docs
 	$(VIRTUALENV)/bin/pip3 install -e .[deep-learning]
+	$(VIRTUALENV)/bin/pip3 install hdbscan --no-cache-dir --no-binary :all: --no-build-isolation
 	touch $@
 
 .PHONY: update-docs
