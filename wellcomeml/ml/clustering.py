@@ -19,7 +19,8 @@ except ValueError:
     HDBSCAN_INSTALLED = False
     logger.warning(
         "If you want to use hdbscan you need to run"
-        "pip3 install hdbscan --no-cache-dir --no-binary :all: --no-build-isolation"
+        "pip3 install hdbscan --no-cache-dir --no-binary :all: --no-build-isolation "
+        "Read more https://github.com/wellcometrust/WellcomeML/issues/197"
     )
 import umap
 
@@ -96,7 +97,7 @@ class TextClustering(object):
             'optics': OPTICS
         }
         if HDBSCAN_INSTALLED:
-            clustering_dispatcher['hdbscan'] == HDBSCAN
+            clustering_dispatcher['hdbscan'] = HDBSCAN
 
         if clustering in clustering_dispatcher:
             self.clustering_class = clustering_dispatcher[clustering](
