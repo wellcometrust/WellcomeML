@@ -200,7 +200,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
         validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
 
-        if tf.config.list_physical_devices('GPU'):
+        if len(tf.config.list_physical_devices('GPU')) > 1:
             strategy = tf.distribute.MirroredStrategy()
         else:  # use default strategy
             strategy = tf.distribute.get_strategy()
