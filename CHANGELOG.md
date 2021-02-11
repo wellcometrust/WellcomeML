@@ -1,3 +1,8 @@
+# 2021.2.1
+
+Bug fixes:
+- Update version to 2021.2.1 which was out of sync in latest release #206
+
 # 2021.2.0
 
 Major changes
