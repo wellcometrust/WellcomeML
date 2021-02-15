@@ -218,7 +218,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         return self
 
-    def score(self, X):
+    def predict_proba(self, X):
         """
         Calculates scores for model prediction
 
@@ -245,7 +245,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             An array of 0s and 1s
 
         """
-        return self.score(X).argmax(axis=1)
+        return self.predict_proba(X).argmax(axis=1)
 
     def save(self, path):
         """Saves model to path"""
@@ -264,7 +264,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
     Class to fine tune Semantic Classifier, allowing the possibility of
     adding metadata to the classification. Extends
     SemanticEquivalenceClassifier, and extends modules for data prep
-    and model initialisation. Fit, predict, score remain intact
+    and model initialisation. Fit, predict, predict_proba remain intact
     """
 
     def __init__(self, n_numerical_features, dropout_rate=0,
@@ -405,7 +405,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         """
         return super().fit(X, y, **kwargs)
 
-    def score(self, X):
+    def predict_proba(self, X):
         """
         Calculates scores for metadata semantic classifier.
 
@@ -419,7 +419,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
         """
 
-        return super().score(X)
+        return super().predict_proba(X)
 
     def predict(self, X):
         """
