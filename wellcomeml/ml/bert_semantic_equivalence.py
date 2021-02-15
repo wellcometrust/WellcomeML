@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import datetime
+import math
 import os
 
 import tensorflow as tf
@@ -86,8 +87,23 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         )
         return self.model
 
-    def _prep_dataset_generator(self, X, y):
+    def _prep_dataset_generator(self, X, y=None):
         features = ["input_ids", "attention_mask", "token_type_ids"]
+
+        if y is None:
+            input_element_types = {feature: tf.int32 for feature in features}
+        else:
+            input_element_types = ({feature: tf.int32 for feature in features}, tf.int64)
+
+        if y is not None:
+            input_element_tensors = (
+                {feature: tf.TensorShape([None]) for feature in features}
+            )
+        else:
+            input_element_tensors = (
+                {feature: tf.TensorShape([None]) for feature in features},
+                tf.TensorShape([]),
+            )
 
         batch_encoding = self.tokenizer.batch_encode_plus(
             X, max_length=self.max_length, add_special_tokens=True,
@@ -95,18 +111,14 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         def gen_train():
             for i in range(len(X)):
-                features = {
+                feature_dict = {
                     k: pad(batch_encoding[k][i], self.max_length)
                     for k in batch_encoding
                 }
-
-                yield (features, int(y[i]))
-
-        input_element_types = ({feature: tf.int32 for feature in features}, tf.int64)
-        input_element_tensors = (
-            {feature: tf.TensorShape([None]) for feature in features},
-            tf.TensorShape([]),
-        )
+                if y is None:
+                    yield feature_dict
+                else:
+                    yield (feature_dict, int(y[i]))
 
         dataset = tf.data.Dataset.from_generator(
             gen_train, input_element_types, input_element_tensors,
@@ -140,7 +152,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
     def _prep_data_for_prediction(self, X):
         X_tokenized = self._tokenize(X)
-        predictions = self.model(X_tokenized)[0]  # Issue 188
+        predictions = self.model.predict(X_tokenized)[0]  # Issue 188
         return tf.convert_to_tensor(predictions)
 
     def fit(self, X, y, random_state=None, epochs=3, metrics=[], **kwargs):
@@ -183,8 +195,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
             self._compile_model()
 
-            self.train_steps = len(X_train) // self.batch_size
-            self.valid_steps = len(X_valid) // self.eval_batch_size
+            self.train_steps = math.ceil(len(X_train)/self.batch_size)
+            self.valid_steps = math.ceil(len(X_valid)/self.eval_batch_size)
         finally:
             callback_objs = [CALLBACK_DICT[c] for c in self.callbacks]
 
