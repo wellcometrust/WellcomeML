@@ -92,14 +92,12 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         if y is None:
             input_element_types = {feature: tf.int32 for feature in features}
-        else:
-            input_element_types = ({feature: tf.int32 for feature in features}, tf.int64)
-
-        if y is not None:
             input_element_tensors = (
                 {feature: tf.TensorShape([None]) for feature in features}
             )
+
         else:
+            input_element_types = ({feature: tf.int32 for feature in features}, tf.int64)
             input_element_tensors = (
                 {feature: tf.TensorShape([None]) for feature in features},
                 tf.TensorShape([]),
@@ -111,15 +109,15 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         def gen_train():
             for i in range(len(X)):
-                feature_dict = {
+                features_dict = {
                     k: pad(batch_encoding[k][i], self.max_length)
                     for k in batch_encoding
                 }
                 if y is None:
-                    yield feature_dict
+                    yield features_dict
                 else:
-                    yield (feature_dict, int(y[i]))
-
+                    yield (features_dict, int(y[i]))
+        
         dataset = tf.data.Dataset.from_generator(
             gen_train, input_element_types, input_element_tensors,
         )
@@ -149,11 +147,6 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             pad_to_max_length=True,
             return_tensors="tf",
         )
-
-    def _prep_data_for_prediction(self, X):
-        X_tokenized = self._tokenize(X)
-        predictions = self.model.predict(X_tokenized)[0]  # Issue 188
-        return tf.convert_to_tensor(predictions)
 
     def fit(self, X, y, random_state=None, epochs=3, metrics=[], **kwargs):
         """
@@ -229,9 +222,9 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             An array of shape len(X) x 2 with scores for classes 0 and 1
 
         """
-        predictions = self._prep_data_for_prediction(X)
+        predictions = self.model.predict(self._prep_dataset_generator(X)).logits
 
-        return tf.keras.activations.softmax(predictions).numpy()
+        return tf.nn.softmax(predictions).numpy()
 
     def predict(self, X):
         """
