@@ -123,7 +123,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
                     yield features_dict
                 else:
                     yield (features_dict, int(y[i]))
-        
+
         dataset = tf.data.Dataset.from_generator(
             gen_train, input_element_types, input_element_tensors,
         )
