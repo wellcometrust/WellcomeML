@@ -91,6 +91,13 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                     Y_batch = Y_batch.todense()
                 yield X_batch, Y_batch
 
+    def _get_distributed_strategy(self):
+        if len(tf.config.list_physical_devices('GPU')) > 1:
+            strategy = tf.distribute.MirroredStrategy()
+        else:  # use default strategy
+            strategy = tf.distribute.get_strategy()
+        return strategy
+
     def _build_model(self, sequence_length, vocab_size, nb_outputs,
                      steps_per_epoch, embedding_matrix=None,
                      metrics=["precision", "recall"]):
@@ -173,7 +180,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             self.learning_rate, steps_per_epoch, self.learning_rate_decay,
             staircase=True
         )
-        strategy = tf.distribute.get_strategy()
+        strategy = self._get_distributed_strategy()
         if isinstance(strategy, tf.distribute.MirroredStrategy):
             optimizer = tf.keras.optimizers.Adam(learning_rate)
         else:  # clipnorm is only supported in default strategy
@@ -200,10 +207,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
         validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
 
-        if len(tf.config.list_physical_devices('GPU')) > 1:
-            strategy = tf.distribute.MirroredStrategy()
-        else:  # use default strategy
-            strategy = tf.distribute.get_strategy()
+        strategy = self._get_distributed_strategy()
         with strategy.scope():
             self.model = self._build_model(
                 sequence_length, vocab_size, nb_outputs,
@@ -271,9 +275,6 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.model.save(model_dir)
 
     def load(self, model_dir):
-        if len(tf.config.list_physical_devices('GPU')) > 1:
-            strategy = tf.distribute.MirroredStrategy()
-        else:  # use default strategy
-            strategy = tf.distribute.get_strategy()
+        strategy = self._get_distributed_strategy()
         with strategy.scope():
             self.model = tf.keras.models.load_model(model_dir)
