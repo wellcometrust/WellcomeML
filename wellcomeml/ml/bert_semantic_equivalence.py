@@ -152,6 +152,13 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         self.model.compile(optimizer=opt, loss=loss, metrics=metrics)
 
+    def _get_distributed_strategy(self):
+        if len(tf.config.list_physical_devices("GPU")) > 1:
+            strategy = tf.distribute.MirroredStrategy()
+        else:
+            strategy = tf.distribute.get_strategy()
+        return strategy
+
     def fit(self, X, y, random_state=None, epochs=3, metrics=[], **kwargs):
         """
         Fits a sentence similarity model
@@ -187,7 +194,9 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             self.valid_dataset = self._prep_dataset_generator(X_valid, y_valid,
                                                               batch_size=self.eval_batch_size)
 
-            self._compile_model()
+            strategy = self._get_distributed_strategy()
+            with strategy.scope():
+                self._compile_model()
 
             self.train_steps = math.ceil(len(X_train)/self.batch_size)
             self.valid_steps = math.ceil(len(X_valid)/self.eval_batch_size)
@@ -248,8 +257,10 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
     def load(self, path):
         """Loads model from path"""
-        self.initialise_models()
-        self.model = TFBertForSequenceClassification.from_pretrained(path)
+        strategy = self._get_distributed_strategy()
+        with strategy.scope():
+            self.initialise_models()
+            self.model = TFBertForSequenceClassification.from_pretrained(path)
         self.trained_ = True
 
 
@@ -449,8 +460,10 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
     def load(self, path):
         """Loads metamodel from path"""
-        self.initialise_models()
-        self.model = tf.keras.models.load_model(path)
+        strategy = self._get_distributed_strategy()
+        with strategy.scope():
+            self.initialise_models()
+            self.model = tf.keras.models.load_model(path)
         self.trained_ = True
 
 
