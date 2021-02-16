@@ -178,7 +178,9 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         try:
             check_is_fitted(self)
         except NotFittedError:
-            self.initialise_models()
+            strategy = self._get_distributed_strategy()
+            with strategy.scope():
+                self.initialise_models()
 
             # Train/val split
             X_train, X_valid, y_train, y_valid = train_test_split(
@@ -194,7 +196,6 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             self.valid_dataset = self._prep_dataset_generator(X_valid, y_valid,
                                                               batch_size=self.eval_batch_size)
 
-            strategy = self._get_distributed_strategy()
             with strategy.scope():
                 self._compile_model()
 
