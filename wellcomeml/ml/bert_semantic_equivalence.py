@@ -13,6 +13,7 @@ from sklearn.utils.validation import check_is_fitted
 from sklearn.exceptions import NotFittedError
 
 from wellcomeml.ml.keras_utils import CategoricalMetrics, MetricMiniBatchHistory
+from wellcomeml.logger import LOGGING_LEVEL, build_logger
 
 TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 CALLBACK_DICT = {
@@ -37,7 +38,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         max_length=128,
         callbacks=['tensorboard'],
         random_seed=42,
-        buffer_size=100
+        buffer_size=100,
+        logging_level=LOGGING_LEVEL
     ):
         """
 
@@ -54,6 +56,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             random_seed: A seed used for shuffling the dataset upon training
             buffer_size: A buffer size that will be used when shuffling the dataset
         """
+        self.logger = build_logger(logging_level, __name__)
         self.pretrained = pretrained
         self.batch_size = batch_size
         self.eval_batch_size = eval_batch_size
@@ -109,9 +112,11 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
                 tf.TensorShape([]),
             )
 
+        self.logger.info("Tokenising texts.")
         batch_encoding = self.tokenizer.batch_encode_plus(
             X, max_length=self.max_length, add_special_tokens=True,
         )
+        self.logger.info("Configuring dataset generators.")
 
         def gen_train():
             for i in range(len(X)):
@@ -194,6 +199,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         finally:
             callback_objs = [CALLBACK_DICT[c] for c in self.callbacks]
 
+            self.logger.info("Fitting model")
             history = self.model.fit(
                 self.train_dataset,
                 epochs=epochs,
