@@ -271,7 +271,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.model.save(model_dir)
 
     def load(self, model_dir):
-        if tf.config.list_physical_devices('GPU'):
+        if len(tf.config.list_physical_devices('GPU')) > 1:
             strategy = tf.distribute.MirroredStrategy()
         else:  # use default strategy
             strategy = tf.distribute.get_strategy()
