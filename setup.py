@@ -46,7 +46,7 @@ setuptools.setup(
         'boto3',
         'scikit-learn',
         'scipy==1.4.1',
-        'spacy[transformers,lookups]==3.0.0',
+        'spacy[lookups]==3.0.0',
         'umap-learn',
         'nervaluate',
         'twine',
@@ -62,7 +62,7 @@ setuptools.setup(
             'tensorflow==2.4.0',
             'torch',
             'transformers',
-            'tokenizers==0.9.4'
+            'tokenizers==0.10.0'
         ]
     },
     tests_require=[
