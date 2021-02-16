@@ -33,7 +33,7 @@ def test_semantic_similarity():
 
     loss_initial = classifier.history['loss'][0]
     loss_epoch_2 = classifier.history['loss'][2]
-    scores = classifier.score(X)
+    scores = classifier.predict_proba(X)
 
     assert loss_epoch_2 < loss_initial
 
@@ -72,7 +72,7 @@ def test_semantic_meta_fit():
     classifier.fit(X, y, epochs=5)
 
     # loss_initial = classifier.history['loss'][0]
-    scores = classifier.score(X)
+    scores = classifier.predict_proba(X)
 
     # Assert it returns a vector of correct length (15 training points) and 15*2 scores
     assert len(classifier.predict(X)) == 15
@@ -109,11 +109,11 @@ def test_save_and_load_semantic(tmp_path):
 
     classifier_1.fit(X, y, epochs=1)
     classifier_1.save(tmp_path)
-    scores_1 = classifier_1.score(X)
+    scores_1 = classifier_1.predict_proba(X)
 
     classifier_2 = SemanticEquivalenceClassifier(pretrained="scibert")
     classifier_2.load(tmp_path)
-    scores_2 = classifier_2.score(X)
+    scores_2 = classifier_2.predict_proba(X)
 
     score_diff = sum([abs(diff) for diff in (scores_1-scores_2).flatten()])
 

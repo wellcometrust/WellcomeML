@@ -25,6 +25,6 @@ test_pair = (
     "personal information will not be requested by the FCC",
 )
 
-score_related = classifier.score([test_pair])
+score_related = classifier.predict_proba([test_pair])
 
 print(f"Sentences are probably related with score {score_related[0][1]}.")

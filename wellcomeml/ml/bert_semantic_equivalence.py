@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import datetime
+import math
 import os
 
 import tensorflow as tf
@@ -34,7 +35,9 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         learning_rate=3e-5,
         test_size=0.2,
         max_length=128,
-        callbacks=['tensorboard']
+        callbacks=['tensorboard'],
+        random_seed=42,
+        buffer_size=100
     ):
         """
 
@@ -48,6 +51,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
              Zero pads every text smaller than this number and cuts out
              any text bigger than that number
             callbacks: List of callbacks as defined in .CALLBACK_DICT.keys()
+            random_seed: A seed used for shuffling the dataset upon training
+            buffer_size: A buffer size that will be used when shuffling the dataset
         """
         self.pretrained = pretrained
         self.batch_size = batch_size
@@ -56,6 +61,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.test_size = test_size
         self.max_length = max_length
         self.callbacks = callbacks
+        self.random_seed = random_seed
+        self.buffer_size = buffer_size
 
         # Defines attributes that will be initialised later
         self.config = None
@@ -86,8 +93,21 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         )
         return self.model
 
-    def _prep_dataset_generator(self, X, y):
+    def _prep_dataset_generator(self, X, y=None, shuffle=False, repeat=False, batch_size=32):
         features = ["input_ids", "attention_mask", "token_type_ids"]
+
+        if y is None:
+            input_element_types = {feature: tf.int32 for feature in features}
+            input_element_tensors = (
+                {feature: tf.TensorShape([None]) for feature in features}
+            )
+
+        else:
+            input_element_types = ({feature: tf.int32 for feature in features}, tf.int64)
+            input_element_tensors = (
+                {feature: tf.TensorShape([None]) for feature in features},
+                tf.TensorShape([]),
+            )
 
         batch_encoding = self.tokenizer.batch_encode_plus(
             X, max_length=self.max_length, add_special_tokens=True,
@@ -95,22 +115,25 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         def gen_train():
             for i in range(len(X)):
-                features = {
+                features_dict = {
                     k: pad(batch_encoding[k][i], self.max_length)
                     for k in batch_encoding
                 }
-
-                yield (features, int(y[i]))
-
-        input_element_types = ({feature: tf.int32 for feature in features}, tf.int64)
-        input_element_tensors = (
-            {feature: tf.TensorShape([None]) for feature in features},
-            tf.TensorShape([]),
-        )
+                if y is None:
+                    yield features_dict
+                else:
+                    yield (features_dict, int(y[i]))
 
         dataset = tf.data.Dataset.from_generator(
             gen_train, input_element_types, input_element_tensors,
         )
+
+        if shuffle:
+            dataset = dataset.shuffle(self.buffer_size, seed=self.random_seed)
+
+        dataset = dataset.batch(batch_size)
+        if repeat:
+            dataset = dataset.repeat(-1)
 
         return dataset
 
@@ -128,20 +151,6 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         metrics = [accuracy, precision, recall, f1_score] + metrics
 
         self.model.compile(optimizer=opt, loss=loss, metrics=metrics)
-
-    def _tokenize(self, X):
-        return self.tokenizer.batch_encode_plus(
-            X,
-            max_length=self.max_length,
-            add_special_tokens=True,
-            pad_to_max_length=True,
-            return_tensors="tf",
-        )
-
-    def _prep_data_for_prediction(self, X):
-        X_tokenized = self._tokenize(X)
-        predictions = self.model(X_tokenized)[0]  # Issue 188
-        return tf.convert_to_tensor(predictions)
 
     def fit(self, X, y, random_state=None, epochs=3, metrics=[], **kwargs):
         """
@@ -170,21 +179,18 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             )
 
             # Generates tensorflow dataset
-            self.train_dataset = self._prep_dataset_generator(X_train, y_train)
-            self.valid_dataset = self._prep_dataset_generator(X_valid, y_valid)
 
-            # Generates mini-batches and stores in a class variable
-            self.train_dataset = (
-                self.train_dataset.shuffle(self.max_length)
-                .batch(self.batch_size)
-                .repeat(-1)
-            )
-            self.valid_dataset = self.valid_dataset.batch(self.eval_batch_size)
+            self.train_dataset = self._prep_dataset_generator(X_train, y_train,
+                                                              shuffle=True,
+                                                              repeat=True,
+                                                              batch_size=self.batch_size)
+            self.valid_dataset = self._prep_dataset_generator(X_valid, y_valid,
+                                                              batch_size=self.eval_batch_size)
 
             self._compile_model()
 
-            self.train_steps = len(X_train) // self.batch_size
-            self.valid_steps = len(X_valid) // self.eval_batch_size
+            self.train_steps = math.ceil(len(X_train)/self.batch_size)
+            self.valid_steps = math.ceil(len(X_valid)/self.eval_batch_size)
         finally:
             callback_objs = [CALLBACK_DICT[c] for c in self.callbacks]
 
@@ -192,8 +198,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
                 self.train_dataset,
                 epochs=epochs,
                 steps_per_epoch=self.train_steps,
-                validation_data=self.valid_dataset,
                 validation_steps=self.valid_steps,
+                validation_data=self.valid_dataset,
                 callbacks=callback_objs,
                 **kwargs
             )
@@ -206,7 +212,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         return self
 
-    def score(self, X):
+    def predict_proba(self, X):
         """
         Calculates scores for model prediction
 
@@ -217,9 +223,9 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             An array of shape len(X) x 2 with scores for classes 0 and 1
 
         """
-        predictions = self._prep_data_for_prediction(X)
+        predictions = self.model.predict(self._prep_dataset_generator(X)).logits
 
-        return tf.keras.activations.softmax(predictions).numpy()
+        return tf.nn.softmax(predictions).numpy()
 
     def predict(self, X):
         """
@@ -233,7 +239,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             An array of 0s and 1s
 
         """
-        return self.score(X).argmax(axis=1)
+        return self.predict_proba(X).argmax(axis=1)
 
     def save(self, path):
         """Saves model to path"""
@@ -252,7 +258,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
     Class to fine tune Semantic Classifier, allowing the possibility of
     adding metadata to the classification. Extends
     SemanticEquivalenceClassifier, and extends modules for data prep
-    and model initialisation. Fit, predict, score remain intact
+    and model initialisation. Fit, predict, predict_proba remain intact
     """
 
     def __init__(self, n_numerical_features, dropout_rate=0,
@@ -323,7 +329,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         self.model = tf.keras.Model(input_text_tensors +
                                     input_numerical_data_tensor, x)
 
-    def _prep_dataset_generator(self, X, y):
+    def _prep_dataset_generator(self, X, y=None, shuffle=False, repeat=False, batch_size=32):
         """Overrides/extends the super class data preparation"""
         text_features = ["input_ids", "attention_mask", "token_type_ids"]
         X_text, X_numerical = self._separate_features(X)
@@ -332,48 +338,60 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
             X_text, max_length=self.max_length, add_special_tokens=True,
         )
 
+        if y is None:
+            input_element_types = (
+                {
+                    **{feature: tf.int32 for feature in text_features},
+                    **{"numerical_metadata": tf.float32},
+                }
+            )
+            input_element_tensors = (
+                {
+                    **{feature: tf.TensorShape([None]) for feature in text_features},
+                    **{"numerical_metadata": tf.TensorShape([self.n_numerical_features])},
+                }
+            )
+        else:
+            input_element_types = (
+                    {
+                        **{feature: tf.int32 for feature in text_features},
+                        **{"numerical_metadata": tf.float32},
+                    },
+                    tf.int64,
+                )
+            input_element_tensors = (
+                {
+                    **{feature: tf.TensorShape([None]) for feature in text_features},
+                    **{"numerical_metadata": tf.TensorShape([self.n_numerical_features])},
+                },
+                tf.TensorShape([]),
+            )
+
         def gen_train():
             for i in range(len(X)):
-                features = {
+                features_dict = {
                     k: pad(batch_encoding_text[k][i], self.max_length)
                     for k in batch_encoding_text
                 }
-                features["numerical_metadata"] = X_numerical[i]
+                features_dict["numerical_metadata"] = X_numerical[i]
 
-                yield (features, int(y[i]))
-
-        input_element_types = (
-            {
-                **{feature: tf.int32 for feature in text_features},
-                **{"numerical_metadata": tf.float32},
-            },
-            tf.int64,
-        )
-        input_element_tensors = (
-            {
-                **{feature: tf.TensorShape([None]) for feature in text_features},
-                **{"numerical_metadata": tf.TensorShape([self.n_numerical_features])},
-            },
-            tf.TensorShape([]),
-        )
+                if y is None:
+                    yield features_dict
+                else:
+                    yield (features_dict, int(y[i]))
 
         dataset = tf.data.Dataset.from_generator(
             gen_train, input_element_types, input_element_tensors,
         )
 
+        if shuffle:
+            dataset = dataset.shuffle(self.buffer_size, seed=self.random_seed)
+
+        dataset = dataset.batch(batch_size)
+        if repeat:
+            dataset = dataset.repeat(-1)
+
         return dataset
-
-    def _prep_data_for_prediction(self, X):
-        input_features = ["input_ids", "attention_mask", "token_type_ids", "numerical_metadata"]
-        X_text, X_numerical = self._separate_features(X)
-
-        X_processed = self._tokenize(X_text)
-        X_processed["numerical_metadata"] = tf.convert_to_tensor(X_numerical)
-
-        X_processed = [X_processed[feature] for feature in input_features]
-
-        predictions = tf.convert_to_tensor(self.model(X_processed))
-        return predictions
 
     def fit(self, X, y, **kwargs):
         """
@@ -393,7 +411,7 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
         """
         return super().fit(X, y, **kwargs)
 
-    def score(self, X):
+    def predict_proba(self, X):
         """
         Calculates scores for metadata semantic classifier.
 
@@ -406,8 +424,9 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
             Numpy array of probabilities, of shape len(X) x 2
 
         """
+        predictions = self.model.predict(self._prep_dataset_generator(X))
 
-        return super().score(X)
+        return tf.nn.softmax(predictions).numpy()
 
     def predict(self, X):
         """
