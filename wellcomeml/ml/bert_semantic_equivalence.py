@@ -393,18 +393,6 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
         return dataset
 
-    # def _prep_data_for_prediction(self, X):
-    #     input_features = ["input_ids", "attention_mask", "token_type_ids", "numerical_metadata"]
-    #     X_text, X_numerical = self._separate_features(X)
-    #
-    #     X_processed = self._tokenize(X_text)
-    #     X_processed["numerical_metadata"] = tf.convert_to_tensor(X_numerical)
-    #
-    #     X_processed = [X_processed[feature] for feature in input_features]
-    #
-    #     predictions = tf.convert_to_tensor(self.model(X_processed))
-    #     return predictions
-
     def fit(self, X, y, **kwargs):
         """
         Fits semantic classifier
