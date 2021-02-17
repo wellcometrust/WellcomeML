@@ -61,8 +61,8 @@ setuptools.setup(
         'deep-learning': [
             'tensorflow==2.4.0',
             'torch',
-            'transformers',
-            'tokenizers==0.10.0'
+            'transformers==4.3.0',
+            'tokenizers==0.10.1'
         ]
     },
     tests_require=[
