@@ -76,8 +76,7 @@ Verify that `_build/html/index.html` has generated correctly and submit a PR.
 
 ### 2.3 Release a new version (and upload to aws s3/pypi/github)
 
-First create a [github token](https://help.github.com/en/github/authenticating-to-github/creating-a
--personal-access-token-for-the-command-line), if you haven't one, with artifact write access and
+First create a [github token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line), if you haven't one, with artifact write access and
  export
  it to the env variables:
 ```bash
