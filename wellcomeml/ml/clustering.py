@@ -15,7 +15,7 @@ from sklearn.pipeline import Pipeline
 try:
     from hdbscan import HDBSCAN
     HDBSCAN_INSTALLED = True
-except ModuleNotFoundError:
+except (ValueError, ModuleNotFoundError):
     HDBSCAN_INSTALLED = False
     logger.warning(
         "If you want to use hdbscan you need to run"
