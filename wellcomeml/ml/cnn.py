@@ -54,7 +54,10 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         early_stopping=False,
         sparse_y=False,
         threshold=0.5,
-        validation_split=0.1
+        validation_split=0.1,
+        sequence_length=None,
+        vocab_size=None,
+        nb_outputs=None
     ):
         self.context_window = context_window
         self.learning_rate = learning_rate
@@ -78,6 +81,9 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.sparse_y = sparse_y
         self.threshold = threshold
         self.validation_split = validation_split
+        self.sequence_length = sequence_length,
+        self.vocab_size = vocab_size,
+        self.nb_outputs = nb_outputs
 
     def _prepare_data(self, X, Y, shuffle=True):
         def yield_data():
@@ -105,8 +111,56 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             strategy = tf.distribute.get_strategy()
         return strategy
 
+    def _init_from_data(self, X, Y):
+        logger.info(
+            "Initializing sequence_length, vocab_size \
+            and nb_outputs from data. This might take a while."
+        )
+        if type(X) is np.ndarray:
+            X_max = X.max()
+            Y_max = Y.max()
+            X_shape = X.shape[1]
+            Y_shape = Y.shape[1] if self.multilabel else Y.shape[0]
+            steps_per_epoch = X.shape[0]
+        elif isinstance(X, tf.data.Dataset):
+            X = X.batch(self.batch_size)
+
+            # init from iterating over dataset
+            X_max = 0
+            Y_max = 0
+            X_shape = None
+            Y_shape = None
+            steps_per_epoch = 0
+            for X_batch, Y_batch in X:
+                batch_X_max = X_batch.numpy().max()
+                batch_Y_max = Y_batch.numpy().max()
+                if batch_X_max > X_max:
+                    X_max = batch_X_max
+                if batch_Y_max > Y_max:
+                    Y_max = batch_Y_max
+                if not Y_shape:
+                    Y_shape = Y_batch.shape[1] if self.multilabel else Y_batch.shape[0]
+                if not X_shape:
+                    X_shape = X_batch.shape[1]
+                steps_per_epoch += 1
+        else:
+            logger.error("CNN currently supports X to one of np.ndarray or tf.data.Dataset")
+            raise NotImplementedError
+
+        self.sequence_length = X_shape
+        self.vocab_size = X_max + 1
+        self.nb_outputs = Y_max if not self.multilabel else Y_shape
+        print(self.sequence_length)
+        print(self.vocab_size)
+        print(self.nb_outputs)
+        logger.info(
+            f"Initialized sequence_length: {self.sequence_length}, \
+            vocab_size: {self.vocab_size}, nb_outputs: {self.nb_outputs}"
+        )
+        return steps_per_epoch
+
     def _build_model(self, sequence_length, vocab_size, nb_outputs,
-                     steps_per_epoch=None, embedding_matrix=None):
+                     steps_per_epoch, embedding_matrix=None):
         def residual_conv_block(x1, l2):
             filters = x1.shape[2]
             x2 = tf.keras.layers.Conv1D(
@@ -201,58 +255,19 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         model.compile(optimizer=optimizer, loss="binary_crossentropy", metrics=metrics)
         return model
 
-    def fit(self, X, Y=None, embedding_matrix=None):
+    def fit(self, X, Y=None, embedding_matrix=None, steps_per_epoch=None):
         if isinstance(X, list):
             X = np.array(X)
         if isinstance(Y, list):
             Y = np.array(Y)
 
-        if type(X) is np.ndarray:
-            X_max = X.max()
-            Y_max = Y.max()
-            X_shape = X.shape[1]
-            Y_shape = Y.shape[1] if self.multilabel else Y.shape[0]
-            steps_per_epoch = X.shape[0]
-        elif isinstance(X, tf.data.Dataset):
-            logger.info(
-                "Initializing sequence_length, vocab_size \
-                and nb_outputs from data. This might take a while."
-            )
-            X = X.batch(self.batch_size)
+        if not (self.sequence_length and self.vocab_size and self.nb_outputs and steps_per_epoch):
+            steps_per_epoch = self._init_from_data(X, Y)
 
-            # init from iterating over dataset
-            X_max = 0
-            Y_max = 0
-            X_shape = None
-            Y_shape = None
-            steps_per_epoch = 0
-            for X_batch, Y_batch in X:
-                batch_X_max = X_batch.numpy().max()
-                batch_Y_max = Y_batch.numpy().max()
-                if batch_X_max > X_max:
-                    X_max = batch_X_max
-                if batch_Y_max > Y_max:
-                    Y_max = batch_Y_max
-                if not Y_shape:
-                    Y_shape = Y_batch.shape[1] if self.multilabel else Y_batch.shape[0]
-                if not X_shape:
-                    X_shape = X_batch.shape[1]
-                steps_per_epoch += 1
-        else:
-            logger.error("CNN currently supports X to one of np.ndarray or tf.data.Dataset")
-            raise NotImplementedError
-
-        sequence_length = X_shape
-        vocab_size = X_max + 1
-        nb_outputs = Y_max if not self.multilabel else Y_shape
-        logger.info(
-            f"Initialized sequence_length: {sequence_length}, \
-            vocab_size: {vocab_size}, nb_outputs: {nb_outputs}"
-        )
         if type(X) is np.ndarray:
             data = self._prepare_data(X, Y, shuffle=True)
         else:  # tensorflow dataset
-            data = X
+            data = X.batch(self.batch_size)
 
         steps_per_epoch = int((1-self.validation_split) * steps_per_epoch)
         train_data = data.take(steps_per_epoch)
@@ -261,7 +276,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         strategy = self._get_distributed_strategy()
         with strategy.scope():
             self.model = self._build_model(
-                sequence_length, vocab_size, nb_outputs,
+                self.sequence_length, self.vocab_size, self.nb_outputs,
                 steps_per_epoch, embedding_matrix)
 
         callbacks = [
