@@ -208,7 +208,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             X_max = X.max()
             Y_max = Y.max()
             X_shape = X.shape[1]
-            Y_shape = Y.shape[1]
+            Y_shape = Y.shape[1] if self.multilabel else Y.shape[0]
         else:  # tensorflow dataset
             logger.info(
                 "Initializing sequence_length, vocab_size \
@@ -230,7 +230,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 if batch_Y_max > Y_max:
                     Y_max = batch_Y_max
                 if not Y_shape:
-                    Y_shape = Y_batch.shape[1]
+                    Y_shape = Y_batch.shape[1] if self.multilabel else Y.shape[0]
                 if not X_shape:
                     X_shape = X_batch.shape[1]
                 steps_per_epoch += 1
@@ -320,7 +320,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             Y_pred = vstack(Y_pred)
             return Y_pred
         else:
-            return self.model.predict(X).numpy() > self.threshold
+            return self.model.predict(X) > self.threshold
 
     def predict_proba(self, X):
         # sparse_y not relevant as probs are dense
