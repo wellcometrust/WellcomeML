@@ -63,6 +63,7 @@ setuptools.setup(
             'torch',
             'transformers==4.3.0',
             'tokenizers==0.10.1'
+            'tensorflow-addons'
         ]
     },
     tests_require=[

@@ -21,9 +21,11 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 from scipy.sparse import csr_matrix, vstack
+import tensorflow_addons as tfa
 import tensorflow as tf
 import numpy as np
 
+from wellcomeml.logger import logger
 from wellcomeml.ml.attention import HierarchicalAttention
 
 TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -48,12 +50,13 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         multilabel=False,
         attention=False,
         attention_heads='same',
-        metrics=["precision", "recall"],
+        metrics=["precision", "recall", "f1"],
         callbacks=["tensorboard"],
         feature_approach="max",
         early_stopping=False,
         sparse_y=False,
-        threshold=0.5
+        threshold=0.5,
+        validation_split=0.1
     ):
         self.context_window = context_window
         self.learning_rate = learning_rate
@@ -76,6 +79,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.early_stopping = early_stopping
         self.sparse_y = sparse_y
         self.threshold = threshold
+        self.validation_split = validation_split
 
     def _yield_data(self, X, Y, batch_size, shuffle=True):
         while True:
@@ -99,8 +103,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         return strategy
 
     def _build_model(self, sequence_length, vocab_size, nb_outputs,
-                     steps_per_epoch, embedding_matrix=None,
-                     metrics=["precision", "recall"]):
+                     steps_per_epoch=None, embedding_matrix=None):
         def residual_conv_block(x1, l2):
             filters = x1.shape[2]
             x2 = tf.keras.layers.Conv1D(
@@ -126,6 +129,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         METRIC_DICT = {
             'precision': tf.keras.metrics.Precision(name='precision'),
             'recall': tf.keras.metrics.Recall(name='recall'),
+            'f1': tfa.metrics.F1Score(
+                nb_outputs, average='micro', threshold=self.threshold, name='f1'),
             'auc': tf.keras.metrics.AUC(name='auc')
         }
 
@@ -180,6 +185,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             self.learning_rate, steps_per_epoch, self.learning_rate_decay,
             staircase=True
         )
+
         strategy = self._get_distributed_strategy()
         if isinstance(strategy, tf.distribute.MirroredStrategy):
             optimizer = tf.keras.optimizers.Adam(learning_rate)
@@ -187,25 +193,60 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             optimizer = tf.keras.optimizers.Adam(learning_rate, clipnorm=1.0)
         metrics = [
             METRIC_DICT[m] if m in METRIC_DICT else m
-            for m in metrics
+            for m in self.metrics
         ]
         model.compile(optimizer=optimizer, loss="binary_crossentropy", metrics=metrics)
         return model
-
-    def fit(self, X, Y, embedding_matrix=None):
+    
+    def fit(self, X, Y=None, embedding_matrix=None):
         if isinstance(X, list):
             X = np.array(X)
         if isinstance(Y, list):
             Y = np.array(Y)
-        sequence_length = X.shape[1]
-        vocab_size = X.max() + 1
-        nb_outputs = Y.max() if not self.multilabel else Y.shape[1]
 
-        X_train, X_val, Y_train, Y_val = train_test_split(
-            X, Y, test_size=0.1, shuffle=True
-        )
-        steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
-        validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
+        if type(X) is np.ndarray:
+            X_max = X.max()
+            Y_max = Y.max()
+            X_shape = X.shape[1]
+            Y_shape = Y.shape[1]
+        else: # tensorflow dataset
+            logger.info("Initializing sequence_length, vocab_size and nb_outputs from data. This might take a while.")
+            X = X.batch(self.batch_size)
+
+            # init from iterating over dataset
+            X_max = 0
+            Y_max = 0
+            X_shape = None
+            Y_shape = None
+            steps_per_epoch = 0
+            for X_batch, Y_batch in X:
+                batch_X_max = X_batch.numpy().max()
+                batch_Y_max = Y_batch.numpy().max()
+                if batch_X_max > X_max:
+                    X_max = batch_X_max
+                if batch_Y_max > Y_max:
+                    Y_max = batch_Y_max
+                if not Y_shape:
+                    Y_shape = Y_batch.shape[1]
+                if not X_shape:
+                    X_shape = X_batch.shape[1]
+                steps_per_epoch += 1
+
+        sequence_length = X_shape
+        vocab_size = X_max + 1
+        nb_outputs = Y_max if not self.multilabel else Y_shape
+        logger.info(f"Initialized sequence_length: {sequence_length}, vocab_size: {vocab_size}, nb_outputs: {nb_outputs}")
+
+        if type(X) is np.ndarray:
+            X_train, X_val, Y_train, Y_val = train_test_split(
+                X, Y, test_size=self.validation_split, shuffle=True
+            )
+            steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
+            validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
+        else: # tensorflow dataset
+            steps_per_epoch = int((1-self.validation_split) * steps_per_epoch)
+            train_data = X.take(steps_per_epoch)
+            val_data = X.skip(steps_per_epoch)
 
         strategy = self._get_distributed_strategy()
         with strategy.scope():
@@ -221,7 +262,16 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             early_stopping = tf.keras.callbacks.EarlyStopping(
                 patience=5, restore_best_weights=True)
             callbacks.append(early_stopping)
-        if self.sparse_y:
+
+        if type(X) is not np.ndarray: # tensorflow dataset
+            self.model.fit(
+                train_data,
+                validation_data=val_data,
+                epochs=self.nb_epochs,
+                callbacks=callbacks
+            )
+        elif self.sparse_y:
+            # case where Y is sparse which is not supported from tf
             train_data = self._yield_data(X_train, Y_train, self.batch_size)
             val_data = self._yield_data(X_val, Y_val, self.batch_size)
 
@@ -231,7 +281,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 validation_data=val_data,
                 validation_steps=validation_steps,
                 epochs=self.nb_epochs,
-                callbacks=callbacks)
+                callbacks=callbacks
+            )
         else:
             self.model.fit(
                 X_train,
@@ -241,24 +292,31 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 validation_data=(X_val, Y_val),
                 callbacks=callbacks,
             )
+        
+        
         return self
 
     def predict(self, X):
         if isinstance(X, list):
             X = np.array(X)
+        def yield_X_batch(X):
+            if type(X) is np.ndarray:
+                for i in range(0, X.shape[0], self.batch_size):
+                    X_batch = X[i: i+self.batch_size]
+                    yield X_batch
+            else: # tensorflow dataset
+                yield X.batch(self.batch_size)
+
         if self.sparse_y:
             Y_pred = []
-            for i in range(0, X.shape[0], self.batch_size):
-                X_batch = X[i: i+self.batch_size]
-                # we do not pass batch_size in predict to allow batches to spead
-                # cores or multi gpu by setting high batch_size vs default 32
+            for X_batch in yield_X_batch(X):
                 Y_pred_batch = self.model.predict(X_batch) > self.threshold
                 Y_pred.append(csr_matrix(Y_pred_batch))
             Y_pred = vstack(Y_pred)
             return Y_pred
         else:
-            return self.model.predict(X, self.batch_size) > self.threshold
-
+            return self.model.predict(X).numpy() > self.threshold
+    
     def predict_proba(self, X):
         # sparse_y not relevant as probs are dense
         return self.model.predict(X, self.batch_size)
