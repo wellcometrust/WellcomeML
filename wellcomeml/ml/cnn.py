@@ -15,10 +15,8 @@ It follows the embed, encode, attend, predict framework
     and whether task is multilabel
 """
 from datetime import datetime
-import math
 
 from sklearn.base import BaseEstimator, ClassifierMixin
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 from scipy.sparse import csr_matrix, vstack
 import tensorflow_addons as tfa
@@ -81,19 +79,24 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.threshold = threshold
         self.validation_split = validation_split
 
-    def _yield_data(self, X, Y, batch_size, shuffle=True):
-        while True:
-            if shuffle:
-                randomize = np.arange(len(X))
-                np.random.shuffle(randomize)
-                X = X[randomize]
-                Y = Y[randomize]
-            for i in range(0, X.shape[0], batch_size):
-                X_batch = X[i:i+batch_size, :]
-                Y_batch = Y[i:i+batch_size, :]
-                if self.sparse_y:
-                    Y_batch = Y_batch.todense()
-                yield X_batch, Y_batch
+    def _prepare_data(self, X, Y, shuffle=True):
+        def yield_data():
+            for i in range(X.shape[0]):
+                x = X[i]
+                y = Y[i, :].todense()  # returns matrix
+                y = np.squeeze(np.asarray(y))
+                yield x, y
+
+        if self.sparse_y:
+            data = tf.data.Dataset.from_generator(yield_data, output_types=(tf.int32, tf.int32))
+        else:
+            data = tf.data.Dataset.from_tensor_slices((X, Y))
+
+        if shuffle:
+            data = data.shuffle(1000)
+
+        data = data.batch(self.batch_size)
+        return data
 
     def _get_distributed_strategy(self):
         if len(tf.config.list_physical_devices('GPU')) > 1:
@@ -209,6 +212,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             Y_max = Y.max()
             X_shape = X.shape[1]
             Y_shape = Y.shape[1] if self.multilabel else Y.shape[0]
+            steps_per_epoch = X.shape[0]
         elif isinstance(X, tf.data.Dataset):
             logger.info(
                 "Initializing sequence_length, vocab_size \
@@ -246,15 +250,13 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             vocab_size: {vocab_size}, nb_outputs: {nb_outputs}"
         )
         if type(X) is np.ndarray:
-            X_train, X_val, Y_train, Y_val = train_test_split(
-                X, Y, test_size=self.validation_split, shuffle=True
-            )
-            steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
-            validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
+            data = self._prepare_data(X, Y, shuffle=True)
         else:  # tensorflow dataset
-            steps_per_epoch = int((1-self.validation_split) * steps_per_epoch)
-            train_data = X.take(steps_per_epoch)
-            val_data = X.skip(steps_per_epoch)
+            data = X
+
+        steps_per_epoch = int((1-self.validation_split) * steps_per_epoch)
+        train_data = data.take(steps_per_epoch)
+        val_data = data.skip(steps_per_epoch)
 
         strategy = self._get_distributed_strategy()
         with strategy.scope():
@@ -271,36 +273,12 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 patience=5, restore_best_weights=True)
             callbacks.append(early_stopping)
 
-        if isinstance(X, tf.data.Dataset):
-            self.model.fit(
-                train_data,
-                validation_data=val_data,
-                epochs=self.nb_epochs,
-                callbacks=callbacks
-            )
-        elif self.sparse_y:
-            # case where Y is sparse which is not supported from tf
-            train_data = self._yield_data(X_train, Y_train, self.batch_size)
-            val_data = self._yield_data(X_val, Y_val, self.batch_size)
-
-            self.model.fit(
-                x=train_data,
-                steps_per_epoch=steps_per_epoch,
-                validation_data=val_data,
-                validation_steps=validation_steps,
-                epochs=self.nb_epochs,
-                callbacks=callbacks
-            )
-        else:
-            self.model.fit(
-                X_train,
-                Y_train,
-                epochs=self.nb_epochs,
-                batch_size=self.batch_size,
-                validation_data=(X_val, Y_val),
-                callbacks=callbacks,
-            )
-
+        self.model.fit(
+            train_data,
+            validation_data=val_data,
+            epochs=self.nb_epochs,
+            callbacks=callbacks
+        )
         return self
 
     def predict(self, X):
