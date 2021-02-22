@@ -62,7 +62,7 @@ setuptools.setup(
             'tensorflow==2.4.0',
             'torch',
             'transformers==4.3.0',
-            'tokenizers==0.10.1'
+            'tokenizers==0.10.1',
             'tensorflow-addons'
         ]
     },

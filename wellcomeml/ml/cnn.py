@@ -197,7 +197,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         ]
         model.compile(optimizer=optimizer, loss="binary_crossentropy", metrics=metrics)
         return model
-    
+
     def fit(self, X, Y=None, embedding_matrix=None):
         if isinstance(X, list):
             X = np.array(X)
@@ -209,8 +209,11 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             Y_max = Y.max()
             X_shape = X.shape[1]
             Y_shape = Y.shape[1]
-        else: # tensorflow dataset
-            logger.info("Initializing sequence_length, vocab_size and nb_outputs from data. This might take a while.")
+        else:  # tensorflow dataset
+            logger.info(
+                "Initializing sequence_length, vocab_size \
+                and nb_outputs from data. This might take a while."
+            )
             X = X.batch(self.batch_size)
 
             # init from iterating over dataset
@@ -235,15 +238,17 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         sequence_length = X_shape
         vocab_size = X_max + 1
         nb_outputs = Y_max if not self.multilabel else Y_shape
-        logger.info(f"Initialized sequence_length: {sequence_length}, vocab_size: {vocab_size}, nb_outputs: {nb_outputs}")
-
+        logger.info(
+            f"Initialized sequence_length: {sequence_length}, \
+            vocab_size: {vocab_size}, nb_outputs: {nb_outputs}"
+        )
         if type(X) is np.ndarray:
             X_train, X_val, Y_train, Y_val = train_test_split(
                 X, Y, test_size=self.validation_split, shuffle=True
             )
             steps_per_epoch = math.ceil(X_train.shape[0] / self.batch_size)
             validation_steps = math.ceil(X_val.shape[0] / self.batch_size)
-        else: # tensorflow dataset
+        else:  # tensorflow dataset
             steps_per_epoch = int((1-self.validation_split) * steps_per_epoch)
             train_data = X.take(steps_per_epoch)
             val_data = X.skip(steps_per_epoch)
@@ -263,7 +268,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 patience=5, restore_best_weights=True)
             callbacks.append(early_stopping)
 
-        if type(X) is not np.ndarray: # tensorflow dataset
+        if type(X) is not np.ndarray:  # tensorflow dataset
             self.model.fit(
                 train_data,
                 validation_data=val_data,
@@ -292,19 +297,19 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 validation_data=(X_val, Y_val),
                 callbacks=callbacks,
             )
-        
-        
+
         return self
 
     def predict(self, X):
         if isinstance(X, list):
             X = np.array(X)
+
         def yield_X_batch(X):
             if type(X) is np.ndarray:
                 for i in range(0, X.shape[0], self.batch_size):
                     X_batch = X[i: i+self.batch_size]
                     yield X_batch
-            else: # tensorflow dataset
+            else:  # tensorflow dataset
                 yield X.batch(self.batch_size)
 
         if self.sparse_y:
@@ -316,7 +321,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             return Y_pred
         else:
             return self.model.predict(X).numpy() > self.threshold
-    
+
     def predict_proba(self, X):
         # sparse_y not relevant as probs are dense
         return self.model.predict(X, self.batch_size)
