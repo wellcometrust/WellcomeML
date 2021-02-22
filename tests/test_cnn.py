@@ -3,6 +3,7 @@ import tempfile
 from wellcomeml.ml import CNNClassifier, KerasVectorizer
 from sklearn.pipeline import Pipeline
 from scipy.sparse import csr_matrix
+import tensorflow as tf
 import numpy as np
 
 
@@ -197,3 +198,40 @@ def test_threshold():
     Y_pred_expected = model.predict_proba(X) > 0.1
     Y_pred = model.predict(X)
     assert np.array_equal(Y_pred_expected, Y_pred)
+
+
+def test_XY_list():
+    X = [
+        "One",
+        "One only",
+        "Two nothing else",
+        "Two and three"
+    ]
+    Y = [0, 0, 1, 1]
+
+    model = Pipeline([
+        ('vec', KerasVectorizer()),
+        ('clf', CNNClassifier())
+    ])
+    model.fit(X, Y)
+    assert model.score(X, Y) > 0.6
+
+
+def test_XY_dataset():
+    X = [
+        "One",
+        "One only",
+        "Two nothing else",
+        "Two and three"
+    ]
+    Y = np.array([0, 0, 1, 1])
+
+    vec = KerasVectorizer()
+    X_vec = vec.fit_transform(X)
+
+    data = tf.data.Dataset.from_tensor_slices((X_vec, Y))
+    data = data.shuffle(100)
+    clf = CNNClassifier(batch_size=2)
+
+    clf.fit(data)
+    assert clf.score(X_vec, Y) > 0.6

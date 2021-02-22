@@ -209,7 +209,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             Y_max = Y.max()
             X_shape = X.shape[1]
             Y_shape = Y.shape[1] if self.multilabel else Y.shape[0]
-        else:  # tensorflow dataset
+        elif isinstance(X, tf.data.Dataset):
             logger.info(
                 "Initializing sequence_length, vocab_size \
                 and nb_outputs from data. This might take a while."
@@ -230,10 +230,13 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 if batch_Y_max > Y_max:
                     Y_max = batch_Y_max
                 if not Y_shape:
-                    Y_shape = Y_batch.shape[1] if self.multilabel else Y.shape[0]
+                    Y_shape = Y_batch.shape[1] if self.multilabel else Y_batch.shape[0]
                 if not X_shape:
                     X_shape = X_batch.shape[1]
                 steps_per_epoch += 1
+        else:
+            logger.error("CNN currently supports X to one of np.ndarray or tf.data.Dataset")
+            raise NotImplementedError
 
         sequence_length = X_shape
         vocab_size = X_max + 1
@@ -268,7 +271,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 patience=5, restore_best_weights=True)
             callbacks.append(early_stopping)
 
-        if type(X) is not np.ndarray:  # tensorflow dataset
+        if isinstance(X, tf.data.Dataset):
             self.model.fit(
                 train_data,
                 validation_data=val_data,
