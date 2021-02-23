@@ -18,7 +18,7 @@ def test_vanilla():
 
     model = Pipeline([
         ('vec', KerasVectorizer()),
-        ('clf', CNNClassifier())
+        ('clf', CNNClassifier(batch_size=2))
     ])
     model.fit(X, Y)
     assert model.score(X, Y) > 0.6
@@ -36,7 +36,7 @@ def test_save_load():
     vec = KerasVectorizer()
     X_vec = vec.fit_transform(X)
 
-    model = CNNClassifier()
+    model = CNNClassifier(batch_size=2)
     model.fit(X_vec, Y)
 
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -59,7 +59,10 @@ def test_save_load_attention():
     vec = KerasVectorizer()
     X_vec = vec.fit_transform(X)
 
-    model = CNNClassifier(attention=True)
+    model = CNNClassifier(
+        batch_size=2,
+        attention=True
+    )
     model.fit(X_vec, Y)
 
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -87,7 +90,10 @@ def test_multilabel():
     ])
     model = Pipeline([
         ('vec', KerasVectorizer()),
-        ('clf', CNNClassifier(multilabel=True))
+        ('clf', CNNClassifier(
+            batch_size=2,
+            multilabel=True
+        ))
     ])
     model.fit(X, Y)
     assert model.score(X, Y) > 0.4
@@ -133,6 +139,7 @@ def test_attention():
     model = Pipeline([
         ('vec', KerasVectorizer()),
         ('clf', CNNClassifier(
+                    batch_size=2,
                     attention=True,
                     attention_heads=10))
     ])
@@ -152,12 +159,14 @@ def test_early_stopping():
     model = Pipeline([
         ('vec', KerasVectorizer()),
         ('clf', CNNClassifier(
+                    batch_size=2,
                     early_stopping=True,
                     nb_epochs=10000
         ))
     ])
     # if early_stopping is not working it will take
     # a lot of time to finish running this test
+    # it will also consume the 4MB of logs in travis
     model.fit(X, Y)
     assert model.score(X, Y) > 0.6
 
@@ -173,7 +182,7 @@ def test_predict_proba():
 
     model = Pipeline([
         ('vec', KerasVectorizer()),
-        ('clf', CNNClassifier())
+        ('clf', CNNClassifier(batch_size=2))
     ])
     model.fit(X, Y)
     Y_pred_prob = model.predict_proba(X)
@@ -192,7 +201,10 @@ def test_threshold():
 
     model = Pipeline([
         ('vec', KerasVectorizer()),
-        ('clf', CNNClassifier(threshold=0.1))
+        ('clf', CNNClassifier(
+            batch_size=2,
+            threshold=0.1
+        ))
     ])
     model.fit(X, Y)
     Y_pred_expected = model.predict_proba(X) > 0.1
@@ -211,7 +223,7 @@ def test_XY_list():
 
     model = Pipeline([
         ('vec', KerasVectorizer()),
-        ('clf', CNNClassifier())
+        ('clf', CNNClassifier(batch_size=2))
     ])
     model.fit(X, Y)
     assert model.score(X, Y) > 0.6
