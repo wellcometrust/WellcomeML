@@ -188,5 +188,5 @@ class BertClassifier(BaseEstimator, TransformerMixin):
 
     def load(self, model_path):
         """Loads model from directory model_path. Tokenizer initialised from param pretrained"""
-        self.init_model()
+        self._init_model()
         self.model = TFBertForSequenceClassification.from_pretrained(model_path)
