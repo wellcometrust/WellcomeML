@@ -15,6 +15,7 @@ It follows the embed, encode, attend, predict framework
     and whether task is multilabel
 """
 from datetime import datetime
+import math
 
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import f1_score
@@ -121,7 +122,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             Y_max = Y.max()
             X_shape = X.shape[1]
             Y_shape = Y.shape[1] if self.multilabel else Y.shape[0]
-            steps_per_epoch = X.shape[0]
+            steps_per_epoch = math.ceil(X.shape[0] / self.batch_size)
         elif isinstance(X, tf.data.Dataset):
             X = X.batch(self.batch_size)
 
@@ -150,9 +151,6 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.sequence_length = X_shape
         self.vocab_size = X_max + 1
         self.nb_outputs = Y_max if not self.multilabel else Y_shape
-        print(self.sequence_length)
-        print(self.vocab_size)
-        print(self.nb_outputs)
         logger.info(
             f"Initialized sequence_length: {self.sequence_length}, \
             vocab_size: {self.vocab_size}, nb_outputs: {self.nb_outputs}"
@@ -269,7 +267,14 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         else:  # tensorflow dataset
             data = X.batch(self.batch_size)
 
-        steps_per_epoch = int((1-self.validation_split) * steps_per_epoch)
+        train_steps_per_epoch = int((1-self.validation_split) * steps_per_epoch)
+        if train_steps_per_epoch == 0:
+            logger.warning(
+                "Not enough data for validation. Consider decreasing \
+                batch_size or validation_split"
+            )
+        else:
+            steps_per_epoch = train_steps_per_epoch
         train_data = data.take(steps_per_epoch)
         val_data = data.skip(steps_per_epoch)
 
