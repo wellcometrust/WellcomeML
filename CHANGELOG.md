@@ -1,4 +1,4 @@
-# 1.0.0
+# 1.0.1
 
 Release date: 24/02/2021
 
@@ -12,6 +12,8 @@ Improvements
 
 Bug fixes:
 - Disables HDBScan for clustering, to solve #197.
+
+Notice: for a technical reason, we are starting with 1.0.1 and not 1.0.0
 
 # 2021.2.1
 
