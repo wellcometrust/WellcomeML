@@ -34,7 +34,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url=about['__url__'],
-    license=['__license__'],
+    license=about['__license__'],
     packages=setuptools.find_packages(include=["wellcomeml*"]),
     classifiers=[
         'Programming Language :: Python :: 3',

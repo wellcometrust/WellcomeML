@@ -1,3 +1,20 @@
+# 1.0.1
+
+Release date: 24/02/2021
+
+From now on we will be using Semantic Versioning, instead of the previous CalVer system. Previous versions will still be installabe by pinning it via pip (e.g. `pip install wellcomeml==2021.2.0`), but won't be listed in the PyPI registry anymore. See discussion [here](https://github.com/wellcometrust/WellcomeML/issues/202) for more details.
+
+Improvements
+- #211 Batch prediction for `wellcomeml.ml.SemanticSimilarityClassifier`
+- #214 Configurable logs
+- #204 Efficient CNN enabling tensorflow datasets as input
+- #193 TransfomersTokenizer class
+
+Bug fixes:
+- Disables HDBScan for clustering, to solve #197.
+
+Notice: for a technical reason, we are starting with 1.0.1 and not 1.0.0
+
 # 2021.2.1
 
 Bug fixes:
