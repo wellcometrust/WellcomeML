@@ -306,6 +306,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
     def predict(self, X):
         if isinstance(X, list):
             X = np.array(X)
+        if isinstance(X, tf.data.Dataset):
+            X = X.batch(self.batch_size)
 
         def yield_X_batch(X):
             if isinstance(X, np.ndarray):

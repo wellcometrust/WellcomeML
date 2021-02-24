@@ -246,4 +246,4 @@ def test_XY_dataset():
     clf = CNNClassifier(batch_size=2)
 
     clf.fit(data)
-    assert clf.score(X_vec, Y) > 0.6
+    assert clf.score(data, Y) > 0.6
