@@ -117,7 +117,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             "Initializing sequence_length, vocab_size \
             and nb_outputs from data. This might take a while."
         )
-        if type(X) is np.ndarray:
+        if isinstance(X, np.ndarray):
             X_max = X.max()
             Y_max = Y.max()
             X_shape = X.shape[1]
@@ -262,7 +262,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         if not (self.sequence_length and self.vocab_size and self.nb_outputs and steps_per_epoch):
             steps_per_epoch = self._init_from_data(X, Y)
 
-        if type(X) is np.ndarray:
+        if isinstance(X, np.ndarray):
             data = self._prepare_data(X, Y, shuffle=True)
         else:  # tensorflow dataset
             data = X.batch(self.batch_size)
@@ -306,7 +306,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             X = np.array(X)
 
         def yield_X_batch(X):
-            if type(X) is np.ndarray:
+            if isinstance(X, np.ndarray):
                 for i in range(0, X.shape[0], self.batch_size):
                     X_batch = X[i: i+self.batch_size]
                     yield X_batch
