@@ -26,7 +26,7 @@ curl --request POST \
   "tag_name": "v'$VERSION'",
   "target_commitish": "master",
   "name": "v'$VERSION'",
-	"prerelease": true
+	"prerelease": false
 }'
 
 
