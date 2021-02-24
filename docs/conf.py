@@ -20,11 +20,17 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = 'WellcomeML'
-copyright = '2020, Wellcome Data Labs'
+copyright = '2021, Wellcome Data Labs'
 author = 'Wellcome Data Labs'
 
+about = {}  # type: dict
+here = os.path.abspath(os.path.dirname(__file__))
+version_path = os.path.join(here, '../wellcomeml', '__version__.py')
+with open(version_path, 'r') as f:
+    exec(f.read(), about)
+
 # The full version, including alpha/beta/rc tags
-release = 'v2020.7.1'
+release = about["__version__"]
 
 
 # -- General configuration ---------------------------------------------------
