@@ -271,7 +271,9 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         if train_steps_per_epoch == 0:
             logger.warning(
                 "Not enough data for validation. Consider decreasing \
-                batch_size or validation_split"
+                batch_size or validation_split. Some features that \
+                rely on validation metrics like early stopping might \
+                not work"
             )
         else:
             steps_per_epoch = train_steps_per_epoch
