@@ -1,5 +1,5 @@
 __name__ = "wellcomeml"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __description__ = """Utilities for managing nlp models and for
                      processing text-related data at Wellcome Data Labs"""
 __url__ = "https://github.com/wellcometrust/wellcomeml/tree/master"
