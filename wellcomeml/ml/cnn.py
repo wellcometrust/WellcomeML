@@ -315,7 +315,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                     X_batch = X[i: i+self.batch_size]
                     yield X_batch
             else:  # tensorflow dataset
-                yield X.batch(self.batch_size)
+                yield X
 
         if self.sparse_y:
             Y_pred = []
