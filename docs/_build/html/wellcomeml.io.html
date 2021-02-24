@@ -191,7 +191,7 @@
 <p>Utilities for loading and saving data from various formats</p>
 <dl class="py function">
 <dt id="wellcomeml.io.io.read_jsonl">
-<code class="sig-prename descclassname">wellcomeml.io.io.</code><code class="sig-name descname">read_jsonl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.io.read_jsonl" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">wellcomeml.io.io.</span></code><code class="sig-name descname"><span class="pre">read_jsonl</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.io.read_jsonl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a list from a jsonl file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -202,7 +202,7 @@
 
 <dl class="py function">
 <dt id="wellcomeml.io.io.write_jsonl">
-<code class="sig-prename descclassname">wellcomeml.io.io.</code><code class="sig-name descname">write_jsonl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_data</span></em>, <em class="sig-param"><span class="n">output_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.io.write_jsonl" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">wellcomeml.io.io.</span></code><code class="sig-name descname"><span class="pre">write_jsonl</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.io.write_jsonl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a dict to jsonl (line delimited json)</p>
 <p>Output format will look like:</p>
 <p><code class="docutils literal notranslate"><span class="pre">`</span>
@@ -226,7 +226,7 @@
 <span id="wellcomeml-io-s3-policy-data-module"></span><h2>wellcomeml.io.s3_policy_data module<a class="headerlink" href="#module-wellcomeml.io.s3_policy_data" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.io.s3_policy_data.</code><code class="sig-name descname">PolicyDocumentsDownloader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s3</span></em>, <em class="sig-param"><span class="n">bucket_name</span></em>, <em class="sig-param"><span class="n">dir_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.io.s3_policy_data.</span></code><code class="sig-name descname"><span class="pre">PolicyDocumentsDownloader</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Interact with S3 to get policy document texts</p>
 <dl class="field-list simple">
@@ -239,7 +239,7 @@
 </dl>
 <dl class="py method">
 <dt id="wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.download">
-<code class="sig-name descname">download</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hash_list</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.download" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">download</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hash_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.download" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download the policy document data from S3</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -250,14 +250,14 @@
 
 <dl class="py method">
 <dt id="wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.get_all_s3_keys">
-<code class="sig-name descname">get_all_s3_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.get_all_s3_keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_all_s3_keys</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.get_all_s3_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference external" href="https://alexwlchan.net/2017/07/listing-s3-keys/">https://alexwlchan.net/2017/07/listing-s3-keys/</a>
 Get a list of all keys to look for pdfs in the S3 bucket.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.get_hashes">
-<code class="sig-name descname">get_hashes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word_list</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.get_hashes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_hashes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.get_hashes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of policy document hashes from the S3 location</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -275,7 +275,7 @@ all</p>
 
 <dl class="py method">
 <dt id="wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.save_json">
-<code class="sig-name descname">save_json</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span></em>, <em class="sig-param"><span class="n">file_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.save_json" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">save_json</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader.save_json" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -285,7 +285,7 @@ all</p>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.io" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="wellcomeml.io.PolicyDocumentsDownloader">
-<em class="property">class </em><code class="sig-prename descclassname">wellcomeml.io.</code><code class="sig-name descname">PolicyDocumentsDownloader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s3</span></em>, <em class="sig-param"><span class="n">bucket_name</span></em>, <em class="sig-param"><span class="n">dir_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.io.</span></code><code class="sig-name descname"><span class="pre">PolicyDocumentsDownloader</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Interact with S3 to get policy document texts</p>
 <dl class="field-list simple">
@@ -298,7 +298,7 @@ all</p>
 </dl>
 <dl class="py method">
 <dt id="wellcomeml.io.PolicyDocumentsDownloader.download">
-<code class="sig-name descname">download</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hash_list</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.download" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">download</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hash_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.download" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download the policy document data from S3</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -309,14 +309,14 @@ all</p>
 
 <dl class="py method">
 <dt id="wellcomeml.io.PolicyDocumentsDownloader.get_all_s3_keys">
-<code class="sig-name descname">get_all_s3_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.get_all_s3_keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_all_s3_keys</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.get_all_s3_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference external" href="https://alexwlchan.net/2017/07/listing-s3-keys/">https://alexwlchan.net/2017/07/listing-s3-keys/</a>
 Get a list of all keys to look for pdfs in the S3 bucket.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="wellcomeml.io.PolicyDocumentsDownloader.get_hashes">
-<code class="sig-name descname">get_hashes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word_list</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.get_hashes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_hashes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.get_hashes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of policy document hashes from the S3 location</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -334,14 +334,14 @@ all</p>
 
 <dl class="py method">
 <dt id="wellcomeml.io.PolicyDocumentsDownloader.save_json">
-<code class="sig-name descname">save_json</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span></em>, <em class="sig-param"><span class="n">file_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.save_json" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">save_json</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader.save_json" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt id="wellcomeml.io.read_jsonl">
-<code class="sig-prename descclassname">wellcomeml.io.</code><code class="sig-name descname">read_jsonl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.read_jsonl" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">wellcomeml.io.</span></code><code class="sig-name descname"><span class="pre">read_jsonl</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.read_jsonl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a list from a jsonl file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -352,7 +352,7 @@ all</p>
 
 <dl class="py function">
 <dt id="wellcomeml.io.write_jsonl">
-<code class="sig-prename descclassname">wellcomeml.io.</code><code class="sig-name descname">write_jsonl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_data</span></em>, <em class="sig-param"><span class="n">output_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.write_jsonl" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">wellcomeml.io.</span></code><code class="sig-name descname"><span class="pre">write_jsonl</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.write_jsonl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a dict to jsonl (line delimited json)</p>
 <p>Output format will look like:</p>
 <p><code class="docutils literal notranslate"><span class="pre">`</span>
