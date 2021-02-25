@@ -1,3 +1,16 @@
+# 1.0.2
+Release date: 25/02/2021
+
+Due to an error, some of the improvements in the previous release weren't built in the PyPI whl.
+
+- #233 CNN predict when X tf.data.Dataset 
+- #214 Configurable logs
+- #204 Efficient CNN enabling tensorflow datasets as input
+- #193 TransfomersTokenizer class
+
+Bug fixes:
+- Disables HDBScan for clustering, to solve #197.
+
 # 1.0.1
 
 Release date: 24/02/2021
@@ -6,12 +19,12 @@ From now on we will be using Semantic Versioning, instead of the previous CalVer
 
 Improvements
 - #211 Batch prediction for `wellcomeml.ml.SemanticSimilarityClassifier`
-- #214 Configurable logs
-- #204 Efficient CNN enabling tensorflow datasets as input
-- #193 TransfomersTokenizer class
+- ~~#214 Configurable logs~~ only avaliable in 1.0.2
+- ~~#204 Efficient CNN enabling tensorflow datasets as input~~ only available in 1.0.2
+- ~~#193 TransfomersTokenizer class~~ only available in 1.0.2
 
 Bug fixes:
-- Disables HDBScan for clustering, to solve #197.
+- ~~Disables HDBScan for clustering, to solve #197.~~
 
 Notice: for a technical reason, we are starting with 1.0.1 and not 1.0.0
 
