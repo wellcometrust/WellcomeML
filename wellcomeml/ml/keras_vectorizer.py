@@ -10,6 +10,7 @@ import gensim.downloader as api
 
 from os import path
 
+from wellcomeml.logger import logger
 from wellcomeml.ml.transformers_tokenizer import TransformersTokenizer
 
 
@@ -38,6 +39,30 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
         self.sequence_length = sequence_length
         self.tokenizer_library = tokenizer_library
 
+    def _infer_from_data(self, X, load_buffer=1000):
+        # We could look at a sample for more efficient
+        max_sequence_length = 1
+
+        X_buffer = []
+        for x in X:
+            X_buffer.append(x)
+
+            if len(X_buffer) >= load_buffer:
+                X_vec = self.transform(X_buffer)
+                sequence_length = X_vec.shape[1]
+                if sequence_length >= max_sequence_length:
+                    max_sequence_length = sequence_length
+                X_buffer = []
+
+        if X_buffer:
+            # TODO: Refactor
+            X_vec = self.transform(X_buffer)
+            sequence_length = X_vec.shape[1]
+            if sequence_length >= max_sequence_length:
+                max_sequence_length = sequence_length
+
+        self.sequence_length = max_sequence_length
+
     def fit(self, X, *_):
         if self.tokenizer_library == "keras":
             self.tokenizer = KerasTokenizer(
@@ -50,6 +75,11 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
                     vocab_size=self.vocab_size
                 )
         self.tokenizer.fit(X)
+        if not self.sequence_length:
+            logger.info(
+                "Param sequence length not provided. Inferring from data.\
+                This might take a while...")
+            self._infer_from_data(X)
         return self
 
     def transform(self, X, *_):
