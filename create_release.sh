@@ -1,4 +1,6 @@
 #!/bin/sh
+git fetch && git rebase origin/master
+
 VERSION=$(python setup.py --version)
 VIRTUALENV=build/virtualenv
 

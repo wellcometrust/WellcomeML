@@ -85,6 +85,7 @@ export GITHUB_TOKEN=...
 
 The checklist for a new release is:
 
+- [ ] Rebase branch to update with master
 - [ ] Change `wellcomeml/__version__.py`
 - [ ] Add changelog
 - [ ] `make dist`
