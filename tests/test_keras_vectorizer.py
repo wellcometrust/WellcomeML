@@ -75,3 +75,12 @@ def test_build_embedding_matrix_word_vectors():
     )
 
     assert embedding_matrix.shape == (5, 25)
+
+
+def test_infer_from_data():
+    X = ["One", "Two words", "Three words here"]
+
+    keras_vectorizer = KerasVectorizer()
+    keras_vectorizer.fit(X)
+
+    assert keras_vectorizer.sequence_length == 3
