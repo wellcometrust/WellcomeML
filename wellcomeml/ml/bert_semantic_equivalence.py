@@ -72,6 +72,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.valid_dataset = None
         self.train_steps = None
         self.valid_steps = None
+        self.strategy = None
 
         self.history = defaultdict(list)
 
@@ -178,8 +179,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         try:
             check_is_fitted(self)
         except NotFittedError:
-            strategy = self._get_distributed_strategy()
-            with strategy.scope():
+            self.strategy = self._get_distributed_strategy()
+            with self.strategy.scope():
                 self.initialise_models()
 
             # Train/val split
@@ -196,7 +197,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             self.valid_dataset = self._prep_dataset_generator(X_valid, y_valid,
                                                               batch_size=self.eval_batch_size)
 
-            with strategy.scope():
+            with self.strategy.scope():
                 self._compile_model()
 
             self.train_steps = math.ceil(len(X_train)/self.batch_size)
@@ -233,7 +234,15 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             An array of shape len(X) x 2 with scores for classes 0 and 1
 
         """
-        predictions = self.model.predict(self._prep_dataset_generator(X)).logits
+        # I didn't quite get to the bottom of this error, but with mirrored strategy predicting
+        # I need to predict "manually" by calling the model.
+
+        if isinstance(self.strategy, tf.distribute.MirroredStrategy):
+            predictions = []
+            for batch in self._prep_dataset_generator(X):
+                predictions += [self.model.predict(batch).logits]
+        else:
+            predictions = self.model.predict(self._prep_dataset_generator(X)).logits
 
         return tf.nn.softmax(predictions).numpy()
 
@@ -258,8 +267,9 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
     def load(self, path):
         """Loads model from path"""
-        strategy = self._get_distributed_strategy()
-        with strategy.scope():
+        self.strategy = self._get_distributed_strategy()
+
+        with self.strategy.scope():
             self.initialise_models()
             self.model = TFBertForSequenceClassification.from_pretrained(path)
         self.trained_ = True
