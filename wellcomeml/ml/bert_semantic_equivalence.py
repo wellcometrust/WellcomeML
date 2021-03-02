@@ -241,11 +241,11 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             predictions = []
             for batch in self._prep_dataset_generator(X):
                 predictions += [self.model(batch).logits]
-            
+
             predictions = tf.concat(predictions, axis=0)
         else:
             predictions = self.model.predict(self._prep_dataset_generator(X)).logits
-        
+
         return tf.nn.softmax(predictions).numpy()
 
     def predict(self, X):
