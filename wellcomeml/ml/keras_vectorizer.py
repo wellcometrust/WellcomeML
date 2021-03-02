@@ -44,8 +44,8 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
         max_sequence_length = 1
 
         def update_max_sequence_length(X_buffer, max_sequence_length, load_buffer):
-            X_vec = self.transform(X_buffer)
-            sequence_length = X_vec.shape[1]
+            X_tokens = self.tokenizer.encode(X_buffer)
+            sequence_length = max([len(x) for x in X_tokens])
             if sequence_length >= max_sequence_length:
                 max_sequence_length = sequence_length
             return max_sequence_length
