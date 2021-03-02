@@ -43,23 +43,25 @@ class KerasVectorizer(BaseEstimator, TransformerMixin):
         # We could look at a sample for more efficient
         max_sequence_length = 1
 
+        def update_max_sequence_length(X_buffer, max_sequence_length, load_buffer):
+            X_vec = self.transform(X_buffer)
+            sequence_length = X_vec.shape[1]
+            if sequence_length >= max_sequence_length:
+                max_sequence_length = sequence_length
+            return max_sequence_length
+
         X_buffer = []
         for x in X:
             X_buffer.append(x)
 
             if len(X_buffer) >= load_buffer:
-                X_vec = self.transform(X_buffer)
-                sequence_length = X_vec.shape[1]
-                if sequence_length >= max_sequence_length:
-                    max_sequence_length = sequence_length
+                max_sequence_length = update_max_sequence_length(
+                        X_buffer, max_sequence_length, load_buffer)
                 X_buffer = []
 
         if X_buffer:
-            # TODO: Refactor
-            X_vec = self.transform(X_buffer)
-            sequence_length = X_vec.shape[1]
-            if sequence_length >= max_sequence_length:
-                max_sequence_length = sequence_length
+            max_sequence_length = update_max_sequence_length(
+                X_buffer, max_sequence_length, load_buffer)
 
         self.sequence_length = max_sequence_length
 
