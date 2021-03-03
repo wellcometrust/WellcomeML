@@ -236,6 +236,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         """
         # I didn't quite get to the bottom of this error, but with mirrored strategy predicting
         # I need to predict "manually" by calling the model.
+        # Any progress on this can be tracked on #241
 
         if isinstance(self.strategy, tf.distribute.MirroredStrategy):
             predictions = []
