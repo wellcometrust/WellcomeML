@@ -75,6 +75,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.valid_dataset = None
         self.train_steps = None
         self.valid_steps = None
+        self.strategy = None
 
         self.history = defaultdict(list)
 
@@ -157,6 +158,13 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
         self.model.compile(optimizer=opt, loss=loss, metrics=metrics)
 
+    def _get_distributed_strategy(self):
+        if len(tf.config.list_physical_devices("GPU")) > 1:
+            strategy = tf.distribute.MirroredStrategy()
+        else:
+            strategy = tf.distribute.get_strategy()
+        return strategy
+
     def fit(self, X, y, random_state=None, epochs=3, metrics=[], **kwargs):
         """
         Fits a sentence similarity model
@@ -176,7 +184,9 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         try:
             check_is_fitted(self)
         except NotFittedError:
-            self.initialise_models()
+            self.strategy = self._get_distributed_strategy()
+            with self.strategy.scope():
+                self.initialise_models()
 
             # Train/val split
             X_train, X_valid, y_train, y_valid = train_test_split(
@@ -192,7 +202,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             self.valid_dataset = self._prep_dataset_generator(X_valid, y_valid,
                                                               batch_size=self.eval_batch_size)
 
-            self._compile_model()
+            with self.strategy.scope():
+                self._compile_model()
 
             self.train_steps = math.ceil(len(X_train)/self.batch_size)
             self.valid_steps = math.ceil(len(X_valid)/self.eval_batch_size)
@@ -229,7 +240,18 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             An array of shape len(X) x 2 with scores for classes 0 and 1
 
         """
-        predictions = self.model.predict(self._prep_dataset_generator(X)).logits
+        # I didn't quite get to the bottom of this error, but with mirrored strategy predicting
+        # I need to predict "manually" by calling the model.
+        # Any progress on this can be tracked on #241
+
+        if isinstance(self.strategy, tf.distribute.MirroredStrategy):
+            predictions = []
+            for batch in self._prep_dataset_generator(X):
+                predictions += [self.model(batch).logits]
+
+            predictions = tf.concat(predictions, axis=0)
+        else:
+            predictions = self.model.predict(self._prep_dataset_generator(X)).logits
 
         return tf.nn.softmax(predictions).numpy()
 
@@ -254,8 +276,11 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
 
     def load(self, path):
         """Loads model from path"""
-        self.initialise_models()
-        self.model = TFBertForSequenceClassification.from_pretrained(path)
+        self.strategy = self._get_distributed_strategy()
+
+        with self.strategy.scope():
+            self.initialise_models()
+            self.model = TFBertForSequenceClassification.from_pretrained(path)
         self.trained_ = True
 
 
@@ -455,8 +480,10 @@ class SemanticEquivalenceMetaClassifier(SemanticEquivalenceClassifier):
 
     def load(self, path):
         """Loads metamodel from path"""
-        self.initialise_models()
-        self.model = tf.keras.models.load_model(path)
+        strategy = self._get_distributed_strategy()
+        with strategy.scope():
+            self.initialise_models()
+            self.model = tf.keras.models.load_model(path)
         self.trained_ = True
 
 
