@@ -8,7 +8,7 @@
 This package contains common utility functions for usual tasks at Wellcome Data Labs, in particular functionalities for processing, embedding and classifying text data. This includes
 
 * An intuitive sklearn-like API wrapping text vectorizers, such as Doc2vec, Bert, Scibert
-* Common API for off-the-shelf classifiers to allow quick iteration (e.g. Frequency Vectorizer, Bert, Scibert, basic CNN, BiLSTM)
+* Common API for off-the-shelf classifiers to allow quick iteration (e.g. Frequency Vectorizer, Bert, Scibert, basic CNN, BiLSTM, SemanticSimilarity)
 * Utils to download and convert academic text datasets for benchmark
 
 For more information read the official [![docs](https://img.shields.io/badge/docs-%20-success)](http://wellcometrust.github.io/WellcomeML)
