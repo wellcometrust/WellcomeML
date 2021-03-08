@@ -13,7 +13,7 @@ df = pd.read_csv(data_file_path)
 X = df[["text_1", "text_2"]].values.tolist()
 y = df["label"].values
 
-# Define the classifier and fits for 3 epochs
+# Define the classifier and fits for 1 epoch
 classifier = SemanticEquivalenceClassifier(
     pretrained="scibert", batch_size=8, eval_batch_size=16
 )
