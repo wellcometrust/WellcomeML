@@ -148,6 +148,14 @@ wellcomeml.ml.spacy\_ner module
    :undoc-members:
    :show-inheritance:
 
+wellcomeml.ml.transformers\_tokenizer module
+--------------------------------------------
+
+.. automodule:: wellcomeml.ml.transformers_tokenizer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 wellcomeml.ml.vectorizer module
 -------------------------------
 
