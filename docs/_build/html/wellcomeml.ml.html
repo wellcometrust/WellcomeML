@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>wellcomeml.ml package &mdash; WellcomeML 1.0.1 documentation</title>
+  <title>wellcomeml.ml package &mdash; WellcomeML 1.0.2 documentation</title>
   
 
   
@@ -103,7 +103,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.bert_vectorizer">wellcomeml.ml.bert_vectorizer module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.bilstm">wellcomeml.ml.bilstm module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.clustering">wellcomeml.ml.clustering module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.cnn">wellcomeml.ml.cnn module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wellcomeml-ml-cnn-module">wellcomeml.ml.cnn module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.constants">wellcomeml.ml.constants module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.doc2vec_vectorizer">wellcomeml.ml.doc2vec_vectorizer module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.frequency_vectorizer">wellcomeml.ml.frequency_vectorizer module</a></li>
@@ -115,6 +115,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.spacy_entity_linking">wellcomeml.ml.spacy_entity_linking module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.spacy_knowledge_base">wellcomeml.ml.spacy_knowledge_base module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.spacy_ner">wellcomeml.ml.spacy_ner module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.transformers_tokenizer">wellcomeml.ml.transformers_tokenizer module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.vectorizer">wellcomeml.ml.vectorizer module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml.voting_classifier">wellcomeml.ml.voting_classifier module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.ml">Module contents</a></li>
@@ -348,7 +349,7 @@ classification task</p>
 <span id="wellcomeml-ml-bert-semantic-equivalence-module"></span><h2>wellcomeml.ml.bert_semantic_equivalence module<a class="headerlink" href="#module-wellcomeml.ml.bert_semantic_equivalence" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.bert_semantic_equivalence.</span></code><code class="sig-name descname"><span class="pre">SemanticEquivalenceClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bert'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['tensorboard']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.bert_semantic_equivalence.</span></code><code class="sig-name descname"><span class="pre">SemanticEquivalenceClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bert'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['tensorboard']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logging_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_semantic_equivalence.SemanticEquivalenceClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
 <p>Class to fine-tune BERT-type models for semantic equivalence, for example
 paraphrase, textual similarity and other NLU tasks</p>
@@ -720,55 +721,8 @@ clustering parameters)</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-wellcomeml.ml.cnn">
-<span id="wellcomeml-ml-cnn-module"></span><h2>wellcomeml.ml.cnn module<a class="headerlink" href="#module-wellcomeml.ml.cnn" title="Permalink to this headline">¶</a></h2>
-<p>CNN architecture inspired from spacy for NLP tasks</p>
-<p>It follows the embed, encode, attend, predict framework</p>
-<blockquote>
-<div><p>Embed: learns a new embedding but can receive
-pre trained embeddings as well</p>
-<p>Encode: stacked CNN with context window 3 that maintains the size of input and applies dropout
-and layer norm</p>
-<p>Attend: not yet implemented</p>
-<p>Predict: softmax or sigmoid depending on number of outputs
-and whether task is multilabel</p>
-</div></blockquote>
-<dl class="py class">
-<dt id="wellcomeml.ml.cnn.CNNClassifier">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.cnn.</span></code><code class="sig-name descname"><span class="pre">CNNClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context_window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate_decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dense_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_heads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'same'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['precision',</span> <span class="pre">'recall']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['tensorboard']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_approach</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stopping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.cnn.CNNClassifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code></p>
-<dl class="py method">
-<dt id="wellcomeml.ml.cnn.CNNClassifier.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.cnn.CNNClassifier.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.cnn.CNNClassifier.load">
-<code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.cnn.CNNClassifier.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.cnn.CNNClassifier.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.cnn.CNNClassifier.predict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.cnn.CNNClassifier.predict_proba">
-<code class="sig-name descname"><span class="pre">predict_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.cnn.CNNClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.cnn.CNNClassifier.save">
-<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.cnn.CNNClassifier.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.cnn.CNNClassifier.score">
-<code class="sig-name descname"><span class="pre">score</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.cnn.CNNClassifier.score" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="wellcomeml-ml-cnn-module">
+<h2>wellcomeml.ml.cnn module<a class="headerlink" href="#wellcomeml-ml-cnn-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-wellcomeml.ml.constants">
 <span id="wellcomeml-ml-constants-module"></span><h2>wellcomeml.ml.constants module<a class="headerlink" href="#module-wellcomeml.ml.constants" title="Permalink to this headline">¶</a></h2>
@@ -976,9 +930,32 @@ not just batch level metrics as with f1_metric.</p>
 </div>
 <div class="section" id="module-wellcomeml.ml.keras_vectorizer">
 <span id="wellcomeml-ml-keras-vectorizer-module"></span><h2>wellcomeml.ml.keras_vectorizer module<a class="headerlink" href="#module-wellcomeml.ml.keras_vectorizer" title="Permalink to this headline">¶</a></h2>
+<p>Implements KerasTokenizer that abstracts Keras tokenisation
+and encoding and KerasVectorizer that is sklearn compatible</p>
+<dl class="py class">
+<dt id="wellcomeml.ml.keras_vectorizer.KerasTokenizer">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.keras_vectorizer.</span></code><code class="sig-name descname"><span class="pre">KerasTokenizer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocab_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oov_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;OOV&gt;'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasTokenizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="wellcomeml.ml.keras_vectorizer.KerasTokenizer.encode">
+<code class="sig-name descname"><span class="pre">encode</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasTokenizer.encode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.keras_vectorizer.KerasTokenizer.fit">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasTokenizer.fit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.keras_vectorizer.KerasTokenizer.vocab">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">vocab</span></code><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasTokenizer.vocab" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt id="wellcomeml.ml.keras_vectorizer.KerasVectorizer">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.keras_vectorizer.</span></code><code class="sig-name descname"><span class="pre">KerasVectorizer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocab_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oov_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;OOV&gt;'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasVectorizer" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.keras_vectorizer.</span></code><code class="sig-name descname"><span class="pre">KerasVectorizer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocab_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oov_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;OOV&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer_library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'keras'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasVectorizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.keras_vectorizer.KerasVectorizer.build_embedding_matrix">
@@ -1329,6 +1306,47 @@ for entity types in the ‘tags’ list, e.g. [‘PERSON’, ‘LOC’]</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-wellcomeml.ml.transformers_tokenizer">
+<span id="wellcomeml-ml-transformers-tokenizer-module"></span><h2>wellcomeml.ml.transformers_tokenizer module<a class="headerlink" href="#module-wellcomeml.ml.transformers_tokenizer" title="Permalink to this headline">¶</a></h2>
+<p>Implements Tokenizer that abstracts common tokenisation
+strategies used in Transformers</p>
+<dl class="py class">
+<dt id="wellcomeml.ml.transformers_tokenizer.TransformersTokenizer">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.transformers_tokenizer.</span></code><code class="sig-name descname"><span class="pre">TransformersTokenizer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lowercase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_tokenizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'whitespace'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wordpiece'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vocab_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unk_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'[UNK]'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.transformers_tokenizer.TransformersTokenizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.encode">
+<code class="sig-name descname"><span class="pre">encode</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.encode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.fit">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.fit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.load">
+<code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokenizer_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.save">
+<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokenizer_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.tokenize">
+<code class="sig-name descname"><span class="pre">tokenize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.tokenize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.vocab">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">vocab</span></code><a class="headerlink" href="#wellcomeml.ml.transformers_tokenizer.TransformersTokenizer.vocab" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-wellcomeml.ml.vectorizer">
 <span id="wellcomeml-ml-vectorizer-module"></span><h2>wellcomeml.ml.vectorizer module<a class="headerlink" href="#module-wellcomeml.ml.vectorizer" title="Permalink to this headline">¶</a></h2>
 <p>A generic vectorizer that can fallback to tdidf or bag of words from sklearn
@@ -1414,185 +1432,6 @@ and return results for multilabel Y</p>
 <div class="section" id="module-wellcomeml.ml">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.ml" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="wellcomeml.ml.BertClassifier">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">BertClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bert-base-uncased'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_pt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertClassifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
-<p>Class to fine-tune BERT like models for a text
-classification task</p>
-<dl class="py method">
-<dt id="wellcomeml.ml.BertClassifier.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertClassifier.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fine tune BERT to text data and Y vector</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> – list or numpy array of texts (n_samples,)</p></li>
-<li><p><strong>Y</strong> – list or numpy array of classes (n_samples, n_classes)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BertClassifier.load">
-<code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertClassifier.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads model from directory model_path. Tokenizer initialised from param pretrained</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BertClassifier.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertClassifier.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict vector Y on text data X</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> – list or numpy array of texts (n_samples)</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>numpy array of predictions Y (n_samples, n_classes)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Y_pred</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BertClassifier.predict_proba">
-<code class="sig-name descname"><span class="pre">predict_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict probabilities for classes on text data X</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> – list or numpy arrray of texts (n_samples)</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>numpy array of probabilities for each class (n_samples, n_classes)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Y_pred_proba</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BertClassifier.save">
-<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertClassifier.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves model in directory model_path</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BertClassifier.score">
-<code class="sig-name descname"><span class="pre">score</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertClassifier.score" title="Permalink to this definition">¶</a></dt>
-<dd><p>Micro f1 score of X data against ground truth Y</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wellcomeml.ml.BertVectorizer">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">BertVectorizer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bert'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sentence_embedding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean_second_to_last'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertVectorizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
-<dl class="py method">
-<dt id="wellcomeml.ml.BertVectorizer.bert_embedding">
-<code class="sig-name descname"><span class="pre">bert_embedding</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertVectorizer.bert_embedding" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BertVectorizer.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertVectorizer.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BertVectorizer.load_transformed">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">load_transformed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertVectorizer.load_transformed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads transformed embedded vectors</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BertVectorizer.save_transformed">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">save_transformed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_transformed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertVectorizer.save_transformed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves transformed embedded vectors</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BertVectorizer.transform">
-<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BertVectorizer.transform" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wellcomeml.ml.BiLSTMClassifier">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">BiLSTMClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate_decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dense_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_heads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'same'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['precision',</span> <span class="pre">'recall']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['tensorboard']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_approach</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stopping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BiLSTMClassifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code></p>
-<dl class="py method">
-<dt id="wellcomeml.ml.BiLSTMClassifier.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BiLSTMClassifier.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BiLSTMClassifier.load">
-<code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BiLSTMClassifier.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BiLSTMClassifier.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BiLSTMClassifier.predict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BiLSTMClassifier.predict_proba">
-<code class="sig-name descname"><span class="pre">predict_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BiLSTMClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BiLSTMClassifier.save">
-<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BiLSTMClassifier.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.BiLSTMClassifier.score">
-<code class="sig-name descname"><span class="pre">score</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.BiLSTMClassifier.score" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wellcomeml.ml.CNNClassifier">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">CNNClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context_window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate_decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dense_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_heads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'same'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['precision',</span> <span class="pre">'recall']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['tensorboard']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_approach</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stopping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.CNNClassifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code></p>
-<dl class="py method">
-<dt id="wellcomeml.ml.CNNClassifier.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.CNNClassifier.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.CNNClassifier.load">
-<code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.CNNClassifier.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.CNNClassifier.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.CNNClassifier.predict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.CNNClassifier.predict_proba">
-<code class="sig-name descname"><span class="pre">predict_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.CNNClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.CNNClassifier.save">
-<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.CNNClassifier.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.CNNClassifier.score">
-<code class="sig-name descname"><span class="pre">score</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.CNNClassifier.score" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="wellcomeml.ml.Doc2VecVectorizer">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">Doc2VecVectorizer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.025</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.Doc2VecVectorizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
@@ -1651,117 +1490,6 @@ classification task</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="wellcomeml.ml.KerasVectorizer">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">KerasVectorizer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocab_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oov_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;OOV&gt;'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.KerasVectorizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
-<dl class="py method">
-<dt id="wellcomeml.ml.KerasVectorizer.build_embedding_matrix">
-<code class="sig-name descname"><span class="pre">build_embedding_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embeddings_name_or_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.KerasVectorizer.build_embedding_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Builds an embedding matrix from either a local embeddings path
-or a gensim pre-trained word vector path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>embeddings_name_or_path</strong> – <p>Can be either:
-- A local directory to word embeddings
-- The name of a GenSim pre-trained word vector model</p>
-<blockquote>
-<div><p>e.g. ‘glove-twitter-25’, for the complete list:
-<a class="reference external" href="https://github.com/RaRe-Technologies/gensim-data#models">https://github.com/RaRe-Technologies/gensim-data#models</a></p>
-</div></blockquote>
-</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An embedding matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.KerasVectorizer.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.KerasVectorizer.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.KerasVectorizer.transform">
-<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.KerasVectorizer.transform" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wellcomeml.ml.SemanticEquivalenceClassifier">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">SemanticEquivalenceClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bert'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['tensorboard']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SemanticEquivalenceClassifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
-<p>Class to fine-tune BERT-type models for semantic equivalence, for example
-paraphrase, textual similarity and other NLU tasks</p>
-<dl class="py method">
-<dt id="wellcomeml.ml.SemanticEquivalenceClassifier.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SemanticEquivalenceClassifier.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fits a sentence similarity model</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> – List of 2-uples: [(‘Sentence 1’, ‘Sentence 2’), ….]</p></li>
-<li><p><strong>y</strong> – list of 0 (not similar) and 1s (similar)</p></li>
-<li><p><strong>random_state</strong> – a random state for the train_test_split</p></li>
-<li><p><strong>epochs</strong> – number_of epochs</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A fitted model</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SemanticEquivalenceClassifier.initialise_models">
-<code class="sig-name descname"><span class="pre">initialise_models</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SemanticEquivalenceClassifier.initialise_models" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SemanticEquivalenceClassifier.load">
-<code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SemanticEquivalenceClassifier.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads model from path</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SemanticEquivalenceClassifier.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SemanticEquivalenceClassifier.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the predicted class (0 - for negative and 1 for positive)
-for X.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> – List of 2-uples: [(‘Sentence 1’, ‘Sentence 2’), ….]</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An array of 0s and 1s</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SemanticEquivalenceClassifier.predict_proba">
-<code class="sig-name descname"><span class="pre">predict_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SemanticEquivalenceClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates scores for model prediction</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> – List of 2-uples: [(‘Sentence 1’, ‘Sentence 2’), ….]</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An array of shape len(X) x 2 with scores for classes 0 and 1</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SemanticEquivalenceClassifier.save">
-<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SemanticEquivalenceClassifier.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves model to path</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="wellcomeml.ml.Sent2VecVectorizer">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">Sent2VecVectorizer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.Sent2VecVectorizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
@@ -1773,457 +1501,6 @@ for X.</p>
 <dl class="py method">
 <dt id="wellcomeml.ml.Sent2VecVectorizer.transform">
 <code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.Sent2VecVectorizer.transform" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wellcomeml.ml.SimilarityEntityLinker">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">SimilarityEntityLinker</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stopwords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tf-idf'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SimilarityEntityLinker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="wellcomeml.ml.SimilarityEntityLinker.evaluate">
-<code class="sig-name descname"><span class="pre">evaluate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SimilarityEntityLinker.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SimilarityEntityLinker.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SimilarityEntityLinker.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>documents: dictionary of the texts from each of the corpus documents</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SimilarityEntityLinker.optimise_threshold">
-<code class="sig-name descname"><span class="pre">optimise_threshold</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'orcid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_id_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'No</span> <span class="pre">ORCID'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SimilarityEntityLinker.optimise_threshold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the f1 scores when different similarity thresholds are used.
-Use half the maximum F1 score found as the optimal threshold.
-This value will be used as the value for the similarity
-threshold in predict, unless another value is given.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SimilarityEntityLinker.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">similarity_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_id_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'No</span> <span class="pre">ORCID'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SimilarityEntityLinker.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Identify the most similar document to a sentence using TFIDF</p>
-<p>If the most similar document doesnt have a similarity value over
-a threshold then return they key ‘No ORCID’</p>
-<p>similarity_threshold can be specified, otherwise if you’ve optimised
-the threshold it will use this value</p>
-<dl class="simple">
-<dt>Input:</dt><dd><dl class="simple">
-<dt>data: a list of tuples in the form</dt><dd><p>[(‘A sentence about Farrar’,
-{metadata}),
-(‘A sentence about Smith’,
-{metadata})]
-For this predict function the contents of
-{metadata} isn’t important</p>
-</dd>
-<dt>similarity_threshold: The threshold by which to</dt><dd><p>classify a match as being true or that there is
-no match. If this is None then the best threshold
-will be found</p>
-</dd>
-</dl>
-</dd>
-<dt>Output:</dt><dd><dl class="simple">
-<dt>pred_entities: a list of predictions</dt><dd><p>of which document in the corpus each data
-point is likely to link to
-[‘0000-0002-2700-623X’, ‘0000-0002-6259-1606’, ‘No ORCID’]</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SimilarityEntityLinker.predict_proba">
-<code class="sig-name descname"><span class="pre">predict_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SimilarityEntityLinker.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns probability estimates for each class
-in the same order as self.classifications</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wellcomeml.ml.SpacyClassifier">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">SpacyClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spacy.TextCatCNN.v1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_trained_vectors_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyClassifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code></p>
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyClassifier.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyClassifier.fit" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> – 1d list of documents</p></li>
-<li><p><strong>Y</strong> – 2d numpy array (nb_examples, nb_labels)</p></li>
-</ul>
-</dd>
-</dl>
-<p>TODO: Generalise to y being 1d</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyClassifier.load">
-<code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyClassifier.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyClassifier.partial_fit">
-<code class="sig-name descname"><span class="pre">partial_fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyClassifier.partial_fit" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> – 1d list of documents</p></li>
-<li><p><strong>Y</strong> – 2d numpy array (nb_examples, nb_labels)</p></li>
-</ul>
-</dd>
-</dl>
-<p>TODO: Generalise to y being 1d</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyClassifier.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyClassifier.predict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyClassifier.predict_proba">
-<code class="sig-name descname"><span class="pre">predict_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyClassifier.save">
-<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyClassifier.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyClassifier.score">
-<code class="sig-name descname"><span class="pre">score</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyClassifier.score" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wellcomeml.ml.SpacyEntityLinker">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">SpacyEntityLinker</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kb_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyEntityLinker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyEntityLinker.load">
-<code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyEntityLinker.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyEntityLinker.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyEntityLinker.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>See how well the model predicts which entity you are referring to in your data</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> – <p>list of test data in the form:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;A sentence about Farrar&#39;</span><span class="p">,</span>
-<span class="p">{</span><span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">{(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">22</span><span class="p">):</span> <span class="p">{</span><span class="s1">&#39;Q1&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;Q2&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}}})]</span>
-</pre></div>
-</div>
-</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>pred_entities_ids: [[‘Q1’], [‘Q1’], [‘Q2’]</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyEntityLinker.save">
-<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyEntityLinker.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyEntityLinker.train">
-<code class="sig-name descname"><span class="pre">train</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyEntityLinker.train" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> – <p>list of training data in the form:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;A sentence about Farrar&#39;</span><span class="p">,</span>
-<span class="p">{</span><span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">{(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">22</span><span class="p">):</span> <span class="p">{</span><span class="s1">&#39;Q1&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;Q2&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}}})]</span>
-</pre></div>
-</div>
-</p>
-</dd>
-</dl>
-<p>See <a class="reference external" href="https://spacy.io/usage/linguistic-features#entity-linking">https://spacy.io/usage/linguistic-features#entity-linking</a>
-for where I got this code from</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wellcomeml.ml.SpacyKnowledgeBase">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">SpacyKnowledgeBase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kb_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'en_core_web_lg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyKnowledgeBase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyKnowledgeBase.load">
-<code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyKnowledgeBase.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyKnowledgeBase.save">
-<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyKnowledgeBase.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyKnowledgeBase.train">
-<code class="sig-name descname"><span class="pre">train</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list_aliases</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyKnowledgeBase.train" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>entities</strong> – a dict of each entity, it’s description and it’s corpus frequency</p></li>
-<li><p><strong>list_aliases</strong> – <p>a list of dicts for each entity e.g.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span>
-    <span class="s1">&#39;alias&#39;</span><span class="p">:</span><span class="s1">&#39;Farrar&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;entities&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Q1&#39;</span><span class="p">,</span> <span class="s1">&#39;Q2&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;probabilities&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">]</span>
-<span class="p">}]</span>
-</pre></div>
-</div>
-<p>probabilities are ‘prior probabilities’ and must sum to &lt; 1</p>
-</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wellcomeml.ml.SpacyNER">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">SpacyNER</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyNER" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Train a spaCy NER classifier on texts annotated using Prodigy</p>
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyNER.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyNER.fit" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>X: a list of sentences,</dt><dd><p>e.g. [‘Professor Smith said’, ‘authors Smith and Chen found’]</p>
-</dd>
-<dt>y: a list of prodigy format spans for each element of X,</dt><dd><dl class="simple">
-<dt>e.g. [{‘start’: 10, ‘end’: 15, ‘label’: ‘PERSON’},</dt><dd><p>{‘start’: 8, ‘end’: 13, ‘label’: ‘PERSON’},
-{‘start’:18, ‘end’:22, ‘label’:’PERSON’}]</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyNER.load">
-<code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyNER.load" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>model:</dt><dd><p>The model’s location (‘models/model’)
-or the name of a spaCy model (“en_core_web_sm”)
-None (default): Then load a blank spacy english model</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyNER.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyNER.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get entity predictions for a piece of text</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyNER.save">
-<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyNER.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.SpacyNER.score">
-<code class="sig-name descname"><span class="pre">score</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.SpacyNER.score" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the model’s performance on the data
-for entity types in the ‘tags’ list, e.g. [‘PERSON’, ‘LOC’]</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wellcomeml.ml.TextClustering">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">TextClustering</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tf-idf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reducer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'umap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clustering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dbscan'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_reduced</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_kw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reducer_random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clustering_random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.TextClustering" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class</p>
-<dl class="py attribute">
-<dt id="wellcomeml.ml.TextClustering.vectorizer">
-<code class="sig-name descname"><span class="pre">vectorizer</span></code><a class="headerlink" href="#wellcomeml.ml.TextClustering.vectorizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>The embedding Vectorizer object</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="wellcomeml.ml.TextClustering.reducer">
-<code class="sig-name descname"><span class="pre">reducer</span></code><a class="headerlink" href="#wellcomeml.ml.TextClustering.reducer" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dimensionality reduction object</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="wellcomeml.ml.TextClustering.clustering">
-<code class="sig-name descname"><span class="pre">clustering</span></code><a class="headerlink" href="#wellcomeml.ml.TextClustering.clustering" title="Permalink to this definition">¶</a></dt>
-<dd><p>A clustering model object</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="wellcomeml.ml.TextClustering.cluster_ids">
-<code class="sig-name descname"><span class="pre">cluster_ids</span></code><a class="headerlink" href="#wellcomeml.ml.TextClustering.cluster_ids" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ids of the cluster</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="wellcomeml.ml.TextClustering.cluster_names">
-<code class="sig-name descname"><span class="pre">cluster_names</span></code><a class="headerlink" href="#wellcomeml.ml.TextClustering.cluster_names" title="Permalink to this definition">¶</a></dt>
-<dd><p>Names of the clusters</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="wellcomeml.ml.TextClustering.cluster_kws">
-<code class="sig-name descname"><span class="pre">cluster_kws</span></code><a class="headerlink" href="#wellcomeml.ml.TextClustering.cluster_kws" title="Permalink to this definition">¶</a></dt>
-<dd><p>Keywords for the clusters (only if embedding=tf-idf)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.TextClustering.break_cluster">
-<code class="sig-name descname"><span class="pre">break_cluster</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cluster_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.TextClustering.break_cluster" title="Permalink to this definition">¶</a></dt>
-<dd><p>Breaks a specific by re-clustering a subset</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.TextClustering.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.TextClustering.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fits all clusters in the pipeline</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> – A list of texts</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A TextClustering object</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.TextClustering.merge_clusters">
-<code class="sig-name descname"><span class="pre">merge_clusters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dictionary</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.TextClustering.merge_clusters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merge cluster based on ids</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.TextClustering.optimise">
-<code class="sig-name descname"><span class="pre">optimise</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cluster_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.TextClustering.optimise" title="Permalink to this definition">¶</a></dt>
-<dd><p>Optimises the clustering silhouette based on a parameter grid,
-a range on number of clusters and a range on noise.</p>
-<p>It is customised to avoid re-fitting of intermediate
-steps (vectorizer and reducer) more than necessary.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> – A list of texts to be clustered</p></li>
-<li><p><strong>param_grid</strong> – A parameter grid, example:</p></li>
-<li><p><strong>= {'reducer'</strong> (<em>param_grid</em>) – {‘min_dist’: [0.0, 0.2], ‘n_neighbors’: [</p></li>
-<li><p><strong>2</strong> – [‘cosine’, ‘euclidean’]},</p></li>
-<li><p><strong>3</strong> – [‘cosine’, ‘euclidean’]},</p></li>
-<li><p><strong>5</strong><strong>]</strong> – [‘cosine’, ‘euclidean’]},</p></li>
-<li><p><strong>'metric'</strong> – [‘cosine’, ‘euclidean’]},</p></li>
-<li><p><strong>'clustering'</strong> – {‘min_samples’: [2, 5], ‘eps’: [0.5, 1, 1.5]}}</p></li>
-<li><p><strong>n_cluster_range</strong> (<em>2-uple of ints</em>) – A 2-uple describing the</p></li>
-<li><p><strong>and min number of clusters</strong><strong> (</strong><strong>e.g.</strong> (<em>max</em>) – (10, 20)). If unset,</p></li>
-<li><p><strong>just choose the best silhopuette</strong> (<em>will</em>) – </p></li>
-<li><p><strong>max_noise</strong> (<em>float in</em><em> [</em><em>0</em><em>,</em><em>1</em><em>]</em>) – The maximum fraction of points</p></li>
-<li><p><strong>Default</strong> (<em>unclustered.</em>) – 0.2</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A dictionary containing “params_list”, “silhouette” (the
-silhouete for each parameter) and “best_clustering” (the best
-clustering parameters)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.TextClustering.set_params">
-<code class="sig-name descname"><span class="pre">set_params</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_parameter_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.TextClustering.set_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set parameters of clustering, reducer and vectorizer</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>params</strong> – A dictionary of parameters</p></li>
-<li><p><strong>from_parameter_grid</strong> – Whether the dictionary is in the form of</p></li>
-<li><p><strong>parameter grid</strong><strong> (</strong><strong>e.g. {'clustering__eps'</strong> (<em>sklearn</em>) – 1}), or a two</p></li>
-<li><p><strong>dictionary</strong><strong> (</strong><strong>e.g. {'clustering'</strong> (<em>level</em>) – {‘eps’: 1}}) (default).</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.TextClustering.stability">
-<code class="sig-name descname"><span class="pre">stability</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.TextClustering.stability" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to calculate how stable the clusters are</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="wellcomeml.ml.Vectorizer">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">Vectorizer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tf-idf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_transformed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.Vectorizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></p>
-<p>Abstract class, sklearn-compatible, that can vectorize texts using
-various models.</p>
-<dl class="py method">
-<dt id="wellcomeml.ml.Vectorizer.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.Vectorizer.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.Vectorizer.fit_transform">
-<code class="sig-name descname"><span class="pre">fit_transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.Vectorizer.fit_transform" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.Vectorizer.load_transformed">
-<code class="sig-name descname"><span class="pre">load_transformed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.Vectorizer.load_transformed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads transformed vector X_transformed vector, using the corresponding
-load method for the specific vectorizer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> – A path to the file containing embedded vectors</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>X_transformed (array), like the one returned by the the
-fit_transform function.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.Vectorizer.save_transformed">
-<code class="sig-name descname"><span class="pre">save_transformed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_transformed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.Vectorizer.save_transformed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves transformed vector X_transformed vector, using the corresponding
-save_transformed method for the specific vectorizer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> – A path to the embedding file</p></li>
-<li><p><strong>X_transformed</strong> – A transformed vector (as output by using the</p></li>
-<li><p><strong>method</strong><strong>)</strong> (<em>transform</em>) – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="wellcomeml.ml.Vectorizer.transform">
-<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.Vectorizer.transform" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
