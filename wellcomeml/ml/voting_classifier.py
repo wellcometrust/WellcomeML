@@ -29,21 +29,34 @@ class WellcomeVotingClassifier(VotingClassifier):
         else:  # tuple with named estimators
             return [est for _, est in self.estimators]
 
+    def _check_vectorizer(self, estimators):
+        if type(estimators[0]) == tuple:
+            return True
+        else:
+            return False
+
     def predict(self, X):
         if self.pretrained:
             check_is_fitted(self, 'estimators')
 
             estimators = self._get_estimators()
-
+            has_vectorizers = self._check_vectorizer(estimators)
+            
             if self.voting == "soft":
-                Y_probs = np.array([est.predict_proba(X) for est in estimators])
+                if has_vectorizers:
+                    Y_probs = np.array([est.predict_proba(vect.transform(X)) for est, vect in estimators])
+                else:
+                    Y_probs = np.array([est.predict_proba(X) for est in estimators])
                 Y_prob = np.mean(Y_probs, axis=0)
                 if self.multilabel:
                     return np.array(Y_prob > 0.5, dtype=int)
                 else:
                     return np.argmax(Y_prob, axis=1)
             else:  # hard voting
-                Y_preds = [est.predict(X) for est in estimators]
+                if has_vectorizers:
+                    Y_preds = [est.predict(vect.transform(X)) for est, vect in estimators]
+                else:
+                    Y_preds = [est.predict(X) for est in estimators]
                 if self.multilabel:
                     Y_preds = np.array(Y_preds)
                     axis = 0

@@ -28,6 +28,13 @@ class MockEstimator():
         return self.Y_prob
 
 
+class MockVectorizer():
+    def __init__(self, size):
+        self.size = size
+        
+    def transform(self, X):
+        return np.random.rand(len(X), self.size)
+
 def test_multilabel():
     Y1_prob = np.array([
         [0.9, 0.5],
@@ -140,3 +147,36 @@ def test_hard_voting():
     X = ["mock", "data", "not used"]
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
+
+
+def test_inc_vectorizer():
+
+    Y1_prob = np.array([
+        [0.9, 0.1],
+        [0.2, 0.8],
+        [0.3, 0.7]
+    ])
+    Y2_prob = np.array([
+        [0.7, 0.3],
+        [0.9, 0.1],
+        [0.4, 0.6]
+    ])
+    Y_expected = np.array([
+        0,
+        0,
+        1
+    ])
+    est1 = MockEstimator(Y1_prob)
+    est2 = MockEstimator(Y2_prob)
+
+    vect1 = MockVectorizer(size=3)
+    vect2 = MockVectorizer(size=5)
+
+    voting_classifier = WellcomeVotingClassifier(
+        estimators=[(est1, vect1), (est2, vect2)], voting="soft"
+    )
+    X = ["mock", "data", "not used"]
+    Y = voting_classifier.predict(X)
+    assert np.array_equal(Y, Y_expected)
+
+
