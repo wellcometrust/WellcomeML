@@ -31,9 +31,10 @@ class MockEstimator():
 class MockVectorizer():
     def __init__(self, size):
         self.size = size
-        
+
     def transform(self, X):
         return np.random.rand(len(X), self.size)
+
 
 def test_multilabel():
     Y1_prob = np.array([
@@ -258,4 +259,3 @@ def test_binary_hard_num_agree():
     X = ["mock", "data", "not used"]
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
-

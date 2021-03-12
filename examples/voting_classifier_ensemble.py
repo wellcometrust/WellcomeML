@@ -61,4 +61,3 @@ voting_classifier = WellcomeVotingClassifier(
 )
 Y_pred = voting_classifier.predict(X)
 print(Y_pred)
-
