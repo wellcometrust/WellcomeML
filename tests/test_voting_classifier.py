@@ -180,3 +180,82 @@ def test_inc_vectorizer():
     assert np.array_equal(Y, Y_expected)
 
 
+def test_binary_hard_majority():
+
+    Y1_prob = np.array([
+        [0.9, 0.1],
+        [0.9, 0.1],
+        [0.9, 0.1]
+    ])
+    Y2_prob = np.array([
+        [0.8, 0.2],
+        [0.8, 0.2],
+        [0.2, 0.8]
+    ])
+    Y3_prob = np.array([
+        [0.7, 0.3],
+        [0.3, 0.7],
+        [0.3, 0.7]
+    ])
+    Y4_prob = np.array([
+        [0.4, 0.6],
+        [0.4, 0.6],
+        [0.4, 0.6]
+    ])
+    Y_expected = np.array([
+        0,
+        0,
+        1
+    ])
+    est1 = MockEstimator(Y1_prob)
+    est2 = MockEstimator(Y2_prob)
+    est3 = MockEstimator(Y3_prob)
+    est4 = MockEstimator(Y4_prob)
+
+    voting_classifier = WellcomeVotingClassifier(
+        estimators=[est1, est2, est3, est4], voting="hard"
+    )
+    X = ["mock", "data", "not used"]
+    Y = voting_classifier.predict(X)
+    assert np.array_equal(Y, Y_expected)
+
+
+def test_binary_hard_num_agree():
+
+    Y1_prob = np.array([
+        [0.9, 0.1],
+        [0.9, 0.1],
+        [0.9, 0.1]
+    ])
+    Y2_prob = np.array([
+        [0.8, 0.2],
+        [0.8, 0.2],
+        [0.2, 0.8]
+    ])
+    Y3_prob = np.array([
+        [0.7, 0.3],
+        [0.3, 0.7],
+        [0.3, 0.7]
+    ])
+    Y4_prob = np.array([
+        [0.4, 0.6],
+        [0.4, 0.6],
+        [0.4, 0.6]
+    ])
+    Y_expected = np.array([
+        0,
+        1,
+        1
+    ])
+    est1 = MockEstimator(Y1_prob)
+    est2 = MockEstimator(Y2_prob)
+    est3 = MockEstimator(Y3_prob)
+    est4 = MockEstimator(Y4_prob)
+
+    voting_classifier = WellcomeVotingClassifier(
+        estimators=[est1, est2, est3, est4], voting="hard", num_agree=2
+    )
+    X = ["mock", "data", "not used"]
+    Y = voting_classifier.predict(X)
+    assert np.array_equal(Y, Y_expected)
+
