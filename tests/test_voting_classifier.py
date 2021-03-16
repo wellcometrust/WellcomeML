@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.pipeline import Pipeline
 
 from wellcomeml.ml import WellcomeVotingClassifier
 
@@ -31,6 +32,9 @@ class MockEstimator():
 class MockVectorizer():
     def __init__(self, size):
         self.size = size
+
+    def fit(self, X):
+        pass
 
     def transform(self, X):
         return np.random.rand(len(X), self.size)
@@ -167,14 +171,12 @@ def test_inc_vectorizer():
         0,
         1
     ])
-    est1 = MockEstimator(Y1_prob)
-    est2 = MockEstimator(Y2_prob)
 
-    vect1 = MockVectorizer(size=3)
-    vect2 = MockVectorizer(size=5)
+    pipe1 = Pipeline([('vect', MockVectorizer(size=3)), ('est', MockEstimator(Y1_prob))])
+    pipe2 = Pipeline([('vect', MockVectorizer(size=5)), ('est', MockEstimator(Y2_prob))])
 
     voting_classifier = WellcomeVotingClassifier(
-        estimators=[(est1, vect1), (est2, vect2)], voting="soft"
+        estimators=[pipe1, pipe2], voting="soft"
     )
     X = ["mock", "data", "not used"]
     Y = voting_classifier.predict(X)
