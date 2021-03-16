@@ -1,4 +1,4 @@
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.linear_model import SGDClassifier
 from sklearn.naive_bayes import MultinomialNB
@@ -59,8 +59,18 @@ Y = [
     [0, 0, 1]
 ]
 
-pipe1 = Pipeline([('count_vect', CountVectorizer()), ('sgd', OneVsRestClassifier(SGDClassifier(loss="log")))])
-pipe2 = Pipeline([('count_vect', CountVectorizer()), ('nb', OneVsRestClassifier(MultinomialNB()))])
+pipe1 = Pipeline(
+    [
+        ('count_vect', CountVectorizer()),
+        ('sgd', OneVsRestClassifier(SGDClassifier(loss="log")))
+    ]
+)
+pipe2 = Pipeline(
+    [
+        ('count_vect', CountVectorizer()),
+        ('nb', OneVsRestClassifier(MultinomialNB()))
+    ]
+)
 
 pipe1.fit(X, Y)
 pipe2.fit(X, Y)
@@ -73,8 +83,18 @@ print(Y_pred)
 
 Y = [1, 0, 1, 0]
 
-pipe1 = Pipeline([('count_vect', CountVectorizer()), ('sgd', SGDClassifier(loss="log"))])
-pipe2 = Pipeline([('count_vect', CountVectorizer()), ('nb', MultinomialNB())])
+pipe1 = Pipeline(
+    [
+        ('count_vect', CountVectorizer()),
+        ('sgd', SGDClassifier(loss="log"))
+    ]
+)
+pipe2 = Pipeline(
+    [
+        ('count_vect', CountVectorizer()),
+        ('nb', MultinomialNB())
+    ]
+)
 
 pipe1.fit(X, Y)
 pipe2.fit(X, Y)
