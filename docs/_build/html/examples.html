@@ -344,7 +344,7 @@ using a <a class="reference internal" href="wellcomeml.ml.html#module-wellcomeml
 <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;text_1&quot;</span><span class="p">,</span> <span class="s2">&quot;text_2&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
-<span class="c1"># Define the classifier and fits for 3 epochs</span>
+<span class="c1"># Define the classifier and fits for 1 epoch</span>
 <span class="n">classifier</span> <span class="o">=</span> <span class="n">SemanticEquivalenceClassifier</span><span class="p">(</span>
     <span class="n">pretrained</span><span class="o">=</span><span class="s2">&quot;scibert&quot;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">eval_batch_size</span><span class="o">=</span><span class="mi">16</span>
 <span class="p">)</span>
