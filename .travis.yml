@@ -23,4 +23,4 @@ branches:
   - main
 
 after_success:
-  - make run_codecov
+  - python -m codecov
