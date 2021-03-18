@@ -5,25 +5,20 @@ python:
   - 3.8
 
 install:
-  - make virtualenv
+  - pip install tox-travis
 
 env:
   global:
     - TF_CPP_MIN_LOG_LEVEL=2
 
 script:
-  - make test
+  - tox
 
 cache: pip
 
-jobs:
-  fast_finish: true
-  allow_failures:
-     - python: 3.8
-
 branches:
   only:
-  - master
+  - main
 
 after_success:
   - make run_codecov
