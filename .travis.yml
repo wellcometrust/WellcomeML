@@ -7,7 +7,7 @@ python:
   - 3.8
 
 install:
-  - pip install -r requirements_tests.txt
+  - pip install -r requirements_test.txt
   - pip install tox-travis
 
 env:
