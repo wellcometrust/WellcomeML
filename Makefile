@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := all
 
 VIRTUALENV := build/virtualenv
-PYTHON_VERSION := python3
+PYTHON_VERSION := python3.8
 
 $(VIRTUALENV)/.installed:
 	@if [ -d $(VIRTUALENV) ]; then rm -rf $(VIRTUALENV); fi
