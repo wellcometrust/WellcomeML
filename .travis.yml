@@ -23,7 +23,7 @@ jobs:
 
 branches:
   only:
-  - master
+  - main
 
 after_success:
   - make run_codecov
