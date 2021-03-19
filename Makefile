@@ -50,7 +50,7 @@ download_nonpypi_packages: $(VIRTUALENV)/.installed $(VIRTUALENV)/.non_pypi_pack
 
 .PHONY: test
 test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models $(VIRTUALENV)/.non_pypi_packages
-	$(VIRTUALENV)/bin/pytest -m  "not (integration)" -s -v --durations=0 --disable-warnings --tb=line --cov=wellcomeml ./tests
+	$(VIRTUALENV)/bin/tox
 
 .PHONY: test-integrations
 test-integrations:
