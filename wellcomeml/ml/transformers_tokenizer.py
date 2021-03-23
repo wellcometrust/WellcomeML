@@ -67,10 +67,35 @@ class TransformersTokenizer:
         self._init_tokenizer()
         self.tokenizer.train_from_iterator(texts, trainer=self.trainer)
 
+    def _yield_tokens_or_encodings(self, texts, return_type="tokens", buffer_size=1000):
+        texts_batch = []
+        for text in texts:
+            texts_batch.append(text)
+
+            if len(texts_batch) >= buffer_size:
+                encodings = self.tokenizer.encode_batch(texts_batch)
+                for e in encodings:
+                    if return_type == "tokens":
+                        yield e.tokens
+                    elif return_type == "encodings":
+                        yield e.ids
+                    else:
+                        raise NotImplementedError
+
+                texts_batch = []
+
+        # TODO: Refactor
+        if texts_batch:
+            encodings = self.tokenizer.encode_batch(texts_batch)
+            for e in encodings:
+                if return_type == "tokens":
+                    yield e.tokens
+                else:
+                    yield e.ids
+
     def tokenize(self, text):
         if type(text) == list:
-            encodings = self.tokenizer.encode_batch(text)
-            return [e.tokens for e in encodings]
+            return list(self._yield_tokens_or_encodings(text))
         elif type(text) == str:
             encoding = self.tokenizer.encode(text)
             return encoding.tokens
@@ -79,8 +104,7 @@ class TransformersTokenizer:
 
     def encode(self, text):
         if type(text) == list:
-            encodings = self.tokenizer.encode_batch(text)
-            return [e.ids for e in encodings]
+            return list(self._yield_tokens_or_encodings(text, return_type="encodings"))
         elif type(text) == str:
             encoding = self.tokenizer.encode(text)
             return encoding.ids
