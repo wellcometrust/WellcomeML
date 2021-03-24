@@ -68,30 +68,26 @@ class TransformersTokenizer:
         self.tokenizer.train_from_iterator(texts, trainer=self.trainer)
 
     def _yield_tokens_or_encodings(self, texts, return_type="tokens", buffer_size=1000):
+        def yield_type(texts_batch, return_type):
+            encodings = self.tokenizer.encode_batch(texts_batch)
+            for e in encodings:
+                if return_type == "tokens":
+                    yield e.tokens
+                elif return_type == "encodings":
+                    yield e.ids
+                else:
+                    raise NotImplementedError
+
         texts_batch = []
         for text in texts:
             texts_batch.append(text)
 
             if len(texts_batch) >= buffer_size:
-                encodings = self.tokenizer.encode_batch(texts_batch)
-                for e in encodings:
-                    if return_type == "tokens":
-                        yield e.tokens
-                    elif return_type == "encodings":
-                        yield e.ids
-                    else:
-                        raise NotImplementedError
-
+                yield from yield_type(texts_batch, return_type)
                 texts_batch = []
 
-        # TODO: Refactor
         if texts_batch:
-            encodings = self.tokenizer.encode_batch(texts_batch)
-            for e in encodings:
-                if return_type == "tokens":
-                    yield e.tokens
-                else:
-                    yield e.ids
+            yield from yield_type(texts_batch, return_type)
 
     def tokenize(self, text):
         if type(text) == list:
