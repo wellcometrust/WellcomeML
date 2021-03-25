@@ -111,3 +111,8 @@ rustup-init
 
 Examples can be found in the subfolder `examples`.
 
+## 4. Troubleshooting
+
+If you experience a problem with installing or using WellcomeML please open an issue. It might be
+worth setting the logging level to DEBUG `export LOGGING_LEVEL=DEBUG` which will often expose
+more information that might be informative to resolve the issue.
