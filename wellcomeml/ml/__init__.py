@@ -1,3 +1,4 @@
+import traceback
 from wellcomeml.logger import logger
 
 
@@ -33,3 +34,4 @@ try:
 except ImportError as e:
     logger.error(e)
     logger.warning("Using WellcomeML without extras (transformers & torch).")
+    logger.debug(traceback.format_exc())
