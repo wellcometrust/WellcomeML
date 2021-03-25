@@ -18,3 +18,7 @@ dist
 *.coverage
 notebooks
 logs/*
+
+.tox/
+.python-version
+
