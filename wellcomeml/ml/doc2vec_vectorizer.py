@@ -87,7 +87,7 @@ class Doc2VecVectorizer(BaseEstimator, TransformerMixin):
         self.model = Doc2Vec(
             tagged_documents,
             vector_size=self.vector_size,
-            window_size=self.window_size,
+            window=self.window_size,
             workers=workers,
             min_count=self.min_count,
             epochs=self.epochs,
