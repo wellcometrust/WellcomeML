@@ -50,7 +50,7 @@ setuptools.setup(
         'umap-learn',
         'nervaluate',
         'twine',
-        'gensim',
+        'gensim<5.0.0',
         # 'hdbscan',
         'cython',
         'flake8',
