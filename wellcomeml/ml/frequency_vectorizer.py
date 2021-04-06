@@ -97,8 +97,9 @@ class WellcomeTfidf(TfidfVectorizer):
 
             imp.reload(pkg_resources)
             nlp = spacy.load(
-                "en_core_web_sm", disable=["ner", "tagger", "parser", "textcat"]
+                "en_core_web_sm", disable=["ner", "parser", "textcat"]  # Spacy 3.0 needs the tagger to lemmatise
             )
+
 
         logger.info("Using spacy pre-trained lemmatiser.")
         if remove_stopwords_and_punct:
