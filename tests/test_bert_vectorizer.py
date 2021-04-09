@@ -26,15 +26,6 @@ def test_fit_transform_works(vec):
     assert(vec.fit_transform(X).shape == (1, 768))
 
 
-def test_embed_one_sentence(vec):
-    X = ["This is a sentence"]
-
-    for embedding in EMBEDDING_TYPES:
-        vec.sentence_embedding = embedding
-        X_embed = vec.transform(X, verbose=False)
-        assert(X_embed.shape == (1, 768))
-
-
 def test_embed_two_sentences(vec):
     X = [
         "This is a sentence",
