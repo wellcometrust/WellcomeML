@@ -23,7 +23,7 @@ def vec():
 def test_fit_transform_works(vec):
     X = ["This is a sentence"]
 
-    assert vec.fit_transform(X, verbose=False).shape == (1, 768)
+    assert vec.fit_transform(X).shape == (1, 768)
 
 
 def test_embed_two_sentences(vec):
