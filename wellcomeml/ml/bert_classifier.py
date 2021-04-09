@@ -57,6 +57,7 @@ class BertClassifier(BaseEstimator, TransformerMixin):
         self.multilabel = multilabel
         self.random_seed = random_seed
         self.from_pt = from_pt
+        self.initiated_ = False
 
     def _init_model(self, num_labels=2):
         config = {
@@ -72,6 +73,7 @@ class BertClassifier(BaseEstimator, TransformerMixin):
         self.tokenizer = BertTokenizer.from_pretrained(pretrained)
         self.model = TFBertForSequenceClassification.from_pretrained(
             pretrained, from_pt=from_pt, num_labels=num_labels)
+        self.initiated_ = True
 
     def _transform_data(self, input_ids, attention_mask, labels=None):
         input_data = {
@@ -114,7 +116,8 @@ class BertClassifier(BaseEstimator, TransformerMixin):
            Y: list or numpy array of classes (n_samples, n_classes)
         """
         num_labels = len(Y[0])
-        self._init_model(num_labels)
+        if not self.initiated_:
+            self._init_model(num_labels)
 
         X_train, X_test, Y_train, Y_test = train_test_split(
             X, Y, random_state=self.random_seed, test_size=self.validation_split

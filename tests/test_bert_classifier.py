@@ -1,4 +1,5 @@
 # encoding: utf-8
+import pytest
 import tempfile
 
 import numpy as np
@@ -6,7 +7,15 @@ import numpy as np
 from wellcomeml.ml.bert_classifier import BertClassifier
 
 
-def test_multilabel():
+@pytest.fixture
+def multilabel_bert():
+    model = BertClassifier()
+    model._init_model(num_labels=4)
+
+    return model
+
+
+def test_multilabel(multilabel_bert):
     X = [
         "One and two",
         "One only",
@@ -22,7 +31,7 @@ def test_multilabel():
         [0, 1, 1, 0]
     ])
 
-    model = BertClassifier()
+    model = multilabel_bert
     model.fit(X, Y)
     Y_pred = model.predict(X)
     Y_prob_pred = model.predict_proba(X)
@@ -93,7 +102,7 @@ def test_scibert():
     assert model.losses[0] > model.losses[-1]
 
 
-def test_save_load():
+def test_save_load(multilabel_bert):
     X = [
         "One and two",
         "One only",
@@ -109,7 +118,7 @@ def test_save_load():
         [0, 1, 1, 0]
     ])
 
-    model = BertClassifier()
+    model = multilabel_bert
     model.fit(X, Y)
 
     with tempfile.TemporaryDirectory() as tmp_path:
