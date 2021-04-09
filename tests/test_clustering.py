@@ -35,11 +35,11 @@ def test_parameter_search(reducer):
          'Francis Harry Crick']
 
     param_grid = {
-        'reducer': {'min_dist': [0.0, 0.2],
-                    'n_neighbors': [2, 3, 5],
+        'reducer': {'min_dist': [0.0],
+                    'n_neighbors': [2],
                     'metric': ['cosine', 'euclidean']},
-        'clustering': {'min_samples': [2, 5],
-                       'eps': [0.5, 1, 1.5]}
+        'clustering': {'min_samples': [2],
+                       'eps': [0.5]}
     }
 
     best_params = cluster.optimise(X, param_grid=param_grid,
