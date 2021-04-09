@@ -14,9 +14,10 @@ EMBEDDING_TYPES = [
 
 @pytest.fixture
 def vec():
-    vec = bert_vectorizer()
+    vectorizer = bert_vectorizer.BertVectorizer()
 
-    return vec.fit()
+    vectorizer.fit()
+    return vectorizer
 
 
 def test_fit_transform_works(vec):
@@ -30,7 +31,7 @@ def test_embed_one_sentence(vec):
 
     for embedding in EMBEDDING_TYPES:
         vec.sentence_embedding = embedding
-        X_embed = vec.transform(X)
+        X_embed = vec.transform(X, verbose=False)
         assert(X_embed.shape == (1, 768))
 
 
@@ -42,7 +43,7 @@ def test_embed_two_sentences(vec):
 
     for embedding in EMBEDDING_TYPES:
         vec.sentence_embedding = embedding
-        X_embed = vec.transform(X)
+        X_embed = vec.transform(X, verbose=False)
         assert(X_embed.shape == (2, 768))
 
 
@@ -51,17 +52,18 @@ def test_embed_long_sentence(vec):
 
     for embedding in EMBEDDING_TYPES:
         vec.sentence_embedding = embedding
-        X_embed = vec.transform(X)
+        X_embed = vec.transform(X, verbose=False)
         assert(X_embed.shape == (1, 768))
 
 
 def test_embed_scibert():
     X = ["This is a sentence"]
     vec = bert_vectorizer.BertVectorizer(pretrained='scibert')
+    vec.fit()
 
     for embedding in EMBEDDING_TYPES:
         vec.sentence_embedding = embedding
-        X_embed = vec.transform(X)
+        X_embed = vec.transform(X, verbose=False)
         assert(X_embed.shape == (1, 768))
 
 
@@ -76,7 +78,7 @@ def test_save_and_load(tmpdir):
                 pretrained=pretrained,
                 sentence_embedding=embedding
             )
-            X_embed = vec.fit_transform(X)
+            X_embed = vec.fit_transform(X, verbose=False)
 
             vec.save_transformed(str(tmpfile), X_embed)
 
