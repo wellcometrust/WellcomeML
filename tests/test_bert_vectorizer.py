@@ -23,7 +23,7 @@ def vec():
 def test_fit_transform_works(vec):
     X = ["This is a sentence"]
 
-    assert(vec.fit_transform(X).shape == (1, 768))
+    assert vec.fit_transform(X, verbose=False).shape == (1, 768)
 
 
 def test_embed_two_sentences(vec):
@@ -35,7 +35,7 @@ def test_embed_two_sentences(vec):
     for embedding in EMBEDDING_TYPES:
         vec.sentence_embedding = embedding
         X_embed = vec.transform(X, verbose=False)
-        assert(X_embed.shape == (2, 768))
+        assert X_embed.shape == (2, 768)
 
 
 def test_embed_long_sentence(vec):
@@ -44,7 +44,7 @@ def test_embed_long_sentence(vec):
     for embedding in EMBEDDING_TYPES:
         vec.sentence_embedding = embedding
         X_embed = vec.transform(X, verbose=False)
-        assert(X_embed.shape == (1, 768))
+        assert X_embed.shape == (1, 768)
 
 
 def test_embed_scibert():
@@ -55,7 +55,7 @@ def test_embed_scibert():
     for embedding in EMBEDDING_TYPES:
         vec.sentence_embedding = embedding
         X_embed = vec.transform(X, verbose=False)
-        assert(X_embed.shape == (1, 768))
+        assert X_embed.shape == (1, 768)
 
 
 @pytest.mark.skip("Reason: Build killed or stalls. Issue #200")
