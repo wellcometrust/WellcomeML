@@ -83,23 +83,9 @@ class WellcomeTfidf(TfidfVectorizer):
 
         """
 
-        try:
-            nlp = spacy.load(
-                "en_core_web_sm", disable=["ner", "tagger", "parser", "textcat"]
-            )
-        except IOError:
-            from wellcomeml.__main__ import download
-
-            download("models")
-            # pkg_resources need to be reloaded to pick up the newly installed models
-            import pkg_resources
-            import imp
-
-            imp.reload(pkg_resources)
-            nlp = spacy.load(
-                "en_core_web_sm", disable=["ner", "parser", "textcat"]  # Spacy 3.0 needs the tagger to lemmatise
-            )
-
+        nlp = spacy.blank("en")
+        nlp.add_pipe("lemmatizer", config={"mode": "lookup"})
+        nlp.initialize()
 
         logger.info("Using spacy pre-trained lemmatiser.")
         if remove_stopwords_and_punct:
