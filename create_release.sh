@@ -1,5 +1,5 @@
 #!/bin/sh
-git fetch && git rebase origin/master
+git fetch && git rebase origin/main
 
 VERSION=$(python setup.py --version)
 VIRTUALENV=build/virtualenv
@@ -26,7 +26,7 @@ curl --request POST \
   --header 'content-type: application/json' \
   --data '{
   "tag_name": "v'$VERSION'",
-  "target_commitish": "master",
+  "target_commitish": "main",
   "name": "v'$VERSION'",
 	"prerelease": false
 }'
