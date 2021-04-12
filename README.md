@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/wellcometrust/WellcomeML.svg?token=cssCZpnz8YDs4Hb4K5pS&branch=master)](https://travis-ci.com/wellcometrust/WellcomeML) [![codecov](https://codecov.io/gh/wellcometrust/wellcomeml/branch/master/graph/badge.svg)](https://codecov.io/gh/wellcometrust/wellcomeml)
+[![Build Status](https://travis-ci.com/wellcometrust/WellcomeML.svg?token=cssCZpnz8YDs4Hb4K5pS&branch=main)](https://travis-ci.com/wellcometrust/WellcomeML) [![codecov](https://codecov.io/gh/wellcometrust/wellcomeml/branch/main/graph/badge.svg)](https://codecov.io/gh/wellcometrust/wellcomeml)
 ![GitHub](https://img.shields.io/github/license/wellcometrust/wellcomeml)
 ![PyPI](https://img.shields.io/pypi/v/wellcomeml)
 
