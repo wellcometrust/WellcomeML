@@ -1,6 +1,7 @@
 from collections import defaultdict
 import logging
 import os
+import pickle
 
 from wellcomeml.ml import vectorizer
 from wellcomeml.logger import logger
@@ -245,7 +246,7 @@ class TextClustering(object):
                param_grid.get('clustering', {}).items()}
         }
 
-        
+
         grid = GridSearchCV(
             estimator=pipeline,
             param_grid=params,
@@ -300,6 +301,43 @@ class TextClustering(object):
         logger.setLevel(logging_level)
 
         return best_params
+
+    def save(self, folder, embedded_points=True, reduced_points=True, clustering_model=True,
+             create_folder=True):
+        """
+        Saves the different steps of the pipeline
+
+        Args:
+            folder(str): path to folder
+            embedded_points(bool): whether to save embedded/vectorized points as a .npy file
+            reduced_points(bool): whether to save reduced (2D) points as a .npy file
+            clustering_model(bool): whether to save the clustering model as a .pkl file
+            create_folder(bool): whether to creat the folder in case it doesn't exits
+
+        Returns:
+
+        """
+        if create_folder:
+            os.makedirs(folder, exist_ok=True)
+
+        if embedded_points:
+            np.save(os.path.join(folder, 'embedded_points.npy'), self.embedded_points)
+        if reduced_points:
+            np.save(os.path.join(folder, 'reduced_points.npy'), self.reduced_points)
+        if clustering_model:
+            with open(os.path.join(folder, 'clustering.pkl'), 'wb') as f:
+                pickle.dump(self.clustering_class, f)
+
+    def load(self, folder, embedded_points=True, reduced_points=True, clustering_model=True):
+        if embedded_points:
+            self.embedded_points = np.load(os.path.join(folder, 'embedded_points.npy'),
+                                           allow_pickle=True)
+        if reduced_points:
+            self.reduced_points = np.load(os.path.join(folder, 'reduced_points.npy'),
+                                          allow_pickle=True)
+        if clustering_model:
+            with open(os.path.join(folder, 'clustering.pickle'), 'rb') as f:
+                self.clustering_class = pickle.load(f)
 
     def stability(self):
         """Function to calculate how stable the clusters are"""
