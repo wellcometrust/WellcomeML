@@ -357,6 +357,8 @@ class TextClustering(object):
         if components == 'all' or 'embedded_points' in components:
             self.embedded_points = np.load(os.path.join(folder, 'embedded_points.npy'),
                                            allow_pickle=True)
+            if not self.embedded_points.shape:
+                self.embedded_points = self.embedded_points[()]
 
         if components == 'all' or 'reduced_points' in components:
             self.reduced_points = np.load(os.path.join(folder, 'reduced_points.npy'),
@@ -373,7 +375,6 @@ class TextClustering(object):
         if components == 'all' or 'clustering_model' in components:
             with open(os.path.join(folder, 'clustering.pkl'), 'rb') as f:
                 self.clustering_class = pickle.load(f)
-
 
     def stability(self):
         """Function to calculate how stable the clusters are"""
