@@ -113,6 +113,8 @@ class TextClustering(object):
                                                'random_state'):
             self.clustering_class.random_state = clustering_random_state
 
+        self.embedded_points = None
+        self.reduced_points = None
         self.cluster_ids = None
         self.cluster_names = None
         self.cluster_kws = None
@@ -131,22 +133,26 @@ class TextClustering(object):
             A TextClustering object
 
         """
-        self._fit_step(X, step='vectorizer')
-        self._fit_step(step='reducer')
-        self._fit_step(step='clustering')
+        self.fit_step(X, step='vectorizer')
+        self.fit_step(step='reducer')
+        self.fit_step(step='clustering')
 
         if self.embedding == 'tf-idf' and self.n_kw:
             self._find_keywords(self.embedded_points.toarray(), n_kw=self.n_kw)
 
         return self
 
-    def _fit_step(self, X=None, step='vectorizer'):
+    def fit_step(self, X=None, y=None, step='vectorizer'):
         """Internal function for partial fitting only a certain step"""
         if step == 'vectorizer':
             self.embedded_points = self.vectorizer.fit_transform(X)
         elif step == 'reducer':
+            if self.embedded_points is None:
+                raise ValueError(
+                    'You must embed/vectorise the points before reducing dimensionality'
+                )
             self.reduced_points = \
-                self.reducer_class.fit_transform(self.embedded_points)
+                self.reducer_class.fit_transform(self.embedded_points, y=y)
         elif step == 'clustering':
             points = (
                 self.reduced_points if self.cluster_reduced else
@@ -239,6 +245,7 @@ class TextClustering(object):
                param_grid.get('clustering', {}).items()}
         }
 
+        
         grid = GridSearchCV(
             estimator=pipeline,
             param_grid=params,
@@ -260,7 +267,9 @@ class TextClustering(object):
         # Prunes result to actually optimise under constraints
         best_silhouette = 0
         best_params = {}
+
         grid.fit(X, y=None)
+
         for params, silhouette, noise, n_clusters in zip(
                 grid.cv_results_['params'],
                 grid.cv_results_['mean_test_silhouette'],
