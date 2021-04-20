@@ -35,7 +35,7 @@ def test_semantic_similarity():
 
     # Assert it returns a vector of correct length (15 training points) and 15*2 scores
 
-    assert len(classifier.predict(X)) ==3
+    assert len(classifier.predict(X)) == 3
     assert (scores > 0).sum() == 3
     assert (scores < 1).sum() == 3
 
