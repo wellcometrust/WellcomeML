@@ -1,8 +1,5 @@
 dist: bionic
 
-vm: 
-  size: 2x-large
-
 language: python
 
 python:
