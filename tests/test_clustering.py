@@ -1,6 +1,6 @@
 import pytest
 
-from wellcomeml.ml import TextClustering
+from wellcomeml.ml.clustering import TextClustering
 
 
 @pytest.mark.parametrize("reducer,cluster_reduced", [("tsne", True),

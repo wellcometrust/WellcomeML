@@ -3,7 +3,7 @@
 
 import en_core_web_sm
 import pytest
-from wellcomeml.ml import SpacyNER
+from wellcomeml.ml.spacy_ner import SpacyNER
 from wellcomeml.metrics.ner_classification_report import ner_classification_report
 
 

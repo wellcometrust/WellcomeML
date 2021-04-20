@@ -1,7 +1,7 @@
 import tempfile
 import os
 
-from wellcomeml.ml import KerasVectorizer
+from wellcomeml.ml.keras_vectorizer import KerasVectorizer
 
 
 def test_vanilla():

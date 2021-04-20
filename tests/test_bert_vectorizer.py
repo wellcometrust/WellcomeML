@@ -1,7 +1,7 @@
 # encoding: utf-8
 import pytest
 
-from wellcomeml.ml import bert_vectorizer
+from wellcomeml.ml.bert_vectorizer import BertVectorizer
 
 EMBEDDING_TYPES = [
     "mean_second_to_last",
@@ -14,7 +14,7 @@ EMBEDDING_TYPES = [
 
 @pytest.fixture
 def vec():
-    vectorizer = bert_vectorizer.BertVectorizer()
+    vectorizer = BertVectorizer()
 
     vectorizer.fit()
     return vectorizer
@@ -49,7 +49,7 @@ def test_embed_long_sentence(vec):
 
 def test_embed_scibert():
     X = ["This is a sentence"]
-    vec = bert_vectorizer.BertVectorizer(pretrained='scibert')
+    vec = BertVectorizer(pretrained='scibert')
     vec.fit()
 
     for embedding in EMBEDDING_TYPES:
@@ -65,7 +65,7 @@ def test_save_and_load(tmpdir):
     X = ["This is a sentence"]
     for pretrained in ['bert', 'scibert']:
         for embedding in EMBEDDING_TYPES:
-            vec = bert_vectorizer.BertVectorizer(
+            vec = BertVectorizer(
                 pretrained=pretrained,
                 sentence_embedding=embedding
             )

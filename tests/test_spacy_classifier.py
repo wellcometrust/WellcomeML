@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from wellcomeml.ml import SpacyClassifier
+from wellcomeml.ml.spacy_classifier import SpacyClassifier
 
 
 def test_multilabel():

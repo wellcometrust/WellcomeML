@@ -1,8 +1,8 @@
 import tempfile
 import pytest
 
-from wellcomeml.ml import SpacyKnowledgeBase
-from wellcomeml.ml import SpacyEntityLinker
+from wellcomeml.ml.spacy_knowledge_base import SpacyKnowledgeBase
+from wellcomeml.ml.spacy_entity_linking import SpacyEntityLinker
 
 
 @pytest.fixture(scope="module")

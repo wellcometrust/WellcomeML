@@ -3,7 +3,7 @@ import pickle
 
 import pytest
 
-from wellcomeml.ml import TransformersTokenizer
+from wellcomeml.ml.transformers_tokenizer import TransformersTokenizer
 
 
 texts = [

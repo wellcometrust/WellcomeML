@@ -1,5 +1,5 @@
 import pytest
-from wellcomeml.ml import SimilarityEntityLinker
+from wellcomeml.ml.similarity_entity_linking import SimilarityEntityLinker
 
 
 @pytest.fixture(scope="module")
