@@ -25,9 +25,9 @@ def test_semantic_similarity():
 
     X = [('This sentence has context_1', 'This one also has context_1'),
          ('This sentence has context_2', 'This one also has context_2'),
-         ('This sentence is about something else', 'God save the queen')]*2
+         ('This sentence is about something else', 'God save the queen')]
 
-    y = [1, 1, 0]*2
+    y = [1, 1, 0]
 
     classifier.fit(X, y, epochs=3)
 
@@ -39,11 +39,9 @@ def test_semantic_similarity():
 
     # Assert it returns a vector of correct length (15 training points) and 15*2 scores
 
-    print(len(classifier.predict(X)))
-
     assert len(classifier.predict(X)) == 6
-    assert (scores > 0).sum() == 6*2
-    assert (scores < 1).sum() == 6*2
+    assert (scores > 0).sum() == 6
+    assert (scores < 1).sum() == 6
 
     # Commenting the extra fit test because there is a bug #189
 
@@ -65,9 +63,9 @@ def test_semantic_meta_fit():
 
     X = [['This sentence has context_1', 'This one also has context_1', 0.1, 0.2],
          ['This sentence has context_2', 'This one also has context_2', 0.2, 0.2],
-         ['This sentence is about something else', 'God save the queen', -0.5, -0.5]]*2
+         ['This sentence is about something else', 'God save the queen', -0.5, -0.5]]
 
-    y = [1, 1, 0]*2
+    y = [1, 1, 0]
 
     classifier.fit(X, y, epochs=3)
 
@@ -76,8 +74,8 @@ def test_semantic_meta_fit():
 
     # Assert it returns a vector of correct length (15 training points) and 15*2 scores
     assert len(classifier.predict(X)) == 6
-    assert (scores > 0).sum() == 6*2
-    assert (scores < 1).sum() == 6*2
+    assert (scores > 0).sum() == 6
+    assert (scores < 1).sum() == 6
 
     # Commenting the extra fit test because there is a bug #189
     # # Fits two extra epochs
