@@ -29,7 +29,7 @@ def test_semantic_similarity():
 
     y = [1, 1, 0]
 
-    classifier.fit(X, y, epochs=3)
+    classifier.fit(X, y, epochs=2)
 
     loss_initial = classifier.history['loss'][0]
     loss_epoch_2 = classifier.history['loss'][2]
@@ -67,7 +67,7 @@ def test_semantic_meta_fit():
 
     y = [1, 1, 0]
 
-    classifier.fit(X, y, epochs=3)
+    classifier.fit(X, y, epochs=2)
 
     # loss_initial = classifier.history['loss'][0]
     scores = classifier.predict_proba(X)
