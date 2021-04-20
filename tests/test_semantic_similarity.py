@@ -31,17 +31,13 @@ def test_semantic_similarity():
 
     classifier.fit(X, y, epochs=2)
 
-    loss_initial = classifier.history['loss'][0]
-    loss_epoch_2 = classifier.history['loss'][2]
     scores = classifier.predict_proba(X)
-
-    assert loss_epoch_2 < loss_initial
 
     # Assert it returns a vector of correct length (15 training points) and 15*2 scores
 
-    assert len(classifier.predict(X)) == 6
-    assert (scores > 0).sum() == 6
-    assert (scores < 1).sum() == 6
+    assert len(classifier.predict(X)) ==3
+    assert (scores > 0).sum() == 3
+    assert (scores < 1).sum() == 3
 
     # Commenting the extra fit test because there is a bug #189
 
@@ -73,9 +69,9 @@ def test_semantic_meta_fit():
     scores = classifier.predict_proba(X)
 
     # Assert it returns a vector of correct length (15 training points) and 15*2 scores
-    assert len(classifier.predict(X)) == 6
-    assert (scores > 0).sum() == 6
-    assert (scores < 1).sum() == 6
+    assert len(classifier.predict(X)) == 3
+    assert (scores > 0).sum() == 3
+    assert (scores < 1).sum() == 3
 
     # Commenting the extra fit test because there is a bug #189
     # # Fits two extra epochs
