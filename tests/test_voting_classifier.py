@@ -120,6 +120,7 @@ def test_multiclass():
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
 
+
 def test_binary_hard_odd():
     Y1_prob = np.array([
         [0.9, 0.1],
@@ -151,6 +152,7 @@ def test_binary_hard_odd():
     X = ["mock", "data", "not used"]
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
+
 
 def test_binary_hard_even():
 
@@ -191,6 +193,7 @@ def test_binary_hard_even():
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
 
+
 def test_multilabel_hard():
     # Since no num_agree, majority (>=2/3) agreement needed
     Y1_prob = np.array([
@@ -223,6 +226,7 @@ def test_multilabel_hard():
     X = ["mock", "data", "not used"]
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
+
 
 def test_multilabel_hard_num_agree():
     # >=3/3 agreement needed
@@ -300,6 +304,7 @@ def test_binary_hard_num_agree():
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
 
+
 def test_multiclass_hard():
 
     Y1_prob = np.array([
@@ -320,7 +325,7 @@ def test_multiclass_hard():
     # Using highest values:
     # 1st data point: 0: 3 votes -> clear winner is 0
     # 2nd data point: 1: 1 vote, 3: 2 votes -> clear winner (in majority voting) is 3
-    # 3rd data point: 2: 1 vote, 3: 1 vote, 1: 1 vote -> no winner, pick first in numerical order, so 1
+    # 3rd data point: 2: 1 vote, 3: 1 vote, 1: 1 vote -> no winner, pick first in numerical order, so 1 # noqa
     Y_expected = np.array([
         0,
         3,
@@ -337,6 +342,7 @@ def test_multiclass_hard():
     Y = voting_classifier.predict(X)
 
     assert np.array_equal(Y, Y_expected)
+
 
 def test_multiclass_hard_num_agree():
 
@@ -358,7 +364,7 @@ def test_multiclass_hard_num_agree():
     # Using highest values:
     # 1st data point: 0: 3 votes -> clear winner is 0
     # 2nd data point: 1: 1 vote, 3: 2 votes -> no winner, pick first in numerical order, so 1
-    # 3rd data point: 2: 1 vote, 3: 1 vote, 1: 1 vote -> no winner, pick first in numerical order, so 1
+    # 3rd data point: 2: 1 vote, 3: 1 vote, 1: 1 vote -> no winner, pick first in numerical order, so 1 # noqa
     Y_expected = np.array([
         0,
         1,
@@ -376,6 +382,7 @@ def test_multiclass_hard_num_agree():
     X = ["mock", "data", "not used"]
     Y = voting_classifier.predict(X)
     assert np.array_equal(Y, Y_expected)
+
 
 def test_inc_vectorizer():
 
