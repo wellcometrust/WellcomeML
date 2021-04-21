@@ -36,8 +36,8 @@ def test_semantic_similarity():
     # Assert it returns a vector of correct length (15 training points) and 15*2 scores
 
     assert len(classifier.predict(X)) == 3
-    assert (scores > 0).sum() == 3
-    assert (scores < 1).sum() == 3
+    assert (scores > 0).sum() == 6
+    assert (scores < 1).sum() == 6
 
     # Commenting the extra fit test because there is a bug #189
 
@@ -70,8 +70,8 @@ def test_semantic_meta_fit():
 
     # Assert it returns a vector of correct length (15 training points) and 15*2 scores
     assert len(classifier.predict(X)) == 3
-    assert (scores > 0).sum() == 3
-    assert (scores < 1).sum() == 3
+    assert (scores > 0).sum() == 6
+    assert (scores < 1).sum() == 6
 
     # Commenting the extra fit test because there is a bug #189
     # # Fits two extra epochs
