@@ -249,7 +249,6 @@ class TextClustering(object):
                param_grid.get('clustering', {}).items()}
         }
 
-
         grid = GridSearchCV(
             estimator=pipeline,
             param_grid=params,
@@ -312,8 +311,9 @@ class TextClustering(object):
         Args:
             folder(str): path to folder
             components(list or 'all'): List of components to save. Options are: 'embbedded_points',
-            'reduced_points', 'vectorizer', 'reducer', and 'clustering_model'. By default, loads 'all'
-            (you can get all components by listing the class param TextClustering.components)
+            'reduced_points', 'vectorizer', 'reducer', and 'clustering_model'. By default, loads
+            'all' (you can get all components by listing the class param
+             TextClustering.components)
 
         """
         if create_folder:
@@ -344,8 +344,9 @@ class TextClustering(object):
         Args:
             folder(str): path to folder
             components(list or 'all'): List of components to load. Options are: 'embbedded_points',
-            'reduced_points', 'vectorizer', 'reducer', and 'clustering_model'. By default, loads 'all'
-            (you can get all components by listing the class param TextClustering.components)
+            'reduced_points', 'vectorizer', 'reducer', and 'clustering_model'. By default, loads
+            'all' (you can get all components by listing the class param
+             TextClustering.components)
 
         """
 
