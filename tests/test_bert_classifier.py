@@ -8,7 +8,7 @@ from wellcomeml.ml.bert_classifier import BertClassifier
 
 
 @pytest.fixture
-def multilabel_bert():
+def multilabel_bert(scope='module'):
     model = BertClassifier()
     model._init_model(num_labels=4)
 

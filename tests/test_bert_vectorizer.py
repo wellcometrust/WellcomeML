@@ -13,7 +13,7 @@ EMBEDDING_TYPES = [
 
 
 @pytest.fixture
-def vec():
+def vec(scope='module'):
     vectorizer = BertVectorizer()
 
     vectorizer.fit()
