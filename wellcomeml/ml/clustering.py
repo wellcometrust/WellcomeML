@@ -40,12 +40,6 @@ class TextClustering(object):
         cluster_names: Names of the clusters
         cluster_kws: Keywords for the clusters (only if embedding=tf-idf)
     """
-    # A class parameter to list all possible components
-    components = ['embbedded_points',
-                  'reduced_points',
-                  'vectorizer',
-                  'reducer',
-                  'clustering_model']
 
     def __init__(self, embedding='tf-idf', reducer='umap', clustering='dbscan',
                  cluster_reduced=True, n_kw=10, params={},
@@ -345,12 +339,13 @@ class TextClustering(object):
 
     def load(self, folder, components='all'):
         """
-        Loads different stes of the pipeline
-        Args:
-            folder:
-            components:
+        Loads the different steps of the pipeline
 
-        Returns:
+        Args:
+            folder(str): path to folder
+            components(list or 'all'): List of components to load. Options are: 'embbedded_points',
+            'reduced_points', 'vectorizer', 'reducer', and 'clustering_model'. By default, loads 'all'
+            (you can get all components by listing the class param TextClustering.components)
 
         """
 
