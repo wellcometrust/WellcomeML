@@ -15,6 +15,7 @@ def multilabel_bert(scope='module'):
     return model
 
 
+@pytest.mark.bert
 def test_multilabel(multilabel_bert):
     X = [
         "One and two",
@@ -44,6 +45,7 @@ def test_multilabel(multilabel_bert):
     assert model.losses[0] > model.losses[-1]
 
 
+@pytest.mark.bert
 def test_multiclass():
     X = [
         "One oh yes",
@@ -73,6 +75,7 @@ def test_multiclass():
     assert model.losses[0] > model.losses[-1]
 
 
+@pytest.mark.bert
 def test_scibert():
     X = [
         "One and two",
@@ -102,6 +105,7 @@ def test_scibert():
     assert model.losses[0] > model.losses[-1]
 
 
+@pytest.mark.bert
 def test_save_load(multilabel_bert):
     X = [
         "One and two",

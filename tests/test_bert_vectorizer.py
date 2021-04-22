@@ -20,12 +20,14 @@ def vec(scope='module'):
     return vectorizer
 
 
+@pytest.mark.bert
 def test_fit_transform_works(vec):
     X = ["This is a sentence"]
 
     assert vec.fit_transform(X).shape == (1, 768)
 
 
+@pytest.mark.bert
 def test_embed_two_sentences(vec):
     X = [
         "This is a sentence",
@@ -38,6 +40,7 @@ def test_embed_two_sentences(vec):
         assert X_embed.shape == (2, 768)
 
 
+@pytest.mark.bert
 def test_embed_long_sentence(vec):
     X = ["This is a sentence"*500]
 
@@ -47,6 +50,7 @@ def test_embed_long_sentence(vec):
         assert X_embed.shape == (1, 768)
 
 
+@pytest.mark.bert
 def test_embed_scibert():
     X = ["This is a sentence"]
     vec = BertVectorizer(pretrained='scibert')
