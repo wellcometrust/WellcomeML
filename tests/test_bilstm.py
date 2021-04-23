@@ -1,7 +1,7 @@
 import tempfile
 
 from wellcomeml.ml.bilstm import BiLSTMClassifier
-from wellcomeml.ml import KerasVectorizer
+from wellcomeml.ml.keras_vectorizer import KerasVectorizer
 from sklearn.pipeline import Pipeline
 from scipy.sparse import csr_matrix
 import numpy as np

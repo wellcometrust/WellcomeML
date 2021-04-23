@@ -9,7 +9,7 @@ from sklearn.metrics import f1_score
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
-from wellcomeml.ml import BertVectorizer
+from wellcomeml.ml.bert_vectorizer import BertVectorizer
 
 
 class SimilarityEntityLinker:

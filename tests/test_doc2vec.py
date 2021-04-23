@@ -1,4 +1,4 @@
-from wellcomeml.ml import Doc2VecVectorizer
+from wellcomeml.ml.doc2vec_vectorizer import Doc2VecVectorizer
 
 
 def test_fit_transform():
