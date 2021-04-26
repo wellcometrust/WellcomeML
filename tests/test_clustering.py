@@ -6,7 +6,7 @@ from wellcomeml.ml.clustering import TextClustering
 @pytest.mark.parametrize("reducer,cluster_reduced", [("tsne", True),
                                                      ("umap", True),
                                                      ("umap", False)])
-def test_full_pipeline(reducer, cluster_reduced):
+def test_full_pipeline(reducer, cluster_reduced, tmp_path):
     cluster = TextClustering(reducer=reducer, cluster_reduced=cluster_reduced,
                              embedding_random_state=42,
                              reducer_random_state=43,
@@ -22,6 +22,17 @@ def test_full_pipeline(reducer, cluster_reduced):
     cluster.fit(X)
 
     assert len(cluster.cluster_kws) == len(cluster.cluster_ids) == 6
+
+    cluster.save(folder=tmp_path)
+
+    cluster_new = TextClustering()
+    cluster_new.load(folder=tmp_path)
+
+    # Asserts all coordinates of the loaded points are equal
+    assert (cluster_new.embedded_points != cluster.embedded_points).sum() == 0
+    assert (cluster_new.reduced_points != cluster.reduced_points).sum() == 0
+    assert cluster_new.reducer_class.__class__ == cluster.reducer_class.__class__
+    assert cluster_new.clustering_class.__class__ == cluster.clustering_class.__class__
 
 
 @pytest.mark.parametrize("reducer", ["tsne", "umap"])

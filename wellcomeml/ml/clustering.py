@@ -1,6 +1,7 @@
 from collections import defaultdict
 import logging
 import os
+import pickle
 
 from wellcomeml.ml import vectorizer
 from wellcomeml.logger import logger
@@ -39,6 +40,7 @@ class TextClustering(object):
         cluster_names: Names of the clusters
         cluster_kws: Keywords for the clusters (only if embedding=tf-idf)
     """
+
     def __init__(self, embedding='tf-idf', reducer='umap', clustering='dbscan',
                  cluster_reduced=True, n_kw=10, params={},
                  embedding_random_state=None, reducer_random_state=None,
@@ -113,12 +115,20 @@ class TextClustering(object):
                                                'random_state'):
             self.clustering_class.random_state = clustering_random_state
 
+        self.embedded_points = None
+        self.reduced_points = None
         self.cluster_ids = None
         self.cluster_names = None
         self.cluster_kws = None
         self.kw_dictionary = {}
         self.silhouette = None
         self.optimise_results = {}
+
+        self.embedded_points_filename = 'embedded_points.npy'
+        self.reduced_points_filename = 'reduced_points.npy'
+        self.vectorizer_filename = 'vectorizer.pkl'
+        self.reducer_filename = 'reducer.pkl'
+        self.clustering_filename = 'clustering.pkl'
 
     def fit(self, X, *_):
         """
@@ -131,22 +141,28 @@ class TextClustering(object):
             A TextClustering object
 
         """
-        self._fit_step(X, step='vectorizer')
-        self._fit_step(step='reducer')
-        self._fit_step(step='clustering')
+        self.fit_step(X, step='vectorizer')
+        self.fit_step(step='reducer')
+        self.fit_step(step='clustering')
 
         if self.embedding == 'tf-idf' and self.n_kw:
             self._find_keywords(self.embedded_points.toarray(), n_kw=self.n_kw)
 
         return self
 
-    def _fit_step(self, X=None, step='vectorizer'):
+    def fit_step(self, X=None, y=None, step='vectorizer'):
         """Internal function for partial fitting only a certain step"""
         if step == 'vectorizer':
             self.embedded_points = self.vectorizer.fit_transform(X)
         elif step == 'reducer':
-            self.reduced_points = \
-                self.reducer_class.fit_transform(self.embedded_points)
+            if self.embedded_points is None:
+                raise ValueError(
+                    'You must embed/vectorise the points before reducing dimensionality'
+                )
+            if X is None:
+                X = self.embedded_points
+
+            self.reduced_points = self.reducer_class.fit_transform(X=X, y=y)
         elif step == 'clustering':
             points = (
                 self.reduced_points if self.cluster_reduced else
@@ -260,7 +276,9 @@ class TextClustering(object):
         # Prunes result to actually optimise under constraints
         best_silhouette = 0
         best_params = {}
+
         grid.fit(X, y=None)
+
         for params, silhouette, noise, n_clusters in zip(
                 grid.cv_results_['params'],
                 grid.cv_results_['mean_test_silhouette'],
@@ -291,6 +309,74 @@ class TextClustering(object):
         logger.setLevel(logging_level)
 
         return best_params
+
+    def save(self, folder, components='all', create_folder=True):
+        """
+        Saves the different steps of the pipeline
+
+        Args:
+            folder(str): path to folder
+            components(list or 'all'): List of components to save. Options are: 'embbedded_points',
+            'reduced_points', 'vectorizer', 'reducer', and 'clustering_model'. By default, loads
+            'all' (you can get all components by listing the class param
+             TextClustering.components)
+
+        """
+        if create_folder:
+            os.makedirs(folder, exist_ok=True)
+
+        if components == 'all' or 'embedded_points' in components:
+            np.save(os.path.join(folder, self.embedded_points_filename), self.embedded_points)
+
+        if components == 'all' or 'reduced_points' in components:
+            np.save(os.path.join(folder, self.reduced_points_filename), self.reduced_points)
+
+        if components == 'all' or 'vectorizer' in components:
+            with open(os.path.join(folder, self.vectorizer_filename), 'wb') as f:
+                pickle.dump(self.vectorizer, f)
+
+        if components == 'all' or 'reducer' in components:
+            with open(os.path.join(folder, self.reducer_filename), 'wb') as f:
+                pickle.dump(self.reducer_class, f)
+
+        if components == 'all' or 'clustering_model' in components:
+            with open(os.path.join(folder, self.clustering_filename), 'wb') as f:
+                pickle.dump(self.clustering_class, f)
+
+    def load(self, folder, components='all'):
+        """
+        Loads the different steps of the pipeline
+
+        Args:
+            folder(str): path to folder
+            components(list or 'all'): List of components to load. Options are: 'embbedded_points',
+            'reduced_points', 'vectorizer', 'reducer', and 'clustering_model'. By default, loads
+            'all' (you can get all components by listing the class param
+             TextClustering.components)
+
+        """
+
+        if components == 'all' or 'embedded_points' in components:
+            self.embedded_points = np.load(os.path.join(folder, self.embedded_points_filename),
+                                           allow_pickle=True)
+            if not self.embedded_points.shape:
+                self.embedded_points = self.embedded_points[()]
+
+        if components == 'all' or 'reduced_points' in components:
+            self.reduced_points = np.load(os.path.join(folder, self.reduced_points_filename),
+                                          allow_pickle=True)
+
+        if components == 'all' or 'vectorizer' in components:
+            with open(os.path.join(folder, self.vectorizer_filename), 'rb') as f:
+                self.vectorizer = pickle.load(f)
+
+        if components == 'all' or 'reducer' in components:
+            with open(os.path.join(folder, self.reducer_filename), 'rb') as f:
+                self.reducer_class = pickle.load(f)
+
+        if components == 'all' or 'clustering_model' in components:
+            with open(os.path.join(folder, self.clustering_filename), 'rb') as f:
+                self.clustering_class = pickle.load(f)
 
     def stability(self):
         """Function to calculate how stable the clusters are"""
