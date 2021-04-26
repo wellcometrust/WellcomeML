@@ -255,7 +255,6 @@ class TextClustering(object):
                param_grid.get('clustering', {}).items()}
         }
 
-        
         grid = GridSearchCV(
             estimator=pipeline,
             param_grid=params,
