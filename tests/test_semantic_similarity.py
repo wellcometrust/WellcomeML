@@ -25,25 +25,19 @@ def test_semantic_similarity():
 
     X = [('This sentence has context_1', 'This one also has context_1'),
          ('This sentence has context_2', 'This one also has context_2'),
-         ('This sentence is about something else', 'God save the queen')]*5
+         ('This sentence is about something else', 'God save the queen')]
 
-    y = [1, 1, 0]*5
+    y = [1, 1, 0]
 
-    classifier.fit(X, y, epochs=3)
+    classifier.fit(X, y, epochs=2)
 
-    loss_initial = classifier.history['loss'][0]
-    loss_epoch_2 = classifier.history['loss'][2]
     scores = classifier.predict_proba(X)
-
-    assert loss_epoch_2 < loss_initial
 
     # Assert it returns a vector of correct length (15 training points) and 15*2 scores
 
-    print(len(classifier.predict(X)))
-
-    assert len(classifier.predict(X)) == 15
-    assert (scores > 0).sum() == 15*2
-    assert (scores < 1).sum() == 15*2
+    assert len(classifier.predict(X)) == 3
+    assert (scores > 0).sum() == 6
+    assert (scores < 1).sum() == 6
 
     # Commenting the extra fit test because there is a bug #189
 
@@ -65,19 +59,19 @@ def test_semantic_meta_fit():
 
     X = [['This sentence has context_1', 'This one also has context_1', 0.1, 0.2],
          ['This sentence has context_2', 'This one also has context_2', 0.2, 0.2],
-         ['This sentence is about something else', 'God save the queen', -0.5, -0.5]]*5
+         ['This sentence is about something else', 'God save the queen', -0.5, -0.5]]
 
-    y = [1, 1, 0]*5
+    y = [1, 1, 0]
 
-    classifier.fit(X, y, epochs=5)
+    classifier.fit(X, y, epochs=2)
 
     # loss_initial = classifier.history['loss'][0]
     scores = classifier.predict_proba(X)
 
     # Assert it returns a vector of correct length (15 training points) and 15*2 scores
-    assert len(classifier.predict(X)) == 15
-    assert (scores > 0).sum() == 15*2
-    assert (scores < 1).sum() == 15*2
+    assert len(classifier.predict(X)) == 3
+    assert (scores > 0).sum() == 6
+    assert (scores < 1).sum() == 6
 
     # Commenting the extra fit test because there is a bug #189
     # # Fits two extra epochs

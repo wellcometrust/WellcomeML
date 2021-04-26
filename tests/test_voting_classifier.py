@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.pipeline import Pipeline
 
-from wellcomeml.ml import WellcomeVotingClassifier
+from wellcomeml.ml.voting_classifier import WellcomeVotingClassifier
 
 
 class MockEstimator():

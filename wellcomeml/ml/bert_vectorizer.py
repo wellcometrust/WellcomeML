@@ -72,8 +72,10 @@ class BertVectorizer(BaseEstimator, TransformerMixin):
 
         return embedded_x.cpu().numpy().flatten()
 
-    def transform(self, X, *_):
-        return np.array([self.bert_embedding(x) for x in tqdm.tqdm(X)])
+    def transform(self, X, verbose=True, *_):
+        X = (tqdm.tqdm(X) if verbose else X)
+
+        return np.array([self.bert_embedding(x) for x in X])
 
     def fit(self, *_):
         model_name = (

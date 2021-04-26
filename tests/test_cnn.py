@@ -1,6 +1,7 @@
 import tempfile
 
-from wellcomeml.ml import CNNClassifier, KerasVectorizer
+from wellcomeml.ml.cnn import CNNClassifier
+from wellcomeml.ml.keras_vectorizer import KerasVectorizer
 from sklearn.pipeline import Pipeline
 from scipy.sparse import csr_matrix
 import tensorflow as tf

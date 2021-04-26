@@ -11,6 +11,10 @@ install:
   - pip install tox-travis
 
 env:
+  jobs:
+    - TEST_SUITE='bert'
+    - TEST_SUITE='not bert'
+
   global:
     - TF_CPP_MIN_LOG_LEVEL=2
 

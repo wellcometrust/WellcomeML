@@ -1,5 +1,5 @@
 # encoding: utf-8
-from wellcomeml.ml import WellcomeTfidf
+from wellcomeml.ml.frequency_vectorizer import WellcomeTfidf
 
 
 def test_tf_idf_dispatch():

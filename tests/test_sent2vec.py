@@ -1,6 +1,6 @@
 import pytest
 
-from wellcomeml.ml import Sent2VecVectorizer
+from wellcomeml.ml.sent2vec_vectorizer import Sent2VecVectorizer
 
 
 @pytest.mark.skip(reason="Consumes too much memory")

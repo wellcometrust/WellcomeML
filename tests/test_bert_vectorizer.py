@@ -1,7 +1,7 @@
 # encoding: utf-8
 import pytest
 
-from wellcomeml.ml import bert_vectorizer
+from wellcomeml.ml.bert_vectorizer import BertVectorizer
 
 EMBEDDING_TYPES = [
     "mean_second_to_last",
@@ -12,43 +12,54 @@ EMBEDDING_TYPES = [
 ]
 
 
-def test_embed_one_sentence():
+@pytest.fixture
+def vec(scope='module'):
+    vectorizer = BertVectorizer()
+
+    vectorizer.fit()
+    return vectorizer
+
+
+@pytest.mark.bert
+def test_fit_transform_works(vec):
     X = ["This is a sentence"]
 
-    for embedding in EMBEDDING_TYPES:
-        vec = bert_vectorizer.BertVectorizer(sentence_embedding=embedding)
-        X_embed = vec.fit_transform(X)
-        assert(X_embed.shape == (1, 768))
+    assert vec.fit_transform(X).shape == (1, 768)
 
 
-def test_embed_two_sentences():
+@pytest.mark.bert
+def test_embed_two_sentences(vec):
     X = [
         "This is a sentence",
         "This is another one"
     ]
 
     for embedding in EMBEDDING_TYPES:
-        vec = bert_vectorizer.BertVectorizer(sentence_embedding=embedding)
-        X_embed = vec.fit_transform(X)
-        assert(X_embed.shape == (2, 768))
+        vec.sentence_embedding = embedding
+        X_embed = vec.transform(X, verbose=False)
+        assert X_embed.shape == (2, 768)
 
 
-def test_embed_long_sentence():
+@pytest.mark.bert
+def test_embed_long_sentence(vec):
     X = ["This is a sentence"*500]
 
     for embedding in EMBEDDING_TYPES:
-        vec = bert_vectorizer.BertVectorizer(sentence_embedding=embedding)
-        X_embed = vec.fit_transform(X)
-        assert(X_embed.shape == (1, 768))
+        vec.sentence_embedding = embedding
+        X_embed = vec.transform(X, verbose=False)
+        assert X_embed.shape == (1, 768)
 
 
+@pytest.mark.bert
 def test_embed_scibert():
     X = ["This is a sentence"]
+    vec = BertVectorizer(pretrained='scibert')
+    vec.fit()
+
     for embedding in EMBEDDING_TYPES:
-        vec = bert_vectorizer.BertVectorizer(pretrained='scibert',
-                                             sentence_embedding=embedding)
-        X_embed = vec.fit_transform(X)
-        assert(X_embed.shape == (1, 768))
+        vec.sentence_embedding = embedding
+        X_embed = vec.transform(X, verbose=False)
+        assert X_embed.shape == (1, 768)
 
 
 @pytest.mark.skip("Reason: Build killed or stalls. Issue #200")
@@ -58,11 +69,11 @@ def test_save_and_load(tmpdir):
     X = ["This is a sentence"]
     for pretrained in ['bert', 'scibert']:
         for embedding in EMBEDDING_TYPES:
-            vec = bert_vectorizer.BertVectorizer(
+            vec = BertVectorizer(
                 pretrained=pretrained,
                 sentence_embedding=embedding
             )
-            X_embed = vec.fit_transform(X)
+            X_embed = vec.fit_transform(X, verbose=False)
 
             vec.save_transformed(str(tmpfile), X_embed)
 

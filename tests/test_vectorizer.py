@@ -1,7 +1,7 @@
 # encoding: utf-8
 import pytest
 
-from wellcomeml.ml import Vectorizer
+from wellcomeml.ml.vectorizer import Vectorizer
 
 
 def test_bert_dispatch():
