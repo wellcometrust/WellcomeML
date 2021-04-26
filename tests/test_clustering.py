@@ -31,6 +31,8 @@ def test_full_pipeline(reducer, cluster_reduced, tmp_path):
     # Asserts all coordinates of the loaded points are equal
     assert (cluster_new.embedded_points != cluster.embedded_points).sum() == 0
     assert (cluster_new.reduced_points != cluster.reduced_points).sum() == 0
+    assert cluster_new.reducer_class.__class__ == cluster.reducer_class.__class__
+    assert cluster_new.clustering_class.__class__ == cluster.clustering_class.__class__
 
 
 @pytest.mark.parametrize("reducer", ["tsne", "umap"])
