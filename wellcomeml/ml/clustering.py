@@ -124,6 +124,12 @@ class TextClustering(object):
         self.silhouette = None
         self.optimise_results = {}
 
+        self.embedded_points_filename = 'embedded_points.npy'
+        self.reduced_points_filename = 'reduced_points.npy'
+        self.vectorizer_filename = 'vectorizer.pkl'
+        self.reducer_filename = 'reducer.pkl'
+        self.clustering_filename = 'clustering.pkl'
+
     def fit(self, X, *_):
         """
         Fits all clusters in the pipeline
@@ -320,21 +326,21 @@ class TextClustering(object):
             os.makedirs(folder, exist_ok=True)
 
         if components == 'all' or 'embedded_points' in components:
-            np.save(os.path.join(folder, 'embedded_points.npy'), self.embedded_points)
+            np.save(os.path.join(folder, self.embedded_points_filename), self.embedded_points)
 
         if components == 'all' or 'reduced_points' in components:
-            np.save(os.path.join(folder, 'reduced_points.npy'), self.reduced_points)
+            np.save(os.path.join(folder, self.reduced_points_filename), self.reduced_points)
 
         if components == 'all' or 'vectorizer' in components:
-            with open(os.path.join(folder, 'vectorizer.pkl'), 'wb') as f:
+            with open(os.path.join(folder, self.vectorizer_filename), 'wb') as f:
                 pickle.dump(self.vectorizer, f)
 
         if components == 'all' or 'reducer' in components:
-            with open(os.path.join(folder, 'reducer.pkl'), 'wb') as f:
+            with open(os.path.join(folder, self.reducer_filename), 'wb') as f:
                 pickle.dump(self.reducer_class, f)
 
         if components == 'all' or 'clustering_model' in components:
-            with open(os.path.join(folder, 'clustering.pkl'), 'wb') as f:
+            with open(os.path.join(folder, self.clustering_filename), 'wb') as f:
                 pickle.dump(self.clustering_class, f)
 
     def load(self, folder, components='all'):
@@ -351,25 +357,25 @@ class TextClustering(object):
         """
 
         if components == 'all' or 'embedded_points' in components:
-            self.embedded_points = np.load(os.path.join(folder, 'embedded_points.npy'),
+            self.embedded_points = np.load(os.path.join(folder, self.embedded_points_filename),
                                            allow_pickle=True)
             if not self.embedded_points.shape:
                 self.embedded_points = self.embedded_points[()]
 
         if components == 'all' or 'reduced_points' in components:
-            self.reduced_points = np.load(os.path.join(folder, 'reduced_points.npy'),
+            self.reduced_points = np.load(os.path.join(folder, self.reduced_points_filename),
                                           allow_pickle=True)
 
         if components == 'all' or 'vectorizer' in components:
-            with open(os.path.join(folder, 'vectorizer.pkl'), 'rb') as f:
+            with open(os.path.join(folder, self.vectorizer_filename), 'rb') as f:
                 self.vectorizer = pickle.load(f)
 
         if components == 'all' or 'reducer' in components:
-            with open(os.path.join(folder, 'reducer.pkl'), 'rb') as f:
+            with open(os.path.join(folder, self.reducer_filename), 'rb') as f:
                 self.reducer_class = pickle.load(f)
 
         if components == 'all' or 'clustering_model' in components:
-            with open(os.path.join(folder, 'clustering.pkl'), 'rb') as f:
+            with open(os.path.join(folder, self.clustering_filename), 'rb') as f:
                 self.clustering_class = pickle.load(f)
 
     def stability(self):
