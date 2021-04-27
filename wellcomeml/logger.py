@@ -9,17 +9,19 @@ import logging
 import os
 
 
-def build_logger(logging_level, name):
+def get_numeric_level(level):
+    if isinstance(level, str):
+        level = getattr(logging, level.upper(), 10)
+    return level
 
-    if isinstance(logging_level, str):
-        numeric_level = getattr(logging, logging_level.upper(), 10)
-    else:
-        numeric_level = 20
+
+def build_logger(logging_level, name):
+    numeric_level = get_numeric_level(logging_level)
 
     logger = logging.getLogger(name)
 
     logging.basicConfig(
-        format="%(asctime)s %(name)s %(levelname)s: %(message)s",
+            format="%(asctime)s %(name)s %(levelname)s: %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
         level=numeric_level,
     )
@@ -27,11 +29,17 @@ def build_logger(logging_level, name):
     return logger
 
 
-LOGGING_LEVEL = os.getenv("LOGGING_LEVEL")
+LOGGING_LEVEL = os.getenv("LOGGING_LEVEL", 20)
 
 logger = build_logger(logging_level=LOGGING_LEVEL, name=__name__)
 
-external_logging_level = {'transformers': logging.WARNING}
+external_logging_level = {
+    'transformers': LOGGING_LEVEL,
+    'tensorflow': LOGGING_LEVEL,
+    'gensim': LOGGING_LEVEL,
+    'sklearn': LOGGING_LEVEL
+}
 
 for package, level in external_logging_level.items():
-    logging.getLogger(package).setLevel(level)
+    numeric_level = get_numeric_level(level)
+    logging.getLogger(package).setLevel(numeric_level)
