@@ -4,10 +4,10 @@
 """
 Utilities for loading and saving data from various formats
 """
-
+import logging
 import json
 
-from wellcomeml.logger import logger
+logger = logging.getLogger(__name__)
 
 
 def write_jsonl(input_data, output_file):

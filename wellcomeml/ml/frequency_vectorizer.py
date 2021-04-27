@@ -4,13 +4,14 @@
 """
 A generic "frequency" vectorizer that wraps all usual transformations.
 """
+import logging
 import re
 
 import numpy as np
 import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from wellcomeml.logger import logger
+logger = logging.getLogger(__name__)
 
 
 class WellcomeTfidf(TfidfVectorizer):

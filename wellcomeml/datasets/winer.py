@@ -1,13 +1,14 @@
 # WiNER: A Wikipedia Annotated Corpus for Named Entity Recognition
 # https://www.aclweb.org/anthology/I17-1042/
-
+import logging
 import tarfile
 import os
 from tqdm import tqdm
 import random
 
 from wellcomeml.datasets.download import check_cache_and_download
-from wellcomeml.logger import logger
+
+logger = logging.getLogger(__name__)
 
 
 def yield_article_entities(f):

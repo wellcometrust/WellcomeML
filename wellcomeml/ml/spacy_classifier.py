@@ -16,10 +16,11 @@ import numpy as np
 import spacy
 import torch
 
+import logging
 import random
 import time
 
-from wellcomeml.logger import logger
+logger = logging.getLogger(__name__)
 
 is_using_gpu = spacy.prefer_gpu()
 if is_using_gpu:

@@ -31,13 +31,14 @@ voting = "hard":
          will be predicted.
 
 """
+import logging
 
 from sklearn.utils.validation import check_is_fitted
 from sklearn.ensemble import VotingClassifier
 from sklearn.exceptions import NotFittedError
 import numpy as np
 
-from wellcomeml.logger import logger
+logger = logging.getLogger(__name__)
 
 
 class WellcomeVotingClassifier(VotingClassifier):

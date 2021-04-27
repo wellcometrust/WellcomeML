@@ -1,3 +1,4 @@
+import logging
 import os
 import tarfile
 
@@ -5,7 +6,7 @@ import boto3
 from botocore import UNSIGNED
 from botocore.client import Config
 
-from wellcomeml.logger import logger
+logger = logging.getLogger(__name__)
 
 DATA_DIR = os.path.expanduser("~/.cache/wellcomeml/data")
 DATA_DISPATCH = {
