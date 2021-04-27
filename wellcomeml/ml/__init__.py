@@ -1,13 +1,13 @@
 import traceback
 import logging
 
-logger = logging.getLogger(__name__)
-
-
 from .frequency_vectorizer import WellcomeTfidf
 from .doc2vec_vectorizer import Doc2VecVectorizer
 from .sent2vec_vectorizer import Sent2VecVectorizer
 from .voting_classifier import WellcomeVotingClassifier
+
+logger = logging.getLogger(__name__)
+
 __all__ = ['WellcomeTfidf', 'Doc2VecVectorizer',
            'Sent2VecVectorizer', 'WellcomeVotingClassifier']
 try:
