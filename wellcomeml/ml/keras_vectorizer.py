@@ -9,9 +9,11 @@ import numpy as np
 import gensim.downloader as api
 
 from os import path
+import logging
 
-from wellcomeml.logger import logger
 from wellcomeml.ml.transformers_tokenizer import TransformersTokenizer
+
+logger = logging.getLogger(__name__)
 
 
 class KerasTokenizer():

@@ -2,6 +2,7 @@
 """
 BERT Vectorizer that embeds text using a prertained BERT model
 """
+import logging
 
 from transformers import BertModel, BertTokenizer
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -10,7 +11,8 @@ import torch
 import tqdm
 
 from wellcomeml.utils import check_cache_and_download
-from wellcomeml.logger import logger
+
+logger = logging.getLogger(__name__)
 
 
 class BertVectorizer(BaseEstimator, TransformerMixin):

@@ -4,7 +4,6 @@ import os
 import pickle
 
 from wellcomeml.ml import vectorizer
-from wellcomeml.logger import logger
 
 import numpy as np
 from sklearn.base import ClusterMixin
@@ -23,6 +22,8 @@ except (ValueError, ModuleNotFoundError):
         "pip3 install hdbscan --no-cache-dir --no-binary :all: --no-build-isolation "
         "Read more https://github.com/wellcometrust/WellcomeML/issues/197"
     )
+
+logger = logging.getLogger(__name__)
 
 CACHE_DIR = os.path.expanduser("~/.cache/wellcomeml")
 

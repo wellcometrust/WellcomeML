@@ -15,6 +15,7 @@ It follows the embed, encode, attend, predict framework
     and whether task is multilabel
 """
 from datetime import datetime
+import logging
 import math
 
 from sklearn.base import BaseEstimator, ClassifierMixin
@@ -24,8 +25,9 @@ import tensorflow_addons as tfa
 import tensorflow as tf
 import numpy as np
 
-from wellcomeml.logger import logger
 from wellcomeml.ml.attention import HierarchicalAttention
+
+logger = logging.getLogger(__name__)
 
 TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 CALLBACK_DICT = {

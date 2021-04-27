@@ -1,5 +1,7 @@
 import traceback
-from wellcomeml.logger import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 from .frequency_vectorizer import WellcomeTfidf
