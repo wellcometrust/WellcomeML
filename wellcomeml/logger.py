@@ -21,7 +21,7 @@ def build_logger(logging_level, name):
     logger = logging.getLogger(name)
 
     logging.basicConfig(
-            format="%(asctime)s %(name)s %(levelname)s: %(message)s",
+        format="%(asctime)s %(name)s %(levelname)s: %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
         level=numeric_level,
     )

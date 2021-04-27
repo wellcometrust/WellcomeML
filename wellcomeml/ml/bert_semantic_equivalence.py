@@ -1,6 +1,5 @@
 from collections import defaultdict
 from datetime import datetime
-import logging
 import math
 import os
 

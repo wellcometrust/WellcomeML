@@ -12,6 +12,10 @@ from sklearn.manifold import TSNE
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import silhouette_score
 from sklearn.pipeline import Pipeline
+import umap
+
+logger = logging.getLogger(__name__)
+
 try:
     from hdbscan import HDBSCAN
     HDBSCAN_INSTALLED = True
@@ -23,7 +27,6 @@ except (ValueError, ModuleNotFoundError):
         "Read more https://github.com/wellcometrust/WellcomeML/issues/197"
     )
 
-logger = logging.getLogger(__name__)
 
 CACHE_DIR = os.path.expanduser("~/.cache/wellcomeml")
 
