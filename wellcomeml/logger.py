@@ -39,7 +39,10 @@ external_logging_level = {
     'transformers': NUMERIC_LEVEL,
     'tensorflow': NUMERIC_LEVEL,
     'gensim': NUMERIC_LEVEL,
-    'sklearn': NUMERIC_LEVEL
+    'sklearn': NUMERIC_LEVEL,
+    'spacy': NUMERIC_LEVEL,
+    'torch': NUMERIC_LEVEL,
+    'tokenizers': NUMERIC_LEVEL
 }
 
 for package, level in external_logging_level.items():
