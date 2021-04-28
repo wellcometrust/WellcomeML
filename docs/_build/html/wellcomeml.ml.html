@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>wellcomeml.ml package &mdash; WellcomeML 1.0.2 documentation</title>
+  <title>wellcomeml.ml package &mdash; WellcomeML 1.1.0 documentation</title>
   
 
   
@@ -546,7 +546,7 @@ and model initialisation. Fit, predict, predict_proba remain intact</p>
 
 <dl class="py method">
 <dt id="wellcomeml.ml.bert_vectorizer.BertVectorizer.transform">
-<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_vectorizer.BertVectorizer.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.bert_vectorizer.BertVectorizer.transform" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -655,6 +655,32 @@ and model initialisation. Fit, predict, predict_proba remain intact</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="wellcomeml.ml.clustering.TextClustering.fit_step">
+<code class="sig-name descname"><span class="pre">fit_step</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vectorizer'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.clustering.TextClustering.fit_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal function for partial fitting only a certain step</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.clustering.TextClustering.load">
+<code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.clustering.TextClustering.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the different steps of the pipeline</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<em>str</em>) – path to folder</p></li>
+<li><p><strong>components</strong> (<em>list</em><em> or </em><em>'all'</em>) – List of components to load. Options are: ‘embbedded_points’,</p></li>
+<li><p><strong>'reduced_points'</strong> – </p></li>
+<li><p><strong>'vectorizer'</strong> – </p></li>
+<li><p><strong>'reducer'</strong> – </p></li>
+<li><p><strong>'clustering_model'. By default</strong> (<em>and</em>) – </p></li>
+<li><p><strong>loads</strong> – </p></li>
+<li><p><strong>(</strong><strong>you can get all components by listing the class param</strong> (<em>'all'</em>) – TextClustering.components)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="wellcomeml.ml.clustering.TextClustering.merge_clusters">
 <code class="sig-name descname"><span class="pre">merge_clusters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dictionary</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.clustering.TextClustering.merge_clusters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge cluster based on ids</p>
@@ -689,6 +715,26 @@ steps (vectorizer and reducer) more than necessary.</p>
 <dd class="field-even"><p>A dictionary containing “params_list”, “silhouette” (the
 silhouete for each parameter) and “best_clustering” (the best
 clustering parameters)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wellcomeml.ml.clustering.TextClustering.save">
+<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.clustering.TextClustering.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the different steps of the pipeline</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<em>str</em>) – path to folder</p></li>
+<li><p><strong>components</strong> (<em>list</em><em> or </em><em>'all'</em>) – List of components to save. Options are: ‘embbedded_points’,</p></li>
+<li><p><strong>'reduced_points'</strong> – </p></li>
+<li><p><strong>'vectorizer'</strong> – </p></li>
+<li><p><strong>'reducer'</strong> – </p></li>
+<li><p><strong>'clustering_model'. By default</strong> (<em>and</em>) – </p></li>
+<li><p><strong>loads</strong> – </p></li>
+<li><p><strong>(</strong><strong>you can get all components by listing the class param</strong> (<em>'all'</em>) – TextClustering.components)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1412,9 +1458,42 @@ save_transformed method for the specific vectorizer.</p>
 <p>Voting classifier with ability to accept pretrained estimators
 and return results for multilabel Y</p>
 <p>Some of the code is taken from <a class="reference external" href="https://gist.github.com/tomquisel/a421235422fdf6b51ec2ccc5e3dee1b4">https://gist.github.com/tomquisel/a421235422fdf6b51ec2ccc5e3dee1b4</a></p>
+<dl>
+<dt>voting = “soft”:</dt><dd><dl class="simple">
+<dt>multilabel = True:</dt><dd><p>The predicted classes will be any classes where the mean probability from all the</p>
+</dd>
+</dl>
+<p>estimators is &gt; 0.5.
+multilabel = False:</p>
+<blockquote>
+<div><p>The predicted class will be class with the largest mean probability from all the
+estimators.</p>
+</div></blockquote>
+</dd>
+<dt>voting = “hard”:</dt><dd><p>The predicted class(es) will be any class(es) where the majority (or &gt;= num_agree) of
+estimators agree. Majority in even cases is 2/2 or &gt;=3/4 (i.e. not 2/4).</p>
+<p>If there are multiple classes with the majority (a tie) then the first one in
+numerical order will be chosen.</p>
+<p>In the multiclass case, if there are multiple classes with &gt;= num_agree, then the
+predicted class will be the first class in a numerically sorted list of the tying classes.
+e.g.</p>
+<blockquote>
+<div><p>If there is 1 vote for class 0, 2 votes for class 1 and 2 votes for class 2,
+then class 1 will be predicted.</p>
+</div></blockquote>
+<p>In the binary case, if there is a tie then class 0 is predicted.
+e.g.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>If there are 2 votes for class 0 and 2 votes for class 1, then class 0</dt><dd><p>will be predicted.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
 <dl class="py class">
 <dt id="wellcomeml.ml.voting_classifier.WellcomeVotingClassifier">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.voting_classifier.</span></code><code class="sig-name descname"><span class="pre">WellcomeVotingClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multilabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.voting_classifier.WellcomeVotingClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.voting_classifier.</span></code><code class="sig-name descname"><span class="pre">WellcomeVotingClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multilabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_agree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.voting_classifier.WellcomeVotingClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble._voting.VotingClassifier</span></code></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.voting_classifier.WellcomeVotingClassifier.predict">
@@ -1565,7 +1644,7 @@ vectorisation/embedding</p>
 
 <dl class="py class">
 <dt id="wellcomeml.ml.WellcomeVotingClassifier">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">WellcomeVotingClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multilabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.WellcomeVotingClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></code><code class="sig-name descname"><span class="pre">WellcomeVotingClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multilabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_agree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.WellcomeVotingClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble._voting.VotingClassifier</span></code></p>
 <dl class="py method">
 <dt id="wellcomeml.ml.WellcomeVotingClassifier.predict">

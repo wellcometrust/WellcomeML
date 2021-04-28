@@ -1,3 +1,21 @@
+# 1.1.0
+Release date: 26/04/2021
+
+Improvements
+
+- #140: Additions to text clustering, exposing each step of the pipeline and adding load/save
+- #272: Spacy lemmatiser speed greatly improved
+- #255: Improve memory efficiency of TransformersTokenizer
+- #245: Voting classifier extras (better input flexibility, parameter for how many models should agree, etc)
+
+- General improvements to continuous testing pipelines
+
+Bug fixes:
+
+- #233: Fix CNN's dataset generator
+- #240: Fix multiGPU in SemanticEquivalenceBer
+- #237: Fix KerasVectorizer return length
+
 # 1.0.2
 Release date: 25/02/2021
 
