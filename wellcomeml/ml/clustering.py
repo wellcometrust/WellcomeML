@@ -22,7 +22,6 @@ except (ValueError, ModuleNotFoundError):
         "pip3 install hdbscan --no-cache-dir --no-binary :all: --no-build-isolation "
         "Read more https://github.com/wellcometrust/WellcomeML/issues/197"
     )
-import umap
 
 CACHE_DIR = os.path.expanduser("~/.cache/wellcomeml")
 
@@ -79,9 +78,12 @@ class TextClustering(object):
         self.cluster_reduced = cluster_reduced
 
         reducer_dispatcher = {
-            'umap': umap.UMAP,
             'tsne': TSNE
         }
+        if reducer == "umap":
+            # this imports takes 10-20s https://github.com/lmcinnes/umap/issues/631
+            import umap
+            reducer_dispatcher["umap"] = umap.UMAP
         self.reducer = reducer
         self.reducer_class = reducer_dispatcher[reducer](
             **params.get('reducer', {})
