@@ -12,7 +12,6 @@ from sklearn.manifold import TSNE
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import silhouette_score
 from sklearn.pipeline import Pipeline
-import umap
 
 logger = logging.getLogger(__name__)
 
