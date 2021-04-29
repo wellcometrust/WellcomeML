@@ -31,22 +31,22 @@ def build_logger(logging_level, name):
 
 DEFAULT_LOGGING_LEVEL = "INFO"
 LOGGING_LEVEL = os.getenv("LOGGING_LEVEL", DEFAULT_LOGGING_LEVEL)
-NUMERIC_LEVEL = get_numeric_level(LOGGING_LEVEL)
+LOGGING_LEVEL = get_numeric_level(LOGGING_LEVEL)
 
-logger = build_logger(logging_level=NUMERIC_LEVEL, name=__name__)
+logger = build_logger(logging_level=LOGGING_LEVEL, name=__name__)
 
 external_logging_level = {
-    'transformers': NUMERIC_LEVEL,
-    'tensorflow': NUMERIC_LEVEL,
-    'gensim': NUMERIC_LEVEL,
-    'sklearn': NUMERIC_LEVEL,
-    'spacy': NUMERIC_LEVEL,
-    'torch': NUMERIC_LEVEL,
-    'tokenizers': NUMERIC_LEVEL
+    'transformers': LOGGING_LEVEL,
+    'tensorflow': LOGGING_LEVEL,
+    'gensim': LOGGING_LEVEL,
+    'sklearn': LOGGING_LEVEL,
+    'spacy': LOGGING_LEVEL,
+    'torch': LOGGING_LEVEL,
+    'tokenizers': LOGGING_LEVEL
 }
 
 for package, level in external_logging_level.items():
-    logging.getLogger(package).setLevel(NUMERIC_LEVEL)
+    logging.getLogger(package).setLevel(LOGGING_LEVEL)
 
-if NUMERIC_LEVEL >= 40:  # ERROR
+if LOGGING_LEVEL >= 40:  # ERROR
     warnings.filterwarnings("ignore")
