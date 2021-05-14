@@ -46,7 +46,6 @@ setuptools.setup(
         'boto3',
         'scikit-learn',
         'scipy==1.4.1',
-        'spacy[lookups]<4.0.0,>=3.0.0',
         'umap-learn',
         'nervaluate',
         'twine',
@@ -58,6 +57,9 @@ setuptools.setup(
         'tqdm'
     ],
     extras_require={
+        'spacy': [
+           'spacy[lookups]<4.0.0,>=3.0.0'
+        ]
         'deep-learning': [
             'tensorflow==2.4.0',
             'torch',
