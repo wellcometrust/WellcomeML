@@ -1,5 +1,6 @@
 import os
 
+
 import setuptools
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -46,6 +47,7 @@ setuptools.setup(
         'boto3',
         'scikit-learn',
         'scipy==1.4.1',
+        'click>=7.0,<8.0',
         'spacy[lookups]<4.0.0,>=3.0.0',
         'umap-learn',
         'nervaluate',

@@ -12,7 +12,7 @@ def test_tf_idf_dispatch():
 
 
 def test_save_and_load(tmpdir):
-    tmpfile = tmpdir.join('test.npy')
+    tmpfile = tmpdir.join('test.npz')
 
     X = ["This is a sentence"*100]
 
