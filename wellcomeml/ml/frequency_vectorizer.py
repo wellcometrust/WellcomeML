@@ -7,7 +7,6 @@ A generic "frequency" vectorizer that wraps all usual transformations.
 import logging
 import re
 
-import numpy as np
 import spacy
 from scipy import sparse
 from sklearn.feature_extraction.text import TfidfVectorizer
