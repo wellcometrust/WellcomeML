@@ -18,7 +18,7 @@ cluster.fit(X)
 print("Not very good clusters:")
 print([(x, cluster) for x, cluster in zip(X, cluster.cluster_ids)])
 
-# This is a better one. Let's optmise for silhouette
+# This is a better one. Let's optimise for silhouette
 
 param_grid = {
  'reducer': {'min_dist': [0.0, 0.2],

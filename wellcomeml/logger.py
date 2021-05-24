@@ -40,13 +40,13 @@ external_logging_level = {
     'tensorflow': LOGGING_LEVEL,
     'gensim': LOGGING_LEVEL,
     'sklearn': LOGGING_LEVEL,
-    'spacy': LOGGING_LEVEL,
+    'spacy': get_numeric_level('ERROR'),  # Spacy is a bit annoying with some initialisation logs
     'torch': LOGGING_LEVEL,
     'tokenizers': LOGGING_LEVEL
 }
 
 for package, level in external_logging_level.items():
-    logging.getLogger(package).setLevel(LOGGING_LEVEL)
+    logging.getLogger(package).setLevel(level)
 
 if LOGGING_LEVEL >= 40:  # ERROR
     warnings.filterwarnings("ignore")

@@ -4,6 +4,7 @@ import os
 import pickle
 
 from wellcomeml.ml import vectorizer
+from wellcomeml.logger import logger
 
 import numpy as np
 from sklearn.base import ClusterMixin
@@ -12,8 +13,6 @@ from sklearn.manifold import TSNE
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import silhouette_score
 from sklearn.pipeline import Pipeline
-
-logger = logging.getLogger(__name__)
 
 try:
     from hdbscan import HDBSCAN
@@ -229,10 +228,17 @@ class TextClustering(object):
             params = {}
 
         elif self.cluster_reduced:
+            # You cannot pickle sparse uMAP with more than 4096 points.
+            # See https://github.com/lmcinnes/umap/issues/674
+            # Until that issue is fixed, we need to convert everything to dense or cannot cache
+            # the transformations of the pipeline
+
+            memory = (CACHE_DIR if len(X) < 4096 or self.embedding != 'tf-idf' else None)
             pipeline = Pipeline([('vectorizer', self.vectorizer),
                                  ('reducer', self.reducer_class),
                                  ('clustering', self.clustering_class)],
-                                memory=CACHE_DIR)
+                                memory=memory)
+
             params = {
                 **{f'reducer__{key}': value for key, value in
                    param_grid.get('reducer', {}).items()}
