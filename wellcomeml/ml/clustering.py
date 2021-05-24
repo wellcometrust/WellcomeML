@@ -1,9 +1,9 @@
 from collections import defaultdict
-import logging
 import os
 import pickle
 
 from wellcomeml.ml import vectorizer
+from wellcomeml.logger import logger
 
 import numpy as np
 from sklearn.base import ClusterMixin
@@ -12,8 +12,6 @@ from sklearn.manifold import TSNE
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import silhouette_score
 from sklearn.pipeline import Pipeline
-
-logger = logging.getLogger(__name__)
 
 try:
     from hdbscan import HDBSCAN
@@ -28,6 +26,7 @@ except (ValueError, ModuleNotFoundError):
 
 
 CACHE_DIR = os.path.expanduser("~/.cache/wellcomeml")
+
 
 
 class TextClustering(object):
@@ -176,8 +175,7 @@ class TextClustering(object):
             self.clustering_class.fit(points)
             self.cluster_ids = self.clustering_class.labels_
 
-    def optimise(self, X, param_grid, n_cluster_range=None, max_noise=0.2,
-                 verbose=False):
+    def optimise(self, X, param_grid, n_cluster_range=None, max_noise=0.2):
         """
         Optimises the clustering silhouette based on a parameter grid,
         a range on number of clusters and a range on noise.
@@ -229,10 +227,17 @@ class TextClustering(object):
             params = {}
 
         elif self.cluster_reduced:
+            # You cannot pickle sparse uMAP with more than 4096 points.
+            # See https://github.com/lmcinnes/umap/issues/674
+            # Until that issue is fixed, we need to convert everything to dense or cannot cache
+            # the transformations of the pipeline
+
+            memory = (CACHE_DIR if len(X) < 4096 or self.embedding != 'tf-idf' else None)
             pipeline = Pipeline([('vectorizer', self.vectorizer),
                                  ('reducer', self.reducer_class),
                                  ('clustering', self.clustering_class)],
-                                memory=CACHE_DIR)
+                                 memory=memory)
+
             params = {
                 **{f'reducer__{key}': value for key, value in
                    param_grid.get('reducer', {}).items()}
@@ -271,13 +276,6 @@ class TextClustering(object):
             refit='silhouette'
         )
 
-        logging_level = logger.level
-        if verbose <= 1:
-            # Previously disable logging to allow the loading bar to run
-            # uninterruptly. Will reset after.
-            logging.getLogger().setLevel(logging.WARNING)
-            logger.setLevel(logging.WARNING)
-
         # Prunes result to actually optimise under constraints
         best_silhouette = 0
         best_params = {}
@@ -311,7 +309,6 @@ class TextClustering(object):
         # Fits the pipeline again with the best parameters
         self.fit(X_text)
 
-        logger.setLevel(logging_level)
 
         return best_params
 
