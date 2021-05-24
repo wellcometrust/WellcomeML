@@ -1,4 +1,5 @@
 from collections import defaultdict
+import logging
 import os
 import pickle
 
@@ -26,7 +27,6 @@ except (ValueError, ModuleNotFoundError):
 
 
 CACHE_DIR = os.path.expanduser("~/.cache/wellcomeml")
-
 
 
 class TextClustering(object):
@@ -175,7 +175,8 @@ class TextClustering(object):
             self.clustering_class.fit(points)
             self.cluster_ids = self.clustering_class.labels_
 
-    def optimise(self, X, param_grid, n_cluster_range=None, max_noise=0.2):
+    def optimise(self, X, param_grid, n_cluster_range=None, max_noise=0.2,
+                 verbose=False):
         """
         Optimises the clustering silhouette based on a parameter grid,
         a range on number of clusters and a range on noise.
@@ -276,6 +277,13 @@ class TextClustering(object):
             refit='silhouette'
         )
 
+        logging_level = logger.level
+        if verbose <= 1:
+            # Previously disable logging to allow the loading bar to run
+            # uninterruptly. Will reset after.
+            logging.getLogger().setLevel(logging.WARNING)
+            logger.setLevel(logging.WARNING)
+
         # Prunes result to actually optimise under constraints
         best_silhouette = 0
         best_params = {}
@@ -309,6 +317,7 @@ class TextClustering(object):
         # Fits the pipeline again with the best parameters
         self.fit(X_text)
 
+        logger.setLevel(logging_level)
 
         return best_params
 
