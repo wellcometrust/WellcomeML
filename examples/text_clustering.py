@@ -14,8 +14,6 @@ X = ['Wellcome Trust',
      'Crick Institute',
      'Francis Harry Crick']
 
-print(len(X))
-
 cluster.fit(X)
 print("Not very good clusters:")
 print([(x, cluster) for x, cluster in zip(X, cluster.cluster_ids)])
