@@ -237,7 +237,7 @@ class TextClustering(object):
             pipeline = Pipeline([('vectorizer', self.vectorizer),
                                  ('reducer', self.reducer_class),
                                  ('clustering', self.clustering_class)],
-                                 memory=memory)
+                                memory=memory)
 
             params = {
                 **{f'reducer__{key}': value for key, value in
