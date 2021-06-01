@@ -268,10 +268,10 @@ def test_XY_dataset_sparse_y():
     vec = KerasVectorizer()
     X_vec = vec.fit_transform(X)
 
-    data = tf.data.Dataset.from_tensor_slices((X_vec, Y))
-    data = data.shuffle(100, seed=42)
+    train_data = tf.data.Dataset.from_tensor_slices((X_vec, Y))
+    test_data = tf.data.Dataset.from_tensor_slices((X_vec))
     clf = CNNClassifier(
         batch_size=2, sparse_y=True, multilabel=True
     )
-    clf.fit(data)
-    assert clf.score(data, Y_sparse) > 0.3
+    clf.fit(train_data)
+    assert clf.score(test_data, Y_sparse) > 0.3
