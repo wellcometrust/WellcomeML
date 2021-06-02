@@ -14,6 +14,7 @@ This includes
 * Common API for off-the-shelf classifiers to allow quick iteration (e.g. Frequency Vectorizer, Bert, Scibert, basic CNN, BiLSTM)
 * Utils to download and convert academic text datasets for benchmark
 
+Check :ref:`examples` for some examples and :ref:`clustering` for clustering-specific documentation.
 
 Quickstart
 -------------------------------------
@@ -59,4 +60,5 @@ Indices and tables
    :hidden:
 
    Examples <examples>
+   Clustering text with WellcomeML <clustering>
    Core library documentation <wellcomeml>
