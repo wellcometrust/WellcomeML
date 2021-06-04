@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -90,6 +93,7 @@
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering text with WellcomeML</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="wellcomeml.html">Core library documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="wellcomeml.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="wellcomeml.datasets.html">wellcomeml.datasets package</a></li>
@@ -191,8 +195,8 @@
 <p>Whole test set and batchwise f1 metrics for use with keras</p>
 <p>Adapted from: <a class="reference external" href="https://www.kaggle.com/rejpalcz/best-loss-function-for-f1-score-metric">https://www.kaggle.com/rejpalcz/best-loss-function-for-f1-score-metric</a></p>
 <dl class="py function">
-<dt id="wellcomeml.metrics.f1.f1_loss">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.f1.</span></code><code class="sig-name descname"><span class="pre">f1_loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.f1.f1_loss" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.metrics.f1.f1_loss">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.f1.</span></span><span class="sig-name descname"><span class="pre">f1_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.f1.f1_loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate batchwise macro f1 loss</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">loss</span><span class="o">=</span><span class="n">f1_loss</span><span class="p">,</span>
@@ -204,8 +208,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="wellcomeml.metrics.f1.f1_metric">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.f1.</span></code><code class="sig-name descname"><span class="pre">f1_metric</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.f1.f1_metric" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.metrics.f1.f1_metric">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.f1.</span></span><span class="sig-name descname"><span class="pre">f1_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.f1.f1_metric" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate batchwise macro f1</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">loss</span><span class="o">=</span><span class="s2">&quot;binary_crossentropy&quot;</span><span class="p">,</span>
@@ -220,8 +224,8 @@
 <div class="section" id="module-wellcomeml.metrics.ner_classification_report">
 <span id="wellcomeml-metrics-ner-classification-report-module"></span><h2>wellcomeml.metrics.ner_classification_report module<a class="headerlink" href="#module-wellcomeml.metrics.ner_classification_report" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="wellcomeml.metrics.ner_classification_report.ner_classification_report">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.ner_classification_report.</span></code><code class="sig-name descname"><span class="pre">ner_classification_report</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.ner_classification_report.ner_classification_report" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.metrics.ner_classification_report.ner_classification_report">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.ner_classification_report.</span></span><span class="sig-name descname"><span class="pre">ner_classification_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.ner_classification_report.ner_classification_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the model’s performance for each grouping of data
 for the NER labels given in ‘tags’</p>
 <dl class="simple">
@@ -241,8 +245,8 @@ groups: (str) the group each of the pred or gold entities belong to</p>
 <div class="section" id="module-wellcomeml.metrics">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.metrics" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="wellcomeml.metrics.f1_loss">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.</span></code><code class="sig-name descname"><span class="pre">f1_loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.f1_loss" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.metrics.f1_loss">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.</span></span><span class="sig-name descname"><span class="pre">f1_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.f1_loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate batchwise macro f1 loss</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">loss</span><span class="o">=</span><span class="n">f1_loss</span><span class="p">,</span>
@@ -254,8 +258,8 @@ groups: (str) the group each of the pred or gold entities belong to</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="wellcomeml.metrics.f1_metric">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.</span></code><code class="sig-name descname"><span class="pre">f1_metric</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.f1_metric" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.metrics.f1_metric">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.</span></span><span class="sig-name descname"><span class="pre">f1_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.f1_metric" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate batchwise macro f1</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">loss</span><span class="o">=</span><span class="s2">&quot;binary_crossentropy&quot;</span><span class="p">,</span>
@@ -267,8 +271,8 @@ groups: (str) the group each of the pred or gold entities belong to</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="wellcomeml.metrics.ner_classification_report">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.</span></code><code class="sig-name descname"><span class="pre">ner_classification_report</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.ner_classification_report" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.metrics.ner_classification_report">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.metrics.</span></span><span class="sig-name descname"><span class="pre">ner_classification_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.metrics.ner_classification_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the model’s performance for each grouping of data
 for the NER labels given in ‘tags’</p>
 <dl class="simple">

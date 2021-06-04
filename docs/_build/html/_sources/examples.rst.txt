@@ -1,3 +1,5 @@
+.. _examples:
+
 Example usage
 ======================================
 Below are some examples of modules.

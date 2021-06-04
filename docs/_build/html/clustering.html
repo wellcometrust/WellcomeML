@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Clustering data with WellcomeML &mdash; WellcomeML 1.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="wellcomeml package" href="wellcomeml.html" />
+    <link rel="prev" title="Example usage" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> WellcomeML
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">WellcomeML’s documentation!</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Clustering text with WellcomeML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wellcomeml.html">Core library documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">WellcomeML</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Clustering data with WellcomeML</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/clustering.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="clustering-data-with-wellcomeml">
+<span id="clustering"></span><h1>Clustering data with WellcomeML<a class="headerlink" href="#clustering-data-with-wellcomeml" title="Permalink to this headline">¶</a></h1>
+<p>We have a module for clustering text data with custom transformations. The basic class is
+<code class="docutils literal notranslate"><span class="pre">TextClustering</span></code>, which you can import from <a class="reference internal" href="wellcomeml.ml.html#module-wellcomeml.ml.clustering" title="wellcomeml.ml.clustering"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wellcomeml.ml.clustering</span></code></a>.</p>
+<p>The pipeline usually consists of:</p>
+<ul class="simple">
+<li><p>A vectorizer (for example <a class="reference internal" href="wellcomeml.ml.html#wellcomeml.ml.frequency_vectorizer.WellcomeTfidf" title="wellcomeml.ml.frequency_vectorizer.WellcomeTfidf"><code class="xref py py-class docutils literal notranslate"><span class="pre">wellcomeml.ml.frequency_vectorizer.WellcomeTfidf</span></code></a>)</p></li>
+<li><p>A dimensionality reduction algorithm (usually <code class="docutils literal notranslate"><span class="pre">umap</span></code>)</p></li>
+<li><p>A clustering algorithm (usually <a class="reference external" href="https://scikit-learn.org/stable/modules/clustering.html">DBScan</a>, but virtually any of sklearn’s algorithms will work).</p></li>
+</ul>
+<p>You will initialise the clustering class by invoking:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wellcomeml.ml.clustering</span> <span class="kn">import</span> <span class="n">TextClustering</span>
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">TextClustering</span><span class="p">(</span>
+    <span class="n">embedding</span><span class="o">=</span><span class="s1">&#39;tf-idf&#39;</span><span class="p">,</span> <span class="c1"># Or bert</span>
+    <span class="n">reducer</span><span class="o">=</span><span class="s1">&#39;umap&#39;</span><span class="p">,</span> <span class="c1"># Or tsne</span>
+    <span class="n">clustering</span><span class="o">=</span><span class="s1">&#39;dbscan&#39;</span> <span class="c1"># Or kmeans, optics, hdbscan</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>If you want to change the basic parameters you can pass an additional argument <cite>params</cite>, that receives ‘embedding’, ‘reducer’ and ‘clustering’ as keys. For example,
+for changing the DBScan bandwitdh parameter to <cite>eps = 3</cite>, umap’s number of neighbors to 3 and to use Scibert pre-trained model you can</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;embedding&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;pretrained&#39;</span><span class="p">:</span> <span class="s1">&#39;scibert&#39;</span><span class="p">},</span>
+    <span class="s1">&#39;reducer&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+    <span class="s1">&#39;clustering&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;eps&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">TextClustering</span><span class="p">(</span>
+    <span class="n">embedding</span><span class="o">=</span><span class="s1">&#39;bert&#39;</span> <span class="c1"># Or bert</span>
+    <span class="n">reducer</span><span class="o">=</span><span class="s1">&#39;umap&#39;</span><span class="p">,</span>
+    <span class="n">clustering</span><span class="o">=</span><span class="s1">&#39;dbscan&#39;</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>There are a couple of ways to fit a model. You can just use the <cite>.fit()</cite> method, which will fit the whole pipeline, as above, or fit intermediate steps, e.g.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">TextClustering</span><span class="p">()</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Wellcome Trust&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;The Wellcome Trust&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;Sir Henry Wellcome&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;Francis Crick&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;Crick Institute&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;Francis Harry Crick&#39;</span><span class="p">]</span>
+
+<span class="n">cluster</span><span class="o">.</span><span class="n">fit_step</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s1">&#39;vectorizer&#39;</span><span class="p">)</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">fit_step</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="s1">&#39;reducer&#39;</span><span class="p">)</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">fit_step</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="s1">&#39;clustering&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The shape of the reduced points is </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">reduced_points</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">)</span>
+</pre></div>
+</div>
+<p>This is particularly useful if you want to access intermediate steps of the pipeline. Note how the subsequent steps after the vectorizer don’t need <cite>X</cite> to be passed.
+This is because the class stores them. Another <em>very cool</em> thing you can do if the reducer is uMAP is to pass a list of classes, y, so you will do <strong>supervised</strong> (or <strong>semi-supervised</strong>)
+dimensonality reduction. Check the <a class="reference external" href="https://umap-learn.readthedocs.io/en/latest/supervised.html">uMAP docs</a> for more info. The usage is <code class="docutils literal notranslate"><span class="pre">cluster.fit_step(y=[1,1,1,0,0,0],</span> <span class="pre">step='reducer')</span></code>.</p>
+<p>The third way of fitting a model is to use the optimiser. This function leverages sklearns grid search with a custom metric (silhouette score).
+Here is a full example for text clustering optimisation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wellcomeml.ml.clustering</span> <span class="kn">import</span> <span class="n">TextClustering</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">TextClustering</span><span class="p">()</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Wellcome Trust&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;The Wellcome Trust&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;Sir Henry Wellcome&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;Francis Crick&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;Crick Institute&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;Francis Harry Crick&#39;</span><span class="p">]</span>
+
+
+<span class="c1"># This is a better one. Let&#39;s optimise for silhouette</span>
+
+<span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
+ <span class="s1">&#39;reducer&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;min_dist&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+             <span class="s1">&#39;n_neighbors&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+             <span class="s1">&#39;metric&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;cosine&#39;</span><span class="p">,</span> <span class="s1">&#39;euclidean&#39;</span><span class="p">]},</span>
+ <span class="s1">&#39;clustering&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;min_samples&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+                <span class="s1">&#39;eps&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">]}</span>
+<span class="p">}</span>
+
+<span class="n">best_params</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">optimise</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Awesome clusters:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">([(</span><span class="n">x</span><span class="p">,</span> <span class="n">cluster</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">cluster</span><span class="o">.</span><span class="n">cluster_ids</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Keywords:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">cluster_kws</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After clustering, you can save or load models using <code class="docutils literal notranslate"><span class="pre">cluster.save()</span></code> and <code class="docutils literal notranslate"><span class="pre">cluster.load()</span></code>.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="wellcomeml.html" class="btn btn-neutral float-right" title="wellcomeml package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="examples.html" class="btn btn-neutral float-left" title="Example usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Wellcome Data Labs.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

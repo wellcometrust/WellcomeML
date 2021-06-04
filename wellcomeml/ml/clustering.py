@@ -31,7 +31,7 @@ CACHE_DIR = os.path.expanduser("~/.cache/wellcomeml")
 
 class TextClustering(object):
     """
-    Class
+    Basic class for clustering pipelines.
 
     Attributes:
         vectorizer: The embedding Vectorizer object
@@ -185,24 +185,24 @@ class TextClustering(object):
         steps (vectorizer and reducer) more than necessary.
 
         Args:
-            X: A list of texts to be clustered
-            param_grid: A parameter grid, example:
+            X (iterable[str]): A list of texts to be clustered
 
-            param_grid = {'reducer': {'min_dist': [0.0, 0.2], 'n_neighbors': [
-            2,3,5], 'metric': ['cosine', 'euclidean']},
-            'clustering': {'min_samples': [2, 5], 'eps': [0.5, 1, 1.5]}}
+            param_grid (dict) : A parameter grid, example:
+                param_grid = {'reducer': {'min_dist': [0.0, 0.2], 'n_neighbors': [2,3,5],
+                'metric': ['cosine', 'euclidean']},
+                'clustering': {'min_samples': [2, 5], 'eps': [0.5, 1, 1.5]}}
 
-            n_cluster_range (2-uple of ints): A 2-uple describing the
-            max and min number of clusters (e.g.: (10, 20)). If unset,
-            will just choose the best silhopuette
+            n_cluster_range (2-uple of ints): A 2-uple describing the max and min number
+                of clusters (e.g.: (10, 20)). If unset, will just choose the best silhouette
 
-            max_noise (float in [0,1]): The maximum fraction of points
-            unclustered. Default: 0.2
+            max_noise (float in [0,1]): The maximum fraction of points unclustered. Default: 0.2
 
         Returns:
-            A dictionary containing "params_list", "silhouette" (the
-            silhouete for each parameter) and "best_clustering" (the best
-            clustering parameters)
+            dict: A dictionary of results.
+
+            The function returns a dictionary containing  "params_list", "silhouette"
+            (the silhouette for each parameter) and "best_clustering"
+            (the best clustering parameters)
 
         """
 

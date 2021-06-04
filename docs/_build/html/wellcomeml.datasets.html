@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -90,6 +93,7 @@
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering text with WellcomeML</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="wellcomeml.html">Core library documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="wellcomeml.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">wellcomeml.datasets package</a><ul>
@@ -191,8 +195,8 @@
 <div class="section" id="module-wellcomeml.datasets.conll">
 <span id="wellcomeml-datasets-conll-module"></span><h2>wellcomeml.datasets.conll module<a class="headerlink" href="#module-wellcomeml.datasets.conll" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="wellcomeml.datasets.conll.load_conll">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.conll.</span></code><code class="sig-name descname"><span class="pre">load_conll</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'conll'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.conll.load_conll" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.datasets.conll.load_conll">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.conll.</span></span><span class="sig-name descname"><span class="pre">load_conll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'conll'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.conll.load_conll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the conll dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -213,8 +217,8 @@ only be altered for test purposes in which case it should be set to
 <div class="section" id="module-wellcomeml.datasets.download">
 <span id="wellcomeml-datasets-download-module"></span><h2>wellcomeml.datasets.download module<a class="headerlink" href="#module-wellcomeml.datasets.download" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="wellcomeml.datasets.download.check_cache_and_download">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.download.</span></code><code class="sig-name descname"><span class="pre">check_cache_and_download</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.download.check_cache_and_download" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.datasets.download.check_cache_and_download">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.download.</span></span><span class="sig-name descname"><span class="pre">check_cache_and_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.download.check_cache_and_download" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if dataset_name is cached and return complete path</p>
 </dd></dl>
 
@@ -222,21 +226,21 @@ only be altered for test purposes in which case it should be set to
 <div class="section" id="module-wellcomeml.datasets.hoc">
 <span id="wellcomeml-datasets-hoc-module"></span><h2>wellcomeml.datasets.hoc module<a class="headerlink" href="#module-wellcomeml.datasets.hoc" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="wellcomeml.datasets.hoc.load_hoc">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.hoc.</span></code><code class="sig-name descname"><span class="pre">load_hoc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.hoc.load_hoc" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.datasets.hoc.load_hoc">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.hoc.</span></span><span class="sig-name descname"><span class="pre">load_hoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.hoc.load_hoc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="wellcomeml.datasets.hoc.load_split">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.hoc.</span></code><code class="sig-name descname"><span class="pre">load_split</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.hoc.load_split" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.datasets.hoc.load_split">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.hoc.</span></span><span class="sig-name descname"><span class="pre">load_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.hoc.load_split" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 <div class="section" id="module-wellcomeml.datasets.winer">
 <span id="wellcomeml-datasets-winer-module"></span><h2>wellcomeml.datasets.winer module<a class="headerlink" href="#module-wellcomeml.datasets.winer" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="wellcomeml.datasets.winer.create_train_test">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.winer.</span></code><code class="sig-name descname"><span class="pre">create_train_test</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NE_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vocab_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docs_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_processed_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_processed_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rand_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.create_train_test" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.datasets.winer.create_train_test">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.winer.</span></span><span class="sig-name descname"><span class="pre">create_train_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NE_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vocab_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docs_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_processed_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_processed_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rand_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.create_train_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to transform the raw WiNER datasets into training
 and testing datasets suitable for training a NER model.
 This NE_path file gives the entities, but they need to be linked
@@ -273,26 +277,26 @@ document</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="wellcomeml.datasets.winer.load_winer">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.winer.</span></code><code class="sig-name descname"><span class="pre">load_winer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_entities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.load_winer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.datasets.winer.load_winer">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.winer.</span></span><span class="sig-name descname"><span class="pre">load_winer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_entities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.load_winer" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="wellcomeml.datasets.winer.yield_article_entities">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.winer.</span></code><code class="sig-name descname"><span class="pre">yield_article_entities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.yield_article_entities" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.datasets.winer.yield_article_entities">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.winer.</span></span><span class="sig-name descname"><span class="pre">yield_article_entities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.yield_article_entities" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="wellcomeml.datasets.winer.yield_merged_entities">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.winer.</span></code><code class="sig-name descname"><span class="pre">yield_merged_entities</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entities</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.yield_merged_entities" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.datasets.winer.yield_merged_entities">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.winer.</span></span><span class="sig-name descname"><span class="pre">yield_merged_entities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entities</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.winer.yield_merged_entities" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 <div class="section" id="module-wellcomeml.datasets">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.datasets" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="wellcomeml.datasets.load_hoc">
-<code class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.</span></code><code class="sig-name descname"><span class="pre">load_hoc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.load_hoc" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.datasets.load_hoc">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.datasets.</span></span><span class="sig-name descname"><span class="pre">load_hoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.datasets.load_hoc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

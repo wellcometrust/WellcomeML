@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -90,6 +93,7 @@
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering text with WellcomeML</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="wellcomeml.html">Core library documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="wellcomeml.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="wellcomeml.datasets.html">wellcomeml.datasets package</a></li>
@@ -188,13 +192,13 @@
 <div class="section" id="module-wellcomeml.spacy.spacy_doc_to_prodigy">
 <span id="wellcomeml-spacy-spacy-doc-to-prodigy-module"></span><h2>wellcomeml.spacy.spacy_doc_to_prodigy module<a class="headerlink" href="#module-wellcomeml.spacy.spacy_doc_to_prodigy" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.spacy.spacy_doc_to_prodigy.</span></code><code class="sig-name descname"><span class="pre">SpacyDocToProdigy</span></code><a class="headerlink" href="#wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wellcomeml.spacy.spacy_doc_to_prodigy.</span></span><span class="sig-name descname"><span class="pre">SpacyDocToProdigy</span></span><a class="headerlink" href="#wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Convert spacy documents into prodigy format</p>
 <dl class="py method">
-<dt id="wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy.return_one_prodigy_doc">
-<code class="sig-name descname"><span class="pre">return_one_prodigy_doc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy.return_one_prodigy_doc" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy.return_one_prodigy_doc">
+<span class="sig-name descname"><span class="pre">return_one_prodigy_doc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy.return_one_prodigy_doc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given one spacy document, yield a prodigy style dict</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -210,8 +214,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy.run">
-<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy.run" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.spacy.spacy_doc_to_prodigy.SpacyDocToProdigy.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cycle through docs and return prodigy docs.</p>
 </dd></dl>
 
@@ -221,13 +225,13 @@
 <div class="section" id="module-wellcomeml.spacy">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.spacy" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="wellcomeml.spacy.SpacyDocToProdigy">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wellcomeml.spacy.</span></code><code class="sig-name descname"><span class="pre">SpacyDocToProdigy</span></code><a class="headerlink" href="#wellcomeml.spacy.SpacyDocToProdigy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.spacy.SpacyDocToProdigy">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wellcomeml.spacy.</span></span><span class="sig-name descname"><span class="pre">SpacyDocToProdigy</span></span><a class="headerlink" href="#wellcomeml.spacy.SpacyDocToProdigy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Convert spacy documents into prodigy format</p>
 <dl class="py method">
-<dt id="wellcomeml.spacy.SpacyDocToProdigy.return_one_prodigy_doc">
-<code class="sig-name descname"><span class="pre">return_one_prodigy_doc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.spacy.SpacyDocToProdigy.return_one_prodigy_doc" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.spacy.SpacyDocToProdigy.return_one_prodigy_doc">
+<span class="sig-name descname"><span class="pre">return_one_prodigy_doc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.spacy.SpacyDocToProdigy.return_one_prodigy_doc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given one spacy document, yield a prodigy style dict</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -243,8 +247,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="wellcomeml.spacy.SpacyDocToProdigy.run">
-<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.spacy.SpacyDocToProdigy.run" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wellcomeml.spacy.SpacyDocToProdigy.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">docs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.spacy.SpacyDocToProdigy.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cycle through docs and return prodigy docs.</p>
 </dd></dl>
 
