@@ -6,10 +6,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      TF_CPP_MIN_LOG_LEVEL=2
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9]
-
+        test-suite: ["bert", "not bert"]
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python ${{ matrix.python-version }}
@@ -21,5 +23,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install tox tox-gh-actions
     - name: Test with tox
+      env:
+        TEST_SUITE: ${{ matrix.test-suite }}
       run: tox
 
