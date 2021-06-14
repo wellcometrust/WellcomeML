@@ -1,27 +1,34 @@
 .DEFAULT_GOAL := all
 
 VIRTUALENV := build/virtualenv
-PYTHON_VERSION := C://Python38/python
 
-$(VIRTUALENV)\.installed:
+UNAME := $(shell uname)
+
+ifeq ($(UNAME), Windows_NT)
+	PYTHON_VERSION := C://Python38/python
+	VENV_BIN := $(VIRTUALENV)/Scripts
+else
+	PYTHON_VERSION := python3.8
+	VENV_BIN := $(VIRTUALENV)/bin
+endif
+
+$(VIRTUALENV)/.installed:
 	@if [ -d $(VIRTUALENV) ]; then rm -rf $(VIRTUALENV); fi
 	@mkdir -p $(VIRTUALENV)
 	$(PYTHON_VERSION) -m venv $(VIRTUALENV)
-
-	$(VIRTUALENV)/Scripts/pip3 install -e .[deep-learning]
-
-	$(VIRTUALENV)/Scripts/pip3 install -r requirements_test.txt
-	$(VIRTUALENV)/Scripts/pip3 install -r docs\requirements.txt
-	$(VIRTUALENV)/Scripts/pip3 install hdbscan --no-cache-dir --no-build-isolation
+	$(VENV_BIN)/pip3 install -r requirements_test.txt
+	$(VENV_BIN)/pip3 install -r docs/requirements.txt
+	$(VENV_BIN)/pip3 install -e .[deep-learning]
+	$(VENV_BIN)/pip3 install hdbscan --no-cache-dir --no-build-isolation
 	touch $@
 
 .PHONY: update-docs
 update-docs:
-	$(VIRTUALENV)\Scripts\sphinx-apidoc --no-toc -d 5 -H WellcomeML -o .\docs -f wellcomeml
-	. $(VIRTUALENV)\Scripts\activate && cd docs && make html
+	$(VENV_BIN)/sphinx-apidoc --no-toc -d 5 -H WellcomeML -o .\docs -f wellcomeml
+	. $(VENV_BIN)/activate && cd docs && make html
 
 .PHONY: virtualenv
-virtualenv: $(VIRTUALENV)\.installed
+virtualenv: $(VIRTUALENV)/.installed
 
 .PHONY: dist
 dist: update-docs
@@ -29,38 +36,38 @@ dist: update-docs
 
 # Spacy is require for testing spacy_to_prodigy
 
-$(VIRTUALENV)\.models:
-	$(VIRTUALENV)\Scripts\python -m spacy download en_core_web_sm
+$(VIRTUALENV)/.models:
+	$(VENV_BIN)/python -m spacy download en_core_web_sm
 	touch $@
 
-$(VIRTUALENV)\.deep_learning_models:
-#	$(VIRTUALENV)\Scripts\python -m spacy download en_trf_bertbaseuncased_lg
+$(VIRTUALENV)/.deep_learning_models:
+#	$(VENV_BIN)/python -m spacy download en_trf_bertbaseuncased_lg
 	touch $@
 
-$(VIRTUALENV)\.non_pypi_packages:
+$(VIRTUALENV)/.non_pypi_packages:
 	git clone https://github.com/epfml/sent2vec.git
-	$(VIRTUALENV)\Scripts\pip install sent2vec
+	$(VENV_BIN)/pip install sent2vec
 	touch $@
 
 .PHONY: download_models
-download_models: $(VIRTUALENV)\.installed $(VIRTUALENV)\.models
+download_models: $(VIRTUALENV)/.installed $(VIRTUALENV)/.models
 
 .PHONY: download_deep_learning_models
-download_deep_learning_models: $(VIRTUALENV)\.models $(VIRTUALENV)\.deep_learning_models
+download_deep_learning_models: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models
 
 .PHONY: download_nonpypi_packages
-download_nonpypi_packages: $(VIRTUALENV)\.installed $(VIRTUALENV)\.non_pypi_packages
+download_nonpypi_packages: $(VIRTUALENV)/.installed $(VIRTUALENV)/.non_pypi_packages
 
 .PHONY: test
-test: $(VIRTUALENV)\.models $(VIRTUALENV)\.deep_learning_models $(VIRTUALENV)\.non_pypi_packages
-	$(VIRTUALENV)\Scripts\tox
+test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models $(VIRTUALENV)/.non_pypi_packages
+	$(VENV_BIN)/tox
 
 .PHONY: test-integrations
 test-integrations:
-	$(VIRTUALENV)\Scripts\pytest -m "integration" -s -v --disable-warnings --tb=line ./tests
+	$(VENV_BIN)/pytest -m "integration" -s -v --disable-warnings --tb=line ./tests
 
 .PHONY: run_codecov
 run_codecov:
-	$(VIRTUALENV)\Scripts\python -m codecov
+	$(VENV_BIN)/python -m codecov
 
 all: virtualenv
