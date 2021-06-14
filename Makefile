@@ -1,22 +1,30 @@
 .DEFAULT_GOAL := all
 
 VIRTUALENV := build/virtualenv
-PYTHON_VERSION := python3.8
+
+ifeq ($(OS), Windows_NT)
+	# for CYGWIN*|MINGW32*|MSYS*|MINGW*
+	PYTHON_VERSION := C://Python38/python
+	VENV_BIN := $(VIRTUALENV)/Scripts
+else
+	PYTHON_VERSION := python3.8
+	VENV_BIN := $(VIRTUALENV)/bin
+endif
 
 $(VIRTUALENV)/.installed:
 	@if [ -d $(VIRTUALENV) ]; then rm -rf $(VIRTUALENV); fi
 	@mkdir -p $(VIRTUALENV)
-	virtualenv --python $(PYTHON_VERSION) $(VIRTUALENV)
-	$(VIRTUALENV)/bin/pip3 install -r requirements_test.txt
-	$(VIRTUALENV)/bin/pip3 install -r docs/requirements.txt # Installs requirements to docs
-	$(VIRTUALENV)/bin/pip3 install -e .[deep-learning]
-	$(VIRTUALENV)/bin/pip3 install hdbscan --no-cache-dir --no-binary :all: --no-build-isolation
+	$(PYTHON_VERSION) -m venv $(VIRTUALENV)
+	$(VENV_BIN)/pip3 install -r requirements_test.txt
+	$(VENV_BIN)/pip3 install -r docs/requirements.txt # Installs requirements to docs
+	$(VENV_BIN)/pip3 install -e .[deep-learning]
+	$(VENV_BIN)/pip3 install hdbscan --no-cache-dir --no-binary :all: --no-build-isolation
 	touch $@
 
 .PHONY: update-docs
 update-docs:
-	$(VIRTUALENV)/bin/sphinx-apidoc --no-toc -d 5 -H WellcomeML -o ./docs -f wellcomeml
-	. $(VIRTUALENV)/bin/activate && cd docs && make html
+	$(VENV_BIN)/sphinx-apidoc --no-toc -d 5 -H WellcomeML -o ./docs -f wellcomeml
+	. $(VENV_BIN)/activate && cd docs && make html
 
 .PHONY: virtualenv
 virtualenv: $(VIRTUALENV)/.installed
@@ -28,15 +36,18 @@ dist: update-docs
 # Spacy is require for testing spacy_to_prodigy
 
 $(VIRTUALENV)/.models:
-	$(VIRTUALENV)/bin/python -m spacy download en_core_web_sm
+	$(VENV_BIN)/python -m spacy download en_core_web_sm
 	touch $@
 
 $(VIRTUALENV)/.deep_learning_models:
-#	$(VIRTUALENV)/bin/python -m spacy download en_trf_bertbaseuncased_lg
+#	$(VENV_BIN)/python -m spacy download en_trf_bertbaseuncased_lg
 	touch $@
 
 $(VIRTUALENV)/.non_pypi_packages:
-	$(VIRTUALENV)/bin/pip install git+https://github.com/epfml/sent2vec.git
+	# Install from local git directory - pip install [address] fails on Windows
+	git clone https://github.com/epfml/sent2vec.git
+	$(VENV_BIN)/pip install sent2vec
+	@rm -rf sent2vec
 	touch $@
 
 .PHONY: download_models
@@ -50,14 +61,14 @@ download_nonpypi_packages: $(VIRTUALENV)/.installed $(VIRTUALENV)/.non_pypi_pack
 
 .PHONY: test
 test: $(VIRTUALENV)/.models $(VIRTUALENV)/.deep_learning_models $(VIRTUALENV)/.non_pypi_packages
-	$(VIRTUALENV)/bin/tox
+	$(VENV_BIN)/tox
 
 .PHONY: test-integrations
 test-integrations:
-	$(VIRTUALENV)/bin/pytest -m "integration" -s -v --disable-warnings --tb=line ./tests
+	$(VENV_BIN)/pytest -m "integration" -s -v --disable-warnings --tb=line ./tests
 
 .PHONY: run_codecov
 run_codecov:
-	$(VIRTUALENV)/bin/python -m codecov
+	$(VENV_BIN)/python -m codecov
 
-all: virtualenv
+all: virtualenv test
