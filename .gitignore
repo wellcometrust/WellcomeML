@@ -22,3 +22,4 @@ logs/*
 .tox/
 .python-version
 
+sent2vec
