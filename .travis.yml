@@ -17,6 +17,7 @@ env:
 
   global:
     - TF_CPP_MIN_LOG_LEVEL=2
+    - DISABLE_DIRECT_IMPORTS=1
 
 script:
   - pip freeze
