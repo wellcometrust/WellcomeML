@@ -22,14 +22,13 @@ RETRY_BACKOFF_MAX = 310
 class EPMCClient:
 
     EPMC_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest"
-    
+
     def __init__(self, api_endpoint=EPMC_URL, max_retries=60, log_level=logging.INFO):
         self.api_endpoint = api_endpoint
         self.max_retries = max_retries
 
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
-
 
     def requests_session(self, adapter_kwargs=None):
         """
@@ -46,8 +45,6 @@ class EPMCClient:
             max_retries=retries, **adapter_kwargs)
                       )
         return session
-
-
 
     def _execute_query(self, session, params, only_first=True):
         """
@@ -67,7 +64,6 @@ class EPMCClient:
                                 "dictionary. Will be deprecated in the future"
                                 " and a list of arguments will be"
                                 " returned by default.")
-
 
         epmc_search_url = "/".join([self.api_endpoint, "search"])
 
@@ -106,7 +102,6 @@ class EPMCClient:
             )
             return None
 
-
     def search(self, session, query, result_type='core', page_size=10,
                only_first=True, **kwargs):
         """ Fetches metadata from EPMC's REST API for a query. """
@@ -126,7 +121,6 @@ class EPMCClient:
         query = "doi:%s" % doi
         return self.search(session, query, only_first=True, **kwargs)
 
-
     def search_by_pmid(self, session, pmid, **kwargs):
         query = "ext_id:%s" % pmid
         return self.search(session, query, only_first=True, **kwargs)
@@ -144,7 +138,7 @@ class EPMCClient:
     def search_by_pmcids(self, session, pmcids, **kwargs):
         query = "pmcid:%s" % '"' + '" OR pmcid:"'.join(pmcids) + '"'
         return self.search(session, query, only_first=False, **kwargs)
-        
+
     def search_by_dois(self, session, dois, **kwargs):
         """
         Args:
@@ -156,7 +150,6 @@ class EPMCClient:
         """
         query = '"' + '" OR "'.join(dois) + '"'
         return self.search(session=session, query=query, only_first=False, **kwargs)
-
 
     def get_full_text(self, session, pmid):
         """ Fetches full text from EPMC's REST API for a given pmid. """
@@ -189,7 +182,8 @@ class EPMCClient:
 
     def get_references(self, session, pub_id, source='MED'):
         """
-        Fetches references from EPMC's REST API for a given publication pub_id and source (e.g. 'MED')
+        Fetches references from EPMC's REST API for a given publication pub_id and source
+        (e.g. 'MED')
         """
         params = {"format": "json", "page": 1, "pageSize": 1000}
 
@@ -226,7 +220,8 @@ class EPMCClient:
 
     def get_citations(self, session, pub_id, source='MED'):
         """
-        Fetches citations from EPMC's REST API for a given publication pub_id and source (e.g. 'MED')
+        Fetches citations from EPMC's REST API for a given publication pub_id and source
+        (e.g. 'MED')
         """
 
         params = {"format": "json", "page": 1, "pageSize": 1000}
@@ -263,16 +258,17 @@ class EPMCClient:
             return None
 
 
-
 if __name__ == "__main__":
     logging.basicConfig()
     logger.setLevel(logging.INFO)
 
     parser = argparse.ArgumentParser(description=__doc__.strip())
 
-    parser.add_argument("--fields", help="A list of fields from EPMC API to parse."
-                                         " By default downloads all fields if parameter is ommited.",
-                        required=False)
+    parser.add_argument(
+        "--fields",
+        help="A list of fields from EPMC API to parse."
+             " By default downloads all fields if parameter is ommited.",
+        required=False)
     parser.add_argument("input", help="A newline-delimited list of DOIs")
     parser.add_argument("output", help="Output file (jsonL)")
 
