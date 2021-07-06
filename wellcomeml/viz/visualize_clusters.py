@@ -18,7 +18,9 @@ def visualize_clusters(reduced_points: list):
     """
 
     blue_wellcome = str(Wellcome33[0])
-    TOOLS = "hover, crosshair, pan, wheel_zoom, zoom_in, zoom_out, box_zoom, undo, redo, reset, tap, save, box_select, poly_select, lasso_select, "
+    TOOLS = ('hover, crosshair, pan, wheel_zoom, zoom_in, zoom_out,'
+             'box_zoom, undo, redo, reset, tap, save, box_select,'
+             'poly_select, lasso_select,')
     TOOLTIPS = [("index", "$index"), ("(x,y)", "($x, $y)"), ]
 
     p = figure(tools=TOOLS, tooltips=TOOLTIPS)
