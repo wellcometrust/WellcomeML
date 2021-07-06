@@ -6,7 +6,6 @@ except ImportError as e:
     throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
 
 
-
 class SelfAttention(tf.keras.layers.Layer):
     """https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf"""
 
