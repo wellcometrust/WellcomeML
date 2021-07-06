@@ -3,8 +3,6 @@ Implements KerasTokenizer that abstracts Keras tokenisation
 and encoding and KerasVectorizer that is sklearn compatible
 """
 from sklearn.base import BaseEstimator, TransformerMixin
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import gensim.downloader as api
 
@@ -12,6 +10,14 @@ from os import path
 import logging
 
 from wellcomeml.ml.transformers_tokenizer import TransformersTokenizer
+from wellcomeml.utils import throw_extra_import_message
+
+try:
+    from tensorflow.keras.preprocessing.text import Tokenizer
+    from tensorflow.keras.preprocessing.sequence import pad_sequences
+except ImportError as e:
+    throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
+
 
 logger = logging.getLogger(__name__)
 

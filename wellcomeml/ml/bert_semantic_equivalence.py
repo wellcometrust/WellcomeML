@@ -3,7 +3,6 @@ from datetime import datetime
 import math
 import os
 
-import tensorflow as tf
 from transformers import BertConfig, BertTokenizer, \
     TFBertForSequenceClassification
 
@@ -14,6 +13,12 @@ from sklearn.exceptions import NotFittedError
 
 from wellcomeml.ml.keras_utils import CategoricalMetrics, MetricMiniBatchHistory
 from wellcomeml.logger import LOGGING_LEVEL, build_logger
+from wellcomeml.utils import throw_extra_import_message
+
+try:
+    import tensorflow as tf
+except ImportError as e:
+    throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
 
 TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 CALLBACK_DICT = {
