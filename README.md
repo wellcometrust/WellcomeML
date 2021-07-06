@@ -132,7 +132,7 @@ more information that might be informative to resolve the issue.
 | wellcomeml.ml.bilstm | BILSTM Text classifier | tensorflow |
 | wellcomeml.ml.clustering | Text clustering pipeline | NA |
 | wellcomeml.ml.cnn | CNN Text Classifier | tensorflow |
-|  wellcomeml.ml.doc2vec_vectorizer | Text vectorizer based on doc2vec | NA |
+| wellcomeml.ml.doc2vec_vectorizer | Text vectorizer based on doc2vec | NA |
 | wellcomeml.ml.frequency_vectorizer | Text vectorizer based on TF-IDF | NA |
 | wellcomeml.ml.keras_utils | Utils for computing metrics during training | tensorflow |
 | wellcomeml.ml.keras_vectorizer | Text vectorizer based on Keras | tensorflow |
@@ -144,5 +144,5 @@ more information that might be informative to resolve the issue.
 | wellcomeml.ml.spacy_ner | Named entity recognition classifier based on spacy | spacy |
 | wellcomeml.ml.transformers_tokenizer | Bespoke tokenizer based on transformers | Transformers |
 | wellcomeml.ml.vectorizer | Abstract class for vectorizers | NA |
-| wellcomeml.ml.voting_classifier | Meta-classifier based on majority voting | NA| 
+| wellcomeml.ml.voting_classifier | Meta-classifier based on majority voting | NA | 
 
