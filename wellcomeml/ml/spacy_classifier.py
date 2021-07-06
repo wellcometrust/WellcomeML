@@ -11,7 +11,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_recall_fscore_support
 from scipy.sparse import csr_matrix
 import numpy as np
-import torch
 
 import logging
 import random
@@ -25,6 +24,11 @@ try:
     import spacy
 except ImportError as e:
     throw_extra_import_message(error=e, required_module='spacy', extra='spacy')
+
+try:
+    import torch
+except ImportError as e:
+    throw_extra_import_message(error=e, extra="torch", required_module="torch")
 
 
 logger = logging.getLogger(__name__)

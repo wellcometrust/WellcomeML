@@ -7,10 +7,14 @@ import logging
 from transformers import BertModel, BertTokenizer
 from sklearn.base import BaseEstimator, TransformerMixin
 import numpy as np
-import torch
 import tqdm
 
-from wellcomeml.utils import check_cache_and_download
+from wellcomeml.utils import check_cache_and_download, throw_extra_import_message
+
+try:
+    import torch
+except ImportError as e:
+    throw_extra_import_message(error=e, extra="torch", required_module="torch")
 
 logger = logging.getLogger(__name__)
 
