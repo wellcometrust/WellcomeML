@@ -1,8 +1,5 @@
-from bokeh.plotting import figure, show
-from wellcomeml.viz.palettes import Wellcome33
-from bokeh.io import output_notebook
-output_notebook()
-
+from bokeh.plotting import figure, output_file, show
+from wellcomeml.viz.palettes import Wellcome33, WellcomeBackground
 
 def visualize_clusters(reduced_points: list):
 
@@ -13,19 +10,22 @@ def visualize_clusters(reduced_points: list):
         List of list of reduced points. Available at cluster.reduced_points
 
     Returns:
-        p
+        None (prints a bokeh figure to file or to notebook)
 
     """
 
     blue_wellcome = str(Wellcome33[0])
-    TOOLS = ('hover, crosshair, pan, wheel_zoom, zoom_in, zoom_out,'
-             'box_zoom, undo, redo, reset, tap, save, box_select,'
-             'poly_select, lasso_select,')
+    well_background = str(WellcomeBackground)
+    TOOLS = ('hover, pan, wheel_zoom, zoom_in, zoom_out, reset, save')
     TOOLTIPS = [("index", "$index"), ("(x,y)", "($x, $y)"), ]
 
-    p = figure(tools=TOOLS, tooltips=TOOLTIPS)
+    p = figure(title="Cluster visualisation", toolbar_location="above",
+               tools=TOOLS, tooltips=TOOLTIPS,
+               background_fill_color=well_background)
 
-    p.scatter(reduced_points[:, 0], reduced_points[:, 1], radius=0.30,
+    p.scatter(reduced_points[0], reduced_points[1], radius=0.30,
               fill_color=blue_wellcome, line_color=None, alpha=0.5)
+
+    output_file("cluster_viz.html")
 
     show(p)
