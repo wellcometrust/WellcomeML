@@ -1,10 +1,10 @@
+
 import sys
 from unittest import mock
 
-from importlib import import_module
+from importlib import import_module, reload
 
 import pytest
-
 
 extra_checks = {
     'tensorflow': [
@@ -20,7 +20,9 @@ extra_checks = {
     'torch': [
         # 'wellcomeml.ml.bert_vectorizer',
         # Not working properly yet - reloading the module causes a different error than ImportError
-        'wellcomeml.ml.spacy_classifier'
+        'wellcomeml.ml.spacy_classifier',
+        'wellcomeml.ml.similarity_entity_liking',
+        #'wellcomeml.ml.bert_semantic_equivalence'
     ],
     'spacy': [
         'wellcomeml.ml.spacy_classifier',
@@ -36,15 +38,13 @@ module_extra_pairs = [
 ]
 
 
-def extra_import_check(module_name, extra_name):
-    with mock.patch.dict(sys.modules, {extra_name: None}):
-        import_module(module_name)
-
-
 @pytest.mark.extras
 @pytest.mark.parametrize("module_name,extra_name", module_extra_pairs)
 def test_dependencies(module_name, extra_name):
     """ Tests that importing the module, in the absence of the extra, throws an error """
+
     with mock.patch.dict(sys.modules, {extra_name: None}):
         with pytest.raises(ImportError):
-            extra_import_check(module_name=module_name, extra_name=extra_name)
+            _tmp_module = import_module(module_name)
+            if module_name in sys.modules:
+                reload(_tmp_module)
