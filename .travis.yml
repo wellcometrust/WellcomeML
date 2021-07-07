@@ -12,9 +12,8 @@ install:
 
 env:
   jobs:
-    - TEST_SUITE='bert and not extras'
-    - TEST_SUITE='not bert and not extras'
-    - TEST_SUITE='extras'
+    - TEST_SUITE='bert'
+    - TEST_SUITE='not bert'
 
   global:
     - TF_CPP_MIN_LOG_LEVEL=2
