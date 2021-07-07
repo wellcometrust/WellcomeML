@@ -13,11 +13,13 @@ extra_checks = {
         'wellcomeml.ml.bilstm',
         'wellcomeml.ml.cnn',
         'wellcomeml.ml.keras_utils',
-        #'wellcomeml.ml.keras_vectorizer',
+        # 'wellcomeml.ml.keras_vectorizer',
+        # Not working properly yet - reloading the module causes a different errot han ImportError
         'wellcomeml.ml.similarity_entity_liking'
     ],
     'torch': [
-        #'wellcomeml.ml.bert_vectorizer',
+        # 'wellcomeml.ml.bert_vectorizer',
+        # Not working properly yet - reloading the module causes a different error than ImportError
         'wellcomeml.ml.spacy_classifier'
     ],
     'spacy': [
@@ -39,6 +41,7 @@ def extra_import_check(module_name, extra_name):
         import_module(module_name)
 
 
+@pytest.mark.extras
 @pytest.mark.parametrize("module_name,extra_name", module_extra_pairs)
 def test_dependencies(module_name, extra_name):
     """ Tests that importing the module, in the absence of the extra, throws an error """
