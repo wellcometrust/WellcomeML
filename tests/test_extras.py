@@ -22,7 +22,7 @@ extra_checks = {
         # Not working properly yet - reloading the module causes a different error than ImportError
         'wellcomeml.ml.spacy_classifier',
         'wellcomeml.ml.similarity_entity_liking',
-        #'wellcomeml.ml.bert_semantic_equivalence'
+        # 'wellcomeml.ml.bert_semantic_equivalence'
     ],
     'spacy': [
         'wellcomeml.ml.spacy_classifier',
