@@ -6,6 +6,7 @@ from wellcomeml.viz.palettes import Wellcome33, WellcomeBackground
 def visualize_clusters(reduced_points: list, RADIUS: float,
                        ALPHA: float, output_in_notebook: bool):
 
+
     """
     Visualises clusters and shows basic information
     Args:
