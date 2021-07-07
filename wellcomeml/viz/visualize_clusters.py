@@ -10,7 +10,7 @@ def visualize_clusters(reduced_points: list):
         List of list of reduced points. Available at cluster.reduced_points
 
     Returns:
-        None (prints a bokeh figure to file or to notebook)
+        None prints a bokeh figure to html file in new page
 
     """
 
