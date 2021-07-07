@@ -2,8 +2,6 @@
 Client library for the EPMC REST API.
 """
 import logging
-import argparse
-import json
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -151,19 +149,22 @@ class EPMCClient:
         query = '"' + '" OR "'.join(dois) + '"'
         return self.search(session=session, query=query, only_first=False, **kwargs)
 
+    def _get_response_content(self, session, epmc_fulltext_url):
+        response = session.get(epmc_fulltext_url)
+        response.raise_for_status()
+        # NB: requests will not reliably guess the encoding, and
+        # we're passing the response directly into LXML, which will
+        # happily parse bytes as well as str. Thus use response.content
+        # (bytes), not response.text (str).
+        return response.content
+
     def get_full_text(self, session, pmid):
         """ Fetches full text from EPMC's REST API for a given pmid. """
         try:
             epmc_fulltext_url = "/".join(
                 [self.api_endpoint, str(pmid), "fullTextXML"]
             )
-            response = session.get(epmc_fulltext_url)
-            response.raise_for_status()
-            # NB: requests will not reliably guess the encoding, and
-            # we're passing the response directly into LXML, which will
-            # happily parse bytes as well as str. Thus use response.content
-            # (bytes), not response.text (str).
-            return response.content
+            return self._get_response_content(session, epmc_fulltext_url)
         except requests.RequestException as e:
             if hasattr(e, 'response'):
                 if e.response.status_code == 404:
@@ -179,6 +180,14 @@ class EPMCClient:
                     )
             raise
         return None
+
+    def _get_response_json(self, session, epmc_references_url, params):
+        response = session.get(
+            epmc_references_url,
+            params=params
+        )
+        response_json = response.json()
+        return response_json
 
     def get_references(self, session, pub_id, source='MED'):
         """
@@ -196,17 +205,13 @@ class EPMCClient:
 
         while go_to_next_page:
             try:
-                response = session.get(
-                    epmc_references_url,
-                    params=params
-                )
-                response_json = response.json()
+                response_json = self._get_response_json(session, epmc_references_url, params)
                 current_page_result = response_json.get('referenceList', {}).get('reference', [])
                 if not current_page_result:
                     go_to_next_page = False
-
-                references += current_page_result
-                params['page'] += 1
+                else:
+                    references += current_page_result
+                    params['page'] += 1
             except requests.RequestException:
                 self.logger.error(
                     "epmc.get_references: requests error pub_id=%s query=%s", pub_id, params
@@ -235,17 +240,13 @@ class EPMCClient:
 
         while go_to_next_page:
             try:
-                response = session.get(
-                    epmc_references_url,
-                    params=params
-                )
-                response_json = response.json()
+                response_json = self._get_response_json(session, epmc_references_url, params)
                 current_page_result = response_json.get('citationList', {}).get('citation', [])
                 if not current_page_result:
                     go_to_next_page = False
-
-                citations += current_page_result
-                params['page'] += 1
+                else:
+                    citations += current_page_result
+                    params['page'] += 1
             except requests.RequestException:
                 self.logger.error(
                     "epmc.get_citations: requests error pub_id=%s query=%s", pub_id, params
@@ -256,47 +257,3 @@ class EPMCClient:
             return citations
         else:
             return None
-
-
-if __name__ == "__main__":
-    logging.basicConfig()
-    logger.setLevel(logging.INFO)
-
-    parser = argparse.ArgumentParser(description=__doc__.strip())
-
-    parser.add_argument(
-        "--fields",
-        help="A list of fields from EPMC API to parse."
-             " By default downloads all fields if parameter is ommited.",
-        required=False)
-    parser.add_argument("input", help="A newline-delimited list of DOIs")
-    parser.add_argument("output", help="Output file (jsonL)")
-
-    args = parser.parse_args()
-
-    epmc_client = EPMCClient(max_retries=3)
-    session = epmc_client.requests_session()
-
-    fields = (args.fields.split(",") if args.fields else None)
-
-    with open(args.input, "r") as f:
-        dois = f.readlines()
-
-    logger.info("Retrieving {} fields from {} publications".format(
-        len(fields) if fields else "all", len(dois)))
-
-    # Filter responses with a generator expression
-    # Also gives the ability for the user to download all fields by omitting the --fields parameter
-
-    if fields:
-        filtered_responses = (
-            {k: d.get(k) for k in fields}
-            for d in epmc_client.search_by_dois(session=session, dois=dois) if d
-        )
-    else:
-        filtered_responses = epmc_client.search_by_dois(session=session, dois=dois)
-
-    with open(args.output, "w") as f:
-        for d in filtered_responses:
-            f.write(json.dumps(d))
-            f.write("\n")
