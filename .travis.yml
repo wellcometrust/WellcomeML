@@ -12,8 +12,9 @@ install:
 
 env:
   jobs:
-    - TEST_SUITE='bert'
-    - TEST_SUITE='not bert'
+    - TEST_SUITE='bert and not extras'
+    - TEST_SUITE='not bert and not extras'
+    - TEST_SUITE='extras'
 
   global:
     - TF_CPP_MIN_LOG_LEVEL=2
@@ -21,9 +22,6 @@ env:
 
 script:
   - pip freeze
-    #  - pytest -m 'extras' -s -v --durations=0 --disable-warnings --tb=line --cov=wellcomeml ./tests/test_extras.py 
-    # Extra tests have to be separate otherwise it will mess with loading/reloading libraries
-    #  - python -m codecov
   - tox
 
 cache: pip
