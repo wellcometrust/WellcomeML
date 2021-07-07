@@ -21,9 +21,9 @@ env:
 
 script:
   - pip freeze
-  - pytest -m 'extras' -s -v --durations=0 --disable-warnings --tb=line --cov=wellcomeml ./tests/test_extras.py 
+    #  - pytest -m 'extras' -s -v --durations=0 --disable-warnings --tb=line --cov=wellcomeml ./tests/test_extras.py 
     # Extra tests have to be separate otherwise it will mess with loading/reloading libraries
-  - python -m codecov
+    #  - python -m codecov
   - tox
 
 cache: pip
