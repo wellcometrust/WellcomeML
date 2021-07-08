@@ -1,8 +1,10 @@
 from bokeh.plotting import figure, output_file, show
+from bokeh.io import output_notebook, reset_output
 from wellcomeml.viz.palettes import Wellcome33, WellcomeBackground
 
 
-def visualize_clusters(reduced_points: list):
+def visualize_clusters(reduced_points: list, RADIUS: float,
+                       ALPHA: float, output_in_notebook: bool):
 
     """
     Visualises clusters and shows basic information
@@ -18,15 +20,19 @@ def visualize_clusters(reduced_points: list):
     blue_wellcome = str(Wellcome33[0])
     well_background = str(WellcomeBackground)
     TOOLS = ('hover, pan, wheel_zoom, zoom_in, zoom_out, reset, save')
-    TOOLTIPS = [("index", "$index"), ("(x,y)", "($x, $y)"), ]
+    TOOLTIPS = [("index", "$index"), ("(x,y)", "($x, $y)")]
 
     p = figure(title="Cluster visualisation", toolbar_location="above",
                tools=TOOLS, tooltips=TOOLTIPS,
                background_fill_color=well_background)
 
-    p.scatter(reduced_points[0], reduced_points[1], radius=0.30,
-              fill_color=blue_wellcome, line_color=None, alpha=0.5)
+    p.scatter(reduced_points[0], reduced_points[1], radius=RADIUS,
+              fill_color=blue_wellcome, line_color=None, alpha=ALPHA)
 
-    output_file("cluster_viz.html")
-
-    show(p)
+    reset_output()
+    if output_in_notebook == True:
+        output_notebook()
+        show(p)
+    else:
+        output_file("cluster_viz.html")
+        show(p)
