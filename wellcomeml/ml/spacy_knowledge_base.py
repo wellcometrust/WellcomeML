@@ -8,10 +8,15 @@ from pathlib import Path
 import subprocess
 import os
 
-from spacy.vocab import Vocab
-from spacy.kb import KnowledgeBase
+from wellcomeml.utils import throw_extra_import_message
 
-import spacy
+try:
+    from spacy.vocab import Vocab
+    from spacy.kb import KnowledgeBase
+
+    import spacy
+except ImportError as e:
+    throw_extra_import_message(error=e, required_module='spacy', extra='spacy')
 
 
 class SpacyKnowledgeBase(object):

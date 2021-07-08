@@ -21,11 +21,16 @@ import math
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import f1_score
 from scipy.sparse import csr_matrix, vstack
-import tensorflow_addons as tfa
-import tensorflow as tf
 import numpy as np
 
 from wellcomeml.ml.attention import HierarchicalAttention
+from wellcomeml.utils import throw_extra_import_message
+
+try:
+    import tensorflow_addons as tfa
+    import tensorflow as tf
+except ImportError as e:
+    throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
 
 logger = logging.getLogger(__name__)
 

@@ -26,8 +26,11 @@ This will install the "vanilla" package. In order to install the deep-learning f
 (torch/transformers/spacy transformers):
 
 ```bash
-pip install wellcomeml[deep-learning]
+pip install wellcomeml[spacy, tensorflow, torch]
 ```
+
+For a list of functionalities/classes and the dependencies on "extras", see [#extras]
+
 
 Installing from a release wheel
 
@@ -116,3 +119,30 @@ Examples can be found in the subfolder `examples`.
 If you experience a problem with installing or using WellcomeML please open an issue. It might be
 worth setting the logging level to DEBUG `export LOGGING_LEVEL=DEBUG` which will often expose
 more information that might be informative to resolve the issue.
+
+## 5. Extras
+
+
+|Module|Description|Extras needed|
+|---|---|---|
+| wellcomeml.ml.attention | Classes that implement keras layers for attention/self-attention  |  tensorflow |
+| wellcomeml.ml.bert_classifier  | Classifier to facilitate fine-tuning bert/scibert  |  tensorflow |
+| wellcomeml.ml.bert_semantic_equivalence  | Classifier to learn semantic equivalence between pairs of documents  |  tensorflow |
+| wellcomeml.ml.bert_vectorizer | Text vectorizer based on bert/scibert | torch |
+| wellcomeml.ml.bilstm | BILSTM Text classifier | tensorflow |
+| wellcomeml.ml.clustering | Text clustering pipeline | NA |
+| wellcomeml.ml.cnn | CNN Text Classifier | tensorflow |
+| wellcomeml.ml.doc2vec_vectorizer | Text vectorizer based on doc2vec | NA |
+| wellcomeml.ml.frequency_vectorizer | Text vectorizer based on TF-IDF | NA |
+| wellcomeml.ml.keras_utils | Utils for computing metrics during training | tensorflow |
+| wellcomeml.ml.keras_vectorizer | Text vectorizer based on Keras | tensorflow |
+| wellcomeml.ml.sent2vec_vectorizer | Text vectorizer based on Sent2Vec | (Requires sent2vec, a non-pypi package) |
+| wellcomeml.ml.similarity_entity_liking | A class to find most similar documents to a sentence in a corpus | tensorflow |
+| wellcomeml.ml.spacy_classifier | A text classifier based on spacy | spacy, torch |
+| wellcomeml.ml.spacy_entity_linking | Similar to similarity_entity_linking, but uses spacy | spacy |
+| wellcomeml.ml.spacy_knowledge_base | Creates a knowledge base of entities, based on [spacy](https://spacy.io/usage/training#entity-linker) | spacy |
+| wellcomeml.ml.spacy_ner | Named entity recognition classifier based on spacy | spacy |
+| wellcomeml.ml.transformers_tokenizer | Bespoke tokenizer based on transformers | Transformers |
+| wellcomeml.ml.vectorizer | Abstract class for vectorizers | NA |
+| wellcomeml.ml.voting_classifier | Meta-classifier based on majority voting | NA | 
+

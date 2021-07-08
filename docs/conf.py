@@ -43,10 +43,13 @@ autodoc_inherit_docstrings = False
 
 extensions = [
     "sphinx_rtd_theme",
-    "sphinx.ext.napoleon"
+    "sphinx.ext.napoleon",
+    "sphinx_markdown_tables"
 ]
 
+
 source_suffix = ['.rst']
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
