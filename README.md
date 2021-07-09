@@ -29,7 +29,7 @@ This will install the "vanilla" package. In order to install the deep-learning f
 pip install wellcomeml[spacy, tensorflow, torch]
 ```
 
-For a list of functionalities/classes and the dependencies on "extras", see [#extras]
+For a list of functionalities/classes and the dependencies on "extras", see [extras](#5-extras).
 
 
 Installing from a release wheel
