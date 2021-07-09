@@ -20,8 +20,8 @@ env:
     - DISABLE_DIRECT_IMPORTS=1
 
 script:
-  - pip freeze
   - tox
+  - pip freeze
 
 cache: pip
 
