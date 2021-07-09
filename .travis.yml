@@ -28,6 +28,7 @@ cache: pip
 branches:
   only:
   - main
+  - feature/visualisation
 
 after_success:
   - python -m codecov
