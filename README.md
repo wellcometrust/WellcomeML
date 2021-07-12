@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.com/wellcometrust/WellcomeML.svg?token=cssCZpnz8YDs4Hb4K5pS&branch=main)](https://travis-ci.com/wellcometrust/WellcomeML) [![codecov](https://codecov.io/gh/wellcometrust/wellcomeml/branch/main/graph/badge.svg)](https://codecov.io/gh/wellcometrust/wellcomeml)
 ![GitHub](https://img.shields.io/github/license/wellcometrust/wellcomeml)
 ![PyPI](https://img.shields.io/pypi/v/wellcomeml)
+[![docs](https://img.shields.io/badge/docs-%20-success)](http://wellcometrust.github.io/WellcomeML)
 
 
 # WellcomeML utils
@@ -11,7 +12,7 @@ This package contains common utility functions for usual tasks at Wellcome Data 
 * Common API for off-the-shelf classifiers to allow quick iteration (e.g. Frequency Vectorizer, Bert, Scibert, basic CNN, BiLSTM, SemanticSimilarity)
 * Utils to download and convert academic text datasets for benchmark
 
-For more information read the official [![docs](https://img.shields.io/badge/docs-%20-success)](http://wellcometrust.github.io/WellcomeML)
+For more information read the official [docs](http://wellcometrust.github.io/WellcomeML).
 
 
 ## 1. Quickstart
