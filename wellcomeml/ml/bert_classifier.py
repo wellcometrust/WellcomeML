@@ -3,14 +3,20 @@ Implements BertClassifier, an sklearn compatible BERT
 classifier class that can be used for text classification
 tasks
 """
+import math
+import os
+
 from transformers import BertTokenizer, TFBertForSequenceClassification
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
-import tensorflow as tf
 
-import math
-import os
+from wellcomeml.utils import throw_extra_import_message
+
+try:
+    import tensorflow as tf
+except ImportError as e:
+    throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
 
 
 PRETRAINED_CONFIG = {

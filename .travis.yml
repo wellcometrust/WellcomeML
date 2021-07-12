@@ -17,16 +17,18 @@ env:
 
   global:
     - TF_CPP_MIN_LOG_LEVEL=2
+    - DISABLE_DIRECT_IMPORTS=1
 
 script:
-  - pip freeze
   - tox
+  - pip freeze
 
 cache: pip
 
 branches:
   only:
   - main
+  - feature/visualisation
 
 after_success:
   - python -m codecov

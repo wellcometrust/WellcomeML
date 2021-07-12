@@ -60,5 +60,6 @@ Indices and tables
    :hidden:
 
    Examples <examples>
+   List of main modules and descriptions <modules>
    Clustering text with WellcomeML <clustering>
    Core library documentation <wellcomeml>

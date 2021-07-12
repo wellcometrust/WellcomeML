@@ -7,10 +7,6 @@ or embed using bert, doc2vec etc
 """
 
 from sklearn.base import BaseEstimator, TransformerMixin
-from wellcomeml.ml.frequency_vectorizer import WellcomeTfidf
-from wellcomeml.ml.bert_vectorizer import BertVectorizer
-from wellcomeml.ml.keras_vectorizer import KerasVectorizer
-from wellcomeml.ml.doc2vec_vectorizer import Doc2VecVectorizer
 
 
 class Vectorizer(BaseEstimator, TransformerMixin):
@@ -30,17 +26,26 @@ class Vectorizer(BaseEstimator, TransformerMixin):
         self.embedding = embedding
         self.cache_transformed = cache_transformed
 
+        # Only actually import when necessary (extras might not be installed)
+
         vectorizer_dispatcher = {
-            "tf-idf": WellcomeTfidf,
-            "bert": BertVectorizer,
-            "keras": KerasVectorizer,
-            "doc2vec": Doc2VecVectorizer,
+            "tf-idf": "wellcomeml.ml.frequency_vectorizer.WellcomeTfidf",
+            "bert": "wellcomeml.ml.bert_vectorizer.BertVectorizer",
+            "keras": "welclomeml.ml.keras_vectorizer.KerasVectorizer",
+            "doc2vec": "wellcomeml.ml.doc2vec_vectorizer.Doc2VecVectorizer",
         }
 
         if not vectorizer_dispatcher.get(embedding):
             raise ValueError(f"Model {embedding} not available")
 
-        self.vectorizer = vectorizer_dispatcher.get(embedding)(**kwargs)
+        vectorizer_path = '.'.join(vectorizer_dispatcher.get(embedding).split('.')[:-1])
+        vectorizer_class_path = vectorizer_dispatcher.get(embedding).split('.')[-1]
+        vectorizer = getattr(
+            __import__(vectorizer_path, fromlist=[vectorizer_class_path]),
+            vectorizer_class_path
+        )
+
+        self.vectorizer = vectorizer(**kwargs)
 
     def fit(self, X=None, *_):
         return self.vectorizer.fit(X)

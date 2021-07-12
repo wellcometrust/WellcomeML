@@ -48,24 +48,27 @@ setuptools.setup(
         'scikit-learn',
         'scipy==1.4.1',
         'click>=7.0,<8.0',
-        'spacy[lookups]<4.0.0,>=3.0.0',
         'umap-learn',
         'nervaluate',
         'twine',
         'gensim<5.0.0',
-        # 'hdbscan',
         'cython',
         'flake8',
         'black',
+        'transformers',
+        'tokenizers==0.10.1',
         'tqdm'
     ],
     extras_require={
-        'deep-learning': [
+        'tensorflow': [
             'tensorflow==2.4.0',
-            'torch',
-            'transformers==4.3.0',
-            'tokenizers==0.10.1',
             'tensorflow-addons'
+        ],
+        'torch': [
+            'torch'
+        ],
+        'spacy': [
+            'spacy[lookups]<3.1.0,>=3.0.0'
         ]
     },
     tests_require=[

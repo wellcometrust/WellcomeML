@@ -5,10 +5,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import f1_score
 from scipy.sparse import csr_matrix, vstack
-import tensorflow as tf
 import numpy as np
 
 from wellcomeml.ml.attention import HierarchicalAttention
+from wellcomeml.utils import throw_extra_import_message
+
+try:
+    import tensorflow as tf
+except ImportError as e:
+    throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
 
 TENSORBOARD_LOG_DIR = "logs/scalars/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 CALLBACK_DICT = {
