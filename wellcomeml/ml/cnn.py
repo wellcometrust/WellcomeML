@@ -224,7 +224,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         elif self.feature_approach == 'sum':
             x = tf.keras.backend.sum(x, axis=1)
         elif self.feature_approach == 'concat':
-            x = tf.concat(x, axis=1)
+            x = tf.keras.layers.Flatten()(x)
         else:
             raise NotImplementedError
         x = tf.keras.layers.Dense(
