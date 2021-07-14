@@ -25,6 +25,23 @@ def test_vanilla():
     assert model.score(X, Y) > 0.6
 
 
+def test_feature_approach_concat():
+    X = [
+        "One",
+        "One only",
+        "Two nothing else",
+        "Two and three"
+    ]
+    Y = np.array([0, 0, 1, 1])
+
+    model = Pipeline([
+        ('vec', KerasVectorizer()),
+        ('clf', CNNClassifier(batch_size=2, feature_approach="concat"))
+    ])
+    model.fit(X, Y)
+    assert model.score(X, Y) > 0.6
+
+
 def test_save_load():
     X = [
         "One",
