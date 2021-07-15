@@ -222,6 +222,9 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             x = tf.keras.backend.sum(x, axis=1)
         elif self.feature_approach == 'concat':
             x = tf.keras.layers.Flatten()(x)
+        elif self.feature_approach == 'multilabel-attention':
+            # in multilabel attention each head represents an output
+            pass
         else:
             raise NotImplementedError
         x = tf.keras.layers.Dense(
@@ -233,11 +236,17 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         output_activation = (
             "sigmoid" if nb_outputs == 1 or self.multilabel else "softmax"
         )
+        if self.feature_approach == "multilabel-attention":
+            # each output comes from an attention head
+            nb_outputs = 1
         out = tf.keras.layers.Dense(
             nb_outputs,
             activation=output_activation,
             kernel_regularizer=l2,
         )(x)
+        if self.feature_approach == "multilabel-attention":
+            # out shape is (batch_size, attention heads (or outputs), 1)
+            out = tf.keras.layers.Flatten()(out)
         model = tf.keras.Model(inp, out)
 
         learning_rate = tf.keras.optimizers.schedules.ExponentialDecay(
