@@ -109,7 +109,8 @@ class TransformersTokenizer:
             raise NotImplementedError
 
     def decode(self, encoded_text):
-        # Note that we currently only support decoding a single encoded sentence
+        if type(encoded_text[0]) in [list, np.ndarray]:
+            return self.tokenizer.decode_batch(encoded_text)
         return self.tokenizer.decode(encoded_text)
 
     def save(self, tokenizer_path):
