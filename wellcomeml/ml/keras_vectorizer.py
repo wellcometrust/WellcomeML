@@ -41,6 +41,8 @@ class KerasTokenizer():
         return self.tokenizer.texts_to_sequences(text)
 
     def decode(self, encoded_text):
+        if not encoded_text:
+            return ""
         if type(encoded_text[0]) == int:
             return self.tokenizer.sequences_to_texts([encoded_text])[0]
         return self.tokenizer.sequences_to_texts(encoded_text)

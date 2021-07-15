@@ -109,3 +109,7 @@ def test_keras_tokenizer_decode_batch(tokenizer):
     token_ids = tokenizer.encode(["This is", "a test"])
     texts = tokenizer.decode(token_ids)
     assert texts == ["this is", "a test"]
+
+
+def test_keras_tokenizer_decode_empty(tokenizer):
+    assert tokenizer.decode([]) == ""

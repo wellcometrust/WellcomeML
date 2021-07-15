@@ -109,6 +109,8 @@ class TransformersTokenizer:
             raise NotImplementedError
 
     def decode(self, encoded_text):
+        if not encoded_text:
+            return ""
         if type(encoded_text[0]) in [list, np.ndarray]:
             return self.tokenizer.decode_batch(encoded_text)
         return self.tokenizer.decode(encoded_text)

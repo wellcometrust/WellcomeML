@@ -61,6 +61,10 @@ def test_decode_batch(tokenizer):
     assert texts == ["this is a test", "test"]
 
 
+def test_decode_empty(tokenizer):
+    assert tokenizer.decode([]) == ""
+
+
 def test_unknown_token(tokenizer):
     tokens = tokenizer.tokenize("I have not seen this before")
     assert "[UNK]" in tokens
