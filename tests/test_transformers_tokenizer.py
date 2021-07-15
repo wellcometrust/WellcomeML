@@ -49,6 +49,18 @@ def test_encode_batch(tokenizer):
     assert len(token_ids) == 2
 
 
+def test_decode(tokenizer):
+    token_ids = tokenizer.encode("This is a test")
+    text = tokenizer.decode(token_ids)
+    assert text == "this is a test"
+
+
+def test_decode_batch(tokenizer):
+    token_ids = tokenizer.encode(["This is a test", "test"])
+    texts = tokenizer.decode(token_ids)
+    assert texts == ["this is a test", "test"]
+
+
 def test_unknown_token(tokenizer):
     tokens = tokenizer.tokenize("I have not seen this before")
     assert "[UNK]" in tokens
