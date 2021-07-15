@@ -1,7 +1,20 @@
 import tempfile
 import os
 
-from wellcomeml.ml.keras_vectorizer import KerasVectorizer
+import pytest
+
+from wellcomeml.ml.keras_vectorizer import KerasVectorizer, KerasTokenizer
+
+
+@pytest.fixture
+def tokenizer():
+    tokenizer = KerasTokenizer()
+    tokenizer.fit([
+        "This is a test",
+        "Another sentence",
+        "Don't split"
+    ])
+    return tokenizer
 
 
 def test_vanilla():
@@ -84,3 +97,15 @@ def test_infer_from_data():
     keras_vectorizer.fit(X)
 
     assert keras_vectorizer.sequence_length == 3
+
+
+def test_keras_tokenizer_decode(tokenizer):
+    token_ids = tokenizer.encode("This is a test")
+    text = tokenizer.decode(token_ids)
+    assert text == "this is a test"
+
+
+def test_keras_tokenizer_decode_batch(tokenizer):
+    token_ids = tokenizer.encode(["This is", "a test"])
+    texts = tokenizer.decode(token_ids)
+    assert texts == ["this is", "a test"]
