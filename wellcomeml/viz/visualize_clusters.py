@@ -1,5 +1,7 @@
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import output_notebook, reset_output
+from bokeh.transform import factor_cmap
+from bokeh.models import CDSView, ColumnDataSource, IndexFilter
 from wellcomeml.viz.palettes import Wellcome33, WellcomeBackground
 
 
@@ -28,17 +30,22 @@ def visualize_clusters(reduced_points: list, radius: float,
 
     """
 
-    blue_wellcome = str(Wellcome33[0])
+    source = ColumnDataSource(reduced_points)
+    clusters = list(reduced_points.ClusterID.unique())
+    Wellcome33_palette = [str(x) for x in Wellcome33]
     well_background = str(WellcomeBackground)
     tools = ('hover, pan, wheel_zoom, zoom_in, zoom_out, reset, save')
-    tooltips = [("index", "$index"), ("(x,y)", "($x, $y)")]
+    tooltips = [("index", "$index"), ("(x,y)", "($x, $y)"),
+                ("cluster", "@ClusterID"), ("keywords", "@Keywords"),
+                ("text", "@Text")]
 
     p = figure(title="Cluster visualisation", toolbar_location="above",
                tools=tools, tooltips=tooltips,
                background_fill_color=well_background)
 
-    p.scatter(reduced_points[0], reduced_points[1], radius=radius,
-              fill_color=blue_wellcome, line_color=None, alpha=alpha)
+    p.scatter(x='X', y='Y', radius=radius, source=source,
+              color=factor_cmap('ClusterID', Wellcome33_palette, clusters),
+              line_color=None, alpha=alpha)
 
     reset_output()
     if output_in_notebook == True:
