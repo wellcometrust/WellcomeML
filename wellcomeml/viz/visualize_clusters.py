@@ -1,7 +1,7 @@
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import output_notebook, reset_output
 from bokeh.transform import factor_cmap
-from bokeh.models import CDSView, ColumnDataSource, IndexFilter
+from bokeh.models import ColumnDataSource
 from wellcomeml.viz.palettes import Wellcome33, WellcomeBackground
 
 
@@ -48,7 +48,7 @@ def visualize_clusters(reduced_points: list, radius: float,
               line_color=None, alpha=alpha)
 
     reset_output()
-    if output_in_notebook == True:
+    if output_in_notebook:
         output_notebook()
         show(p)
     else:
