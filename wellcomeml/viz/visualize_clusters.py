@@ -1,11 +1,12 @@
+import pandas as pd
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import output_notebook, reset_output
-from bokeh.transform import factor_cmap
 from bokeh.models import ColumnDataSource
-from wellcomeml.viz.palettes import Wellcome33, WellcomeBackground
+from wellcomeml.viz.palettes import (Wellcome33,
+                                     WellcomeBackground, WellcomeNoData)
 
 
-def visualize_clusters(reduced_points: list, radius: float,
+def visualize_clusters(reduced_points: list, clustering, radius: float,
                        alpha: float, output_in_notebook: bool,
                        output_file_path: str = 'cluster_viz.html'):
 
@@ -30,22 +31,30 @@ def visualize_clusters(reduced_points: list, radius: float,
 
     """
 
-    source = ColumnDataSource(reduced_points)
-    clusters = list(reduced_points.ClusterID.unique())
+    data = pd.DataFrame(reduced_points)
+    data = data.rename(columns={0: 'X', 1: 'Y'})
+    data['cluster_id'] = clustering.cluster_ids
+    data['cluster_id'] = data['cluster_id'].astype(str)
+    data['Keywords'] = clustering.cluster_kws
+
     Wellcome33_palette = [str(x) for x in Wellcome33]
     well_background = str(WellcomeBackground)
+    clusters = list(data['cluster_id'])
+    clusters = list(map(int, clusters))
+    data['colors'] = [(Wellcome33_palette[x % 33]
+                       if x != -1 else str(WellcomeNoData)) for x in clusters]
+    source = ColumnDataSource.from_df(data)
+
     tools = ('hover, pan, wheel_zoom, zoom_in, zoom_out, reset, save')
     tooltips = [("index", "$index"), ("(x,y)", "($x, $y)"),
-                ("cluster", "@ClusterID"), ("keywords", "@Keywords"),
-                ("text", "@Text")]
+                ("cluster", "@cluster_id"), ("keywords", "@Keywords")]
 
     p = figure(title="Cluster visualisation", toolbar_location="above",
                tools=tools, tooltips=tooltips,
                background_fill_color=well_background)
 
     p.scatter(x='X', y='Y', radius=radius, source=source,
-              color=factor_cmap('ClusterID', Wellcome33_palette, clusters),
-              line_color=None, alpha=alpha)
+              color='colors', line_color=None, alpha=alpha)
 
     reset_output()
     if output_in_notebook:
