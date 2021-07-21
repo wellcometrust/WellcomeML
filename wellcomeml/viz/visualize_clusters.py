@@ -6,7 +6,7 @@ from wellcomeml.viz.palettes import (Wellcome33,
                                      WellcomeBackground, WellcomeNoData)
 
 
-def visualize_clusters(reduced_points: list, clustering, radius: float,
+def visualize_clusters(clustering, radius: float,
                        alpha: float, output_in_notebook: bool,
                        output_file_path: str = 'cluster_viz.html'):
 
@@ -14,8 +14,7 @@ def visualize_clusters(reduced_points: list, clustering, radius: float,
     """
     Visualises clusters and shows basic information
     Args:
-        reduced_points: list
-        List of list of reduced points. Available at cluster.reduced_points
+        clustering: class
         radius: float
         Radius of the circles in the scatter plot
         alpha: float
@@ -31,6 +30,7 @@ def visualize_clusters(reduced_points: list, clustering, radius: float,
 
     """
 
+    reduced_points = clustering.reduced_points
     data = pd.DataFrame(reduced_points)
     data = data.rename(columns={0: 'X', 1: 'Y'})
     data['cluster_id'] = clustering.cluster_ids
