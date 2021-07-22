@@ -44,7 +44,8 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         callbacks=['tensorboard'],
         random_seed=42,
         buffer_size=100,
-        logging_level=LOGGING_LEVEL
+        logging_level=LOGGING_LEVEL,
+        verbose=1  # follows Keras verbose for now
     ):
         """
 
@@ -71,6 +72,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.callbacks = callbacks
         self.random_seed = random_seed
         self.buffer_size = buffer_size
+        self.verbose = verbose
 
         # Defines attributes that will be initialised later
         self.config = None
@@ -223,6 +225,7 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
                 validation_steps=self.valid_steps,
                 validation_data=self.valid_dataset,
                 callbacks=callback_objs,
+                verbose=self.verbose,
                 **kwargs
             )
 
