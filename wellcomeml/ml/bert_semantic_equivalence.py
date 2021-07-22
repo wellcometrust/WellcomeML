@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils.validation import check_is_fitted
 from sklearn.exceptions import NotFittedError
 
-from wellcomeml.ml.keras_utils import CategoricalMetrics, MetricMiniBatchHistory
+from wellcomeml.ml.keras_utils import CategoricalMetrics  # , MetricMiniBatchHistory
 from wellcomeml.logger import LOGGING_LEVEL, build_logger
 from wellcomeml.utils import throw_extra_import_message
 
