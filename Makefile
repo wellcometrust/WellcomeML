@@ -15,9 +15,10 @@ $(VIRTUALENV)/.installed:
 	@if [ -d $(VIRTUALENV) ]; then rm -rf $(VIRTUALENV); fi
 	@mkdir -p $(VIRTUALENV)
 	$(PYTHON_VERSION) -m venv $(VIRTUALENV)
+	$(VENV_BIN)/pip3 install --upgrade pip
 	$(VENV_BIN)/pip3 install -r requirements_test.txt
 	$(VENV_BIN)/pip3 install -r docs/requirements.txt # Installs requirements to docs
-	$(VENV_BIN)/pip3 install -e .[deep-learning]
+	$(VENV_BIN)/pip3 install -e .[tensorflow,spacy,torch]
 	$(VENV_BIN)/pip3 install hdbscan --no-cache-dir --no-binary :all: --no-build-isolation
 	touch $@
 
