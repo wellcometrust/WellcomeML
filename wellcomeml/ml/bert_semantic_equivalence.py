@@ -20,12 +20,6 @@ try:
 except ImportError as e:
     throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
 
-TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-CALLBACK_DICT = {
-    'tensorboard': tf.keras.callbacks.TensorBoard(log_dir=TENSORBOARD_LOG_DIR, update_freq=1),
-    'minibatch_history': MetricMiniBatchHistory()
-}
-
 
 class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
     """
@@ -41,10 +35,10 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         learning_rate=3e-5,
         test_size=0.2,
         max_length=128,
-        callbacks=['tensorboard'],
         random_seed=42,
         buffer_size=100,
         logging_level=LOGGING_LEVEL,
+        tensorflow_log_path="logs",
         verbose=1  # follows Keras verbose for now
     ):
         """
@@ -58,9 +52,10 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             max_length: Maximum length of text in characters.
              Zero pads every text smaller than this number and cuts out
              any text bigger than that number
-            callbacks: List of callbacks as defined in .CALLBACK_DICT.keys()
             random_seed: A seed used for shuffling the dataset upon training
             buffer_size: A buffer size that will be used when shuffling the dataset
+            tensorflow_log_path: Path to store tensorboard logs
+            verbose: 0,1,2. Verbose level for keras fit
         """
         self.logger = build_logger(logging_level, __name__)
         self.pretrained = pretrained
@@ -69,9 +64,9 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
         self.learning_rate = learning_rate
         self.test_size = test_size
         self.max_length = max_length
-        self.callbacks = callbacks
         self.random_seed = random_seed
         self.buffer_size = buffer_size
+        self.tensorboard_log_path = tensorflow_log_path
         self.verbose = verbose
 
         # Defines attributes that will be initialised later
@@ -215,8 +210,16 @@ class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):
             self.train_steps = math.ceil(len(X_train)/self.batch_size)
             self.valid_steps = math.ceil(len(X_valid)/self.eval_batch_size)
         finally:
-            callback_objs = [CALLBACK_DICT[c] for c in self.callbacks]
-
+            callback_objs = [
+                # Issue #187
+                # MetricMiniBatchHistory()
+            ]
+            if self.tensorboard_log_path:
+                datetime_str = datetime.now().strftime("%Y%m%d-%H%M%S")
+                tensorboard = tf.keras.callbacks.TensorBoard(
+                    log_dir=f"{self.tensorboard_log_path}/scalar/{datetime_str}"
+                )
+                callback_objs.append(tensorboard)
             self.logger.info("Fitting model")
             history = self.model.fit(
                 self.train_dataset,
