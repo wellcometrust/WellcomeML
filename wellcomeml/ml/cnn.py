@@ -52,7 +52,6 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         attention=False,
         attention_heads='same',
         metrics=["precision", "recall", "f1"],
-        callbacks=["tensorboard"],
         feature_approach="max",
         early_stopping=False,
         sparse_y=False,
@@ -80,7 +79,6 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.attention = attention
         self.attention_heads = attention_heads
         self.metrics = metrics
-        self.callbacks = callbacks
         self.feature_approach = feature_approach
         self.early_stopping = early_stopping
         self.sparse_y = sparse_y
