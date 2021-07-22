@@ -1,6 +1,6 @@
 import pandas as pd
 from wellcomeml.ml.clustering import TextClustering
-from wellcomeml.viz import visualize_clusters
+from wellcomeml.viz.visualize_cluster import visualize_clusters
 
 url = "https://datalabs-public.s3.eu-west-2.amazonaws.com/" \
       "datasets/epmc/random_sample.csv"
@@ -16,4 +16,5 @@ clustering = TextClustering(embedding='tf-idf', reducer='umap', params={
 
 clustering.fit(text)
 
-visualize_clusters(clustering, 0.05, 0.8, output_in_notebook=True)
+visualize_clusters(clustering, 0.05, 0.8, output_in_notebook=False,
+                   output_file_path="test.html")
