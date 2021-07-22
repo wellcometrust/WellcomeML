@@ -1,3 +1,19 @@
+# 1.2.0
+Release date: 22/07/2021
+
+Improvements:
+- #327: Adds verbose and tensorboard_log_path to CNN and SemanticEquivalenceClassifier
+- #315: Implements decode to KerasTokenizer and TransformersTokenizer.
+- #308: Adds EPMCClient to download data from EPMC
+- #283: Disable umap to make imports in wellcomeml faster
+- #279: Extend LOGGING_LEVEL env variable to control more libraries logger
+- #306: Break down deep-learning extra to tensorflow,torch,spacy for more control over what's installed
+
+Bug fixes:
+- #313: Fix concat feature_approach in CNN
+- #297: Fix OOM error in CNN predict
+- #292: Fix clustering pipeline when umap used and input length > 4096
+
 # 1.1.0
 Release date: 26/04/2021
 
