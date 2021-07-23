@@ -1,4 +1,3 @@
-import pytest
 import os
 
 from wellcomeml.ml.clustering import TextClustering
