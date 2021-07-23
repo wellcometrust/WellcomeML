@@ -8,6 +8,7 @@ Improvements:
 - #283: Disable umap to make imports in wellcomeml faster
 - #279: Extend LOGGING_LEVEL env variable to control more libraries logger
 - #306: Break down deep-learning extra to tensorflow,torch,spacy for more control over what's installed
+- #289: Re-factors frequency vectoriser saving function to make it more efficient
 
 Bug fixes:
 - #313: Fix concat feature_approach in CNN
