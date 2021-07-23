@@ -1,6 +1,6 @@
 import pandas as pd
 from wellcomeml.ml.clustering import TextClustering
-from wellcomeml.viz.visualize_cluster import visualize_clusters
+from wellcomeml.viz.visualize_clusters import visualize_clusters
 
 url = "https://datalabs-public.s3.eu-west-2.amazonaws.com/" \
       "datasets/epmc/random_sample.csv"
