@@ -68,7 +68,7 @@ setuptools.setup(
             'torch'
         ],
         'spacy': [
-            'spacy[lookups]<3.1.0,>=3.0.0'
+            'spacy[lookups]==3.0.6'
         ]
     },
     tests_require=[
