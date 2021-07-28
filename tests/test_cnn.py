@@ -312,7 +312,8 @@ def test_multilabel_attention():
         ('vec', KerasVectorizer()),
         ('clf', CNNClassifier(
             batch_size=2, multilabel=True, attention=True,
-            feature_approach="multilabel-attention"))
+            feature_approach="multilabel-attention",
+            learning_rate=1e-2))
     ])
     model.fit(X, Y)
     assert model.score(X, Y) > 0.6
