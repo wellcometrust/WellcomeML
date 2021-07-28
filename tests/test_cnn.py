@@ -292,3 +292,27 @@ def test_XY_dataset_sparse_y():
     )
     clf.fit(train_data)
     assert clf.score(test_data, Y_sparse) > 0.3
+
+
+def test_multilabel_attention():
+    X = [
+        "One and two",
+        "One only",
+        "Two nothing else",
+        "Two and three"
+    ]
+    Y = np.array([
+        [1, 1, 0, 0],
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 1, 0]
+    ])
+
+    model = Pipeline([
+        ('vec', KerasVectorizer()),
+        ('clf', CNNClassifier(
+            batch_size=2, multilabel=True, attention=True,
+            feature_approach="multilabel-attention"))
+    ])
+    model.fit(X, Y)
+    assert model.score(X, Y) > 0.6

@@ -177,10 +177,14 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             return tf.keras.layers.add([x1, x2])
 
         def residual_attention(x1):
-            x2 = HierarchicalAttention(self.attention_heads)(x1)
+            attention_heads = self.attention_heads
+            if self.feature_approach == "multilabel-attention":
+                attention_heads = self.nb_outputs
+            print(f"Attention heads {attention_heads}")
+            x2 = HierarchicalAttention(attention_heads)(x1)
             x2 = tf.keras.layers.Dropout(self.dropout)(x2)
             x2 = tf.keras.layers.LayerNormalization()(x2)
-            if self.attention_heads == 'same':
+            if attention_heads == 'same':
                 return tf.keras.layers.add([x1, x2])
             else:
                 return x2
