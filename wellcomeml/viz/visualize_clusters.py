@@ -10,7 +10,6 @@ def visualize_clusters(clustering, radius: float,
                        alpha: float, output_in_notebook: bool,
                        output_file_path: str = 'cluster_viz.html'):
 
-
     """
     Visualises clusters and shows basic information
     Args:
