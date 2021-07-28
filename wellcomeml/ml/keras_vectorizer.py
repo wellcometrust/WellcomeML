@@ -35,8 +35,17 @@ class KerasTokenizer():
         self.tokenizer = Tokenizer(num_words=self.vocab_size, oov_token=self.oov_token)
         self.tokenizer.fit_on_texts(texts)
 
-    def encode(self, texts):
-        return self.tokenizer.texts_to_sequences(texts)
+    def encode(self, text):
+        if type(text) == str:
+            return self.tokenizer.texts_to_sequences([text])[0]
+        return self.tokenizer.texts_to_sequences(text)
+
+    def decode(self, encoded_text):
+        if not encoded_text:
+            return ""
+        if type(encoded_text[0]) == int:
+            return self.tokenizer.sequences_to_texts([encoded_text])[0]
+        return self.tokenizer.sequences_to_texts(encoded_text)
 
 
 class KerasVectorizer(BaseEstimator, TransformerMixin):

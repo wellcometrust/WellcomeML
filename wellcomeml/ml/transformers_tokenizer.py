@@ -7,12 +7,13 @@ from tokenizers.normalizers import Lowercase, Sequence
 from tokenizers.trainers import BpeTrainer, WordPieceTrainer
 from tokenizers.pre_tokenizers import ByteLevel, Whitespace
 from tokenizers import Tokenizer
-
+import numpy as np
 
 # TODO
 # - generalise to two sentences
 # - prepare input for transformers
 # - pad and truncate to max length
+
 
 class TransformersTokenizer:
     def __init__(self, lowercase=True,
@@ -99,13 +100,20 @@ class TransformersTokenizer:
             raise NotImplementedError
 
     def encode(self, text):
-        if type(text) == list:
+        if type(text) in [list, np.ndarray]:
             return list(self._yield_tokens_or_encodings(text, return_type="encodings"))
         elif type(text) == str:
             encoding = self.tokenizer.encode(text)
             return encoding.ids
         else:
             raise NotImplementedError
+
+    def decode(self, encoded_text):
+        if not encoded_text:
+            return ""
+        if type(encoded_text[0]) in [list, np.ndarray]:
+            return self.tokenizer.decode_batch(encoded_text)
+        return self.tokenizer.decode(encoded_text)
 
     def save(self, tokenizer_path):
         self.tokenizer.save(tokenizer_path)

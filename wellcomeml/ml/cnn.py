@@ -34,11 +34,6 @@ except ImportError as e:
 
 logger = logging.getLogger(__name__)
 
-TENSORBOARD_LOG_DIR = "logs/scalar/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-CALLBACK_DICT = {
-    'tensorboard': tf.keras.callbacks.TensorBoard(log_dir=TENSORBOARD_LOG_DIR)
-}
-
 
 class CNNClassifier(BaseEstimator, ClassifierMixin):
     def __init__(
@@ -57,7 +52,6 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         attention=False,
         attention_heads='same',
         metrics=["precision", "recall", "f1"],
-        callbacks=["tensorboard"],
         feature_approach="max",
         early_stopping=False,
         sparse_y=False,
@@ -65,7 +59,9 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         validation_split=0.1,
         sequence_length=None,
         vocab_size=None,
-        nb_outputs=None
+        nb_outputs=None,
+        tensorboard_log_path="logs",
+        verbose=1  # this follows keras.Model.fit verbose for now
     ):
         self.context_window = context_window
         self.learning_rate = learning_rate
@@ -83,7 +79,6 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.attention = attention
         self.attention_heads = attention_heads
         self.metrics = metrics
-        self.callbacks = callbacks
         self.feature_approach = feature_approach
         self.early_stopping = early_stopping
         self.sparse_y = sparse_y
@@ -91,7 +86,9 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.validation_split = validation_split
         self.sequence_length = sequence_length,
         self.vocab_size = vocab_size,
-        self.nb_outputs = nb_outputs
+        self.nb_outputs = nb_outputs,
+        self.tensorboard_log_path = tensorboard_log_path,
+        self.verbose = verbose
 
     def _prepare_data(self, X, Y, shuffle=True):
         def yield_data():
@@ -293,10 +290,13 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
                 self.sequence_length, self.vocab_size, self.nb_outputs,
                 steps_per_epoch, embedding_matrix)
 
-        callbacks = [
-            CALLBACK_DICT[c] if c in CALLBACK_DICT else c
-            for c in self.callbacks
-        ]
+        callbacks = []
+        if self.tensorboard_log_path:
+            datetime_str = datetime.now().strftime("%Y%m%d-%H%M%S")
+            tensorboard = tf.keras.callbacks.TensorBoard(
+                log_dir=f"{self.tensorboard_log_path}/scalar/{datetime_str}"
+            )
+            callbacks.append(tensorboard)
         if self.early_stopping:
             early_stopping = tf.keras.callbacks.EarlyStopping(
                 patience=5, restore_best_weights=True)
@@ -306,7 +306,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             train_data,
             validation_data=val_data,
             epochs=self.nb_epochs,
-            callbacks=callbacks
+            callbacks=callbacks,
+            verbose=self.verbose
         )
         return self
 
