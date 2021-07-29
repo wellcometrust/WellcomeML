@@ -107,7 +107,6 @@ class WellcomeTfidf(TfidfVectorizer):
             ]
 
     def transform(self, X, regex=True, spacy_lemmatizer=True, *_):
-        print("Ba")
         if regex:
             X = self.regex_transform(X)
         if spacy_lemmatizer:
