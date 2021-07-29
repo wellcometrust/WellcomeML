@@ -45,7 +45,6 @@ class WellcomeTfidf(TfidfVectorizer):
         self.nlp.add_pipe("lemmatizer", config={"mode": "lookup"})
         self.nlp.initialize()
 
-
     @classmethod
     def save_transformed(cls, path, X_transformed):
         """Saves transformed embedded vectors"""
