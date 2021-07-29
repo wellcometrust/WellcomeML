@@ -41,6 +41,11 @@ class WellcomeTfidf(TfidfVectorizer):
 
         super().__init__(**kwargs)
 
+        self.nlp = spacy.blank("en")
+        self.nlp.add_pipe("lemmatizer", config={"mode": "lookup"})
+        self.nlp.initialize()
+
+
     @classmethod
     def save_transformed(cls, path, X_transformed):
         """Saves transformed embedded vectors"""
@@ -84,10 +89,6 @@ class WellcomeTfidf(TfidfVectorizer):
 
         """
 
-        nlp = spacy.blank("en")
-        nlp.add_pipe("lemmatizer", config={"mode": "lookup"})
-        nlp.initialize()
-
         logger.info("Using spacy pre-trained lemmatiser.")
         if remove_stopwords_and_punct:
             return [
@@ -98,14 +99,15 @@ class WellcomeTfidf(TfidfVectorizer):
                     and not token.is_punct
                     and token.lemma_ != "-PRON-"
                 ]
-                for doc in nlp.pipe(X)
+                for doc in self.nlp.pipe(X)
             ]
         else:
             return [
-                [token.lemma_.lower() for token in doc] for doc in nlp.pipe(X)
+                [token.lemma_.lower() for token in doc] for doc in self.nlp.pipe(X)
             ]
 
     def transform(self, X, regex=True, spacy_lemmatizer=True, *_):
+        print("Ba")
         if regex:
             X = self.regex_transform(X)
         if spacy_lemmatizer:
@@ -115,16 +117,9 @@ class WellcomeTfidf(TfidfVectorizer):
 
         return super().transform(X)
 
-    def fit(self, X, regex=True, spacy_lemmatizer=True, *_):
-        if regex:
-            X = self.regex_transform(X)
-        if spacy_lemmatizer:
-            X = self.spacy_lemmatizer(X)
-
-        logger.info("Fitting vectorizer.")
-
-        X = [" ".join(text) for text in X]
-
-        super().fit(X)
-
+    def fit(self, X, *_):
+        super().fit()
         return self
+
+    def fit_transform(self, X, y=None):
+        return self.fit(X).transform(X)
