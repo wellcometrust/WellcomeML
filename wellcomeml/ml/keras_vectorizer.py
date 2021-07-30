@@ -47,6 +47,12 @@ class KerasTokenizer():
             return self.tokenizer.sequences_to_texts([encoded_text])[0]
         return self.tokenizer.sequences_to_texts(encoded_text)
 
+    def tokenize(self, text):
+        if type(text) == str:
+            return text.split()
+        else:
+            return [t.split() for t in text]
+
 
 class KerasVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, vocab_size=None, sequence_length=None, oov_token="<OOV>",
