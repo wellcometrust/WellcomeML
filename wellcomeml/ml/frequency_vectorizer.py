@@ -116,7 +116,7 @@ class WellcomeTfidf(TfidfVectorizer):
         return super().transform(X)
 
     def fit(self, X, *_):
-        super().fit()
+        super().fit(X)
         return self
 
     def fit_transform(self, X, y=None):
