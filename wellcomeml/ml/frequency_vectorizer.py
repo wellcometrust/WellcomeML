@@ -35,7 +35,7 @@ class WellcomeTfidf(TfidfVectorizer):
         """
         self.embedding = "tf-idf"
         self.use_regex = use_regex
-        self.use_spacy_lemmatizer= use_spacy_lemmatizer
+        self.use_spacy_lemmatizer = use_spacy_lemmatizer
 
         logger.info("Initialising frequency vectorizer.")
 
@@ -130,4 +130,3 @@ class WellcomeTfidf(TfidfVectorizer):
         X = self._pre_transform(X)
 
         return super().fit_transform(X, y=y)
-
