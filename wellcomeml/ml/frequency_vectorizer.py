@@ -26,7 +26,7 @@ class WellcomeTfidf(TfidfVectorizer):
     vectorisation/embedding
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, use_regex=True, use_spacy_lemmatizer=True, **kwargs):
         """
 
         Args:
@@ -34,6 +34,8 @@ class WellcomeTfidf(TfidfVectorizer):
 
         """
         self.embedding = "tf-idf"
+        self.use_regex = use_regex
+        self.use_spacy_lemmatizer= use_spacy_lemmatizer
 
         logger.info("Initialising frequency vectorizer.")
 
@@ -105,19 +107,27 @@ class WellcomeTfidf(TfidfVectorizer):
                 [token.lemma_.lower() for token in doc] for doc in self.nlp.pipe(X)
             ]
 
-    def transform(self, X, regex=True, spacy_lemmatizer=True, *_):
-        if regex:
+    def _pre_transform(self, X):
+        if self.use_regex:
             X = self.regex_transform(X)
-        if spacy_lemmatizer:
+        if self.use_spacy_lemmatizer:
             X = self.spacy_lemmatizer(X)
 
-        X = [" ".join(text) for text in X]
+        return [" ".join(text) for text in X]
+
+    def transform(self, X):
+        X = self._pre_transform(X)
 
         return super().transform(X)
 
-    def fit(self, X, *_):
+    def fit(self, X, y=None):
+        X = self._pre_transform(X)
+
         super().fit(X)
         return self
 
     def fit_transform(self, X, y=None):
-        return self.fit(X).transform(X)
+        X = self._pre_transform(X)
+
+        return super().fit_transform(X, y=y)
+
