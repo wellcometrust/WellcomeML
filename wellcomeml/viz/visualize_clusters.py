@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from bokeh.io import output_notebook, reset_output
-from bokeh.models import ColumnDataSource, Legend
+from bokeh.models import Legend
 from bokeh.plotting import figure, output_file, show
 from wellcomeml.viz.palettes import (Wellcome33,
                                      WellcomeBackground, WellcomeNoData)
