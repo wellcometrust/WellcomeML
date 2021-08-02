@@ -48,7 +48,6 @@ def visualize_clusters(clustering, radius: float = 0.05, alpha: float = 0.8,
     clusters_uniq = np.unique(clusters)
     data['colors'] = [(palette[x % len(palette)]
                        if x != -1 else str(WellcomeNoData)) for x in clusters]
-    source = ColumnDataSource.from_df(data)
 
     tools = ('hover, pan, wheel_zoom, zoom_in, zoom_out, reset, save')
     tooltips = [("index", "$index"), ("(x,y)", "($x, $y)"),
