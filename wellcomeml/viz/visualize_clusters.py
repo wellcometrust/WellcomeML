@@ -12,7 +12,6 @@ def visualize_clusters(clustering, radius: float = 0.05, alpha: float = 0.8,
                        output_in_notebook: bool = True,
                        output_file_path: str = 'cluster_viz.html',
                        palette: list = Wellcome33):
-
     """
     This function creates a plot of the clusters
 
