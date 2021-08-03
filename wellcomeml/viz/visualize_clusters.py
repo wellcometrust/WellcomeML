@@ -7,7 +7,7 @@ from wellcomeml.viz.palettes import (Wellcome33,
                                      WellcomeBackground, WellcomeNoData)
 
 
-def visualize_clusters(clustering, radius: float = 0.05, alpha: float = 0.8,
+def visualize_clusters(clustering, radius: float = 0.05, alpha: float = 0.5,
                        plot_width: int = 600, plot_height: int = 600,
                        output_in_notebook: bool = True,
                        output_file_path: str = 'cluster_viz.html',
@@ -19,7 +19,7 @@ def visualize_clusters(clustering, radius: float = 0.05, alpha: float = 0.8,
     ----------
         clustering : class
         radius : float, default: 0.05
-        alpha : float, default: 0.8
+        alpha : float, default: 0.5
         plot_width : int, default: 600
         plot_height : int, default: 600
         output_in_notebook : bool, default: True
@@ -60,7 +60,8 @@ def visualize_clusters(clustering, radius: float = 0.05, alpha: float = 0.8,
     R = []
     for x in clusters_uniq:
         df = data[data['cluster_id'] == str(x)]
-        r = p.circle(x="X", y="Y", color="colors", source=df)
+        r = p.circle(x="X", y="Y", radius=radius, fill_alpha=alpha,
+                     color="colors", source=df)
         R += [r]
 
     if len(clusters_uniq) > 36:
