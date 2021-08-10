@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>wellcomeml.ml package &mdash; WellcomeML 1.2.0 documentation</title>
+  <title>wellcomeml.ml package &mdash; WellcomeML 1.2.1 documentation</title>
   
 
   
@@ -892,13 +892,18 @@ and whether task is multilabel</p>
 <p>A generic “frequency” vectorizer that wraps all usual transformations.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="wellcomeml.ml.frequency_vectorizer.WellcomeTfidf">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wellcomeml.ml.frequency_vectorizer.</span></span><span class="sig-name descname"><span class="pre">WellcomeTfidf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.frequency_vectorizer.WellcomeTfidf" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wellcomeml.ml.frequency_vectorizer.</span></span><span class="sig-name descname"><span class="pre">WellcomeTfidf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_regex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_spacy_lemmatizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.frequency_vectorizer.WellcomeTfidf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_extraction.text.TfidfVectorizer</span></code></p>
 <p>Class to wrap some basic transformation and text
 vectorisation/embedding</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wellcomeml.ml.frequency_vectorizer.WellcomeTfidf.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacy_lemmatizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.frequency_vectorizer.WellcomeTfidf.fit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.frequency_vectorizer.WellcomeTfidf.fit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.ml.frequency_vectorizer.WellcomeTfidf.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.frequency_vectorizer.WellcomeTfidf.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -943,7 +948,7 @@ vectorisation/embedding</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wellcomeml.ml.frequency_vectorizer.WellcomeTfidf.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacy_lemmatizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.frequency_vectorizer.WellcomeTfidf.transform" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.frequency_vectorizer.WellcomeTfidf.transform" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1047,6 +1052,11 @@ and encoding and KerasVectorizer that is sklearn compatible</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wellcomeml.ml.keras_vectorizer.KerasTokenizer.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasTokenizer.fit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.ml.keras_vectorizer.KerasTokenizer.tokenize">
+<span class="sig-name descname"><span class="pre">tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.keras_vectorizer.KerasTokenizer.tokenize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
@@ -2476,13 +2486,18 @@ save_transformed method for the specific vectorizer.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wellcomeml.ml.WellcomeTfidf">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></span><span class="sig-name descname"><span class="pre">WellcomeTfidf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.WellcomeTfidf" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wellcomeml.ml.</span></span><span class="sig-name descname"><span class="pre">WellcomeTfidf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_regex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_spacy_lemmatizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.WellcomeTfidf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_extraction.text.TfidfVectorizer</span></code></p>
 <p>Class to wrap some basic transformation and text
 vectorisation/embedding</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wellcomeml.ml.WellcomeTfidf.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacy_lemmatizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.WellcomeTfidf.fit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.WellcomeTfidf.fit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.ml.WellcomeTfidf.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.WellcomeTfidf.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2527,7 +2542,7 @@ vectorisation/embedding</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wellcomeml.ml.WellcomeTfidf.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacy_lemmatizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.WellcomeTfidf.transform" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.ml.WellcomeTfidf.transform" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

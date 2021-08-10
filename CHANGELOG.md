@@ -1,3 +1,11 @@
+# 1.2.1
+Release date: 05/08/2021
+
+Bug fixes:
+
+- #346: Fixes problem with tf-idf vectoriser lemmatising twice
+- #337: Pin spacy to fix problem with enity-linking test
+
 # 1.2.0
 Release date: 22/07/2021
 
