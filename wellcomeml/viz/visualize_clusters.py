@@ -11,7 +11,7 @@ from bokeh.events import MenuItemClick
 
 def visualize_clusters(clustering, filter_list, radius: float = 0.05,
                        alpha: float = 0.5,
-                       plot_width: int = 600, plot_height: int = 600,
+                       plot_width: int = 1000, plot_height: int = 530,
                        output_in_notebook: bool = True,
                        output_file_path: str = 'cluster_viz.html',
                        palette: list = Wellcome33):
@@ -52,22 +52,20 @@ def visualize_clusters(clustering, filter_list, radius: float = 0.05,
     data['colors'] = [(palette[x % len(palette)]
                        if x != -1 else str(WellcomeNoData)) for x in clusters]
 
-    tools = ('hover, pan, wheel_zoom, zoom_in, zoom_out, reset, save')
+    tools = ('hover, pan, wheel_zoom, zoom_in, zoom_out, reset, save, tap')
     tooltips = [("index", "$index"), ("(x,y)", "($x, $y)"),
                 ("cluster", "@cluster_id"), ("keywords", "@Keywords")]
 
     dropdown_options = [('All', 'All'), None] + [
         (cat, cat) for i, cat in enumerate(sorted(data['category'].unique()),
                                            2)]
-    # Generate dropdown widget
     dropdown = Dropdown(label='Category', button_type='default',
-                        menu=dropdown_options)
+                        menu=dropdown_options, width=190, align="end")
 
     p = figure(title="Cluster visualization", toolbar_location="above",
                plot_width=plot_width, plot_height=plot_height,
                tools=tools, tooltips=tooltips,
-               background_fill_color=well_background,
-               sizing_mode='scale_width')
+               background_fill_color=well_background)
 
     R = []
     sources = []
@@ -83,7 +81,6 @@ def visualize_clusters(clustering, filter_list, radius: float = 0.05,
 
         R += [r]
 
-    # Callback
     callback = CustomJS(
         args=dict(sources=sources, filtered_sources=filtered_sources),
         code="""
@@ -144,9 +141,10 @@ def visualize_clusters(clustering, filter_list, radius: float = 0.05,
         p.add_layout(legend, 'right')
 
     p.legend.title = "Cluster ID"
-    p.legend.label_text_font_size = "10px"
+    p.legend.label_text_font_size = "11px"
     p.legend.background_fill_color = str(WellcomeBackground)
     p.legend.click_policy = "hide"
+    p.min_border_left = 200
 
     reset_output()
     if output_in_notebook:
