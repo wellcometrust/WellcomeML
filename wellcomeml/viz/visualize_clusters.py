@@ -13,7 +13,7 @@ try:
     from bokeh.layouts import column
     from bokeh.events import MenuItemClick
 except ImportError as e:
-    throw_extra_import_message(error=e, required_module='bokeh', extra='bokeh')
+    throw_extra_import_message(error=e, required_module='bokeh', extra='vis')
 
 
 def visualize_clusters(clustering, filter_list: Optional[list] = None,
