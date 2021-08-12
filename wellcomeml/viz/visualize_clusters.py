@@ -1,39 +1,42 @@
+from typing import Optional, Union
+
 import numpy as np
 import pandas as pd
+
 from bokeh.io import output_notebook, reset_output
 from bokeh.models import Legend, Dropdown, ColumnDataSource, CustomJS
 from bokeh.plotting import figure, output_file, show
-from wellcomeml.viz.palettes import (Wellcome33,
-                                     WellcomeBackground, WellcomeNoData)
 from bokeh.layouts import column
 from bokeh.events import MenuItemClick
 
+from wellcomeml.viz.palettes import (Wellcome33, WellcomeBackground, WellcomeNoData)
 
-def visualize_clusters(clustering, filter_list, radius: float = 0.05,
+
+def visualize_clusters(clustering, filter_list: Optional[list] = None,
+                       texts: Optional[list] = None,
+                       radius: float = 0.05,
                        alpha: float = 0.5,
                        plot_width: int = 1000, plot_height: int = 530,
                        output_in_notebook: bool = True,
-                       output_file_path: str = 'cluster_viz.html',
-                       palette: list = Wellcome33):
+                       output_file_path: Optional[str] = None,
+                       palette: Union[list, str] = 'Wellcome33'):
     """
     This function creates a plot of the clusters
 
-    Parameters
-    ----------
-        clustering : class
-        filter_list : list
-        radius : float, default: 0.05
-        alpha : float, default: 0.5
-        plot_width : int, default: 600
-        plot_height : int, default: 600
-        output_in_notebook : bool, default: True
-        output_file_path : str, default: 'cluster_viz.html'
-        palette : list, default: Wellcome33
+    Args:
+        clustering: wellcomeml.ml.TextClustering instnace
+        filter_list: list
+        texts: A list of texts to be displayed by the hover function
+        radius: float, default: 0.05
+        alpha: float, default: 0.5
+        plot_width: int, default: 600
+        plot_height: int, default: 600
+        output_in_notebook: bool, default: True
+        output_file_path: str, default: 'cluster_viz.html'
+        palette: list, default: Wellcome33
 
-    Returns
-    -------
-        None
-            Prints a bokeh figure
+    Returns:
+        None (Prints a bokeh figure)
     """
 
     reduced_points = clustering.reduced_points
@@ -42,7 +45,9 @@ def visualize_clusters(clustering, filter_list, radius: float = 0.05,
     data['cluster_id'] = clustering.cluster_ids
     data['cluster_id'] = data['cluster_id'].astype(str)
     data['Keywords'] = clustering.cluster_kws
-    data['category'] = filter_list
+    data['category'] = (filter_list if filter_list else ['All']*len(data))
+
+    palette = (Wellcome33 if palette == 'Wellcome33' else palette)
 
     palette = [str(x) for x in palette]
     well_background = str(WellcomeBackground)
@@ -56,9 +61,15 @@ def visualize_clusters(clustering, filter_list, radius: float = 0.05,
     tooltips = [("index", "$index"), ("(x,y)", "($x, $y)"),
                 ("cluster", "@cluster_id"), ("keywords", "@Keywords")]
 
-    dropdown_options = [('All', 'All'), None] + [
-        (cat, cat) for i, cat in enumerate(sorted(data['category'].unique()),
-                                           2)]
+    if texts is not None:
+        # Only gets the 60 characters of the text
+        data['text'] = [text[:60] + '...' for text in texts]
+        tooltips += [("text", "@text")]
+
+    dropdown_options = list(set(
+        [('All', 'All'), None] + [
+        (cat, cat) for i, cat in enumerate(sorted(data['category'].unique()), 2)]
+    ))
     dropdown = Dropdown(label='Category', button_type='default',
                         menu=dropdown_options, width=190, align="end")
 
@@ -150,6 +161,7 @@ def visualize_clusters(clustering, filter_list, radius: float = 0.05,
     if output_in_notebook:
         output_notebook()
         show(column(dropdown, p))
-    else:
+
+    if output_file_path:
         output_file(output_file_path)
         show(column(dropdown, p))
