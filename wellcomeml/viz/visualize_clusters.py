@@ -164,8 +164,8 @@ def visualize_clusters(clustering, filter_list: Optional[list] = None,
     reset_output()
     if output_in_notebook:
         output_notebook()
-        show(column(dropdown, p))
 
     if output_file_path:
         output_file(output_file_path)
-        show(column(dropdown, p))
+
+    show(column(dropdown, p))
