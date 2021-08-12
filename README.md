@@ -24,10 +24,10 @@ pip install wellcomeml
 ```
 
 This will install the "vanilla" package. In order to install the deep-learning functionality
-(torch/transformers/spacy transformers):
+(torch/transformers/spacy transformers/visualisation functionalities):
 
 ```bash
-pip install wellcomeml[spacy, tensorflow, torch]
+pip install wellcomeml[spacy, tensorflow, torch, vis]
 ```
 
 For a list of functionalities/classes and the dependencies on "extras", see [extras](#5-extras).
