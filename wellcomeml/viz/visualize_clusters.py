@@ -68,10 +68,9 @@ def visualize_clusters(clustering, filter_list: Optional[list] = None,
         tooltips += [("text", "@text")]
 
     # DropDown Button
-    dropdown_options = list(set(
-        [('All', 'All'), None] + [
-        (cat, cat) for i, cat in enumerate(sorted(data['category'].unique()), 2)]
-    ))
+    dropdown_options = list(set([('All', 'All'), None] +
+                                [(cat, cat) for i, cat in enumerate(sorted(
+                                    data['category'].unique()), 2)]))
     dropdown = Dropdown(label='Category', button_type='default',
                         menu=dropdown_options, width=190, align="end")
 
