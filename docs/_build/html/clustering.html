@@ -94,7 +94,10 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">List of main modules and descriptions</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Clustering text with WellcomeML</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Clustering text with WellcomeML</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#visualize-clusters-demo">Visualize clusters demo</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="wellcomeml.html">Core library documentation</a></li>
 </ul>
 
@@ -251,6 +254,46 @@ Here is a full example for text clustering optimisation:</p>
 </pre></div>
 </div>
 <p>After clustering, you can save or load models using <code class="docutils literal notranslate"><span class="pre">cluster.save()</span></code> and <code class="docutils literal notranslate"><span class="pre">cluster.load()</span></code>.</p>
+<div class="section" id="visualize-clusters-demo">
+<h2>Visualize clusters demo<a class="headerlink" href="#visualize-clusters-demo" title="Permalink to this headline">¶</a></h2>
+<p>WellcomeML provides a function called <cite>visualize_clusters</cite> for visualizing the results of the clustering outputs.
+Let’s see step by step how to plot interactive clusters automatically.</p>
+<p>For this example, we’ll be using a dataset of academic publication abstracts. Download the dataset <a class="reference external" href="https://datalabs-public.s3.eu-west-2.amazonaws.com/datasets/epmc/random_sample.csv">here</a>.</p>
+<p>Import the following libraries:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">wellcomeml.ml.clustering</span> <span class="kn">import</span> <span class="n">TextClustering</span>
+<span class="kn">from</span> <span class="nn">wellcomeml.viz.visualize_clusters</span> <span class="kn">import</span> <span class="n">visualize_clusters</span>
+</pre></div>
+</div>
+<p>Load the previously downloaded datasets</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;random_sample.csv&quot;</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Apply clustering to the isolated text list</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">clustering</span> <span class="o">=</span> <span class="n">TextClustering</span><span class="p">(</span><span class="n">embedding</span><span class="o">=</span><span class="s1">&#39;tf-idf&#39;</span><span class="p">,</span> <span class="n">reducer</span><span class="o">=</span><span class="s1">&#39;umap&#39;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;reducer&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;min_dist&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;n_neighbors&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+    <span class="s1">&#39;vectorizer&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;min_df&#39;</span><span class="p">:</span> <span class="mf">0.0002</span><span class="p">},</span>
+    <span class="s1">&#39;clustering&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;min_samples&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;eps&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">}</span>
+<span class="p">})</span>
+
+<span class="n">clustering</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a random list for filtering the results (this is just some dummy data so we can show the potential of the viz -
+on your dataset you probably will have an obvious filtering variable)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">random_list</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">([</span><span class="s1">&#39;Accepted&#39;</span><span class="p">,</span> <span class="s1">&#39;Rejected&#39;</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                        <span class="n">k</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">clustering</span><span class="o">.</span><span class="n">reduced_points</span><span class="p">)))</span>
+<span class="n">random_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">random_list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Invoke the <cite>visualize_clusters</cite> function by adjusting the parameter as you desire</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">visualize_clusters</span><span class="p">(</span><span class="n">clustering</span><span class="p">,</span> <span class="n">random_list</span><span class="p">,</span>
+                   <span class="n">output_in_notebook</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_file_path</span><span class="o">=</span><span class="s2">&quot;test.html&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<iframe src="https://datalabs-public.s3.eu-west-2.amazonaws.com/wellcomeml/docs/static/clustering.html" height="600px" width="100%" frameBorder="0"></iframe></div>
 </div>
 
 

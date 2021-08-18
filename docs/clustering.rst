@@ -102,29 +102,31 @@ Here is a full example for text clustering optimisation:
 After clustering, you can save or load models using ``cluster.save()`` and ``cluster.load()``.
 
 Visualize clusters demo
-==================
+------------------------
 WellcomeML provides a function called `visualize_clusters` for visualizing the results of the clustering outputs.
 Let's see step by step how to plot interactive clusters automatically.
 
-Download the dataset `here <https://datalabs-public.s3.eu-west-2.amazonaws.com/datasets/epmc/random_sample.csv>`_.
+For this example, we'll be using a dataset of academic publication abstracts. Download the dataset `here <https://datalabs-public.s3.eu-west-2.amazonaws.com/datasets/epmc/random_sample.csv>`_.
 
 Import the following libraries:
 
-  .. code-block:: python
+.. code-block:: python
 
     import random
     import pandas as pd
     from wellcomeml.ml.clustering import TextClustering
     from wellcomeml.viz.visualize_clusters import visualize_clusters
 
-  Load the previously downloaded datasets
-    .. code-block:: python
+Load the previously downloaded datasets
+
+.. code-block:: python
 
     data = pd.read_csv("random_sample.csv")
     text = list(data['text'])
 
-  Apply clustering to the isolated text list
-    .. code-block:: python
+Apply clustering to the isolated text list
+
+.. code-block:: python
 
     clustering = TextClustering(embedding='tf-idf', reducer='umap', params={
         'reducer': {'min_dist': 0.1, 'n_neighbors': 10},
@@ -134,13 +136,23 @@ Import the following libraries:
 
     clustering.fit(text)
 
-  Create a random list for filtering the results
-    ..code-block:: python
+Create a random list for filtering the results (this is just some dummy data so we can show the potential of the viz -
+on your dataset you probably will have an obvious filtering variable)
 
-    random_list = pd.Series(random.choices(['Accepted', 'Rejected'], weights=[5, 1], k=len(clustering.reduced_points)))
+.. code-block:: python
+
+    random_list = pd.Series(random.choices(['Accepted', 'Rejected'], weights=[5, 1],
+                            k=len(clustering.reduced_points)))
     random_list = list(random_list)
 
-  Invoke the `visualize_clusters` function by adjusting the parameter as you desire
 
-    ..code-block:: python
-    visualize_clusters(clustering, random_list, output_in_notebook=True, output_file_path="test.html")
+Invoke the `visualize_clusters` function by adjusting the parameter as you desire
+
+.. code-block:: python
+
+    visualize_clusters(clustering, random_list,
+                       output_in_notebook=True, output_file_path="test.html")
+
+.. raw:: html
+
+    <iframe src="https://datalabs-public.s3.eu-west-2.amazonaws.com/wellcomeml/docs/static/clustering.html" height="600px" width="100%" frameBorder="0"></iframe>
