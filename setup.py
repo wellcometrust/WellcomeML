@@ -69,6 +69,9 @@ setuptools.setup(
         ],
         'spacy': [
             'spacy[lookups]==3.0.6'
+        ],
+        'vis': [
+            'bokeh'
         ]
     },
     tests_require=[

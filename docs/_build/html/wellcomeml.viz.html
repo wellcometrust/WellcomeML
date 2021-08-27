@@ -105,6 +105,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.viz.colors">wellcomeml.viz.colors module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.viz.palettes">wellcomeml.viz.palettes module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.viz.visualize_clusters">wellcomeml.viz.visualize_clusters module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.viz">Module contents</a></li>
 </ul>
 </li>
@@ -202,6 +203,34 @@
 </div>
 <div class="section" id="module-wellcomeml.viz.palettes">
 <span id="wellcomeml-viz-palettes-module"></span><h2>wellcomeml.viz.palettes module<a class="headerlink" href="#module-wellcomeml.viz.palettes" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-wellcomeml.viz.visualize_clusters">
+<span id="wellcomeml-viz-visualize-clusters-module"></span><h2>wellcomeml.viz.visualize_clusters module<a class="headerlink" href="#module-wellcomeml.viz.visualize_clusters" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="wellcomeml.viz.visualize_clusters.visualize_clusters">
+<span class="sig-prename descclassname"><span class="pre">wellcomeml.viz.visualize_clusters.</span></span><span class="sig-name descname"><span class="pre">visualize_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clustering</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_width</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_height</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">530</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_in_notebook</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'Wellcome33'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.viz.visualize_clusters.visualize_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates a plot of the clusters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clustering</strong> – wellcomeml.ml.TextClustering instance</p></li>
+<li><p><strong>filter_list</strong> – list</p></li>
+<li><p><strong>texts</strong> – A list of texts to be displayed by the hover function</p></li>
+<li><p><strong>radius</strong> – float, default: 0.05</p></li>
+<li><p><strong>alpha</strong> – float, default: 0.5</p></li>
+<li><p><strong>plot_width</strong> – int, default: 600</p></li>
+<li><p><strong>plot_height</strong> – int, default: 600</p></li>
+<li><p><strong>output_in_notebook</strong> – bool, default: True</p></li>
+<li><p><strong>output_file_path</strong> – str, default: ‘cluster_viz.html’</p></li>
+<li><p><strong>palette</strong> – list, default: Wellcome33</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None (Prints a bokeh figure)</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-wellcomeml.viz">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.viz" title="Permalink to this headline">¶</a></h2>

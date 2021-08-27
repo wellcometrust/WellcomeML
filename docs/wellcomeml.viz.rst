@@ -20,6 +20,14 @@ wellcomeml.viz.palettes module
    :undoc-members:
    :show-inheritance:
 
+wellcomeml.viz.visualize\_clusters module
+-----------------------------------------
+
+.. automodule:: wellcomeml.viz.visualize_clusters
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
