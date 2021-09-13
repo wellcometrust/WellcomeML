@@ -51,7 +51,7 @@ setuptools.setup(
         'umap-learn',
         'nervaluate',
         'twine',
-        'gensim<5.0.0',
+        'gensim<=4.0.0',
         'cython',
         'flake8',
         'black',
