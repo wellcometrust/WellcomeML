@@ -42,7 +42,7 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     install_requires=[
-        'numpy==1.19.2',
+        'numpy>=1.19.5,<1.20',
         'pandas',
         'boto3',
         'scikit-learn',
@@ -51,7 +51,7 @@ setuptools.setup(
         'umap-learn',
         'nervaluate',
         'twine',
-        'gensim<5.0.0',
+        'gensim<=4.0.0',
         'cython',
         'flake8',
         'black',
