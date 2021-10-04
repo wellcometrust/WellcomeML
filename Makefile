@@ -47,7 +47,7 @@ $(VIRTUALENV)/.deep_learning_models:
 $(VIRTUALENV)/.non_pypi_packages:
 	# Install from local git directory - pip install [address] fails on Windows
 	git clone https://github.com/epfml/sent2vec.git
-	$(VENV_BIN)/pip install sent2vec
+	cd sent2vec && git checkout f00a1b67f4330e5be99e7cc31ac28df94deed9ac && $(VENV_BIN)/pip install . # Install latest compatible sent2vec
 	@rm -rf sent2vec
 	touch $@
 
