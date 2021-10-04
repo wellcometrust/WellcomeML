@@ -14,7 +14,7 @@ def download(download_target):
         sent_2_vec_commit = '@f00a1b67f4330e5be99e7cc31ac28df94deed9ac'
 
         subprocess.run([
-            'pip', 'install', 'git+https://github.com/epfml/sent2vec.git'])
+            'pip', 'install', f'git+https://github.com/epfml/sent2vec.git@{sent_2_vec_commit}'])
     else:
         print(f"{download_target} is not one of models,deeplearning-models")
 
