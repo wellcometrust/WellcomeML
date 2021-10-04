@@ -11,7 +11,7 @@ def download(download_target):
             'python', '-m', 'spacy', 'download', 'en_core_web_trf'])
     elif download_target == "non_pypi_packages":
         # This is a workaround to pin sent2vec
-        sent_2_vec_commit = '@f00a1b67f4330e5be99e7cc31ac28df94deed9ac'
+        sent_2_vec_commit = 'f00a1b67f4330e5be99e7cc31ac28df94deed9ac'
 
         subprocess.run([
             'pip', 'install', f'git+https://github.com/epfml/sent2vec.git@{sent_2_vec_commit}'])
