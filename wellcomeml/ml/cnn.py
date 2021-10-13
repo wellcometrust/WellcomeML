@@ -297,11 +297,15 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         train_data = data.take(steps_per_epoch)
         val_data = data.skip(steps_per_epoch)
 
-        strategy = self._get_distributed_strategy()
-        with strategy.scope():
-            self.model = self._build_model(
-                self.sequence_length, self.vocab_size, self.nb_outputs,
-                steps_per_epoch, embedding_matrix)
+        if hasattr(self, "model"):
+            logger.warning("Using existing model")
+            print("Using existing model")
+        else:
+            strategy = self._get_distributed_strategy()
+            with strategy.scope():
+                self.model = self._build_model(
+                    self.sequence_length, self.vocab_size, self.nb_outputs,
+                    steps_per_epoch, embedding_matrix)
 
         callbacks = []
         if self.tensorboard_log_path:
