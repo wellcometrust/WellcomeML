@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 def write_jsonl(input_data, output_file):
     """
-    Write a dict to jsonl (line delimited json)
+    Write a list of dicts to jsonl (line delimited json)
 
     Output format will look like:
 
@@ -24,7 +24,7 @@ def write_jsonl(input_data, output_file):
     ```
 
     Args:
-        input_data(dict): A dict to be written to json.
+        input_data(dict): A list of dicts to be written to json.
         output_file(str): Filename to which the jsonl will be saved.
     """
 
