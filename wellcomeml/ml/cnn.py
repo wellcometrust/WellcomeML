@@ -61,6 +61,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         vocab_size=None,
         nb_outputs=None,
         tensorboard_log_path="logs",
+        use_gpu=True,
         verbose=1  # this follows keras.Model.fit verbose for now
     ):
         self.context_window = context_window
@@ -88,6 +89,7 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         self.vocab_size = vocab_size,
         self.nb_outputs = nb_outputs,
         self.tensorboard_log_path = tensorboard_log_path,
+        self.use_gpu = use_gpu,
         self.verbose = verbose
 
     def _prepare_data(self, X, Y, shuffle=True):
@@ -110,10 +112,11 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         return data
 
     def _get_distributed_strategy(self):
-        if len(tf.config.list_physical_devices('GPU')) > 1:
-            strategy = tf.distribute.MirroredStrategy()
-        else:  # use default strategy
-            strategy = tf.distribute.get_strategy()
+        gpus = tf.config.list_physical_devices('GPU')
+        if len(gpus) >= 1 and self.use_gpu:
+            strategy = tf.distribute.MirroredStrategy(gpus)
+        else:  # use cpus
+            strategy = tf.distribute.MirroredStrategy(["CPU"])
         return strategy
 
     def _init_from_data(self, X, Y):
