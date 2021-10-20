@@ -50,7 +50,7 @@ def _yield_jsonl(file_name):
 
 
 def read_jsonl(input_file):
-    """Create a list from a jsonl file
+    """Create a list of dicts from a jsonl file
 
     Args:
         input_file(str): File to be loaded.
