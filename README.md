@@ -3,7 +3,6 @@
 ![PyPI](https://img.shields.io/pypi/v/wellcomeml)
 [![docs](https://img.shields.io/badge/docs-%20-success)](http://wellcometrust.github.io/WellcomeML)
 
-
 # WellcomeML utils
 
 This package contains common utility functions for usual tasks at the Wellcome Trust, in particular functionalities for processing, embedding and classifying text data. This includes
