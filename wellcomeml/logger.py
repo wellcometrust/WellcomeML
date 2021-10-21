@@ -48,5 +48,9 @@ external_logging_level = {
 for package, level in external_logging_level.items():
     logging.getLogger(package).setLevel(level)
 
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = os.environ.get(
+    "TF_CPP_MIN_LOG_LEVEL", str(LOGGING_LEVEL // 10)
+)
+
 if LOGGING_LEVEL >= 40:  # ERROR
     warnings.filterwarnings("ignore")
