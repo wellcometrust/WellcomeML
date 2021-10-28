@@ -1,5 +1,5 @@
 from wellcomeml.ml.bilstm import BiLSTMClassifier
-from wellcomeml.ml.keras_vectorizer import  KerasVectorizer
+from wellcomeml.ml.keras_vectorizer import KerasVectorizer
 from sklearn.pipeline import Pipeline
 
 import numpy as np
