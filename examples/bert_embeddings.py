@@ -2,7 +2,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 
-from wellcomeml.ml import BertVectorizer
+from wellcomeml.ml.bert_vectorizer import BertVectorizer
 
 
 X = [
