@@ -5,7 +5,7 @@ returning some predictions and an evaluation of the trained model
 
 import random
 
-from wellcomeml.ml import SpacyNER
+from wellcomeml.ml.spacy_ner import SpacyNER
 from wellcomeml.metrics.ner_classification_report import ner_classification_report
 from wellcomeml.datasets.conll import load_conll
 from wellcomeml.datasets.winer import load_winer

@@ -1,4 +1,4 @@
-from wellcomeml.ml import TextClustering
+from wellcomeml.ml.clustering import TextClustering
 
 # This is bad clustering
 

@@ -1,6 +1,6 @@
 import numpy as np
 
-from wellcomeml.ml import BertClassifier
+from wellcomeml.ml.bert_classifier import BertClassifier
 
 X = ["Hot and cold", "Hot", "Cold"]
 Y = np.array([[1, 1], [1, 0], [0, 1]])

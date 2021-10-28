@@ -3,7 +3,7 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.pipeline import Pipeline
 
 
-from wellcomeml.ml import Sent2VecVectorizer
+from wellcomeml.ml.sent2vec_vectorizer import Sent2VecVectorizer
 
 X = [
     "Malaria is a disease spread by mosquitos",
