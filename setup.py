@@ -26,6 +26,45 @@ with open(version_path, 'r') as f:
 with open('README.md', 'r') as f:
     long_description = f.read()
 
+extras = {
+        'umap': [
+            'umap-learn'
+        ],
+        'gensim': [
+            'gensim<=4.0.0'
+        ],
+        'sklearn': [
+            'scikit-learn'
+        ],
+        'transformers': [
+            'transformers',
+            'tokenizers==0.10.1'
+        ],
+        'tensorflow': [
+            'tensorflow==2.4.0',
+            'tensorflow-addons',
+            'numpy>=1.19.2,<1.20'
+        ],
+        'torch': [
+            'torch'
+        ],
+        'spacy': [
+            'spacy[lookups]==3.0.6'
+        ],
+        # All visualisation libraries
+        'vis': [
+            'bokeh',
+            'pandas'
+        ],
+        # All evaluation libraries
+        'evaluate': [
+            'nervaluate'
+        ]
+}
+
+# Allow users to install 'all' if they wish
+extras['all'] = [dep for dep_list in extras.values() for dep in dep_list]
+
 setuptools.setup(
     name=about['__name__'],
     version=about['__version__'],
@@ -42,38 +81,14 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     install_requires=[
-        'numpy>=1.19.2,<1.20',
-        'pandas',
         'boto3',
-        'scikit-learn',
-        'scipy==1.4.1',
-        'click>=7.0,<8.0',
-        'umap-learn',
-        'nervaluate',
         'twine',
-        'gensim<=4.0.0',
         'cython',
         'flake8',
         'black',
-        'transformers',
-        'tokenizers==0.10.1',
         'tqdm'
     ],
-    extras_require={
-        'tensorflow': [
-            'tensorflow==2.4.0',
-            'tensorflow-addons'
-        ],
-        'torch': [
-            'torch'
-        ],
-        'spacy': [
-            'spacy[lookups]==3.0.6'
-        ],
-        'vis': [
-            'bokeh'
-        ]
-    },
+    extras_require=extras,
     tests_require=[
         'pytest',
         'pytest-cov',
