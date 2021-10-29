@@ -1,15 +1,23 @@
 from typing import Optional, Union
 
-import numpy as np
-import pandas as pd
-
-from bokeh.io import output_notebook, reset_output
-from bokeh.models import Legend, Dropdown, ColumnDataSource, CustomJS
-from bokeh.plotting import figure, output_file, show
-from bokeh.layouts import column
-from bokeh.events import MenuItemClick
+from wellcomeml.utils import throw_extra_import_message
 
 from wellcomeml.viz.palettes import (Wellcome33, WellcomeBackground, WellcomeNoData)
+
+required_modules = 'numpy,pandas,bokeh'
+required_extras = 'core'
+
+try:
+    import numpy as np
+    import pandas as pd
+
+    from bokeh.io import output_notebook, reset_output
+    from bokeh.models import Legend, Dropdown, ColumnDataSource, CustomJS
+    from bokeh.plotting import figure, output_file, show
+    from bokeh.layouts import column
+    from bokeh.events import MenuItemClick
+except ImportError as e:
+    throw_extra_import_message(error=e, required_modules=required_modules, extras=required_extras)
 
 
 def visualize_clusters(clustering, filter_list: Optional[list] = None,

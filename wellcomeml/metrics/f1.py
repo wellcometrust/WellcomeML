@@ -2,8 +2,16 @@
 
 Adapted from: https://www.kaggle.com/rejpalcz/best-loss-function-for-f1-score-metric
 """
-import tensorflow as tf
-import tensorflow.keras.backend as K
+from wellcomeml.utils import throw_extra_import_message
+
+required_modules = 'tensorflow'
+required_extras = 'tensorflow'
+
+try:
+    import tensorflow as tf
+    import tensorflow.keras.backend as K
+except ImportError as e:
+    throw_extra_import_message(e, required_modules, required_extras)
 
 
 def f1_metric(y_true, y_pred):

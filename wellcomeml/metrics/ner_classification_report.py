@@ -1,5 +1,12 @@
+from wellcomeml.utils import throw_extra_import_message
 
-from nervaluate import Evaluator
+required_module = 'nervaluate'
+required_extras = 'core'
+
+try:
+    from nervaluate import Evaluator
+except ImportError as e:
+    throw_extra_import_message(error, required_module, required_extras)
 
 
 def ner_classification_report(y_true, y_pred, groups, tags):
