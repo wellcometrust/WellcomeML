@@ -27,14 +27,14 @@ with open('README.md', 'r') as f:
     long_description = f.read()
 
 extras = {
-        'umap': [
-            'umap-learn'
-        ],
-        'gensim': [
-            'gensim<=4.0.0'
-        ],
-        'sklearn': [
-            'scikit-learn'
+        'core': [
+            'scikit-learn',
+            'scipy',
+            'umap-learn',
+            'gensim<=4.0.0',
+            'bokeh',
+            'pandas',
+            'nervaluate'
         ],
         'transformers': [
             'transformers',
@@ -49,17 +49,9 @@ extras = {
             'torch'
         ],
         'spacy': [
-            'spacy[lookups]==3.0.6'
+            'spacy[lookups]==3.0.6',
+            'click>=7.0,<8.0'
         ],
-        # All visualisation libraries
-        'vis': [
-            'bokeh',
-            'pandas'
-        ],
-        # All evaluation libraries
-        'evaluate': [
-            'nervaluate'
-        ]
 }
 
 # Allow users to install 'all' if they wish
