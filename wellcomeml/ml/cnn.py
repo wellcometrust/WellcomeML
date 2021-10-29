@@ -18,19 +18,21 @@ from datetime import datetime
 import logging
 import math
 
-from sklearn.base import BaseEstimator, ClassifierMixin
-from sklearn.metrics import f1_score
-from scipy.sparse import csr_matrix, vstack
-import numpy as np
-
 from wellcomeml.ml.attention import HierarchicalAttention
 from wellcomeml.utils import throw_extra_import_message
+
+required_modules = 'tensorflow,sklearn,numpy,scipy'
+required_extras = 'core,tensorflow'
 
 try:
     import tensorflow_addons as tfa
     import tensorflow as tf
+    from sklearn.base import BaseEstimator, ClassifierMixin
+    from sklearn.metrics import f1_score
+    from scipy.sparse import csr_matrix, vstack
+    import numpy as np
 except ImportError as e:
-    throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
+    throw_extra_import_message(error=e, required_modules=required_modules, extras=required_extras)
 
 logger = logging.getLogger(__name__)
 

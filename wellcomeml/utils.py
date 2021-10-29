@@ -62,10 +62,10 @@ def check_cache_and_download(model_name):
     return model_path
 
 
-def throw_extra_import_message(error, extra, required_module):
+def throw_extra_import_message(error, extras, required_modules):
     """Safely throws an import error if it due to missing extras, and re-raising it otherwise"""
-    if error.name == required_module:
-        raise ImportError(f"To use this class/module you need to install wellcomeml with {extra} "
-                          f"extras, e.g. pip install wellcomeml[{extra}]")
+    if error.name in required_modules.split(','):
+        raise ImportError(f"To use this class/module you need to install wellcomeml with {extras} "
+                          f"extras, e.g. pip install wellcomeml[{extras}]")
     else:
         raise error

@@ -1,14 +1,15 @@
 import csv
 from collections import defaultdict
 
-from sklearn.metrics import f1_score, precision_score, recall_score
-
 from wellcomeml.utils import throw_extra_import_message
 
+require_modules = 'sklearn,tensorflow'
+required_extras = 'core,tensorflow'
 try:
+    from sklearn.metrics import f1_score, precision_score, recall_score
     import tensorflow as tf
 except ImportError as e:
-    throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
+    throw_extra_import_message(error=e, required_modules=require_modules, extras=required_extras)
 
 
 class Metrics(tf.keras.callbacks.Callback):

@@ -10,13 +10,16 @@ import os
 
 from wellcomeml.utils import throw_extra_import_message
 
+required_modules = 'spacy'
+required_extras = 'spacy'
+
 try:
     from spacy.vocab import Vocab
     from spacy.kb import KnowledgeBase
 
     import spacy
 except ImportError as e:
-    throw_extra_import_message(error=e, required_module='spacy', extra='spacy')
+    throw_extra_import_message(error=e, required_modules=required_modules, extras=required_extras)
 
 
 class SpacyKnowledgeBase(object):

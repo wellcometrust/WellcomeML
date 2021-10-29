@@ -4,17 +4,20 @@ BERT Vectorizer that embeds text using a prertained BERT model
 """
 import logging
 
-from transformers import BertModel, BertTokenizer
-from sklearn.base import BaseEstimator, TransformerMixin
-import numpy as np
 import tqdm
 
 from wellcomeml.utils import check_cache_and_download, throw_extra_import_message
 
+required_modules = "torch,sklearn,numpy"
+required_extras = "torch,transformers,sklearn"
 try:
+    from transformers import BertModel, BertTokenizer
+    from sklearn.base import BaseEstimator, TransformerMixin
+    import numpy as np
     import torch
 except ImportError as e:
-    throw_extra_import_message(error=e, extra="torch", required_module="torch")
+    throw_extra_import_message(error=e, required_modules=required_modules,
+                               extras=required_extras)
 
 logger = logging.getLogger(__name__)
 

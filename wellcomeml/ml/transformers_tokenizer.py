@@ -2,12 +2,21 @@
 Implements Tokenizer that abstracts common tokenisation
 strategies used in Transformers
 """
-from tokenizers.models import WordPiece, BPE
-from tokenizers.normalizers import Lowercase, Sequence
-from tokenizers.trainers import BpeTrainer, WordPieceTrainer
-from tokenizers.pre_tokenizers import ByteLevel, Whitespace
-from tokenizers import Tokenizer
-import numpy as np
+from wellcomeml.utils import throw_extra_import_message
+
+required_modules = 'tokenizers,numpy'
+required_extras = 'core,transformers'
+
+try:
+    from tokenizers.models import WordPiece, BPE
+    from tokenizers.normalizers import Lowercase, Sequence
+    from tokenizers.trainers import BpeTrainer, WordPieceTrainer
+    from tokenizers.pre_tokenizers import ByteLevel, Whitespace
+    from tokenizers import Tokenizer
+    import numpy as np
+except ImportError as e:
+    throw_extra_import_message(error=e, required_modules=required_modules,
+                               required_extras=required_extras)
 
 # TODO
 # - generalise to two sentences

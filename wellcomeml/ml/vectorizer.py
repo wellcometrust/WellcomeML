@@ -5,8 +5,17 @@
 A generic vectorizer that can fallback to tdidf or bag of words from sklearn
 or embed using bert, doc2vec etc
 """
+from wellcomeml.utils import throw_extra_import_message
 
-from sklearn.base import BaseEstimator, TransformerMixin
+required_modules = 'sklearn'
+required_extras = 'core'
+
+try:
+    from sklearn.base import BaseEstimator, TransformerMixin
+except ImportError as e:
+    throw_extra_import_message(error=e, required_modules=required_modules,
+                               required_extras=required_extras)
+
 
 
 class Vectorizer(BaseEstimator, TransformerMixin):

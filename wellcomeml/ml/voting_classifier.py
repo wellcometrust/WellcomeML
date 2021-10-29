@@ -33,10 +33,18 @@ voting = "hard":
 """
 import logging
 
-from sklearn.utils.validation import check_is_fitted
-from sklearn.ensemble import VotingClassifier
-from sklearn.exceptions import NotFittedError
-import numpy as np
+required_modules = 'sklearn,numpy'
+required_extras = 'core'
+
+try:
+    from sklearn.utils.validation import check_is_fitted
+    from sklearn.ensemble import VotingClassifier
+    from sklearn.exceptions import NotFittedError
+    import numpy as np
+except ImportError as e:
+    throw_extra_import_message(error=e, required_modules=required_modules,
+                                   required_extras=required_extras)
+
 
 logger = logging.getLogger(__name__)
 

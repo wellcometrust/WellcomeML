@@ -2,9 +2,17 @@
 Vectorizer that exposes sklearn interface to sent2vec
 paper and codebase. https://github.com/epfml/sent2vec
 """
-from sklearn.base import TransformerMixin, BaseEstimator
+from wellcomeml.utils import check_cache_and_download, throw_extra_import_message
 
-from wellcomeml.utils import check_cache_and_download
+required_modules = 'sklearn'
+required_extras = 'core'
+
+try:
+    from sklearn.base import TransformerMixin, BaseEstimator
+except ImportError as e:
+    throw_extra_import_message(error=e, required_modules=required_modules,
+                               required_extras=required_extras)
+
 
 
 class Sent2VecVectorizer(BaseEstimator, TransformerMixin):

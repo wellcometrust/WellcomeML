@@ -6,13 +6,16 @@ import random
 
 from wellcomeml.utils import throw_extra_import_message
 
+required_modules = 'spacy'
+required_extras = 'spacy'
+
 try:
     from spacy.training import Example
     from spacy.util import minibatch, compounding
     import spacy
     from spacy.kb import KnowledgeBase
 except ImportError as e:
-    throw_extra_import_message(error=e, required_module='spacy', extra='spacy')
+    throw_extra_import_message(error=e, required_modules=required_modules, extras=required_extras)
 
 
 class SpacyEntityLinker(object):
