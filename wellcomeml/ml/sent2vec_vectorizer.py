@@ -14,7 +14,6 @@ except ImportError as e:
                                required_extras=required_extras)
 
 
-
 class Sent2VecVectorizer(BaseEstimator, TransformerMixin):
     def __init__(self, pretrained=None):
         self.pretrained = pretrained

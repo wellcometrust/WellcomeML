@@ -33,6 +33,8 @@ voting = "hard":
 """
 import logging
 
+from wellcomeml.utils import throw_extra_import_message
+
 required_modules = 'sklearn,numpy'
 required_extras = 'core'
 
@@ -42,9 +44,7 @@ try:
     from sklearn.exceptions import NotFittedError
     import numpy as np
 except ImportError as e:
-    throw_extra_import_message(error=e, required_modules=required_modules,
-                                   required_extras=required_extras)
-
+    throw_extra_import_message(error=e, required_modules=required_modules, extras=required_extras)
 
 logger = logging.getLogger(__name__)
 

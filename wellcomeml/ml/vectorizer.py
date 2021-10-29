@@ -17,7 +17,6 @@ except ImportError as e:
                                required_extras=required_extras)
 
 
-
 class Vectorizer(BaseEstimator, TransformerMixin):
     """
     Abstract class, sklearn-compatible, that can vectorize texts using
