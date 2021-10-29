@@ -3,13 +3,21 @@ A class that for each of a list of sentences will find the most similar document
 using the TFIDF vectors or a BERT embedding from the corpus documents.
 
 """
-
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import f1_score
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
+from wellcomeml.utils import throw_extra_import_message
 
 from wellcomeml.ml.bert_vectorizer import BertVectorizer
+
+required_modules = 'sklearn'
+required_extras = 'core'
+
+try:
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics import f1_score
+    from sklearn.metrics.pairwise import cosine_similarity
+    import numpy as np
+except ImportError as e:
+    throw_extra_import_message(error=e, required_modules=required_modules,
+                               required_extras=required_extras)
 
 
 class SimilarityEntityLinker:

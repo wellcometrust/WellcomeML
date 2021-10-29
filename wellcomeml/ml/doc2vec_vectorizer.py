@@ -4,9 +4,18 @@ import multiprocessing
 import statistics
 import logging
 
-from sklearn.base import BaseEstimator, TransformerMixin
-from gensim.models.doc2vec import Doc2Vec, TaggedDocument
-import numpy as np
+from wellcomeml.utils import throw_extra_import_message
+
+required_modules = 'sklearn,gensim,numpy'
+required_extras = 'core'
+
+try:
+    from sklearn.base import BaseEstimator, TransformerMixin
+    from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+    import numpy as np
+except ImportError as e:
+    throw_extra_import_message(error=e, required_modules=required_modules, extras=required_extras)
+
 
 logging.getLogger("gensim").setLevel(logging.WARNING)
 

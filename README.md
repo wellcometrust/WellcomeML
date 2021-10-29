@@ -11,6 +11,7 @@ This package contains common utility functions for usual tasks at the Wellcome T
 * An intuitive sklearn-like API wrapping text vectorizers, such as Doc2vec, Bert, Scibert
 * Common API for off-the-shelf classifiers to allow quick iteration (e.g. Frequency Vectorizer, Bert, Scibert, basic CNN, BiLSTM, SemanticSimilarity)
 * Utils to download and convert academic text datasets for benchmark
+* Utils to download data from the EPMC API
 
 For more information read the official [docs](http://wellcometrust.github.io/WellcomeML).
 
@@ -23,39 +24,38 @@ Installing from PyPi
 pip install wellcomeml
 ```
 
-This will install the "vanilla" package. In order to install the deep-learning functionality
-(torch/transformers/spacy transformers/visualisation functionalities):
+This will install the "vanilla" package with very little functionality, such as io, dataset download etc.
+
+If space is not a problem, you can install the  _full_ package (around 2.2GB):
 
 ```bash
-pip install wellcomeml[spacy, tensorflow, torch, vis]
+pip install wellcomeml[all]
 ```
 
-For a list of functionalities/classes and the dependencies on "extras", see [extras](#5-extras).
-
-
-Installing from a release wheel
-
-Download the wheel [from aws](https://datalabs-public.s3.eu-west-2.amazonaws.com/wellcomeml/wellcomeml-2020.1.0-py3-none-any.whl)
-and pip install it:
+The full package is relatively big, therefore we also have fine-grained installations if you only wish to use one specific module.
+Those are `core, transformers, tensorflow, torch, spacy`. You can install one, or more of those you want, e.g.:
 
 ```bash
-pip install wellcomeml-2020.1.0-py3-none-any.whl
-pip install wellcomeml-2020.1.0-py3-none-any.whl[deep-learning]
+pip install wellcomeml[tensorflow, core]
 ```
 
-### 1.1 Installing wellcomeml[deep-learning] on windows 
+To check that your installation allows you to use a specific module, try (for example):
 
-Torch has a different installation for windows so it will not get automatically installed with wellcomeml[deeplearning].
+```bash
+python -c "import wellcomeml.ml.bert_vectorizer"
+```
+
+If you don't have the correct dependencies installed for a module, an error will appear 
+and point you to the right dependencies.
+
+### 1.1 Installing wellcomeml[all] on windows 
+
+Torch has a different installation for windows so it will not get automatically installed with wellcomeml[all].
 It needs to be installed first (this is for machines with no CUDA parallel computing platform for those that do look here https://pytorch.org/ for correct installation):
 
 ```
 pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
-```
-
-Then install wellcomeml[deep-learning]:
-
-```
-pip install wellcomeml[deep-learning]
+pip install wellcomeml[all]
 ```
 
 ## 2. Development
@@ -145,5 +145,4 @@ more information that might be informative to resolve the issue.
 | wellcomeml.ml.spacy_ner | Named entity recognition classifier based on spacy | spacy |
 | wellcomeml.ml.transformers_tokenizer | Bespoke tokenizer based on transformers | Transformers |
 | wellcomeml.ml.vectorizer | Abstract class for vectorizers | NA |
-| wellcomeml.ml.voting_classifier | Meta-classifier based on majority voting | NA | 
-
+| wellcomeml.ml.voting_classifier | Meta-classifier based on majority voting | NA |

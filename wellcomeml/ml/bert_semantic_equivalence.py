@@ -3,22 +3,24 @@ from datetime import datetime
 import math
 import os
 
-from transformers import BertConfig, BertTokenizer, \
-    TFBertForSequenceClassification
-
-from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.model_selection import train_test_split
-from sklearn.utils.validation import check_is_fitted
-from sklearn.exceptions import NotFittedError
+from wellcomeml.utils import throw_extra_import_message
 
 from wellcomeml.ml.keras_utils import CategoricalMetrics  # , MetricMiniBatchHistory
 from wellcomeml.logger import LOGGING_LEVEL, build_logger
-from wellcomeml.utils import throw_extra_import_message
+
 
 try:
     import tensorflow as tf
+    from transformers import BertConfig, BertTokenizer, \
+        TFBertForSequenceClassification
+
+    from sklearn.base import BaseEstimator, TransformerMixin
+    from sklearn.model_selection import train_test_split
+    from sklearn.utils.validation import check_is_fitted
+    from sklearn.exceptions import NotFittedError
 except ImportError as e:
-    throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
+    throw_extra_import_message(error=e, required_modules='tensorflow,sklearn',
+                               extras='core,tensorflow,transformers')
 
 
 class SemanticEquivalenceClassifier(BaseEstimator, TransformerMixin):

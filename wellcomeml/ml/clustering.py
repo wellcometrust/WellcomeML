@@ -5,14 +5,23 @@ import pickle
 
 from wellcomeml.ml import vectorizer
 from wellcomeml.logger import logger
+from wellcomeml.utils import throw_extra_import_message
 
-import numpy as np
-from sklearn.base import ClusterMixin
-from sklearn.cluster import DBSCAN, OPTICS, KMeans
-from sklearn.manifold import TSNE
-from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import silhouette_score
-from sklearn.pipeline import Pipeline
+required_modules = 'tensorflow,sklearn,numpy'
+extras = 'tensorflow,core'
+
+try:
+    import numpy as np
+    from sklearn.base import ClusterMixin
+    from sklearn.cluster import DBSCAN, OPTICS, KMeans
+    from sklearn.manifold import TSNE
+    from sklearn.model_selection import GridSearchCV
+    from sklearn.metrics import silhouette_score
+    from sklearn.pipeline import Pipeline
+except ImportError as e:
+    throw_extra_import_message(error=e, required_modules=required_modules,
+                               extras=extras)
+
 
 try:
     from hdbscan import HDBSCAN

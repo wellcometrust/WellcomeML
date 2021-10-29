@@ -3,7 +3,7 @@ from wellcomeml.utils import throw_extra_import_message
 try:
     import tensorflow as tf
 except ImportError as e:
-    throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
+    throw_extra_import_message(error=e, required_modules='tensorflow', extras='tensorflow')
 
 
 class SelfAttention(tf.keras.layers.Layer):

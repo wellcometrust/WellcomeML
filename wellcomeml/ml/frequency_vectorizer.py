@@ -7,15 +7,18 @@ A generic "frequency" vectorizer that wraps all usual transformations.
 import logging
 import re
 
-from scipy import sparse
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 from wellcomeml.utils import throw_extra_import_message
 # Heavy dependencies go here
+required_modules = 'spacy,sklearn,scipy'
+required_extras = 'spacy,core'
+
 try:
     import spacy
+    from scipy import sparse
+    from sklearn.feature_extraction.text import TfidfVectorizer
 except ImportError as e:
-    throw_extra_import_message(error=e, required_module='spacy', extra='spacy')
+    throw_extra_import_message(error=e, required_modules='spacy', extras='spacy')
 
 logger = logging.getLogger(__name__)
 

@@ -1,14 +1,16 @@
 import random
 
-from nervaluate import Evaluator
-
 from wellcomeml.utils import throw_extra_import_message
+
+required_modules = 'spacy,nervaluate'
+required_extras = 'spacy,core'
 
 try:
     from spacy.training import Example
     import spacy
+    from nervaluate import Evaluator
 except ImportError as e:
-    throw_extra_import_message(error=e, required_module='spacy', extra='spacy')
+    throw_extra_import_message(error=e, required_modules=required_modules, extras=required_extras)
 
 
 class SpacyNER:

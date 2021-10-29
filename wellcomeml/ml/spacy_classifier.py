@@ -5,30 +5,28 @@ Train a convolutional neural network for multilabel classification
 of grants
 Adapted from https://github.com/explosion/spaCy/blob/master/examples/training/train_textcat.py
 """
-from sklearn.metrics import f1_score
-from sklearn.base import BaseEstimator, ClassifierMixin
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import precision_recall_fscore_support
-from scipy.sparse import csr_matrix
-import numpy as np
-
 import logging
 import random
 import time
 
 from wellcomeml.utils import throw_extra_import_message
 
+required_modules = 'spacy,numpy,scipy,torch'
+required_extras = 'spacy,core,torch'
+
 try:
+    from sklearn.metrics import f1_score
+    from sklearn.base import BaseEstimator, ClassifierMixin
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import precision_recall_fscore_support
+    from scipy.sparse import csr_matrix
+    import numpy as np
     from spacy.training import Example
     from spacy.util import minibatch, compounding
     import spacy
-except ImportError as e:
-    throw_extra_import_message(error=e, required_module='spacy', extra='spacy')
-
-try:
     import torch
 except ImportError as e:
-    throw_extra_import_message(error=e, extra="torch", required_module="torch")
+    throw_extra_import_message(error=e, required_modules=required_modules, extras=required_extras)
 
 
 logger = logging.getLogger(__name__)

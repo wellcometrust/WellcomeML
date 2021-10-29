@@ -6,17 +6,17 @@ tasks
 import math
 import os
 
-from transformers import BertTokenizer, TFBertForSequenceClassification
-from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score
-
 from wellcomeml.utils import throw_extra_import_message
 
 try:
+    from transformers import BertTokenizer, TFBertForSequenceClassification
+    from sklearn.base import BaseEstimator, TransformerMixin
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import f1_score
     import tensorflow as tf
 except ImportError as e:
-    throw_extra_import_message(error=e, required_module='tensorflow', extra='tensorflow')
+    throw_extra_import_message(error=e, required_modules='tensorflow,sklearn',
+                               extras='tensorflow,sklearn,transformers')
 
 
 PRETRAINED_CONFIG = {
