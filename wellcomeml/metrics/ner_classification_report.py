@@ -6,7 +6,7 @@ required_extras = 'core'
 try:
     from nervaluate import Evaluator
 except ImportError as e:
-    throw_extra_import_message(error, required_module, required_extras)
+    throw_extra_import_message(e, required_module, required_extras)
 
 
 def ner_classification_report(y_true, y_pred, groups, tags):
