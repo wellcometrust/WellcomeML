@@ -317,3 +317,44 @@ def test_multilabel_attention():
     ])
     model.fit(X, Y)
     assert model.score(X, Y) > 0.3
+
+
+def test_build_model():
+    X = [
+        "One and two",
+        "One only",
+        "Two nothing else",
+        "Two and three"
+    ]
+    Y = np.array([
+        [1, 1, 0, 0],
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 1, 0]
+    ])
+
+    vectorizer = KerasVectorizer()
+    X_vec = vectorizer.fit_transform(X)
+
+    batch_size = 2
+    model = CNNClassifier(
+        batch_size=batch_size,
+        multilabel=True, learning_rate=1e-2)
+    model.fit(X_vec, Y)
+
+    Y_pred = model.predict(X_vec)
+    assert Y_pred.shape[1] == 4
+
+    Y = Y[:, :3]
+    sequence_length = X_vec.shape[1]
+    vocab_size = X_vec.max() + 1
+    nb_outputs = Y.shape[1]
+    decay_steps = X_vec.shape[0] / batch_size
+
+    model.build_model(
+        sequence_length, vocab_size,
+        nb_outputs, decay_steps)
+    model.fit(X_vec, Y)
+
+    Y_pred = model.predict(X_vec)
+    assert Y_pred.shape[1] == 3

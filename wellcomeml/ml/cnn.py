@@ -166,8 +166,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         )
         return steps_per_epoch
 
-    def _build_model(self, sequence_length, vocab_size, nb_outputs,
-                     steps_per_epoch, embedding_matrix=None):
+    def build_model(self, sequence_length, vocab_size, nb_outputs,
+                    decay_steps, embedding_matrix=None):
         def residual_conv_block(x1, l2):
             filters = x1.shape[2]
             x2 = tf.keras.layers.Conv1D(
@@ -256,10 +256,10 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         if self.feature_approach == "multilabel-attention":
             # out shape is (batch_size, attention heads (or outputs), 1)
             out = tf.keras.layers.Flatten()(out)
-        model = tf.keras.Model(inp, out)
+        self.model = tf.keras.Model(inp, out)
 
         learning_rate = tf.keras.optimizers.schedules.ExponentialDecay(
-            self.learning_rate, steps_per_epoch, self.learning_rate_decay,
+            self.learning_rate, decay_steps, self.learning_rate_decay,
             staircase=True
         )
 
@@ -272,8 +272,8 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
             METRIC_DICT[m] if m in METRIC_DICT else m
             for m in self.metrics
         ]
-        model.compile(optimizer=optimizer, loss="binary_crossentropy", metrics=metrics)
-        return model
+        self.model.compile(optimizer=optimizer, loss="binary_crossentropy", metrics=metrics)
+        return self.model
 
     def fit(self, X, Y=None, embedding_matrix=None, steps_per_epoch=None):
         if isinstance(X, list):
@@ -302,11 +302,14 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
         train_data = data.take(steps_per_epoch)
         val_data = data.skip(steps_per_epoch)
 
-        strategy = self._get_distributed_strategy()
-        with strategy.scope():
-            self.model = self._build_model(
-                self.sequence_length, self.vocab_size, self.nb_outputs,
-                steps_per_epoch, embedding_matrix)
+        if hasattr(self, "model"):
+            logger.warning("Using existing model")
+        else:
+            strategy = self._get_distributed_strategy()
+            with strategy.scope():
+                self.build_model(
+                    self.sequence_length, self.vocab_size, self.nb_outputs,
+                    steps_per_epoch, embedding_matrix)
 
         callbacks = []
         if self.tensorboard_log_path:
