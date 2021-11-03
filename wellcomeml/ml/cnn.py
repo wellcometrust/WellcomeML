@@ -299,7 +299,6 @@ class CNNClassifier(BaseEstimator, ClassifierMixin):
 
         if hasattr(self, "model"):
             logger.warning("Using existing model")
-            print("Using existing model")
         else:
             strategy = self._get_distributed_strategy()
             with strategy.scope():
