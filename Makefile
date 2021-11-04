@@ -18,7 +18,7 @@ $(VIRTUALENV)/.installed:
 	$(VENV_BIN)/pip3 install --upgrade pip
 	$(VENV_BIN)/pip3 install -r requirements_test.txt
 	$(VENV_BIN)/pip3 install -r docs/requirements.txt # Installs requirements to docs
-	$(VENV_BIN)/pip3 install -e .[tensorflow,spacy,torch]
+	$(VENV_BIN)/pip3 install -e .[tensorflow,spacy,torch,core,transformers]
 	$(VENV_BIN)/pip3 install hdbscan --no-cache-dir --no-binary :all: --no-build-isolation
 	touch $@
 
