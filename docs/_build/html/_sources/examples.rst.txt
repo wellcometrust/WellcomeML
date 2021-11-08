@@ -12,7 +12,7 @@ In order to transform text:
 
 .. code-block:: python
 
-    from wellcomeml.ml import BertVectorizer
+    from wellcomeml.ml.bert_vectorizer import BertVectorizer
 
 
     X = [
@@ -38,7 +38,7 @@ using a :class:`BertClassifier <wellcomeml.ml.bert_classifier>`
 
     import numpy as np
 
-    from wellcomeml.ml import BertClassifier
+    from wellcomeml.ml.bert_classifier import BertClassifier
 
     X = ["Hot and cold", "Hot", "Cold"]
     Y = np.array([[1,1],[1,0],[0,1]])
@@ -56,7 +56,7 @@ Retrain a `spaCy NER classifier <https://spacy.io/usage/training#ner>`_ on new d
 
     import random
 
-    from wellcomeml.ml import SpacyNER
+    from wellcomeml.ml.spacy_ner import SpacyNER
 
     X_train = [
         "n Journal of Psychiatry 158: 2071–4\nFreeman MP, Hibbeln JR, Wisner KL et al. (2006)\n",
@@ -106,7 +106,7 @@ Link sentences to the most similar document in a corpus using :class:`Similarity
 
 .. code-block:: python
 
-    from wellcomeml.ml import SimilarityEntityLinker
+    from wellcomeml.ml.similarity_entity_linking import SimilarityEntityLinker
 
     entities_kb = {
         "Michelle Williams (actor)": (

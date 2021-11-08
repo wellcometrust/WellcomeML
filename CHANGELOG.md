@@ -1,3 +1,20 @@
+# 2.0.0
+Release date: 05/11/2021
+
+Improvements:
+- #328: Expose build_model to CNNClassifier and don't rebuild in fit
+- #372: Add more fine grained extras to make vanilla WellcomeML light (109MB)
+- #368: Expand LOGGING_LEVEL to TF_CPP_MIN_LOG_LEVEL
+- #332: Add `wellcomeml.viz` to vizualize clusters
+- #344: Add filter by variable in visualize clusters
+
+Breaking changes:
+- #371: Delete `wellcomeml.ml.__init__` so all ml models need to be explicitly imported
+
+Bug fixes:
+- #357: Fix sent2vec test error
+
+
 # 1.2.1
 Release date: 05/08/2021
 
