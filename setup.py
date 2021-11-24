@@ -83,7 +83,7 @@ setuptools.setup(
     extras_require=extras,
     tests_require=[
         'pytest',
-        'pytest-cov',
-	'tox'
+        'pytest-cov'
+        'tox'
     ]
 )
