@@ -1,3 +1,8 @@
+# 2.0.1
+Release date; 24/11/2021
+
+- #376: Fixes a bug with relative import of EPMC API client
+
 # 2.0.0
 Release date: 05/11/2021
 
