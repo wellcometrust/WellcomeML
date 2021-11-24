@@ -62,7 +62,7 @@ setuptools.setup(
     version=about['__version__'],
     author=about['__author__'],
     author_email=about['__author_email__'],
-    description=about['__description__'],
+    description=about['__description__'].replace('\n', ''),
     long_description=long_description,
     long_description_content_type='text/markdown',
     url=about['__url__'],
@@ -84,6 +84,6 @@ setuptools.setup(
     tests_require=[
         'pytest',
         'pytest-cov',
-        'tox'
+	'tox'
     ]
 )
