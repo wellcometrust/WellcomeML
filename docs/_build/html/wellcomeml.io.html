@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>wellcomeml.io package &mdash; WellcomeML 2.0.0 documentation</title>
+  <title>wellcomeml.io package &mdash; WellcomeML 2.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="wellcomeml.metrics package" href="wellcomeml.metrics.html" />
+    <link rel="next" title="wellcomeml.io.epmc package" href="wellcomeml.io.epmc.html" />
     <link rel="prev" title="wellcomeml.datasets package" href="wellcomeml.datasets.html" /> 
 </head>
 
@@ -49,6 +49,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="wellcomeml.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="wellcomeml.datasets.html">wellcomeml.datasets package</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">wellcomeml.io package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.io.io">wellcomeml.io.io module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-wellcomeml.io.s3_policy_data">wellcomeml.io.s3_policy_data module</a></li>
@@ -96,6 +97,19 @@
              
   <section id="wellcomeml-io-package">
 <h1>wellcomeml.io package<a class="headerlink" href="#wellcomeml-io-package" title="Permalink to this headline"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="wellcomeml.io.epmc.html">wellcomeml.io.epmc package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wellcomeml.io.epmc.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wellcomeml.io.epmc.html#module-wellcomeml.io.epmc.client">wellcomeml.io.epmc.client module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wellcomeml.io.epmc.html#module-wellcomeml.io.epmc">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
 </section>
@@ -197,6 +211,92 @@ all</p>
 <section id="module-wellcomeml.io">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.io" title="Permalink to this headline"></a></h2>
 <dl class="py class">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wellcomeml.io.</span></span><span class="sig-name descname"><span class="pre">EPMCClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'https://www.ebi.ac.uk/europepmc/webservices/rest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.EPMC_URL">
+<span class="sig-name descname"><span class="pre">EPMC_URL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'https://www.ebi.ac.uk/europepmc/webservices/rest'</span></em><a class="headerlink" href="#wellcomeml.io.EPMCClient.EPMC_URL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.get_citations">
+<span class="sig-name descname"><span class="pre">get_citations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pub_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MED'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient.get_citations" title="Permalink to this definition"></a></dt>
+<dd><p>Fetches citations from EPMC’s REST API for a given publication pub_id and source
+(e.g. ‘MED’)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.get_full_text">
+<span class="sig-name descname"><span class="pre">get_full_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pmid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient.get_full_text" title="Permalink to this definition"></a></dt>
+<dd><p>Fetches full text from EPMC’s REST API for a given pmid.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.get_references">
+<span class="sig-name descname"><span class="pre">get_references</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pub_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MED'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient.get_references" title="Permalink to this definition"></a></dt>
+<dd><p>Fetches references from EPMC’s REST API for a given publication pub_id and source
+(e.g. ‘MED’)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.requests_session">
+<span class="sig-name descname"><span class="pre">requests_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adapter_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient.requests_session" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a requests session with retry params in place, and
+configured for a single persistent connection (since we
+generally expect one session per thread).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'core'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient.search" title="Permalink to this definition"></a></dt>
+<dd><p>Fetches metadata from EPMC’s REST API for a query.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.search_by_doi">
+<span class="sig-name descname"><span class="pre">search_by_doi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doi</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient.search_by_doi" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.search_by_dois">
+<span class="sig-name descname"><span class="pre">search_by_dois</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dois</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient.search_by_dois" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> – requests.Session</p></li>
+<li><p><strong>dois</strong> – list of DOI strings</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p>Dicts of EPMC responses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.search_by_pmcid">
+<span class="sig-name descname"><span class="pre">search_by_pmcid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pmcid</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient.search_by_pmcid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.search_by_pmcids">
+<span class="sig-name descname"><span class="pre">search_by_pmcids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pmcids</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient.search_by_pmcids" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.search_by_pmid">
+<span class="sig-name descname"><span class="pre">search_by_pmid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pmid</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient.search_by_pmid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.search_by_pmids">
+<span class="sig-name descname"><span class="pre">search_by_pmids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pmids</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient.search_by_pmids" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="wellcomeml.io.PolicyDocumentsDownloader">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wellcomeml.io.</span></span><span class="sig-name descname"><span class="pre">PolicyDocumentsDownloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -292,7 +392,7 @@ all</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="wellcomeml.datasets.html" class="btn btn-neutral float-left" title="wellcomeml.datasets package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="wellcomeml.metrics.html" class="btn btn-neutral float-right" title="wellcomeml.metrics package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="wellcomeml.io.epmc.html" class="btn btn-neutral float-right" title="wellcomeml.io.epmc package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
