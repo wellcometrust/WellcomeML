@@ -1,6 +1,14 @@
 wellcomeml.io package
 =====================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 5
+
+   wellcomeml.io.epmc
+
 Submodules
 ----------
 
