@@ -1,3 +1,8 @@
+# 2.0.2
+Release date 01/01/2022
+
+- #379: Fixes a problem in the required dependencies, moving flake8 and black to tests
+
 # 2.0.1
 Release date; 24/11/2021
 
