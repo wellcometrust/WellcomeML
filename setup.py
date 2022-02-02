@@ -76,13 +76,13 @@ setuptools.setup(
         'boto3',
         'twine',
         'cython',
-        'flake8',
-        'black',
         'tqdm'
     ],
     extras_require=extras,
     tests_require=[
         'pytest',
+        'flake8',
+        'black',
         'pytest-cov'
         'tox'
     ]
