@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>wellcomeml.io package &mdash; WellcomeML 2.0.1 documentation</title>
+  <title>wellcomeml.io package &mdash; WellcomeML 2.0.3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -153,7 +153,7 @@
 <span id="wellcomeml-io-s3-policy-data-module"></span><h2>wellcomeml.io.s3_policy_data module<a class="headerlink" href="#module-wellcomeml.io.s3_policy_data" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wellcomeml.io.s3_policy_data.</span></span><span class="sig-name descname"><span class="pre">PolicyDocumentsDownloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wellcomeml.io.s3_policy_data.</span></span><span class="sig-name descname"><span class="pre">PolicyDocumentsDownloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.s3_policy_data.PolicyDocumentsDownloader" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Interact with S3 to get policy document texts</p>
 <dl class="field-list simple">
@@ -212,11 +212,11 @@ all</p>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-wellcomeml.io" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="wellcomeml.io.EPMCClient">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wellcomeml.io.</span></span><span class="sig-name descname"><span class="pre">EPMCClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'https://www.ebi.ac.uk/europepmc/webservices/rest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wellcomeml.io.</span></span><span class="sig-name descname"><span class="pre">EPMCClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'https://www.ebi.ac.uk/europepmc/webservices/rest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.EPMCClient" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="wellcomeml.io.EPMCClient.EPMC_URL">
-<span class="sig-name descname"><span class="pre">EPMC_URL</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'https://www.ebi.ac.uk/europepmc/webservices/rest'</span></em><a class="headerlink" href="#wellcomeml.io.EPMCClient.EPMC_URL" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">EPMC_URL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'https://www.ebi.ac.uk/europepmc/webservices/rest'</span></em><a class="headerlink" href="#wellcomeml.io.EPMCClient.EPMC_URL" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -298,7 +298,7 @@ generally expect one session per thread).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wellcomeml.io.PolicyDocumentsDownloader">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wellcomeml.io.</span></span><span class="sig-name descname"><span class="pre">PolicyDocumentsDownloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wellcomeml.io.</span></span><span class="sig-name descname"><span class="pre">PolicyDocumentsDownloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wellcomeml.io.PolicyDocumentsDownloader" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Interact with S3 to get policy document texts</p>
 <dl class="field-list simple">
