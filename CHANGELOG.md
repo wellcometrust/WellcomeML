@@ -1,3 +1,8 @@
+# 2.0.3
+Release date 21/03/2022
+
+- #384: Unpin tokenizers to allow users to upgrade to latest transformers 
+
 # 2.0.2
 Release date 01/01/2022
 
