@@ -38,7 +38,7 @@ extras = {
         ],
         'transformers': [
             'transformers',
-            'tokenizers==0.10.1'
+            'tokenizers'
         ],
         'tensorflow': [
             'tensorflow==2.4.0',
