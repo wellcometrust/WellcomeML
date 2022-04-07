@@ -1,11 +1,10 @@
 from collections import defaultdict
 
 import numpy as np
-from bokeh.plotting import ColumnDataSource, figure, show
-from bokeh.io import curdoc, \
-    output_notebook, output_file, export_png, reset_output
+from bokeh.plotting import figure, show
+from bokeh.io import output_notebook, output_file, reset_output
 
-from wellcomeml.viz.palettes import WellcomeBackground, WellcomeNoData
+from wellcomeml.viz.palettes import WellcomeBackground
 from wellcomeml.viz.colors import NAMED_COLORS_DICT
 
 
@@ -33,7 +32,8 @@ def plot_heatmap(co_occurrence,
             {"concept_1": banana, "concept_2": fruit, "value": 0.1}
         ]
 
-        concept_order(list): A list of order of concepts to plot, if none will chose arbitrary
+        concept_order(list): A list of order of concepts to plot, if none will chose arbitrary.
+          Only applicable if list of "concepts_1" is the same as "concepts_2"
         file(str): A file to save the output
         color(str): Which color from the Wellcome pallete (see `wellcomeml.viz.colors`)
         metadata_to_display(list): List of 2-uples describing the legend and the key to display
@@ -71,7 +71,6 @@ def plot_heatmap(co_occurrence,
 
     data = {**data, **metadata}
 
-
     title = title
     tools = "hover,save,wheel_zoom"
     tooltips = [('Tags', '@y_name, @x_name'),
@@ -81,7 +80,13 @@ def plot_heatmap(co_occurrence,
         tooltips += [(legend, '@' + key) for legend, key in metadata_to_display]
 
     x_range = (concept_order if concept_order else list(reversed(np.unique(x_names))))
-    y_range = list(reversed(concept_order))
+    # If the concepts are equal in rows and columns plot them in order, otherwise
+    # just plot the unique y_concepts
+    if set(x_names) == set(y_names):
+        y_range = list(reversed(x_range))
+    else:
+        y_range = np.unique(y_names)
+
     p = figure(title=title, x_axis_location="below", tools=tools,
                x_range=x_range,
                y_range=y_range,
