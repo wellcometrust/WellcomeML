@@ -18,7 +18,9 @@ def plot_heatmap(co_occurrence,
                  title="",
                  notebook_url='localhost:8888',
                  color='Blue Lagoon',
-                 metadata_to_display=[]):
+                 metadata_to_display=[],
+                 rectangle_size=0.9,
+                 display_percentages=True):
     """
     Plots a nice bokeh heatmap between two sets of "concepts" using the Wellcome pallette.
 
@@ -42,6 +44,8 @@ def plot_heatmap(co_occurrence,
         metadata_to_display(list): List of 2-uples describing the legend and the key to display
           Exmaple, if the co_ocurrence matrix consist of the keys `concept_1`, `concept_2`,
           `value`, `legend`, one can send `metadata_to_display=[(This is a legend, legend)]`
+        rectangle_size(int): Size of the rectangles to plot. Default: 0.9
+        display_percentages(bool): Whether to show the percentages in the each rectangle as text
 
     Returns:
     """
@@ -93,14 +97,16 @@ def plot_heatmap(co_occurrence,
     else:
         y_range = np.unique(y_names)
 
-    labels = LabelSet(x='x_name', y='y_name', text='alpha_text', text_font_size='16px',
-                      text_align="center", source=data, render_mode='canvas')
-
     p = figure(title=title, x_axis_location="below", tools=tools,
                x_range=x_range,
                y_range=y_range,
                tooltips=tooltips,
                background_fill_color=str(WellcomeBackground))
+
+    if display_percentages:
+        labels = LabelSet(x='x_name', y='y_name', text='alpha_text', text_font_size='16px',
+                          text_align="center", source=data, render_mode='canvas')
+        p.add_layout(labels)
 
     p.plot_width = 1000
     p.plot_height = 1000
@@ -110,7 +116,7 @@ def plot_heatmap(co_occurrence,
     p.axis.major_label_text_font_size = "8pt"
     p.xaxis.major_label_orientation = np.pi / 3
 
-    p.rect('x_name', 'y_name', 0.9, 0.9, source=data,
+    p.rect('x_name', 'y_name', rectangle_size, rectangle_size, source=data,
            color='colors', alpha='alphas', line_color=None,
            hover_line_color='black', hover_color='colors')
 
@@ -118,7 +124,5 @@ def plot_heatmap(co_occurrence,
         output_notebook()
     if file:
         output_file(file, title=title)
-
-    p.add_layout(labels)
 
     show(p, notebook_url=notebook_url)
