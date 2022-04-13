@@ -18,7 +18,7 @@ def plot_heatmap(co_occurrence,
                  title="",
                  notebook_url='localhost:8888',
                  color='Blue Lagoon',
-                 metadata_to_display=[],
+                 metadata_to_display=None,
                  rectangle_size=0.9,
                  display_percentages=True):
     """
