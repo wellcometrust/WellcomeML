@@ -9,7 +9,6 @@ from bokeh.models import LabelSet, ColumnDataSource
 from wellcomeml.viz.palettes import WellcomeBackground
 from wellcomeml.viz.colors import NAMED_COLORS_DICT
 
-A = 'test'
 
 def plot_heatmap(co_occurrence,
                  concept_order=None,
