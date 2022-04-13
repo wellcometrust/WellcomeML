@@ -3,10 +3,13 @@ from collections import defaultdict
 import numpy as np
 from bokeh.plotting import figure, show
 from bokeh.io import output_notebook, output_file, reset_output
+from bokeh.models import LabelSet, ColumnDataSource
+
 
 from wellcomeml.viz.palettes import WellcomeBackground
 from wellcomeml.viz.colors import NAMED_COLORS_DICT
 
+A = 'test'
 
 def plot_heatmap(co_occurrence,
                  concept_order=None,
@@ -66,10 +69,13 @@ def plot_heatmap(co_occurrence,
         "y_name": y_names,
         "alphas": alphas,
         "alpha_percentage": [100*alpha for alpha in alphas],
+        "alpha_text": [f'{100*alpha:.0f}%' for alpha in alphas],
         "colors": colors
     }
 
     data = {**data, **metadata}
+
+    data = ColumnDataSource(data=data)
 
     title = title
     tools = "hover,save,wheel_zoom"
@@ -86,6 +92,9 @@ def plot_heatmap(co_occurrence,
         y_range = list(reversed(x_range))
     else:
         y_range = np.unique(y_names)
+
+    labels = LabelSet(x='x_name', y='y_name', text='alpha_text', text_font_size='16px',
+                      text_align="center", source=data, render_mode='canvas')
 
     p = figure(title=title, x_axis_location="below", tools=tools,
                x_range=x_range,
@@ -109,5 +118,7 @@ def plot_heatmap(co_occurrence,
         output_notebook()
     if file:
         output_file(file, title=title)
+
+    p.add_layout(labels)
 
     show(p, notebook_url=notebook_url)
