@@ -31,7 +31,7 @@ extras = {
             'scikit-learn',
             'scipy',
             'umap-learn',
-            'gensim<=4.0.0',
+            'gensim',
             'bokeh',
             'pandas',
             'nervaluate'
