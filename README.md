@@ -5,6 +5,7 @@
 
 
 # WellcomeML utils
+**!!!!! Note this repository is now deprecated and is no longer maintained !!!!!**  
 
 This package contains common utility functions for usual tasks at the Wellcome Trust, in particular functionalities for processing, embedding and classifying text data. This includes
 
